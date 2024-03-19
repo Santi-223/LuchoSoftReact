@@ -1,0 +1,140 @@
+#iconoEditar {
+  margin-top: -30px;
+  margin-left: 80px;
+  font-size: 30px;
+  color: #E12424;
+}
+
+#perfil {
+  margin-top: 8vh;
+}
+
+#usuarioRegistrado {
+  margin-top: 1vh;
+}
+
+#contenidoDatos {
+  border-radius: 5px;
+  border: 1px solid #6d6d6d;
+  padding: 10px;
+}
+
+#contenidoDatos i {
+  margin-right: 10px;
+  color: #E12424;
+}
+
+#datos {
+  width: 70%;
+  /* Ajusta el ancho según lo necesites */
+  margin: 0 auto;
+  /* Centra horizontalmente */
+  padding: 10px;
+  /* Agregamos un poco de espacio interno */
+}
+
+#tituloDatos {
+  margin-bottom: 10px;
+}
+
+#botones {
+  text-align: right;
+  /* Alinea los botones a la derecha */
+  margin-top: 30px;
+  /* Agrega espacio entre el contenido y los botones */
+}
+
+.btn-rojo {
+  background-color: #E12424;
+  color: white;
+  border: none;
+  padding: 10px 10px;
+  border-radius: 5px;
+  margin-left: 10px;
+}
+
+.btn-rojo-claro {
+  background-color: #48110d;
+  color: white;
+  border: none;
+  padding: 10px 10px;
+  border-radius: 5px;
+}
+
+.divActualizarContraseña {
+  max-width: 400px;
+  margin: 0 auto;
+  margin-top: 70px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f8f8f8;
+}
+
+.divActualizarContraseña h2 {
+  margin-bottom: 20px;
+}
+
+.divActualizarContraseña form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+}
+
+
+.input-group input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+#guardar {
+  background-color: #48110d;
+  color: white;
+}
+
+#cancelar {
+  background-color: #E12424;
+  color: white;
+}
+
+.rojo {
+  margin-left: 30px;
+  background-color: #E12424;
+  color: white;
+  border: none;
+  padding: 15px 60px;
+  border-radius: 5px;
+
+}
+
+.rojo:hover {
+  background: #f33928;
+}
+
+.rojo:active {
+  box-shadow: 1px 1px 1px 1px #f33928;
+}
+
+.vinotinto {
+  background: #48110d;
+  color: white;
+  color: white;
+  border: none;
+  padding: 15px 60px;
+  border-radius: 5px;
+}
+
+.vinotinto:hover {
+  background: #771d17;
+
+}
+
+.vinotinto:active {
+  box-shadow: 1px 1px 1px 1px #771d17;
+}

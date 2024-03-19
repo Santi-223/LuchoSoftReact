@@ -1,11 +1,15 @@
-import React, { useState, useEffect, setIsLoading } from 'react';
-import '../Layout.css';
-import estilos from '../Usuarios/Usuarios.module.css';
+import React, { useState, useEffect } from 'react';
+import '../Layout.css'
+import estilos from '../Usuarios/Usuarios.module.css'
+import { useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
-function AgregarUsuarios() {
+function EditarUsuario() {
 
     const [roles, setRoles] = useState([]);
+
+    let { id_usuario } = useParams();
+    console.log(id_usuario)
 
     const [usuario, setUsuario] = useState({
         id_usuario: '',
@@ -15,9 +19,29 @@ function AgregarUsuarios() {
         contraseña: '',
         telefono_usuario: '',
         direccion_usuario: '',
-        estado_usuario: 1,
+        estado_usuario: '',
         id_rol: ''
     });
+
+    useEffect(() => {
+        const fetchUsuario = async () => {
+            try {
+                const response = await fetch(`http://localhost:8082/configuracion/usuarios/${id_usuario}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    const usuarioFiltrado = data[0];
+                    setUsuario(usuarioFiltrado);
+                    console.log(usuarioFiltrado)
+                } else {
+                    console.error('Error al obtener el usuario');
+                }
+            } catch (error) {
+                console.error('Error al obtener el usuario:', error);
+            }
+        };
+
+        fetchUsuario();
+    }, [id_usuario]);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -53,47 +77,64 @@ function AgregarUsuarios() {
 
     }, []);
 
-
     const handleSubmit = async (event) => {
         event.preventDefault();
 
         console.log(usuario)
 
-        try {
-            const response = await fetch('http://localhost:8082/configuracion/usuarios', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(usuario)
-            });
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: '¿Deseas actualizar la información del usuario?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, actualizar',
+            cancelButtonText: 'Cancelar'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const response = await fetch(`http://localhost:8082/configuracion/usuarios/${usuario.id_usuario}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(usuario)
+                    });
 
-            if (response.ok) {
-                console.log('Usuario creado exitosamente.');
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Usuario creado exitosamente',
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-                // Aquí podrías redirigir a otra página, mostrar un mensaje de éxito, etc.
-            } else {
-                console.error('Error al crear el usuario:', response.statusText);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Error al crear el usuario',
-                });
+                    if (response.ok) {
+                        console.log('Usuario actualizado exitosamente.');
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Usuario actualizado exitosamente',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                        setTimeout(() => {
+                            window.location.href = '/usuarios';
+                        }, 1000);
+                        // Aquí podrías redirigir a otra página, mostrar un mensaje de éxito, etc.
+                    } else {
+                        console.error('Error al actualizar el usuario:', response.statusText);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Error al actualizar el usuario',
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error al actualizar el usuario:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Error al actualizar el usuario',
+                    });
+                }
             }
-        } catch (error) {
-            console.error('Error al crear el usuario:', error);
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Error al crear el usuario',
-            });
-        }
+        });
+
     };
+
 
     return (
         <div>
@@ -106,7 +147,7 @@ function AgregarUsuarios() {
                 <br />
                 <center>
                     <div id={estilos.titulo}>
-                        <h1>Registro Usuario</h1>
+                        <h1>Editar Usuario</h1>
                         <br />
                         <br />
                         <br />
@@ -114,18 +155,18 @@ function AgregarUsuarios() {
                 </center>
                 <form onSubmit={handleSubmit}>
                     <div id={estilos.contenedorsitos}>
-
                         <div id={estilos.contenedorsito}>
                             <div className={estilos["input-container"]}>
                                 <div className={estilos["formulario__grupo"]} id={estilos.grupo__id_usuario}>
-                                    <label htmlFor="id_usuario"><i className={["fa-solid fa-id-card iconosRojos"]}></i>id_usuario</label>
+                                    <label for="id_usuario"><i className={["fa-solid fa-id-card iconosRojos"]}></i>id_usuario</label>
                                     <div className={estilos["formulario__grupo-input"]}>
                                         <input
+                                            readOnly
                                             className={estilos["input-field"]}
                                             type="text"
                                             name="id_usuario"
                                             id={estilos.id_usuario}
-                                            value={usuario.id_usuario}
+                                            value={usuario ? usuario.id_usuario : ''}
                                             onChange={handleChange}
                                         />
                                         <span></span>
@@ -134,15 +175,15 @@ function AgregarUsuarios() {
                             </div>
 
                             <div className={estilos["input-container"]}>
-                                <div className={estilos["formulario__grupo"]} id={estilos.grupo__nombre}>
-                                    <label htmlFor="nombre"> <i className={["fa-solid fa-font iconosRojos"]}></i>Nombre</label>
+                                <div className={estilos["formulario__grupo"]} id={estilos.grupo__nombre_usuario}>
+                                    <label for="nombre_usuario"> <i className={["fa-solid fa-font iconosRojos"]}></i>nombre_usuario</label>
                                     <div className={estilos["formulario__grupo-input"]}>
                                         <input
                                             className={estilos["input-field"]}
                                             type="text"
                                             name="nombre_usuario"
-                                            id={estilos.nombre}
-                                            value={usuario.nombre_usuario}
+                                            id={estilos.nombre_usuario}
+                                            value={usuario ? usuario.nombre_usuario : ''}
                                             onChange={handleChange}
                                         />
                                         <span></span>
@@ -152,15 +193,15 @@ function AgregarUsuarios() {
 
 
                             <div className={estilos["input-container"]}>
-                                <div className={estilos["formulario__grupo"]} id={estilos.grupo__telefono}>
-                                    <label htmlFor="telefono_usuario"><i className={["fa-solid fa-phone iconosRojos"]}></i> Telefono</label>
+                                <div className={estilos["formulario__grupo"]} id={estilos.grupo__telefono_usuario}>
+                                    <label for="telefono_usuario"><i className={["fa-solid fa-phone iconosRojos"]}></i> telefono_usuario</label>
                                     <div className={estilos["formulario__grupo-input"]}>
                                         <input
                                             className={estilos["input-field"]}
                                             type="text"
                                             name="telefono_usuario"
                                             id={estilos.telefono_usuario}
-                                            value={usuario.telefono_usuario}
+                                            value={usuario ? usuario.telefono_usuario : ''}
                                             onChange={handleChange}
                                         />
                                         <span></span>
@@ -170,7 +211,7 @@ function AgregarUsuarios() {
 
                             <div className={estilos["input-container"]}>
                                 <div className={estilos["formulario__grupo"]} id={estilos.grupo__direccion}>
-                                    <label htmlFor="direccion_usuario"><i className={["fa-sharp fa-solid fa-location-dot iconosRojos"]}></i>
+                                    <label for="direccion_usuario"><i className={["fa-sharp fa-solid fa-location-dot iconosRojos"]}></i>
                                         Dirección</label>
                                     <div className={estilos["formulario__grupo-input"]}>
                                         <input
@@ -178,7 +219,7 @@ function AgregarUsuarios() {
                                             type="text"
                                             name="direccion_usuario"
                                             id={estilos.direccion_usuario}
-                                            value={usuario.direccion_usuario}
+                                            value={usuario ? usuario.direccion_usuario : ''}
                                             onChange={handleChange}
                                         />
                                         <span></span>
@@ -189,14 +230,14 @@ function AgregarUsuarios() {
 
                             <div className={estilos["input-container"]}>
                                 <div className={estilos["formulario__grupo"]} id={estilos.grupo__contraseña}>
-                                    <label htmlFor="contraseña"><i className={["fa-solid fa-lock iconosRojos"]}></i>Contraseña</label>
+                                    <label for="contraseña"><i className={["fa-solid fa-lock iconosRojos"]}></i>Contraseña</label>
                                     <div className={estilos["formulario__grupo-input"]}>
                                         <input
                                             className={estilos["input-field"]}
                                             type="contraseña"
                                             name="contraseña"
                                             id={estilos.contraseña}
-                                            value={usuario.contraseña}
+                                            value={usuario ? usuario.contraseña : ''}
                                             onChange={handleChange}
                                         />
                                         <span></span>
@@ -212,7 +253,7 @@ function AgregarUsuarios() {
                                         type="email"
                                         name="email"
                                         id={estilos.email}
-                                        value={usuario.email}
+                                        value={usuario ? usuario.email : ''}
                                         onChange={handleChange}
                                     />
                                 </div>
@@ -237,6 +278,7 @@ function AgregarUsuarios() {
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                         <div id={estilos.cosas}>
                             <center>
@@ -255,26 +297,25 @@ function AgregarUsuarios() {
                                         type="text"
                                         placeholder="URL de la imagen"
                                         name='imagen_usuario'
-                                        value={usuario.imagen_usuario}
+                                        value={usuario ? usuario.imagen_usuario : ''}
                                         onChange={handleChange}
                                     />
                                 </div>
                             </center>
                             <br />
                         </div>
-
-
                     </div>
 
 
 
                     <div className={estilos["botonsito"]}>
-                        <button className={`boton ${estilos.botonMorado}`} type='submit'><i></i> Guardar</button>
-                        <button className={`boton ${estilos.botonRojo}`}>
+                        <button type='submit' className={`boton ${estilos.botonMorado}`}><i></i> Guardar</button>
+                        <button type="button" className={`boton ${estilos.botonRojo}`}>
                             <i className={[""]}></i> Cancelar
                         </button>
                     </div>
                 </form>
+
 
 
             </div>
@@ -282,4 +323,4 @@ function AgregarUsuarios() {
     );
 }
 
-export default AgregarUsuarios;
+export default EditarUsuario;
