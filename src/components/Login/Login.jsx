@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Navigate, Link } from "react-router-dom";
-import estilos from '../Acceso/Acceso.module.css';
+import estilos from '../Login/Login.module.css';
 import '../Layout.css';
 import Swal from 'sweetalert2';
 
@@ -58,7 +58,7 @@ function Acceso() {
 
                 Swal.fire({
                     icon: 'success',
-                    title: `Acceso exitoso, token: ${data.token}`,
+                    title: `Acceso exitoso`,
                     showConfirmButton: false,
                     timer: 1500
                 });
@@ -91,21 +91,10 @@ function Acceso() {
     // Si el usuario no está autenticado, muestra la página de acceso
     return (
         <div>
-            <div className="barraPrincipal">
-                <div className="contenedor_1">
-                    <img src="/archivos/imagenes/LuchoGod.png" height="45px" length="45px" alt="Logo" />
-                    <p id="luchosoft">LuchoSoft</p>
-                </div>
-            </div>
-
             <div className={estilos["contenido"]}>
                 <center>
 
                     <div id={estilos.titulo}><h1>Bienvenido</h1></div>
-                    <div id={estilos.perfil}>
-                        <div id={estilos.imgPerfil}><img src="archivos/imagenes/Profile.png" height="70vh" lenght="70vh" /></div>
-
-                    </div>
                 </center>
                 <div className={estilos["divActualizarContraseña"]}>
                     <form onSubmit={handleSubmit}>

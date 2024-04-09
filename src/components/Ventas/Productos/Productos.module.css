@@ -1,21 +1,10 @@
-.titulo {
-    display: flex;
-    justify-content: space-between;
-}
-
 .botonsito {
     display: flex;
     margin-left: auto;
-    justify-content: space-evenly;
-    padding: 20px;
-}
-
-#imagen {
-    width: 200px;
-    max-height: 200px;
-}
-
-.botonAgregar {
+    padding: 50px 50px;
+  }
+  
+  .botonAgregar {
     background-color: #1F67B9;
     color: white;
     height: 40px;
@@ -23,60 +12,93 @@
     margin-right: 20px;
     border: none;
     border-radius: 50px;
-}
-
-
-.divFiltro{
+  }
+  
+  .divFiltro{
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-
-.azul {
-    background: #1F67B9;
+    margin-right: 20px;
+  }
+  
+  
+  .descargar {
+    margin-left: 100px;
+    height: 50px;
+    width: 55px;
+    margin-top: 5px;
+  }
+  
+  
+  .vinotinto {
+    background: #48110d;
     color: white;
-    display: flex;
-    justify-content: center;
-    width: 150px;
-}
-
-.azul:hover {
+    border: none;
+    border-radius: 50px;
+  
+  }
+  
+  .vinotinto:hover {
+    background: #771d17;
+  }
+  
+  .vinotinto:active {
+    box-shadow: 1px 1px 1px 1px #771d17;
+  }
+  
+  .botonAgregar:hover {
     background: #3c77bb;
-}
-
-.azul:active {
+  }
+  
+  .botonAgregar:active {
     box-shadow: 1px 1px 1px 1px #3c77bb;
-}
-
-.gris {
-    background: #a7a7a7;
+  }
+  
+  .azulado {
+  
     color: white;
-    display: flex;
-    justify-content: center;
-    width: 150px;
-}
-
-.gris:hover {
-    background: #adadad;
-
-}
-
-.gris:active {
-    box-shadow: 1px 1px 1px 1px #adadad;
-}
-
-.checkbox {
+    height: 50px;
+    min-width: 130px;
+    margin-left: 100%;
+    margin-bottom: -20px;
+  }
+  
+  .botonRojo {
+    background-color: #E12424;
+    color: white;
+    height: 50px;
+    width: 180px;
+    margin-left: 20%;
+    margin-bottom: 20px;
+  }
+  
+  .botonMorado {
+    background-color: #722F37;
+    color: white;
+    height: 50px;
+    width: 180px;
+    margin-left: 20%;
+    margin-bottom: 20px;
+  }
+  
+  .checkbox {
     margin-right: 10px;
-}
-
-
-.cajaBotones {
+  }
+  .botones {
+  
+    margin-left: 87vh;
+  
+  
+    margin-bottom: -90px;
+  }
+  
+  .cajaBotones {
     margin-top: 60px;
     display: flex;
     justify-content: center;
-}
-
-.cajaBotones button {
+  }
+  
+  .cajaBotones button {
     padding: 10px 40px;
     /* Ajusta el padding para hacer los botones más largos */
     border: none;
@@ -84,193 +106,205 @@
     cursor: pointer;
     width: 20%;
     /* Ajusta el ancho de los botones */
-}
-
-#guardar {
+  }
+  
+  #guardar {
     background-color: #48110d;
     color: white;
-}
-
-#cancelar {
-    background-color: #1F67B9;
+  }
+  
+  #cancelar {
+    background-color: #E12424;
     color: white;
-}
-
-
-.espacioEntreBotones {
+  }
+  
+  
+  .espacioEntreBotones {
     width: 40px;
     /* Ajusta el ancho del espacio según tus preferencias */
-}
-
-.gris {
+  }
+  
+  .gris {
     color: #6d6d6d;
-}
-
-.parrafoGris {
+  }
+  
+  .gris:hover {
+    background: rgb(146, 146, 146);
+  }
+  
+  .gris:active {
+    box-shadow: 1px 1px 1px 1px rgb(146, 146, 146);
+  }
+  
+  .parrafoGris {
     color: gray;
-}
-
-
-.divImagen {
+  }
+  
+  input {
+    border-radius: 3px;
+    border: 1px solid #6d6d6d;
+  }
+  
+  .input1 input {
+    padding-left: 10px;
+    width: 300px;
+    height: 50px;
+  }
+  
+  
+  .input1 i {
+    font-size: 20px;
+  }
+  
+  .divImagen {
     border-radius: 10px;
     border: 1px solid #6d6d6d;
-    padding: 10px;
+    padding: 20px;
     background-color: #ffffff;
-    margin-top: -20px;
-    width: 300px;
-}
-
-.contenido2 {
+  }
+  
+  .contenido2 {
     border-radius: 3px;
     border: 1px solid #b9b9b9;
     margin-left: 50px;
     margin-right: 50px;
     background-color: #f8f8f8;
-}
-
-#_id {
+  }
+  
+  #_id {
     background-color: #ccc;
-}
-
-
-.rojo {
-    background: #1F67B9;
+  }
+  
+  
+  .rojo {
+    background: #E12424;
     color: white;
-
-}
-
-.rojo:hover {
-    background: #3c77bb;
-}
-
-.rojo:active {
-    box-shadow: 1px 1px 1px 1px #3c77bb;
-}
-
-.vinotinto {
+  
+  }
+  
+  .rojo:hover {
+    background: #f33928;
+  }
+  
+  .rojo:active {
+    box-shadow: 1px 1px 1px 1px #f33928;
+  }
+  
+  .vinotinto {
     background: #48110d;
     color: white;
-}
-
-.vinotinto:hover {
+    height: 40px;
+  }
+  
+  .vinotinto:hover {
     background: #771d17;
-
-}
-
-.vinotinto:active {
+  
+  }
+  
+  .vinotinto:active {
     box-shadow: 1px 1px 1px 1px #771d17;
-}
-
-.input-container {
+  }
+  
+  .input-container {
     display: flex;
     align-items: center;
     margin-bottom: 15px;
     margin-left: 50px;
-}
-
-.icon {
+  }
+  
+  .icon {
     margin-right: 10px;
     font-size: 20px;
-}
-
-.key-icon::before {
+  }
+  
+  .key-icon::before {
     content: "\f084";
     /* Unicode for key icon */
     font-family: "Font Awesome 5 Free";
     font-weight: 900;
-}
-
-.user-icon::before {
+  }
+  
+  .user-icon::before {
     content: "\f007";
     /* Unicode for user icon */
     font-family: "Font Awesome 5 Free";
     font-weight: 900;
-}
-
-.input-field {
+  }
+  
+  .input-field {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    width: 500px;
-
-}
-
-.input-field2 {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 240px;
-
-}
-
-.formulario__grupo2 {
-    margin-left: 20px;
-}
-
-#contenedorsitos {
+    width: 400px;
+  
+  }
+  
+  #contenedorsitos {
     display: flex;
-}
-
-#contenedorsito {
+  }
+  
+  #contenedorsito {
     margin-top: -50px;
-
-}
-
-#cosas {
+  
+  }
+  
+  #cosas {
     margin-left: 60px;
-}
-
-.contIzquierdaAbajo {
+  }
+  
+  .contIzquierdaAbajo {
     margin-top: -35px;
-}
-
-.invalid {
-    border: 1px solid #1F67B9;
+  }
+  
+  .invalid {
+    border: 1px solid #E12424;
     box-shadow: 0 0 1px red;
     outline: none;
-}
-
-.error {
-    color: #1F67B9;
+  }
+  
+  .error {
+    color: #E12424;
     display: block;
     font-size: 12px;
-
-}
-
-label {
+  
+  }
+  
+  label {
     display: block;
     /* Hace que el label sea un elemento en bloque para que aparezca por encima del input */
     margin-bottom: 10px;
     /* Agrega un margen inferior para separar el label del input */
-}
-
-/* Estilos para el botón de eliminar */
-.boton {
+  }
+  
+  /* Estilos para el botón de eliminar */
+  .boton {
     background-color: transparent;
     /* Establece el fondo del botón como transparente */
     border: none;
     /* Elimina el borde del botón */
     cursor: pointer;
     /* Cambia el cursor al pasar sobre el botón */
-}
-
-.boton:hover {
+  
+  }
+  
+  .boton:hover {
     background-color: transparent;
     /* Establece el fondo del botón como transparente al pasar sobre él */
-}
-
-.tabla {
+  }
+  
+  .tabla {
     border-collapse: collapse;
     border: 1px solid gray;
     border-radius: 10px;
     margin-top: 20px;
     margin-right: 20px;
-}
-
-.busqueda {
+  }
+  
+  .busqueda {
     height: 30px;
     border: none;
     border: 1px solid gray;
     border-radius: 20px;
     width: 500px;
-}
+    margin-top: 5px;
+  }

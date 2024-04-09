@@ -1,0 +1,147 @@
+.botones {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.boton-generar {
+    background-color: #48110d;
+    color: white;
+    text-align: center;
+    font-size: 20px;
+    height: 40px;
+    width: 100px;
+    border-radius: 50px;
+    border: none;
+}
+
+.rojo{
+    background: #E12424;
+    color: white;
+}
+  
+.rojo:hover{
+    background: #f33928;
+}
+  
+.rojo:active{
+    box-shadow: 1px 1px 1px 1px #f33928;
+}
+
+
+#titulo {
+    display: flex;
+    font-size: 15px;
+    margin-top: -15px;
+}
+.iconosRojos{
+    color: #E12424;
+}
+
+.iconosMorados{
+    color:#8a0000
+}
+
+.vinotinto{
+background: #48110d;
+color: white;
+}
+
+.vinotinto:hover{
+background: #771d17;
+
+}
+
+.vinotinto:active{
+box-shadow: 1px 1px 1px 1px #771d17;
+}
+
+.tabla{
+    border-collapse: collapse;
+    border: 1px solid gray;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+.busqueda{
+    height: 30px;
+    border: none;
+    border: 1px solid gray;
+    border-radius: 20px;
+    width: 500px;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 37px;
+    height: 18px;
+    margin-top: 12px;
+}
+
+.slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: gray;
+    border-radius: 30px;
+    transition: 0.4s;
+}
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 15px;
+        width: 15px;
+        left: 4px;
+        bottom: 2px;
+        background-color: white;
+        border-radius: 50%;
+        transition: 0.4s;
+    }
+
+    
+
+
+.slider2{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #1F67B9;
+    border-radius: 30px;
+    transition: 0.4s;
+}
+
+    .slider2:before{
+        
+        position: absolute;
+        content: "";
+        height: 15px;
+        width: 15px;
+        left: 4px;
+        bottom: 2px;
+        background-color: white;
+        border-radius: 50%;
+        transition: 0.4s;
+        transform: translateX(13px);
+    }
+
+        
+.estado3-button {
+    background-color: #4caf4f;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+}
+
+.Estado4-button{
+    background-color: #aaaaaa;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+}

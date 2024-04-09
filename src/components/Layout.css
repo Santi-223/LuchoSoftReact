@@ -1,12 +1,17 @@
+body{
+  margin: 0px;
+}
+
 .contenedor_1 {
-  margin-left: 30px;
+  margin-left: 10px;
   margin-bottom: 8px;
   display: flex;
   align-items: center;
 }
 
-#luchosoft{
-  margin-left: 10px;
+#luchosoft {
+  margin-left: 8px;
+  color: white
 }
 
 .centrar {
@@ -22,11 +27,13 @@
 
 
 .barraPrincipal {
-  margin-right: -20px;
-  background-color: #E12424;
+  display: flex;
+  justify-content: space-between;
+  background-color: #4e54c8;  
   color: rgb(255, 255, 255);
   border-right: 1;
-  border: 1px solid #000000;
+  border: 1px solid #d3d3d3;
+  height: 9vh;
 }
 
 .contenedor {
@@ -36,26 +43,27 @@
 .barraLateral {
   flex: 2;
   /* Ocupa 4/5 del ancho disponible */
-  background-color: rgb(255, 255, 255);
-  padding: 20px;
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  height: 91vh;
   border-top: 10mm chocolate;
-  border-right: 1px solid #6d6d6d;
-  /* Agregar un borde derecho */
+  background-color: white;
 }
 
 .contenido {
   flex: 12;
   /* Ocupa 1/5 del ancho disponible */
-  background-color: #dbdbdb;
   padding: 20px;
-  margin-right: -20px;
   color: rgb(0, 0, 0);
+  border-left: 1px solid #6d6d6d;
+  background-color: white;
 }
 
 /*Menu------------------------------------------------------------------------------------------------------------------*/
 
 .sidebar {
-  width: 250px;
+  width: 200px;
   color: white;
 }
 
@@ -73,13 +81,15 @@
   /* Color del texto del encabezado del módulo */
   border-radius: 5px;
   /* Bordes redondeados */
-  border: 2px solid #6d6d6d;
+  border: 2px solid #8b8b8b;
   font-size: 15px;
   /* Cambia el tamaño de fuente a 18px */
 }
 
+
+.module-heading:hover,
 .module-heading.selected {
-  background-color: #ff000079;
+  background-color: #e5e3ed;
 }
 
 .options {
@@ -97,7 +107,8 @@
 
 .options li {
   padding: 5px;
-  background-color: #ffffff;
+  background-color: white;
+  ;
   color: rgb(0, 0, 0);
   border-radius: 5px;
   border: 2px solid #6d6d6d;
@@ -108,31 +119,16 @@
 
 .options li:hover,
 .options li.selected {
-  background-color: rgba(255, 0, 0, 0.329);
+  background-color: #e5e3ed;
 }
 
-.usuario {
-  margin-top: 40px;
-  margin-left: 30px;
-  display: flex;
-  align-items: center;
-}
-
-.usuario-link {
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-  color: #333;
-}
 
 .usuario-link img {
-  height: 30px;
+  margin-top: 8px;
   margin-right: 10px;
-}
-
-.usuario-link span {
-  font-size: 16px;
-  font-weight: bold;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
 }
 
 .module-heading {
@@ -149,11 +145,6 @@
   transform: rotate(90deg);
 }
 
-.contenido {
-  margin-top: 10px;
-  background-color: white;
-}
-
 .yellow-underline {
   color: #FAC710;
   text-decoration: underline;
@@ -161,8 +152,10 @@
 }
 
 a {
-  color: black; /* Cambia el color del texto a negro */
-  text-decoration: none; /* Elimina el subrayado del texto */
+  color: black;
+  /* Cambia el color del texto a negro */
+  text-decoration: none;
+  /* Elimina el subrayado del texto */
 }
 
 
@@ -174,8 +167,27 @@ a {
   cursor: pointer;
 }
 
-.iconosRojos{
+.boton p {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+
+.iconosRojos {
   color: #E12424;
+}
+
+.iconosVerdes {
+  color: #21d424;
+}
+
+.iconosNaranjas {
+  color: #ffbd2f;
+}
+
+.iconosAzules {
+  color: #1F67B9;
 }
 
 

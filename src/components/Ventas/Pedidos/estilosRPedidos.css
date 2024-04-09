@@ -1,0 +1,318 @@
+.iconosRojos{
+color: #E12424;
+}
+
+.buton-tabla-cliente{
+    display: flex;
+}
+
+#contenedorcito {
+    display: flex;
+    margin-left: 20px;
+}
+
+.TablaDetallePedidos{
+    margin-left: 100px;
+}
+
+/* .BotonesPedidos{
+    margin-top: 100px;
+} */
+.agrPedidos{
+    display: flex;
+}
+
+.agrPedidos p{
+    margin-right: 20px;
+}
+
+.inputcantidad{
+    height: 20px;
+    width: 60px;
+}
+
+.inputPrecio{
+    height: 20px;
+    width: 70px;
+}
+.agrPedidos button{
+    height: 30px;
+    width: 60px;
+    border-radius: 20px;
+    border: none;
+    background-color: #48110d;
+    color: #FFF;
+    margin-top: 10px;
+}
+
+.agrPedidos button:hover{
+    background: #631d18;
+}
+
+.agrPedidos button:active{
+    box-shadow: 1px 1px 1px 1px #631d18;
+}
+#kaka{
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    margin-top: 0px;
+    
+}
+
+#kake{
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    margin-top: 10px;
+}
+
+#totalpedidos{
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    margin-top: 0px;
+    margin-left: 30px;
+}
+
+.input-container {
+    display: block;
+    margin-bottom: 15px;
+}
+
+.input-container input{
+    width: 200px;
+}
+
+#cliente{
+    display: flex;
+    margin-top: 20px;
+    align-items: center;
+}
+
+#cliente p{
+    margin-right: 20px;
+}
+
+.btnAgregar{
+    background-color: #48110d;
+    border: none;
+    color: #FFF;
+    height: 30px;
+    width: 70px;
+    border-radius: 20px;
+
+}
+
+.btnAgregar:hover{
+    background: #631d18;
+}
+
+.btnAgregar:active{
+    box-shadow: 1px 1px 1px 1px #631d18;
+}
+
+.busqueda{
+    display: flex;
+    
+    height: 20px;
+    border-radius: 20px;
+    width: 200px;
+}
+
+#ClienteAgregado{
+    display: flex;
+}
+
+.TablaCliente{
+    background-color: rgb(9, 41, 54);
+    color: #FFF;
+    font-size: 15px;
+    height: 30px;
+    margin-top: -1px;
+    padding-top: 7px;
+    padding-bottom: 0px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+
+.detalleC{
+    border: 1px solid #858585;
+    width: 230px;
+    border-radius: 20px;
+    height: 150px;
+}
+
+.detalleC p{
+    display: flex;
+    color: #6d6d6d;
+    margin-left: 20px;
+}
+
+.seleccionar{
+    display: flex;
+    text-align: center;
+    justify-content: center;
+}
+
+.seleccionar label{
+    margin-top: 14px;
+    margin-left: 10px;
+}
+
+.icon {
+    margin-right: 10px;
+    font-size: 20px;
+}
+
+.input-field {
+    padding: 10px;
+
+    border-radius: 5px;
+    width: 350px; /* Cambia este valor para ajustar el ancho del input */
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+.input-field2 {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100px; /* Cambia este valor para ajustar el ancho del input */
+    padding: 10px;
+
+    display: flex;
+    justify-content: end;
+
+}
+
+.input-field3 {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 760px; /* Cambia este valor para ajustar el ancho del input */
+    padding: 10px;
+
+    display: flex;
+    justify-content: end;
+    align-items: center;
+
+
+}
+
+.cajaBotonesRPedidos {
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+}
+
+.cajaBotonesRPedidos button {
+  
+    /* Ajusta el padding para hacer los botones más largos */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    /* Ajusta el ancho de los botones */
+    text-align: center;
+    width: 150px;
+    margin-right: 30px;
+    height: 40px;
+    font-size: 15px;
+    /* padding-top: 10px;
+    padding-left: 20px; */
+}
+
+
+.iconosMorados{
+color:#8a0000}
+
+input::placeholder {
+padding-left: 8px;
+}
+
+input{
+border-radius: 3px;
+border: 1px solid #6d6d6d;
+}
+
+
+.rojoRPedidos{
+    background: #E12424;
+    color: white;
+}
+
+.rojoRPedidos:hover{
+    background: #f33928;
+}
+
+.rojoRPedidos:active{
+    box-shadow: 1px 1px 1px 1px #f33928;
+}
+
+.vinotinto{
+    background: #48110d;
+    color: white;
+}
+
+.vinotinto:hover{
+    background: #771d17;
+    
+}
+
+.vinotinto:active{
+    box-shadow: 1px 1px 1px 1px #771d17;
+}
+
+#tituloRPedidos {
+    color: rgb(0, 0, 0);
+    display: flex;
+    font-size: 15px; /* Tamaño de fuente */
+    font-weight: bold; /* Negrita */
+    margin-top: -20px;
+}
+
+.tabladetalleP{
+    display: flex;
+    justify-content: center;
+    justify-content: space-around;
+    align-items: center;
+
+}
+
+.hijotablaInsu{
+    border: 1px solid gray;
+    border-radius: 5px;
+}
+
+
+.tabladetalleClien{
+    border: 1px solid gray;
+    border-radius: 10px;
+}
+
+.tabla{
+    width: 600px;
+}
+
+.agregarInsu{
+    height: 40px;
+    width: 40PX;
+    border-radius: 30PX;
+    border: none;
+    background-color: #48110d;
+    color: #FFF;
+    margin-bottom: -25px;
+}
+
+.agregarClient{
+    height: 40px;
+    width: 40PX;
+    border-radius: 30PX;
+    border: none;
+    background-color: #48110d;
+    color: #FFF;
+    margin-bottom: -25px;
+}

@@ -16,7 +16,9 @@ const Layout = () => {
     const [permisoClientes, setPermisoClientes] = useState(false);
     const [permisoPedidos, setPermisoPedidos] = useState(false);
     const [permisoVentas, setPermisoVentas] = useState(false);
-    
+    const [permisoMCompras, setPermisoMCompras] = useState(false);
+    const [permisoMVentas, setPermisoMVentas] = useState(false);
+
 
     // Obtener el token del localStorage
     const token = localStorage.getItem('token');
@@ -43,6 +45,10 @@ const Layout = () => {
             setPermisoUsuarios(true);
         }
 
+        if (permisos && permisos.includes(3) || permisos.includes(4) || permisos.includes(5) || permisos.includes(6)) {
+            setPermisoMCompras(true);
+        }
+
         if (permisos && permisos.includes(3)) {
             setPermisoCatInsumos(true);
         }
@@ -61,6 +67,10 @@ const Layout = () => {
 
         if (permisos && permisos.includes(7)) {
             setPermisoOrden(true);
+        }
+
+        if (permisos && permisos.includes(8) || permisos.includes(9) || permisos.includes(10) || permisos.includes(11) || permisos.includes(12)) {
+            setPermisoMVentas(true);
         }
 
         if (permisos && permisos.includes(8)) {
@@ -105,18 +115,23 @@ const Layout = () => {
         <div>
             <div className="barraPrincipal">
                 <div className="contenedor_1">
-                    <Link to={"/"}>
+                    <Link to={"/dashboard"}>
                         <img src="/archivos/imagenes/LuchoGod.png" height="45px" length="45px" alt="Logo" />
                     </Link>
                     <p id="luchosoft">LuchoSoft</p>
                 </div>
+                <div>
+                    <Link to="/dashboard">
+                        <a className="usuario-link">
+                            <img src={(usuario.imagen_usuario != "" ? usuario.imagen_usuario : "")} alt="" />
+                        </a>
+                    </Link>
+                </div>
+
             </div>
 
             <div className="contenedor">
                 <div className="barraLateral">
-                    <center>
-                        <h2>Menú</h2>
-                    </center>
                     <div className="sidebar">
                         {permisoRoles && ( // Mostrar el módulo de configuración solo si el permiso uno está presente
                             <div className="module">
@@ -144,53 +159,87 @@ const Layout = () => {
                             </div>
                         )}
 
+                        {permisoMCompras && (
                             < div className="module">
-                        <p className={`module-heading ${selectedModule === "Compras" ? "selected" : ""}`} onClick={() => handleModuleClick("Compras")}>
-                            Compras <i className="bi bi-chevron-down arrow-icon"></i>
-                        </p>
-                        <ul className={`options ${selectedModule === "Compras" ? "active" : ""}`}>
-                            <li>Categoria de insumos</li>
-                            <li>Insumos</li>
-                            <li>Proveedores</li>
-                            <li>Compras</li>
-                        </ul>
-                    </div>
-
-                    <div className="module">
-                        <p className={`module-heading ${selectedModule === "Producción" ? "selected" : ""}`} onClick={() => handleModuleClick("Producción")}>
-                            Producción <i className="bi bi-chevron-down arrow-icon"></i>
-                        </p>
-                        <ul className={`options ${selectedModule === "Producción" ? "active" : ""}`}>
-                            <li>Orden de producción</li>
-                        </ul>
-                    </div>
-
-                    <div className="module">
-                        <p className={`module-heading ${selectedModule === "Ventas" ? "selected" : ""}`} onClick={() => handleModuleClick("Ventas")}>
-                            Ventas <i className="bi bi-chevron-down arrow-icon"></i>
-                        </p>
-                        <ul className={`options ${selectedModule === "Ventas" ? "active" : ""}`}>
-                            <li>Categoria de productos</li>
-                            <li>Productos</li>
-                            <li>Clientes</li>
-                            <li>Pedidos</li>
-                            <li>Ventas</li>
-                        </ul>
-                    </div>
-                    <div className="usuario">
-                        <Link to="/home">
-                            <a className="usuario-link">
-                                <img src="/archivos/imagenes/Profile.png" alt="" />
-                                <span id="spanIcono">Nombre de Usuario</span>
-                            </a>
-                        </Link>
+                                <p className={`module-heading ${selectedModule === "Compras" ? "selected" : ""}`} onClick={() => handleModuleClick("Compras")}>
+                                    Compras <i className="bi bi-chevron-down arrow-icon"></i>
+                                </p>
+                                <ul className={`options ${selectedModule === "Compras" ? "active" : ""}`}>
+                                    {permisoCatInsumos && (
+                                        <Link to="/CatInsumos">
+                                            <li>Categoria de insumos</li>
+                                        </Link>
+                                    )}
+                                    {permisoInsumos && (
+                                        <Link to="/Insumos">
+                                            <li>Insumos</li>
+                                        </Link>
+                                    )}
+                                    {permisoProveedores && (
+                                        <Link to="/Proveedores">
+                                            <li>Proveedores</li>
+                                        </Link>
+                                    )}
+                                    {permisoCompras && (
+                                        <Link to="/Compra">
+                                            <li>Compras</li>
+                                        </Link>
+                                    )}
+                                </ul>
+                            </div>
+                        )}
+                        {permisoOrden && (
+                            <div className="module">
+                                <p className={`module-heading ${selectedModule === "Producción" ? "selected" : ""}`} onClick={() => handleModuleClick("Producción")}>
+                                    Producción <i className="bi bi-chevron-down arrow-icon"></i>
+                                </p>
+                                <ul className={`options ${selectedModule === "Producción" ? "active" : ""}`}>
+                                    <Link to="/ordenes_produccion">
+                                        <li>Orden de producción</li>
+                                    </Link>
+                                </ul>
+                            </div>
+                        )}
+                        {permisoMVentas && (
+                            <div className="module">
+                                <p className={`module-heading ${selectedModule === "Ventas" ? "selected" : ""}`} onClick={() => handleModuleClick("Ventas")}>
+                                    Ventas <i className="bi bi-chevron-down arrow-icon"></i>
+                                </p>
+                                <ul className={`options ${selectedModule === "Ventas" ? "active" : ""}`}>
+                                    {permisoCatProductos && (
+                                        <Link to="/categoria_productos">
+                                            <li>Categoria de productos</li>
+                                        </Link>
+                                    )}
+                                    {permisoProductos && (
+                                        <Link to="/productos">
+                                            <li>Productos</li>
+                                        </Link>
+                                    )}
+                                    {permisoClientes && (
+                                        <Link to="/clientes">
+                                            <li>Clientes</li>
+                                        </Link>
+                                    )}
+                                    {permisoPedidos && (
+                                        <Link to="/pedidos">
+                                            <li>Pedidos</li>
+                                        </Link>
+                                    )}
+                                    {permisoVentas && (
+                                        <Link to="/ventas">
+                                            <li>Ventas</li>
+                                        </Link>
+                                    )}
+                                </ul>
+                            </div>
+                        )}
                     </div>
                 </div>
+                <div className="contenido">
+                    <Outlet />
+                </div>
             </div>
-            <div className="contenido">
-                <Outlet />
-            </div>
-        </div>
         </div >
     );
 };

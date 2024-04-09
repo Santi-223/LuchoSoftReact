@@ -18,15 +18,15 @@
 .botonAgregar {
     background-color: #1F67B9;
     color: white;
-    height: 40px;
-    width: 130px;
-    margin-right: 20px;
+    height: 50px;
+    width: 150px;
+    margin-right: 160px;
     border: none;
     border-radius: 50px;
 }
 
 
-.divFiltro{
+.divFiltro {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -117,20 +117,22 @@
     padding: 10px;
     background-color: #ffffff;
     margin-top: -20px;
-    width: 300px;
+    margin-left: 20px;
+    width: 350px;
+    height: 350px;
+
 }
 
 .contenido2 {
     border-radius: 3px;
-    border: 1px solid #b9b9b9;
     margin-left: 50px;
     margin-right: 50px;
-    background-color: #f8f8f8;
 }
 
 #_id {
     background-color: #ccc;
 }
+
 
 
 .rojo {
@@ -150,6 +152,7 @@
 .vinotinto {
     background: #48110d;
     color: white;
+    height: 50px;
 }
 
 .vinotinto:hover {
@@ -163,9 +166,9 @@
 
 .input-container {
     display: flex;
-    align-items: center;
-    margin-bottom: 15px;
-    margin-left: 50px;
+    justify-content: space-between; 
+
+
 }
 
 .icon {
@@ -191,7 +194,7 @@
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    width: 500px;
+    width: 200px;
 
 }
 
@@ -203,17 +206,24 @@
 
 }
 
-.formulario__grupo2 {
+.formulariogrupo {
     margin-left: 20px;
 }
 
 #contenedorsitos {
     display: flex;
+    margin-left: 60px;
 }
 
 #contenedorsito {
-    margin-top: -50px;
-
+    display: flex;
+    /* Establece un contenedor flexible */
+    flex-direction: column;
+    /* Establece la dirección del flex a vertical */
+    justify-content: space-between;
+    /* Distribuye los elementos con un espacio igual entre ellos */
+    margin-top: -30px;
+    margin-left: -50px;
 }
 
 #cosas {
@@ -263,7 +273,7 @@ label {
     border-collapse: collapse;
     border: 1px solid gray;
     border-radius: 10px;
-    margin-top: 20px;
+    margin-top: -30px;
     margin-right: 20px;
 }
 
@@ -274,3 +284,22 @@ label {
     border-radius: 20px;
     width: 500px;
 }
+
+
+.botonRojo {
+    background-color: #E12424;
+    color: white;
+    height: 50px;
+    width: 180px;
+    margin-left: 5%;
+    margin-bottom: -10px;
+  }
+  
+  .botonMorado {
+    background-color: #722F37;
+    color: white;
+    height: 50px;
+    width: 180px;
+    margin-left: 5%;
+    margin-bottom: -10px;
+  }

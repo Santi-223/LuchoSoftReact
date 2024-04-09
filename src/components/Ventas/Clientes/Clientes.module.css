@@ -1,0 +1,280 @@
+#tituloCliente{
+font-size: 15px;
+margin-top: -20px;
+display: flex;
+}
+
+.contenido {
+    text-align: center;
+}
+
+.contForms {
+    display: inline-block;
+    /* Alinea los formularios horizontalmente */
+    text-align: left;
+    /* Alinea el contenido de los formularios a la izquierda */
+    margin: 0 auto;
+    /* Centra los formularios horizontalmente */
+}
+
+
+.iconosRojos {
+    color: #E12424;
+    cursor: pointer;
+}
+
+.iClienteFrecuente {
+    color: #E12424;
+    cursor: pointer;
+    /* background-color: #992222; */
+}
+
+
+.iconosMorados {
+    color: #48110d;
+}
+
+input {
+    border-radius: 3px;
+    border: 1px solid #6d6d6d;
+}
+
+.input1 input {
+    padding-left: 10px;
+    width: 300px;
+    height: 50px;
+}
+
+
+.input1 i {
+    font-size: 20px;
+}
+
+.parrafoGris {
+    color: gray;
+}
+
+#guardar {
+    background-color: #48110d;
+    color: white;
+}
+
+#cancelar {
+    background-color: #E12424;
+    color: white;
+}
+
+
+.gris {
+    color: #6d6d6d;
+}
+
+.contenido2{
+    border-radius: 10px;
+    border: 1px solid #b9b9b9;
+    margin-left: 200px;
+    margin-right: 200px;
+    background-color: #f8f8f8;
+}
+
+
+.rojo{
+    background: #E12424;
+    color: white;
+  
+  }
+  
+  .rojo:hover{
+    background: #3e7fc9;
+  }
+  
+  .rojo:active{
+    box-shadow: 1px 1px 1px 1px #3e7fc9;
+  }
+
+  
+  .vinotinto:hover{
+    background: #771d17;
+    
+  }
+  
+  .vinotinto:active{
+    box-shadow: 1px 1px 1px 1px #771d17;
+  }
+
+.botones {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.botonAgregar {
+    border: none;
+    margin-right: 20px;
+    background-color: #1F67B9;
+    color: white;
+    border-radius: 50px;
+    height: 40px;
+    width: 150px;
+    font-size: 15px;
+}
+
+.boton-generar {
+    background-color: #48110d;
+    color: white;
+    text-align: center;
+    font-size: 20px;
+    height: 40px;
+    width: 100px;
+    border-radius: 50px;
+    border: none;
+}
+
+
+
+.pull-left {
+    float: left !important;
+}
+
+.tabla{
+    border-collapse: collapse;
+    border: 1px solid gray;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+.busqueda{
+    height: 30px;
+    border: none;
+    border: 1px solid gray;
+    border-radius: 20px;
+    width: 500px;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 35px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: gray;
+    border-radius: 30px;
+    transition: 0.4s;
+}
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 15px;
+        width: 15px;
+        left: 4px;
+        bottom: 2px;
+        background-color: white;
+        border-radius: 50%;
+        transition: 0.4s;
+    }
+
+
+.slider2{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #1F67B9;
+    border-radius: 30px;
+    transition: 0.4s;
+}
+
+    .slider2:before{
+        
+        position: absolute;
+        content: "";
+        height: 15px;
+        width: 15px;
+        left: 4px;
+        bottom: 2px;
+        background-color: white;
+        border-radius: 50%;
+        transition: 0.4s;
+        transform: translateX(13px);
+    }
+
+.acciones{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+    .acciones button{
+        margin-left: 10px;
+        margin-top: -6px;
+        background-color: rgba(255, 255, 255, 0);
+        border: none;
+        font-size: 20px;
+    }
+
+
+/* .frecuentebuton{
+    background-color: rgba(127, 255, 212, 0.589);
+    border: none;
+    border-radius: 5px;
+} */
+
+.frecuente-button {
+    background-color: #4caf4f;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+  
+.no-frecuente-button {
+    background-color: #aaaaaa;
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+}
+
+.contFormsRCliente {
+    display: inline-block;
+    /* Alinea los formularios horizontalmente */
+    text-align: left;
+    /* Alinea el contenido de los formularios a la izquierda */
+    margin: 0;
+    /* Centra los formularios horizontalmente */
+    font-size: 2px;
+}
+
+.input1RCliente input {
+    width: 300px;
+    height: 20px;
+}
+
+.BotonesClientes{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.BotonesClientes button{
+    height: 45px;
+    width: 100px;
+    margin-right: 20px;
+    border-radius: 10px;
+    border: none;
+
+}
+
+.RegistrarCliente{
+    background-color: #1F67B9;
+    color: #ffffff;
+}

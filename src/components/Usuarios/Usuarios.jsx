@@ -8,6 +8,10 @@ import Swal from 'sweetalert2';
 import DataTable from "react-data-table-component";
 
 function Usuarios() {
+
+    // Obtener el token del localStorage
+    const token = localStorage.getItem('token');
+
     const [usuarios, setUsuarios] = useState([]);
     const [roles, setRoles] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -38,7 +42,7 @@ function Usuarios() {
             cell: (row) => (
                 <img id={estilos.imagen_i}
                     src={row.imagen_usuario ? row.imagen_usuario : 'https://tse2.mm.bing.net/th?id=OIP.U8HnwxkbTkhoZ_DTf7sCSgHaHa&pid=Api&P=0&h=180'}
-                    width="80px" />
+                    width="40px" />
             ),
             sortable: true
         },
@@ -79,21 +83,21 @@ function Usuarios() {
             name: "Acciones",
             cell: (row) => (
                 <div className={estilos["acciones"]}>
-                    <button className={estilos.boton} onClick={() => handleEstadoUsuario(row.id_usuario, row.estado_usuario)} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '15px' }}>
+                    <button className={estilos.boton} onClick={() => handleEstadoUsuario(row.id_usuario, row.estado_usuario)} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}>
                         {row.estado_usuario === 1 ? (
                             <i className="bi bi-toggle-on" style={{ color: "#1F67B9" }}></i>
                         ) : (
                             <i className="bi bi-toggle-off" style={{ color: "black" }}></i>
                         )}
                     </button>
-                    <button className={estilos.boton} onClick={() => handleDeleteUsuario(row.id_usuario)} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '15px' }}>
-                        <i className="fas fa-trash iconosRojos"></i>
-                    </button>
                     <Link to={`/editarUsuarios/${row.id_usuario}`}>
-                        <button className={estilos.boton} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '15px' }}>
-                            <i class="fa-solid fa-pen-to-square iconosRojos"></i>
+                        <button className={estilos.boton} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}>
+                            <i class="fa-solid fa-pen-to-square iconosNaranjas"></i>
                         </button>
                     </Link>
+                    <button className={estilos.boton} onClick={() => handleDeleteUsuario(row.id_usuario)} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}>
+                        <i className="fas fa-trash iconosRojos"></i>
+                    </button>
                 </div>
             )
         },
@@ -172,7 +176,7 @@ function Usuarios() {
                     const response = await fetch(`http://localhost:8082/configuracion/usuarios/${idUsuario}`, {
                         method: 'DELETE',
                         headers: {
-                            'token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjExMSwicGVybWlzb3MiOlsxLDIsMyw0LDUsNiw3LDgsOSwxMCwxMSwxMl0sImlhdCI6MTcxMDI1NjA5MywiZXhwIjoxNzEwMjU2MjEzfQ.WBPrtb_F21NO4FVBE4bmUpRrVtS9d-5V8DUYgDp2Ync'
+                            'token': token
                         }
                     });
 
@@ -187,20 +191,22 @@ function Usuarios() {
                         );
                     } else {
                         // Mostrar alerta de error si falla la eliminación
-                        Swal.fire(
-                            'Error',
-                            'Ha ocurrido un error al eliminar el usuario:',
-                            'error'
-                        );
+                        const errorData = await response.json(); // Parsear el cuerpo de la respuesta como JSON
+                        console.error('Error al eliminar el usuario:', errorData.msg);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error al eliminar el usuario',
+                            text: errorData.msg
+                        });
                     }
                 } catch (error) {
                     // Mostrar alerta de error si hay un error en la solicitud
                     console.error('Error al eliminar el usuario:', error);
-                    Swal.fire(
-                        'Error',
-                        'Ha ocurrido un error al eliminar el usuario.',
-                        'error'
-                    );
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error al crear el usuario',
+                        text: error
+                    });
                 }
             }
         });
@@ -233,6 +239,12 @@ function Usuarios() {
 
                     if (response.ok) {
                         // Actualización exitosa, actualizar la lista de compras
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'El estado se ha actualizado',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
                         fetchUsuarios();
                     } else {
                         console.error('Error al actualizar el estado del usuario');
@@ -257,21 +269,22 @@ function Usuarios() {
             <link href="https://cdn.datatables.net/2.0.2/css/dataTables.semanticui.css" rel="stylesheet" />
             <link href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.css" rel="stylesheet" />
 
-            <div className={estilos[""]}>
+            <div className={estilos["titulo"]}>
 
                 <h1>Gestión Usuarios</h1>
-
+            </div>
+            <br />
+            <div className={estilos['divFiltro']}>
+                <input type="text" placeholder=" Buscar..." value={filtro} onChange={handleFiltroChange} className={estilos["busqueda"]} />
+                
                 <Link to="/agregarUsuarios">
 
 
-                    <button className={`boton ${estilos.botonAgregar}`}><i className="fa-solid fa-plus"></i> Agregar</button>
+                    <button className={`${estilos.botonAgregar}`}><i className="fa-solid fa-plus"></i> Agregar</button>
                 </Link>
             </div>
-            <div className={estilos['filtro']}>
-                <input type="text" placeholder=" Buscar..." value={filtro} onChange={handleFiltroChange} className={estilos["busqueda"]} />
-            </div>
             <div className={estilos["tabla"]}>
-                <DataTable columns={columns} data={filteredUsuario} pagination paginationPerPage={5} highlightOnHover></DataTable>
+                <DataTable columns={columns} data={filteredUsuario} pagination paginationPerPage={6} highlightOnHover></DataTable>
             </div>
         </div>
     );

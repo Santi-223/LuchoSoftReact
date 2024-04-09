@@ -1,9 +1,11 @@
 import React, { useState, useEffect, setIsLoading } from 'react';
 import '../Layout.css';
 import estilos from '../Usuarios/Usuarios.module.css';
+import { Navigate, Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
 function AgregarUsuarios() {
+    const [redirect, setRedirect] = useState(false);
 
     const [roles, setRoles] = useState([]);
 
@@ -59,41 +61,142 @@ function AgregarUsuarios() {
 
         console.log(usuario)
 
-        try {
-            const response = await fetch('http://localhost:8082/configuracion/usuarios', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(usuario)
-            });
-
-            if (response.ok) {
-                console.log('Usuario creado exitosamente.');
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Usuario creado exitosamente',
-                    showConfirmButton: false,
-                    timer: 1500
+        if (usuario.id_usuario.length == 0) {
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "El campo de identificación esta vacío.",
+            })
+        }
+        else if (usuario.id_usuario.length < 5) {
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "El campo de identificación debe tener 5 o más carácteres.",
+            })
+        }
+        else if (usuario.nombre_usuario.length == 0) {
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "El campo de nombre esta vacío.",
+            })
+        }
+        else if (usuario.nombre_usuario.length < 5) {
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "El campo de nombre debe tener 5 o más carácteres.",
+            })
+        }
+        else if (usuario.telefono_usuario.length == 0) {
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "El campo de teléfono esta vacío.",
+            })
+        }
+        else if (usuario.telefono_usuario.length < 7) {
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "El campo de teléfono debe tener 7 o más carácteres.",
+            })
+        }
+        else if (usuario.direccion_usuario.length == 0) {
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "El campo de dirección esta vacío.",
+            })
+        }
+        else if (usuario.direccion_usuario.length < 7) {
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "El campo de dirección debe tener 7 o más carácteres.",
+            })
+        }
+        else if (usuario.email.length == 0) {
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "El campo de email esta vacío.",
+            })
+        }
+        else if (usuario.email.length < 5) {
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "El campo de email debe tener 5 o más carácteres.",
+            })
+        }
+        else if (usuario.contraseña.length == 0) {
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "El campo de contraseña esta vacío.",
+            })
+        }
+        else if (usuario.contraseña.length < 8) {
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "La contraseña debe tener 8 o más carácteres.",
+            })
+        }
+        else if (usuario.id_rol == 0) {
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "Debes seleccionar un rol.",
+            })
+        }
+        else {
+            try {
+                const response = await fetch('http://localhost:8082/configuracion/usuarios', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(usuario)
                 });
-                // Aquí podrías redirigir a otra página, mostrar un mensaje de éxito, etc.
-            } else {
-                console.error('Error al crear el usuario:', response.statusText);
+
+                if (response.ok) {
+                    console.log('Usuario creado exitosamente.');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Usuario creado exitosamente',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                    setTimeout(() => {
+                        setRedirect(true);
+                    }, 1000);
+                    // Aquí podrías redirigir a otra página, mostrar un mensaje de éxito, etc.
+                } else {
+                    const errorData = await response.json(); // Parsear el cuerpo de la respuesta como JSON
+                    console.error('Error al crear el usuario:', errorData.msg);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error al crear el usuario',
+                        text: errorData.msg,
+                    });
+                }
+            } catch (error) {
+                console.error('Error al crear el usuario:', error);
                 Swal.fire({
                     icon: 'error',
-                    title: 'Error',
-                    text: 'Error al crear el usuario',
+                    title: 'Error al crear el usuario',
+                    text: error.msg
                 });
             }
-        } catch (error) {
-            console.error('Error al crear el usuario:', error);
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Error al crear el usuario',
-            });
         }
     };
+
+    if (redirect) {
+        return <Navigate to={'/usuarios'}></Navigate>
+    }
 
     return (
         <div>
@@ -106,7 +209,7 @@ function AgregarUsuarios() {
                 <br />
                 <center>
                     <div id={estilos.titulo}>
-                        <h1>Registro Usuario</h1>
+                        <h1>Registrar Usuario</h1>
                         <br />
                         <br />
                         <br />
@@ -118,11 +221,11 @@ function AgregarUsuarios() {
                         <div id={estilos.contenedorsito}>
                             <div className={estilos["input-container"]}>
                                 <div className={estilos["formulario__grupo"]} id={estilos.grupo__id_usuario}>
-                                    <label htmlFor="id_usuario"><i className={["fa-solid fa-id-card iconosRojos"]}></i>id_usuario</label>
+                                    <label htmlFor="id_usuario">Identificación</label>
                                     <div className={estilos["formulario__grupo-input"]}>
                                         <input
-                                            className={estilos["input-field"]}
-                                            type="text"
+                                            className={estilos["input-field2"]}
+                                            type="number"
                                             name="id_usuario"
                                             id={estilos.id_usuario}
                                             value={usuario.id_usuario}
@@ -131,14 +234,11 @@ function AgregarUsuarios() {
                                         <span></span>
                                     </div>
                                 </div>
-                            </div>
-
-                            <div className={estilos["input-container"]}>
-                                <div className={estilos["formulario__grupo"]} id={estilos.grupo__nombre}>
-                                    <label htmlFor="nombre"> <i className={["fa-solid fa-font iconosRojos"]}></i>Nombre</label>
+                                <div className={estilos["formulario__grupo2"]}>
+                                    <label htmlFor="nombre">Nombre</label>
                                     <div className={estilos["formulario__grupo-input"]}>
                                         <input
-                                            className={estilos["input-field"]}
+                                            className={estilos["input-field2"]}
                                             type="text"
                                             name="nombre_usuario"
                                             id={estilos.nombre}
@@ -149,14 +249,12 @@ function AgregarUsuarios() {
                                     </div>
                                 </div>
                             </div>
-
-
                             <div className={estilos["input-container"]}>
                                 <div className={estilos["formulario__grupo"]} id={estilos.grupo__telefono}>
-                                    <label htmlFor="telefono_usuario"><i className={["fa-solid fa-phone iconosRojos"]}></i> Telefono</label>
+                                    <label htmlFor="telefono_usuario">Telefono</label>
                                     <div className={estilos["formulario__grupo-input"]}>
                                         <input
-                                            className={estilos["input-field"]}
+                                            className={estilos["input-field2"]}
                                             type="text"
                                             name="telefono_usuario"
                                             id={estilos.telefono_usuario}
@@ -166,15 +264,11 @@ function AgregarUsuarios() {
                                         <span></span>
                                     </div>
                                 </div>
-                            </div>
-
-                            <div className={estilos["input-container"]}>
-                                <div className={estilos["formulario__grupo"]} id={estilos.grupo__direccion}>
-                                    <label htmlFor="direccion_usuario"><i className={["fa-sharp fa-solid fa-location-dot iconosRojos"]}></i>
-                                        Dirección</label>
+                                <div className={estilos["formulario__grupo2"]} id={estilos.grupo__direccion}>
+                                    <label htmlFor="direccion_usuario">Dirección</label>
                                     <div className={estilos["formulario__grupo-input"]}>
                                         <input
-                                            className={estilos["input-field"]}
+                                            className={estilos["input-field2"]}
                                             type="text"
                                             name="direccion_usuario"
                                             id={estilos.direccion_usuario}
@@ -186,27 +280,9 @@ function AgregarUsuarios() {
                                 </div>
                             </div>
 
-
-                            <div className={estilos["input-container"]}>
-                                <div className={estilos["formulario__grupo"]} id={estilos.grupo__contraseña}>
-                                    <label htmlFor="contraseña"><i className={["fa-solid fa-lock iconosRojos"]}></i>Contraseña</label>
-                                    <div className={estilos["formulario__grupo-input"]}>
-                                        <input
-                                            className={estilos["input-field"]}
-                                            type="contraseña"
-                                            name="contraseña"
-                                            id={estilos.contraseña}
-                                            value={usuario.contraseña}
-                                            onChange={handleChange}
-                                        />
-                                        <span></span>
-                                    </div>
-                                </div>
-                            </div>
-
                             <div className={estilos["input-container"]}>
                                 <div className={estilos["eo"]}>
-                                    <p className={estilos[""]}><i className={["fas fa-user-shield iconosRojos"]}></i>email</p>
+                                    <p className={estilos[""]}>Email</p>
                                     <input
                                         className={estilos["input-field"]}
                                         type="email"
@@ -218,65 +294,68 @@ function AgregarUsuarios() {
                                 </div>
                             </div>
                             <div className={estilos["input-container"]}>
-                                <div className={estilos["formulario__grupo"]} id={estilos.grupo__id_rol}>
-                                    <label htmlFor="id_rol"><i className={["fa-solid fa-id-card iconosRojos"]}></i>Seleccionar Rol</label>
+                                <div className={estilos["formulario__grupo"]} id={estilos.grupo__contraseña}>
+                                    <label htmlFor="contraseña">Contraseña</label>
+                                    <div className={estilos["formulario__grupo-input"]}>
+                                        <input
+                                            className={estilos["input-field2"]}
+                                            type="password"
+                                            name="contraseña"
+                                            id={estilos.contraseña}
+                                            value={usuario.contraseña}
+                                            onChange={handleChange}
+                                        />
+                                        <span></span>
+                                    </div>
+                                </div>
+                                <div className={estilos["formulario__grupo2"]} id={estilos.grupo__id_rol}>
+                                    <label htmlFor="id_rol">Seleccionar Rol</label>
                                     <div className={estilos["formulario__grupo-input"]}>
                                         <select
-                                            className={estilos["input-field"]}
+                                            className={estilos["input-field2"]}
                                             name="id_rol" // Utiliza el mismo nombre que el campo id_rol
                                             id={estilos.id_rol} // Cambia el id para que sea único
                                             value={usuario.id_rol}
                                             onChange={handleChange}
                                         >
-                                            <option>Seleccione un rol</option>
-                                            {roles.map(rol => (
-                                                <option value={rol.id_rol}>{rol.nombre_rol}</option>
-                                            ))}
+                                            <option value={0}>Seleccione un rol</option>
+                                            {roles.map(rol => {
+                                                if (rol.estado_rol != false) {
+                                                    return <option value={rol.id_rol}>{rol.nombre_rol}</option>
+                                                }
+                                            })}
                                         </select>
-                                        <span></span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div id={estilos.cosas}>
                             <center>
-                                <br />
-                                <br />
-                                <div className={`${estilos.divImagen} ${estilos.input1}`} >
-                                    <p><i className={["fa-solid fa-image iconosRojos"]}></i> URL Imagen</p>
-                                    <img id={estilos.imagen_i}
-                                        src={usuario.imagen_usuario ? usuario.imagen_usuario : 'https://tse2.mm.bing.net/th?id=OIP.U8HnwxkbTkhoZ_DTf7sCSgHaHa&pid=Api&P=0&h=180'}
-                                        width="200px" />
-                                    <br />
-                                    <br />
-                                    <input
-                                        id={estilos.imagen_usuario}
-                                        className={estilos["input-field2"]}
-                                        type="text"
-                                        placeholder="URL de la imagen"
-                                        name='imagen_usuario'
-                                        value={usuario.imagen_usuario}
-                                        onChange={handleChange}
-                                    />
+                                <div className={`${estilos.divImagen} `} >
+                                    <p>URL Imagen</p>
+                                    <img id={estilos.imagen}
+                                        src={usuario.imagen_usuario ? usuario.imagen_usuario : 'https://tse2.mm.bing.net/th?id=OIP.U8HnwxkbTkhoZ_DTf7sCSgHaHa&pid=Api&P=0&h=180'} />
+                                    <div>
+                                        <input
+                                            id={estilos.imagen_usuario}
+                                            className={estilos["input-field2"]}
+                                            type="text"
+                                            placeholder="URL de la imagen"
+                                            name='imagen_usuario'
+                                            value={usuario.imagen_usuario}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
+
                                 </div>
                             </center>
-                            <br />
                         </div>
-
-
                     </div>
-
-
-
                     <div className={estilos["botonsito"]}>
-                        <button className={`boton ${estilos.botonMorado}`} type='submit'><i></i> Guardar</button>
-                        <button className={`boton ${estilos.botonRojo}`}>
-                            <i className={[""]}></i> Cancelar
-                        </button>
+                        <button className={`boton ${estilos.azul}`} type='submit'><p className={estilos.textoBoton}>Guardar</p></button>
+                        <Link className={`boton ${estilos.gris}`} to='/usuarios'><p>Cancelar</p></Link>
                     </div>
                 </form>
-
-
             </div>
         </div>
     );

@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
-import { Outlet, Link } from "react-router-dom";
-import $ from 'jquery';
+import React, { useState, useEffect, useRef } from 'react';
+import { Outlet, Link, Navigate } from "react-router-dom";
 import 'datatables.net-bs5';
 import '../Layout.css'
 import estilos from '../Configuracion/Roles.module.css'
@@ -8,15 +7,18 @@ import Swal from 'sweetalert2';
 import Modal from '../Modal';
 import styled from 'styled-components';
 import DataTable from "react-data-table-component";
+import { error } from 'jquery';
 
 function Roles() {
+
+    // Obtener el token del localStorage
+    const token = localStorage.getItem('token');
 
     const [selectedPermisos, setSelectedPermisos] = useState([]);
     const [estadoModalAgregar, cambiarEstadoModalAgregar] = useState(false);
     const [estadoModaleditar, cambiarEstadoModalEditar] = useState(false);
     const [roles, setRoles] = useState([]);
     const [roles1, setRoles1] = useState({
-        id_rol: '',
         nombre_rol: '',
         descripcion_rol: '',
         estado_rol: 1
@@ -89,14 +91,14 @@ function Roles() {
                             <i className="bi bi-toggle-off" style={{ color: "black" }}></i>
                         )}
                     </button>
-                    <button className={estilos.boton} onClick={() => handleDeleteRoles(row.id_rol)} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}>
-                        <i className="fas fa-trash iconosRojos"></i>
-                    </button>
                     <button onClick={() => {
                         cambiarEstadoModalEditar(!estadoModaleditar),
                             setRolesEditar(row)
                     }} className={estilos.boton} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}>
-                        <i class="fa-solid fa-pen-to-square iconosRojos"></i>
+                        <i class="fa-solid fa-pen-to-square iconosNaranjas"></i>
+                    </button>
+                    <button className={estilos.boton} onClick={() => handleDeleteRoles(row.id_rol)} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}>
+                        <i className="fas fa-trash iconosRojos"></i>
                     </button>
                 </div>
             )
@@ -114,75 +116,150 @@ function Roles() {
         console.log(selectedPermisos)
     };
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
+    const checkEditar = (event, idRolP, idRol, idPermiso) => {
+        const { value, checked } = event.target;
+        if (checked) {
+            console.log("Ya esta descheck", idRolP)
+            crearRolPer(idRol, idPermiso)
+        } else {
+            console.log("Ya esta check", idRolP)
+            handleDeleteRolesPermisos(idRolP)
+        }
+        console.log(selectedPermisos)
+    };
+
+    const crearRolPer = async (id_rol, id_permiso) => {
+        console.log('permiso selecionado: ', id_permiso, 'rol: ', id_rol)
+        const detallePayload = {
+            fecha_roles_permisos: '2023-09-22',
+            id_rol: id_rol,
+            id_permiso: id_permiso
+        };
 
         try {
-            console.log('rol a enviar: ', roles1)
-
-            const id_rol = roles1.id_rol;
-            // Enviar los datos del rol
-            const responseRoles = await fetch('http://localhost:8082/configuracion/roles', {
+            const responseDetalle = await fetch('http://localhost:8082/configuracion/roles_permisos', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(roles1)
+                body: JSON.stringify(detallePayload)
             });
 
-            if (responseRoles.ok) {
-                console.log('Rol creado exitosamente.');
-
-                // Iterar sobre los permisos seleccionados y enviar los detalles a la API de la tabla de detalle
-                selectedPermisos.forEach(async (id_permiso) => {
-
-                    console.log('permiso selecionado: ', id_permiso, 'rol: ', id_rol)
-                    const detallePayload = {
-                        fecha_roles_permisos: '2023-09-22',
-                        id_rol: id_rol,
-                        id_permiso: id_permiso
-                    };
-
-                    try {
-                        const responseDetalle = await fetch('http://localhost:8082/configuracion/roles_permisos', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify(detallePayload)
-                        });
-
-                        if (!responseDetalle.ok) {
-                            console.error('Error al enviar el detalle del permiso:', responseDetalle.statusText);
-                        } else {
-                            console.log('Detalle enviado con exito')
-                        }
-                    } catch (error) {
-                        console.error('Error al enviar el detalle del permiso:', error);
-                    }
+            if (!responseDetalle.ok) {
+                console.error('Error al enviar el detalle del permiso:', responseDetalle.statusText);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error al enviar el detalle',
+                    showConfirmButton: false,
+                    timer: 1500
                 });
-
+            } else {
+                console.log('Detalle enviado con exito')
                 Swal.fire({
                     icon: 'success',
                     title: 'Registro exitoso',
                     showConfirmButton: false,
                     timer: 1500
                 });
-                setTimeout(() => {
-                    window.location.href = '/roles';
-                }, 2000);
-
-                // Resto del código si es necesario
-            } else {
-                console.error('Error al crear el rol:', responseRoles.statusText);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Error al crear el rol',
-                });
+                fetchRolesPermisos();
             }
         } catch (error) {
-            console.error('Error al crear el rol:', error);
+            console.error('Error al enviar el detalle del permiso:', error);
+        }
+    }
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+
+        if (roles1.nombre_rol.length == 0) {
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "El campo de nombre esta vacío.",
+            })
+        } else if (roles1.descripcion_rol.length == 0) {
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "El campo de descripción rol esta vacío.",
+            })
+        }
+        else {
+            try {
+                console.log('rol a enviar: ', roles1)
+
+                // Enviar los datos del rol
+                const responseRoles = await fetch('http://localhost:8082/configuracion/roles', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(roles1)
+                });
+
+                if (responseRoles.ok) {
+                    const compraData = await responseRoles.json();
+                    const id_rol = compraData.id_rol;
+
+                    console.log('Rol creado exitosamente. su id es: ', id_rol);
+
+                    // Iterar sobre los permisos seleccionados y enviar los detalles a la API de la tabla de detalle
+                    selectedPermisos.forEach(async (id_permiso) => {
+
+                        console.log('permiso selecionado: ', id_permiso, 'rol: ', id_rol)
+                        const detallePayload = {
+                            fecha_roles_permisos: '2023-09-22',
+                            id_rol: id_rol,
+                            id_permiso: id_permiso
+                        };
+
+                        try {
+                            const responseDetalle = await fetch('http://localhost:8082/configuracion/roles_permisos', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(detallePayload)
+                            });
+
+                            if (!responseDetalle.ok) {
+                                console.error('Error al enviar el detalle del permiso:', responseDetalle.statusText);
+                            } else {
+                                console.log('Detalle enviado con exito')
+                            }
+                        } catch (error) {
+                            console.error('Error al enviar el detalle del permiso:', error);
+                        }
+                    });
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Registro exitoso',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                    fetchRoles();
+                    fetchRolesPermisos();
+                    setSelectedPermisos([]);
+                    setRoles1({
+                        nombre_rol: '',
+                        descripcion_rol: '',
+                        estado_rol: 1
+                    });
+                    cambiarEstadoModalAgregar(false);
+
+                    // Resto del código si es necesario
+                } else {
+                    console.error('Error al crear el rol:', responseRoles.statusText);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Error al crear el rol',
+                    });
+                }
+            } catch (error) {
+                console.error('Error al crear el rol:', error);
+            }
         }
     };
 
@@ -232,17 +309,87 @@ function Roles() {
             if (result.isConfirmed) {
                 try {
                     const response = await fetch(`http://localhost:8082/configuracion/roles/${idRol}`, {
-                        method: 'DELETE'
+                        method: 'DELETE',
+                        headers: {
+                            'token': token
+                        }
                     });
 
                     if (response.ok) {
                         console.log('Eliminación exitosa')
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Eliminación exitosa',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
                         fetchRoles();
                     } else {
-                        console.error('Error al eliminar el rol');
+                        const errorData = await response.json(); // Parsear el cuerpo de la respuesta como JSON
+                        console.error('Error al eliminar el rol:', errorData.msg);
+                        Swal.fire({
+                            icon: 'error',
+                            title: `Error al eliminar el rol`,
+                            text: errorData.msg, // Mostrar el mensaje de error recibido desde la API
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
                     }
                 } catch (error) {
                     console.error('Error al eliminar el rol:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error al eliminar el rol',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                }
+            }
+        });
+    };
+
+    const handleDeleteRolesPermisos = async (idRolP) => {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: '¿Estás seguro de que quieres eliminar esta asignación de permiso?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const response = await fetch(`http://localhost:8082/configuracion/roles_permisos/${idRolP}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'token': token
+                        }
+                    });
+
+                    if (response.ok) {
+                        console.log('Eliminación exitosa')
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Eliminación exitosa',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                        fetchRolesPermisos();
+                    } else {
+                        const errorData = await response.json(); // Parsear el cuerpo de la respuesta como JSON
+                        console.error('Error al eliminar la aisgnación del permiso:', errorData.msg);
+                        Swal.fire({
+                            icon: 'error',
+                            title: `Error al eliminar la aisgnación del permiso`,
+                            text: errorData.msg, // Mostrar el mensaje de error recibido desde la API
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error al eliminar la asignación del permiso:', error);
                 }
             }
         });
@@ -278,6 +425,12 @@ function Roles() {
                     if (response.ok) {
                         // Actualización exitosa, actualizar la lista de compras
                         console.log('actualizacion exitosa')
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'El estado se ha actualizado',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
                         fetchRoles();
                     } else {
                         console.error('Error al actualizar el estado del rol');
@@ -337,61 +490,83 @@ function Roles() {
         }));
     };
 
+    const handleChangeEditar = (event) => {
+        const { name, value } = event.target;
+        setRolesEditar(prevroles => ({
+            ...prevroles,
+            [name]: value
+        }));
+    };
+
     const handleSubmitEditar = async (event) => {
         event.preventDefault();
 
-        console.log(roles)
-
-        Swal.fire({
-            title: '¿Estás seguro?',
-            text: '¿Deseas actualizar la información del rol?',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Sí, actualizar',
-            cancelButtonText: 'Cancelar'
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                try {
-                    const response = await fetch(`http://localhost:8082/configuracion/roles/${roles.id_rol}`, {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(roles)
-                    });
-
-                    if (response.ok) {
-                        console.log('rol actualizado exitosamente.');
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'rol actualizado exitosamente',
-                            showConfirmButton: false,
-                            timer: 1500
+        if (rolesEditar.nombre_rol.length == 0) {
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "El campo de nombre esta vacío.",
+            })
+        } else if (rolesEditar.descripcion_rol.length == 0) {
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "El campo de descripción rol esta vacío.",
+            })
+        }
+        else {
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: '¿Deseas actualizar la información del rol?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, actualizar',
+                cancelButtonText: 'Cancelar'
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    try {
+                        const response = await fetch(`http://localhost:8082/configuracion/roles/${rolesEditar.id_rol}`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(rolesEditar)
                         });
-                        setTimeout(() => {
-                            window.location.href = '/roles';
-                        }, 2000);
-                        // Aquí podrías redirigir a otra página, mostrar un mensaje de éxito, etc.
-                    } else {
-                        console.error('Error al actualizar el rol:', response.statusText);
+
+                        if (response.ok) {
+                            console.log('rol actualizado exitosamente.');
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'rol actualizado exitosamente',
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                            setTimeout(() => {
+                                fetchRoles();
+                                cambiarEstadoModalEditar(false);
+                            }, 2000);
+                            // Aquí podrías redirigir a otra página, mostrar un mensaje de éxito, etc.
+                        } else {
+                            console.error('Error al actualizar el rol:', response.statusText);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Error al actualizar el rol',
+                            });
+                        }
+                    } catch (error) {
+                        console.error('Error al actualizar el rol:', error);
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
                             text: 'Error al actualizar el rol',
                         });
                     }
-                } catch (error) {
-                    console.error('Error al actualizar el rol:', error);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'Error al actualizar el rol',
-                    });
                 }
-            }
-        });
+            });
+        }
     };
 
     if (isLoading) {
@@ -405,20 +580,19 @@ function Roles() {
             <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
             <link href="https://cdn.datatables.net/2.0.2/css/dataTables.semanticui.css" rel="stylesheet" />
             <link href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.css" rel="stylesheet" />
-            <center>
-                <div id="titulo">
-                    <h1>Gestión de Roles</h1>
-                </div>
-                <br />
-            </center>
-            <div className={estilos["botones"]}>
-                <button onClick={() => cambiarEstadoModalAgregar(!estadoModalAgregar)} className={`boton ${estilos.botonRojo}`}><i className={[".fa-solid fa-plus"]}></i> Agregar</button>
+            <div className={estilos["titulo"]}>
+                <h1>Gestión de Roles</h1>
+
             </div>
-            <div className={estilos['filtro']}>
+            <br />
+            <div className={estilos['divFiltro']}>
                 <input type="text" placeholder=" Buscar..." value={filtro} onChange={handleFiltroChange} className={estilos["busqueda"]} />
+                <div className={estilos["botones"]}>
+                    <button onClick={() => cambiarEstadoModalAgregar(!estadoModalAgregar)} className={`${estilos.botonAgregar}`}><i className="fa-solid fa-plus"></i> Agregar</button>
+                </div>
             </div>
             <div className={estilos["tabla"]}>
-                <DataTable columns={columns} data={filteredRoles} pagination paginationPerPage={5} highlightOnHover></DataTable>
+                <DataTable columns={columns} data={filteredRoles} pagination paginationPerPage={6} highlightOnHover></DataTable>
             </div>
             <Modal
                 estado={estadoModalAgregar}
@@ -435,23 +609,11 @@ function Roles() {
                     <form onSubmit={handleSubmit}>
                         <div id={estilos.contenedorsito}>
                             <div id={estilos.contInput}>
-                                <div className={estilos["inputIdNombre"]}>
-                                    <div>
-                                        <p id={estilos.textito}> <i class="fa-solid fa-key iconosRojos"></i> ID del rol</p>
+                                <div className={estilos["input-container"]}>
+                                    <div id={estilos.eo}>
+                                        <p id={estilos.textito} >Nombre del rol</p>
                                         <input
-                                            id={estilos.idrol}
-                                            className={estilos["input2"]}
-                                            type="number"
-                                            placeholder="Ingrese el ID del rol"
-                                            name='id_rol'
-                                            value={roles1.id_rol}
-                                            onChange={handleChange}
-                                        />
-                                    </div>
-                                    <div id={estilos.nombrerol}>
-                                        <p id={estilos.textito} > <i class="fa-solid fa-font iconosRojos"></i> Nombre del rol</p>
-                                        <input
-                                            className={estilos["input2"]}
+                                            className={estilos["input-field"]}
                                             type="text"
                                             placeholder="Insertar nombre"
                                             name='nombre_rol'
@@ -464,7 +626,7 @@ function Roles() {
                                 <br />
                                 <div className={estilos["input-container"]}>
                                     <div id={estilos.eo}>
-                                        <p id={estilos.textito}> <i class="fa-solid fa-message iconosRojos"></i> Descripción del rol</p>
+                                        <p id={estilos.textito}>Descripción del rol</p>
                                         <input
                                             id={estilos.descrol}
                                             className={estilos["input-field"]}
@@ -483,10 +645,10 @@ function Roles() {
                                     <div id={estilos.seleccionarpermisos}>
 
 
-                                        <table id={estilos.tablita} className={estilos["tablitaMarginRight"]}>
+                                        <table id={estilos.tablita}  >
                                             <thead>
-                                                <tr>
-                                                    <th id={estilos.fondotabla} style={{ color: 'rgb(255, 255, 255)' }}>Seleccionar permisos</th>
+                                                <tr id={estilos.fondotabla}>
+                                                    <th style={{ color: 'rgb(255, 255, 255)' }}>Seleccionar permisos</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -495,7 +657,7 @@ function Roles() {
                                                         <td>
                                                             <input
                                                                 type="checkbox"
-                                                                className={estilos["checkbox"]}
+                                                                className={`form-check-input ${estilos["checkbox"]}`}
                                                                 value={permiso.id_permiso}
                                                                 onChange={handleCheckboxChange}
                                                             />
@@ -515,9 +677,9 @@ function Roles() {
                         </div>
                         <center>
                             <div className={estilos["cajaBotones"]}>
-                                <button onclick="registrar()" className={estilos["vinotinto"]} type="submit">Guardar</button>
+                                <button onclick="registrar()" className={estilos["azul"]} type="submit">Guardar</button>
                                 <div className={estilos["espacioEntreBotones"]}></div>
-                                <button onClick={() => cambiarEstadoModalAgregar(!estadoModalAgregar)} className={estilos["rojo"]} type="button">Cancelar</button>
+                                <button onClick={() => cambiarEstadoModalAgregar(!estadoModalAgregar)} className={estilos["gris"]} type="button">Cancelar</button>
                             </div>
                         </center>
                     </form>
@@ -526,7 +688,7 @@ function Roles() {
             <Modal
                 estado={estadoModaleditar}
                 cambiarEstado={cambiarEstadoModalEditar}
-                titulo="Registar Rol"
+                titulo="Editar Rol"
                 mostrarHeader={true}
                 mostrarOverlay={true}
                 posicionModal={'center'}
@@ -538,33 +700,29 @@ function Roles() {
                     <form onSubmit={handleSubmitEditar}>
                         <div id={estilos.contenedorsito}>
                             <div id={estilos.contInput}>
-                                <div className={estilos["input-container"]}>
-                                    <div id={estilos.eo}>
-                                        <p id={estilos.textito}> <i class="fa-solid fa-key iconosRojos"></i> ID del rol</p>
+                                <div className={estilos["inputIdNombre"]}>
+                                    <div>
+                                        <p id={estilos.textito}>ID del rol</p>
                                         <input
                                             id={estilos.idrol}
-                                            className={estilos["input-field"]}
+                                            className={estilos["input2"]}
                                             type="number"
                                             placeholder="Ingrese el ID del rol"
                                             name='id_rol'
                                             value={rolesEditar.id_rol}
-                                            onChange={handleChange}
+                                            onChange={handleChangeEditar}
+                                            readOnly
                                         />
                                     </div>
-
-                                </div>
-                                <br />
-                                <div className={estilos["input-container"]}>
-                                    <div id={estilos.eo}>
-                                        <p id={estilos.textito} > <i class="fa-solid fa-font iconosRojos"></i> Nombre del rol</p>
+                                    <div id={estilos.nombrerol}>
+                                        <p id={estilos.textito} >Nombre del rol</p>
                                         <input
-                                            id={estilos.nombrerol}
-                                            className={estilos["input-field"]}
+                                            className={estilos["input2"]}
                                             type="text"
                                             placeholder="Insertar nombre"
                                             name='nombre_rol'
                                             value={rolesEditar.nombre_rol}
-                                            onChange={handleChange}
+                                            onChange={handleChangeEditar}
                                         />
                                     </div>
 
@@ -572,7 +730,7 @@ function Roles() {
                                 <br />
                                 <div className={estilos["input-container"]}>
                                     <div id={estilos.eo}>
-                                        <p id={estilos.textito}> <i class="fa-solid fa-message iconosRojos"></i> Descripción del rol</p>
+                                        <p id={estilos.textito}>Descripción del rol</p>
                                         <input
                                             id={estilos.descrol}
                                             className={estilos["input-field"]}
@@ -580,21 +738,65 @@ function Roles() {
                                             placeholder="Insertar descripción"
                                             name='descripcion_rol'
                                             value={rolesEditar.descripcion_rol}
-                                            onChange={handleChange}
+                                            onChange={handleChangeEditar}
                                         />
                                     </div>
 
                                 </div>
                             </div>
+                            <div className={estilos["input-container"]}>
+                                <div className={estilos["contDerechaAbajo"]}>
+                                    <div id={estilos.seleccionarpermisos}>
+
+
+                                        <table id={estilos.tablita} className={estilos["tablitaMarginRight"]}>
+                                            <thead>
+                                                <tr>
+                                                    <th id={estilos.fondotabla} style={{ color: 'rgb(255, 255, 255)' }}>Seleccionar permisos</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {permisos1.map(permiso => {
+                                                    let sent2 = false;
+                                                    let idRolP = 0;
+                                                    rolesPermisos.forEach(rolP => {
+                                                        if (rolP.id_rol === rolesEditar.id_rol && rolP.id_permiso === permiso.id_permiso) {
+                                                            sent2 = true;
+                                                            idRolP = rolP.id_roles_permisos;
+                                                        }
+                                                    });
+                                                    return (
+                                                        <tr key={permiso.id_permiso}>
+                                                            <td>
+                                                                <input
+                                                                    type="checkbox"
+                                                                    className={`form-check-input ${estilos["checkbox"]}`}
+                                                                    value={permiso.id_permiso}
+                                                                    checked={sent2 === true}
+                                                                    onChange={(event) => checkEditar(event, idRolP, rolesEditar.id_rol, permiso.id_permiso)}
+                                                                />
+                                                                {permiso.nombre_permiso}
+                                                            </td>
+                                                        </tr>
+                                                    );
+                                                })}
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
 
                         </div>
 
                         <br />
                         <center>
                             <div className={estilos["cajaBotones"]}>
-                                <button onclick="registrar()" className={estilos["vinotinto"]} type="submit">Guardar</button>
+                                <button onclick="registrar()" className={estilos["azul"]} type="submit">Guardar</button>
                                 <div className={estilos["espacioEntreBotones"]}></div>
-                                <button onClick={() => cambiarEstadoModalEditar(!estadoModaleditar)} className={estilos["rojo"]} type="button" onclick="window.location.href='gestionroles.html'">Cancelar</button>
+                                <button onClick={() => cambiarEstadoModalEditar(!estadoModaleditar)} className={estilos["gris"]} type="button" onclick="window.location.href='gestionroles.html'">Cancelar</button>
                             </div>
                         </center>
                     </form>

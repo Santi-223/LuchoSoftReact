@@ -1,20 +1,38 @@
-.conosRojos {
+.titulo{
+  display: flex;
+  justify-content: space-between;
+}
+
+.iconosRojos {
   color: #E12424;
 }
 
+.botonAgregar {
+  background-color: #1F67B9;
+  color: white;
+  height: 40px;
+  width: 130px;
+  margin-right: 20px;
+  border: none;
+  border-radius: 50px;
+}
+
+.divFiltro{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
 .botonRojo {
-  background-color: #E12424;
+  background-color: #1F67B9;
   color: white;
   height: 50px;
   width: 180px;
-  margin-top: 20px;
-  margin-left: 70%;
-  margin-bottom: -30px;
+  margin-right: 20px;
 }
 
 .boton-morado {
-  background-color: #E12424;
+  background-color: #1F67B9;
   color: white;
 
 }
@@ -89,10 +107,12 @@ td {
 }
 
 #fondotabla {
-  background-color: #E12424;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  background-color: #1F67B9;
   display: flex;
   justify-content: center;
-  font-style: #E12424;
+  font-style: #1F67B9;
 }
 
 
@@ -180,6 +200,7 @@ td {
 
 
 
+
 .cajaBotones {
   display: flex;
   justify-content: center;
@@ -194,7 +215,6 @@ td {
   width: 30%;
   /* Ajusta el ancho de los botones */
 }
-
 
 
 
@@ -248,36 +268,36 @@ td {
 
 
 
-.rojo {
-  background: #E12424;
+.azul {
+  background: #1F67B9;
   color: white;
   display: flex;
   justify-content: center;
 
 }
 
-.rojo:hover {
-  background: #f33928;
+.azul:hover {
+  background: #3c77bb;
 }
 
-.rojo:active {
-  box-shadow: 1px 1px 1px 1px #f33928;
+.azul:active {
+  box-shadow: 1px 1px 1px 1px #3c77bb;
 }
 
-.vinotinto {
-  background: #48110d;
+.gris {
+  background: #a7a7a7;
   color: white;
   display: flex;
   justify-content: center;
 }
 
-.vinotinto:hover {
-  background: #771d17;
+.gris:hover {
+  background: #adadad;
 
 }
 
-.vinotinto:active {
-  box-shadow: 1px 1px 1px 1px #771d17;
+.gris:active {
+  box-shadow: 1px 1px 1px 1px #adadad;
 }
 
 
@@ -322,19 +342,21 @@ td {
 
 #tablita {
   width: 100%;
-  border-collapse: collapse;
   table-layout: fixed;
+  border: none;
   /* Fijar el ancho de la tabla */
 }
 
+
 #tablita thead th {
-  background-color: #E12424;
+  background-color: #1F67B9;
   font-weight: bold;
   padding: 10px;
   text-align: left;
 }
 
 #tablita tbody {
+  border: 1px solid rgb(214, 214, 214);
   max-height: 125px;
   /* Altura máxima deseada para el tbody */
   display: block;
@@ -351,10 +373,6 @@ td {
 
 }
 
-
-.tablitaMarginRight {
-  margin-right: 142px;
-}
 
 #divTabla {
   margin-left: 10px;
@@ -380,9 +398,11 @@ td {
   margin-right: 20px;
 }
 
-.busqueda{
+.busqueda {
   height: 30px;
+  border: none;
+  border: 1px solid gray;
   border-radius: 20px;
   width: 500px;
-  margin-top: 20px;
+  margin-top: 5px;
 }

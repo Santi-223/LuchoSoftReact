@@ -1,18 +1,7 @@
-.titulo {
-    display: flex;
-    justify-content: space-between;
-}
-
 .botonsito {
     display: flex;
     margin-left: auto;
-    justify-content: space-evenly;
-    padding: 20px;
-}
-
-#imagen {
-    width: 200px;
-    max-height: 200px;
+    padding: 50px 50px;
 }
 
 .botonAgregar {
@@ -23,57 +12,149 @@
     margin-right: 20px;
     border: none;
     border-radius: 50px;
+  }
+
+.descargar {
+    margin-left: 100px;
+    height: 50px;
+    width: 55px;
+    margin-top: 5px;
 }
+
 
 
 .divFiltro{
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
+    margin-right: 20px;
+  }
 
-.azul {
-    background: #1F67B9;
+.vinotinto {
+    background: #48110d;
     color: white;
-    display: flex;
-    justify-content: center;
-    width: 150px;
+    border: none;
+    border-radius: 50px;
+
 }
 
-.azul:hover {
+.vinotinto:hover {
+    background: #771d17;
+}
+
+.vinotinto:active {
+    box-shadow: 1px 1px 1px 1px #771d17;
+}
+
+.botonAgregar:hover {
     background: #3c77bb;
 }
 
-.azul:active {
+.botonAgregar:active {
     box-shadow: 1px 1px 1px 1px #3c77bb;
 }
 
-.gris {
-    background: #a7a7a7;
+.azulado {
+
     color: white;
-    display: flex;
-    justify-content: center;
-    width: 150px;
+    height: 50px;
+    min-width: 130px;
+    margin-left: 100%;
+    margin-bottom: -20px;
 }
 
-.gris:hover {
-    background: #adadad;
-
+.botonRojo {
+    background-color: #E12424;
+    color: white;
+    height: 50px;
+    width: 180px;
+    margin-left: 20%;
+    margin-bottom: 20px;
 }
 
-.gris:active {
-    box-shadow: 1px 1px 1px 1px #adadad;
+.botonMorado {
+    background-color: #722F37;
+    color: white;
+    height: 50px;
+    width: 180px;
+    margin-left: 20%;
+    margin-bottom: 20px;
 }
 
 .checkbox {
     margin-right: 10px;
 }
 
+.botones {
+
+    margin-left: 87vh;
+
+
+    margin-bottom: -90px;
+}
 
 .cajaBotones {
     margin-top: 60px;
     display: flex;
     justify-content: center;
+}
+
+.azulado3 {
+    background: #1F67B9;
+    color: white;
+    height: 45px;
+    max-width: 120px;
+    min-width: 120px;
+    display: flex;
+    text-align: center;
+
+}
+
+.inputIdNombre {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    justify-content: space-between;
+  
+  }
+
+  .espacio {
+    width: 40px;
+  }
+  
+  .input2 {
+    padding: 15px;
+    border-radius: 5px;
+    width: 160px;
+    padding: 10px;
+    border: 1px solid #ccc;
+  }
+
+  #textito {
+    margin-bottom: 4px;
+    font-size: 13px;
+  }
+
+.gris {
+    background: rgb(128, 128, 128);
+    min-width: 120px;
+
+}
+
+.gris:hover {
+    background: rgb(146, 146, 146);
+}
+
+.gris:active {
+    box-shadow: 1px 1px 1px 1px rgb(146, 146, 146);
+}
+
+.azulado3:hover {
+    background: #3c77bb;
+}
+
+.azulado3:active {
+    box-shadow: 1px 1px 1px 1px #3c77bb;
 }
 
 .cajaBotones button {
@@ -92,7 +173,7 @@
 }
 
 #cancelar {
-    background-color: #1F67B9;
+    background-color: #E12424;
     color: white;
 }
 
@@ -106,18 +187,39 @@
     color: #6d6d6d;
 }
 
+.gris:hover {
+    background: rgb(146, 146, 146);
+}
+
+.gris:active {
+    box-shadow: 1px 1px 1px 1px rgb(146, 146, 146);
+}
+
 .parrafoGris {
     color: gray;
 }
 
+input {
+    border-radius: 3px;
+    border: 1px solid #6d6d6d;
+}
+
+.input1 input {
+    padding-left: 10px;
+    width: 300px;
+    height: 50px;
+}
+
+
+.input1 i {
+    font-size: 20px;
+}
 
 .divImagen {
     border-radius: 10px;
     border: 1px solid #6d6d6d;
-    padding: 10px;
+    padding: 20px;
     background-color: #ffffff;
-    margin-top: -20px;
-    width: 300px;
 }
 
 .contenido2 {
@@ -134,22 +236,23 @@
 
 
 .rojo {
-    background: #1F67B9;
+    background: #E12424;
     color: white;
 
 }
 
 .rojo:hover {
-    background: #3c77bb;
+    background: #f33928;
 }
 
 .rojo:active {
-    box-shadow: 1px 1px 1px 1px #3c77bb;
+    box-shadow: 1px 1px 1px 1px #f33928;
 }
 
 .vinotinto {
     background: #48110d;
     color: white;
+    height: 40px;
 }
 
 .vinotinto:hover {
@@ -191,20 +294,8 @@
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    width: 500px;
+    width: 400px;
 
-}
-
-.input-field2 {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 240px;
-
-}
-
-.formulario__grupo2 {
-    margin-left: 20px;
 }
 
 #contenedorsitos {
@@ -225,13 +316,13 @@
 }
 
 .invalid {
-    border: 1px solid #1F67B9;
+    border: 1px solid #E12424;
     box-shadow: 0 0 1px red;
     outline: none;
 }
 
 .error {
-    color: #1F67B9;
+    color: #E12424;
     display: block;
     font-size: 12px;
 
@@ -252,6 +343,7 @@ label {
     /* Elimina el borde del botón */
     cursor: pointer;
     /* Cambia el cursor al pasar sobre el botón */
+
 }
 
 .boton:hover {
@@ -273,4 +365,5 @@ label {
     border: 1px solid gray;
     border-radius: 20px;
     width: 500px;
-}
+    margin-top: 5px;
+  }

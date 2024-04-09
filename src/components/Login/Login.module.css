@@ -2,19 +2,24 @@
   margin-top: -30px;
   margin-left: 80px;
   font-size: 30px;
+  color: #1F67B9;
 }
 
-#iconoEditar a {
-  color: #ffbd2f;
+.contenido{
+  margin-top: 15vh;
 }
 
-#imgPerfil img {
-  border-radius: 50%; 
-  width: 130px; 
+body {
+  background-image: url('/src/assets/imagen.jpeg');
+  /* Ruta a la imagen */
+  background-size: cover;
+  /* Ajustar la imagen al tamaño del div */
+  background-position: center;
+  /* Posicionar la imagen en el centro */
 }
 
 #perfil {
-  margin-top: 4vh;
+  margin-top: 8px;
 }
 
 #usuarioRegistrado {
@@ -41,6 +46,10 @@
   /* Agregamos un poco de espacio interno */
 }
 
+#titulo {
+  color: white;
+}
+
 #tituloDatos {
   margin-bottom: 10px;
 }
@@ -53,34 +62,34 @@
 }
 
 .btn-rojo {
-  background-color: #E12424;
-  color: white;
-  border: none;
-  padding: 10px 10px;
-  border-radius: 5px;
-  margin-left: 10px;
-}
-
-.btn-azul-claro {
   background-color: #1F67B9;
   color: white;
   border: none;
-  padding: 10px 10px;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.btn-rojo-claro {
+  background-color: #722F37;
+  color: white;
+  border: none;
+  padding: 5px 10px;
   border-radius: 5px;
 }
 
 .divActualizarContraseña {
   max-width: 400px;
   margin: 0 auto;
-  margin-top: 70px;
+  margin-top: 40px;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  background-color: #f8f8f8;
+  background-color: #f2f2f2dc;
 }
 
 .divActualizarContraseña h2 {
-  margin-bottom: 20px;
+  margin-bottom: 0px;
+
 }
 
 .divActualizarContraseña form {
@@ -101,47 +110,65 @@
   border-radius: 5px;
 }
 
-.inputs{
-  width: 300px;
+.cajaBotonesRegistro {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
 }
 
-.cajaBotones{
-  margin-top: 10px;
+.cajaBotonesRegistro button {
+  padding: 10px 30px;
+  /* Ajusta el padding para hacer los botones más largos */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 45%;
+  /* Ajusta el ancho de los botones */
+}
+
+
+
+.cajaBotonesRecuperar {
+  margin-top: 20px;
   display: flex;
   justify-content: space-between;
 }
 
-.azul {
-  background-color: #1F67B9;
-  color: white;
+.cajaBotonesRecuperar button {
+  padding: 10px 30px;
+  /* Ajusta el padding para hacer los botones más largos */
   border: none;
-  padding: 15px 40px;
   border-radius: 5px;
+  cursor: pointer;
+  width: 45%;
+  /* Ajusta el ancho de los botones */
+}
+
+
+.rojo {
+  background: #1F67B9;
+  color: white;
 
 }
 
-.azul:hover {
+.rojo:hover {
   background: #3c77bb;
 }
 
-.azul:active {
+.rojo:active {
   box-shadow: 1px 1px 1px 1px #3c77bb;
 }
 
-.gris {
-  background: #a7a7a7;
+.vinotinto {
+  background: #48110d;
   color: white;
-  color: white;
-  border: none;
-  padding: 15px 40px;
-  border-radius: 5px;
 }
 
-.gris:hover {
-  background: #adadad;
+.vinotinto:hover {
+  background: #771d17;
 
 }
 
-.gris:active {
-  box-shadow: 1px 1px 1px 1px #adadad;
+.vinotinto:active {
+  box-shadow: 1px 1px 1px 1px #771d17;
 }
