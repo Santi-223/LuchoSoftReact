@@ -15,10 +15,6 @@
 }
 
 
-input::placeholder {
-    padding-left: 20px;
-}
-
 input {
     border-radius: 3px;
     border: 1px solid #6d6d6d;
@@ -29,6 +25,7 @@ input {
     color: white;
 
   }
+  
   
   .rojo:hover{
     background: #3e7fc9;

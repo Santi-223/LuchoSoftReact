@@ -229,9 +229,6 @@ color: #E12424;
 .iconosMorados{
 color:#8a0000}
 
-input::placeholder {
-padding-left: 8px;
-}
 
 input{
 border-radius: 3px;

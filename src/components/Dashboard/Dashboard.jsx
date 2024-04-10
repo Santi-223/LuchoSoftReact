@@ -4,15 +4,15 @@ import Swal from "sweetalert2";
 import estilos from '../Dashboard/Dashboard.module.css';
 import Modal from '../Modal';
 import styled from 'styled-components';
+import { useUserContext } from "../UserProvider";
 
 const Dashboard = () => {
-  // Obtener el objeto de usuario del localStorage
-  const usuarioString = localStorage.getItem('usuario');
-  const usuarioLS = JSON.parse(usuarioString); // Convertir de cadena JSON a objeto JavaScript
 
-  console.log('ID - Usuario local:', usuarioLS.id_usuario);
+  const { usuario } = useUserContext();
 
-  const [usuario, setUsuario] = useState({
+  const usuarioLS = usuario;
+
+  const [usuario2, setUsuario2] = useState({
     contraseñaAntigua: '',
     contraseña: '',
     confirmacionContraseña: ''
@@ -20,8 +20,8 @@ const Dashboard = () => {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setUsuario(prevUsuario => ({
-      ...prevUsuario,
+    setUsuario2(prevUsuario2 => ({
+      ...prevUsuario2,
       [name]: value
     }));
   };
@@ -29,11 +29,11 @@ const Dashboard = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    console.log(usuario)
+    console.log(usuario2)
 
-    console.log('longitud contraseña: ', usuario.contraseña.length)
+    console.log('longitud contraseña: ', usuario2.contraseña.length)
 
-    if (usuario.contraseña.length < 8) {
+    if (usuario2.contraseña.length < 8) {
       Swal.fire({
         icon: 'error',
         title: 'La contraseña debe tener mínimo 8 caracteres.',
@@ -41,7 +41,7 @@ const Dashboard = () => {
         timer: 1500
       });
     }
-    else if (usuario.contraseñaAntigua != usuarioLS.contraseña) {
+    else if (usuario2.contraseñaAntigua != usuarioLS.contraseña) {
       Swal.fire({
         icon: 'error',
         title: 'Contraseña incorrecta',
@@ -49,7 +49,7 @@ const Dashboard = () => {
         timer: 1500
       });
     }
-    else if (usuario.contraseña != usuario.confirmacionContraseña) {
+    else if (usuario2.contraseña != usuario2.confirmacionContraseña) {
       Swal.fire({
         icon: 'error',
         title: 'La confirmación de contraseña es incorrecta',
@@ -75,7 +75,7 @@ const Dashboard = () => {
               headers: {
                 'Content-Type': 'application/json'
               },
-              body: JSON.stringify(usuario)
+              body: JSON.stringify(usuario2)
             });
 
             if (response.ok) {
@@ -131,8 +131,8 @@ const Dashboard = () => {
         // Eliminar token del localStorage
         localStorage.removeItem('token');
 
-        // Eliminar usuario del localStorage
-        localStorage.removeItem('usuario');
+        // Eliminar usuario2 del localStorage
+        localStorage.removeItem('usuario2');
 
         // Eliminar permisos del localStorage
         localStorage.removeItem('permisos');
@@ -157,22 +157,22 @@ const Dashboard = () => {
         <center>
           <div id={estilos.titulo}><h1>Inicio</h1></div>
           <div id={estilos.perfil}>
-            <div id={estilos.imgPerfil}><img src={usuarioLS.imagen_usuario} height="120vh" length="120vh" alt="Perfil" /></div>
+            <div id={estilos.imgPerfil}><img src={usuarioLS && usuarioLS.imagen_usuario} height="120vh" length="120vh" alt="Perfil" /></div>
 
-            <div id={estilos.iconoEditar}><Link to={`/editarUsuarios/${usuarioLS.id_usuario}`}><i className="fa-solid fa-pen-to-square"></i></Link></div>
+            <div id={estilos.iconoEditar}><Link to={`/editarUsuarios/${usuarioLS && usuarioLS.id_usuario}`}><i className="fa-solid fa-pen-to-square"></i></Link></div>
 
-            <div id={estilos.usuarioRegistrado}><h6>Administrador</h6></div>
+            <div id={estilos.usuario2Registrado}><h6>Administrador</h6></div>
           </div>
         </center>
 
         <div id={estilos.datos}>
           <div id={estilos.tituloDatos}><h4>Datos:</h4></div>
           <div id={estilos.contenidoDatos}>
-            <h6>Cedula: {usuarioLS.id_usuario}</h6>
-            <h6>Nombre: {usuarioLS.nombre_usuario}</h6>
-            <h6>Dirección: {usuarioLS.direccion_usuario}</h6>
-            <h6>Telefono: {usuarioLS.telefono_usuario}</h6>
-            <h6>Correo: {usuarioLS.email}</h6>
+            <h6>Cedula: {usuarioLS && usuarioLS.id_usuario}</h6>
+            <h6>Nombre: {usuarioLS && usuarioLS.nombre_usuario}</h6>
+            <h6>Dirección: {usuarioLS && usuarioLS.direccion_usuario}</h6>
+            <h6>Telefono: {usuarioLS && usuarioLS.telefono_usuario}</h6>
+            <h6>Correo: {usuarioLS && usuarioLS.email}</h6>
           </div>
           <div id={estilos.botones}>
             <button onClick={() => cambiarEstadoModalActContraseña(!estadoModalActContraseña)} className={`${estilos["btn-azul-claro"]}`}>Actualizar contraseña</button>
@@ -202,7 +202,7 @@ const Dashboard = () => {
                   type="password"
                   id={estilos.contrasenaAntigua}
                   name="contraseñaAntigua"
-                  value={usuario ? usuario.contraseñaAntigua : ''}
+                  value={usuario2 ? usuario2.contraseñaAntigua : ''}
                   onChange={handleChange} />
               </div>
               <div className={estilos["input-group"]}>
@@ -214,7 +214,7 @@ const Dashboard = () => {
                   type="password"
                   id={estilos.contrasenaNueva}
                   name="contraseña"
-                  value={usuario ? usuario.contraseña : ''}
+                  value={usuario2 ? usuario2.contraseña : ''}
                   onChange={handleChange}
                 />
               </div>
@@ -227,7 +227,7 @@ const Dashboard = () => {
                   id={estilos.confirmarContrasena}
                   required
                   name="confirmacionContraseña"
-                  value={usuario ? usuario.confirmacionContraseña : ''}
+                  value={usuario2 ? usuario2.confirmacionContraseña : ''}
                   onChange={handleChange}
                 />
               </div>
@@ -235,7 +235,7 @@ const Dashboard = () => {
               <div className={estilos["cajaBotones"]}>
                 <button className={estilos["azul"]} type="submit">Guardar</button>
                 <button className={estilos["gris"]} type="button" onClick={() => {
-                  cambiarEstadoModalActContraseña(!estadoModalActContraseña), setUsuario({
+                  cambiarEstadoModalActContraseña(!estadoModalActContraseña), setUsuario2({
                     contraseñaAntigua: '',
                     contraseña: '',
                     confirmacionContraseña: ''

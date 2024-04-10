@@ -1,7 +1,6 @@
 import React from "react";
 import DataTable from "react-data-table-component";
 import { Link, useParams } from "react-router-dom";
-import '../Pedidos/estilosRPedidos.css';
 import Modal from '../Clientes/modal';
 import styled from "styled-components";
 import { useState, useEffect } from "react";

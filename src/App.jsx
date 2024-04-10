@@ -32,27 +32,21 @@ import Pedidos from './components/Ventas/Pedidos/Pedidos';
 import Cliente from './components/Ventas/Clientes/Clientes';
 import EditarPedidos from './components/Ventas/Pedidos/EditarPedidos';
 
+import { UserProvider } from './components/UserProvider';
 
 function App() {
 
-  const token = localStorage.getItem('token');
-
-  let malp = true;
-
-  if (token == null) {
-    malp = false;
-  }
-
-
   return (
-    <>
+    <UserProvider>
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
         <Route element={
-          <PrivateRoute prot={0}>
-            <Layout />
-          </PrivateRoute>
+          <UserProvider>
+            <PrivateRoute prot={0}>
+              <Layout />
+            </PrivateRoute>
+          </UserProvider>
         }>
           <Route exact path="/dashboard" element={
             <PrivateRoute prot={0}>
@@ -163,7 +157,7 @@ function App() {
 
         </Route>
       </Routes>
-    </>
+    </UserProvider>
   )
 }
 

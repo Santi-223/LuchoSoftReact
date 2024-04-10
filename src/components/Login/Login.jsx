@@ -40,22 +40,7 @@ function Acceso() {
 
                 // Almacenar en el localStorage
                 localStorage.setItem('token', data.token);
-                localStorage.setItem('usuario', JSON.stringify(data.usuario));
-                localStorage.setItem('permisos', JSON.stringify(data.permisos));
-
-                // Obtener el token del localStorage
-                const token = localStorage.getItem('token');
-
-                // Obtener el objeto de usuario del localStorage
-                const usuarioString = localStorage.getItem('usuario');
-                const usuario = JSON.parse(usuarioString); // Convertir de cadena JSON a objeto JavaScript
-
-                // Obtener los permisos del localStorage
-                const permisosString = localStorage.getItem('permisos');
-                const permisos = JSON.parse(permisosString); // Convertir de cadena JSON a objeto JavaScript
-
-
-
+                
                 Swal.fire({
                     icon: 'success',
                     title: `Acceso exitoso`,

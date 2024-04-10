@@ -2,8 +2,11 @@ import React, { useState, useEffect } from "react";
 import { Navigate, Link } from "react-router-dom";
 import Login from '../components/Login/Login';
 import Swal from 'sweetalert2';
+import { useUserContext } from "../components/UserProvider";
 
 const PrivateRoute = ({ prot, children }) => {
+
+    const { usuario, permisos } = useUserContext();
 
     let auth = false;
 
@@ -13,14 +16,7 @@ const PrivateRoute = ({ prot, children }) => {
 
     const token = localStorage.getItem('token');
 
-    const usuarioString = localStorage.getItem('usuario');
-    const usuario = JSON.parse(usuarioString);
-
-    const permisosString = localStorage.getItem('permisos');
-    const permisos = JSON.parse(permisosString);
-
     const validarToken = async () => {
-        console.log("recibo:: ", token)
         try {
             const response = await fetch('http://localhost:8082/configuracion/validarJwt', {
                 headers: {
@@ -55,11 +51,6 @@ const PrivateRoute = ({ prot, children }) => {
         validarToken();
     }
 
-    console.log('Token local en Private: ', token);
-    console.log('Usuario local en Private:', usuario);
-    console.log('Permisos local en Private:', permisos);
-
-    console.log("prot: ", prot)
 
     if (token != null) {
         auth = true
@@ -70,8 +61,6 @@ const PrivateRoute = ({ prot, children }) => {
     if (permisos && permisos.includes(prot) || prot === 0) {
         permiso = true;
     }
-
-    console.log("El permiso es: ", permiso)
 
     if (auth && permiso) {
         cont = true

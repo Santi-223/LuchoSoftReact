@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Outlet, Link, json } from "react-router-dom";
 import "./Layout.css";
+import { useUserContext } from "../components/UserProvider";
 
 const Layout = () => {
     const [selectedModule, setSelectedModule] = useState(null);
@@ -19,23 +20,10 @@ const Layout = () => {
     const [permisoMCompras, setPermisoMCompras] = useState(false);
     const [permisoMVentas, setPermisoMVentas] = useState(false);
 
-
-    // Obtener el token del localStorage
-    const token = localStorage.getItem('token');
-
-    // Obtener el objeto de usuario del localStorage
-    const usuarioString = localStorage.getItem('usuario');
-    const usuario = JSON.parse(usuarioString); // Convertir de cadena JSON a objeto JavaScript
-
-    // Obtener los permisos del localStorage
-    const permisosString = localStorage.getItem('permisos');
-    const permisos = JSON.parse(permisosString); // Convertir de cadena JSON a objeto JavaScript
-
-    console.log('Token local: ', token);
-    console.log('Usuario local:', usuario);
-    console.log('Permisos local:', permisos);
+    const { usuario, permisos } = useUserContext();
 
     useEffect(() => {
+
 
         if (permisos && permisos.includes(1)) {
             setPermisoRoles(true);
@@ -104,12 +92,15 @@ const Layout = () => {
         return () => {
             document.removeEventListener("click", handleClickOutside);
         };
-    }, []);
+    }, [permisos]);
 
     const handleModuleClick = (module) => {
         setSelectedModule(selectedModule === module ? null : module);
     };
 
+
+    //<h2>Componente Hijo</h2>
+    //{usuario && <p>Hola {usuario.nombre_usuario}</p>}
 
     return (
         <div>
@@ -123,7 +114,7 @@ const Layout = () => {
                 <div>
                     <Link to="/dashboard">
                         <a className="usuario-link">
-                            <img src={(usuario.imagen_usuario != "" ? usuario.imagen_usuario : "")} alt="" />
+                            <img src={usuario && usuario.imagen_usuario} alt="" />
                         </a>
                     </Link>
                 </div>
