@@ -129,7 +129,7 @@ function AgregarProductos() {
             });
 
             // Redirige a la página de productos
-            window.location.href = '/productos';
+            window.location.href = '/#/productos';
         } catch (error) {
             console.error('Error:', error.message);
             // Muestra el SweetAlert de error

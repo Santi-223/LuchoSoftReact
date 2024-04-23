@@ -237,7 +237,7 @@ function Insumos() {
                             timer: 1500
                         });
                         setTimeout(() => {
-                            window.location.href = '/insumos';
+                            window.location.href = '/#/insumos';
                         }, 2000);
                         // Aquí podrías redirigir a otra página, mostrar un mensaje de éxito, etc.
                     } else {
@@ -304,7 +304,7 @@ function Insumos() {
                     timer: 1500
                 });
                 setTimeout(() => {
-                    window.location.href = '/insumos';
+                    window.location.href = '/#/insumos';
                 }, 2000);
 
 

@@ -112,7 +112,7 @@ function CategoriasProductos() {
                             timer: 1500
                         });
                         setTimeout(() => {
-                            window.location.href = '/categoria_productos';
+                            window.location.href = '/#/categoria_productos';
                         }, 2000);
                         // Aquí podrías redirigir a otra página, mostrar un mensaje de éxito, etc.
                     } else {
@@ -220,7 +220,7 @@ function CategoriasProductos() {
                     timer: 1500
                 });
                 setTimeout(() => {
-                    window.location.href = '/categoria_productos';
+                    window.location.href = '/#/categoria_productos';
                 }, 2000);
 
             } else {

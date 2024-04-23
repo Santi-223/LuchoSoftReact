@@ -203,7 +203,7 @@ const Cliente = () => {
                     timer: 1500
                 });
                 setTimeout(() => {
-                    window.location.href = '/clientes';
+                    window.location.href = '/#/clientes';
                 }, 2000);
 
 
@@ -390,7 +390,7 @@ const Cliente = () => {
                             timer: 1500
                         });
                         setTimeout(() => {
-                            window.location.href = '/clientes';
+                            window.location.href = '/#/clientes';
                         }, 2000);
                         // Aquí podrías redirigir a otra página, mostrar un mensaje de éxito, etc.
                     } else {

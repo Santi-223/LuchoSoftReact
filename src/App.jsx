@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import './App.css'
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, HashRouter } from 'react-router-dom';
 import Layout from './components/Layout';
 import Default from './components/Default';
 import Dashboard from './components/Dashboard/Dashboard';
@@ -37,7 +37,8 @@ import { UserProvider } from './components/UserProvider';
 function App() {
 
   return (
-    <UserProvider>
+    <HashRouter>
+      <UserProvider>
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
@@ -158,6 +159,7 @@ function App() {
         </Route>
       </Routes>
     </UserProvider>
+    </HashRouter>
   )
 }
 

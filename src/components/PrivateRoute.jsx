@@ -38,7 +38,7 @@ const PrivateRoute = ({ prot, children }) => {
                         // Eliminar permisos del localStorage
                         localStorage.removeItem('permisos');
         
-                        window.location.href = '/login';
+                        window.location.href = '/#/login';
                     }
                 });
             }

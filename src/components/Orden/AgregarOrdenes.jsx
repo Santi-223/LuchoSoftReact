@@ -232,7 +232,7 @@ function AgregarOrdenes() {
                 await Promise.all(ordenesInsumosPromises);
 
                 // Una vez que se han registrado todos los detalles de la orden, redireccionamos a la página de órdenes de producción
-                window.location.href = '/ordenes_produccion';
+                window.location.href = '/#/ordenes_produccion';
             } catch (error) {
                 console.error('Error al enviar los datos:', error);
             }
@@ -253,11 +253,11 @@ function AgregarOrdenes() {
                 cancelButtonText: 'No',
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = '/ordenes_produccion';
+                    window.location.href = '/#/ordenes_produccion';
                 }
             });
         } else {
-            window.location.href = '/ordenes_produccion';
+            window.location.href = '/#/ordenes_produccion';
         }
     };
 

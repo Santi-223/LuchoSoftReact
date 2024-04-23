@@ -177,7 +177,7 @@ function Proveedores() {
                             timer: 1500
                         });
                         setTimeout(() => {
-                            window.location.href = '/proveedores';
+                            window.location.href = '/#/proveedores';
                         }, 2000);
                         // Aquí podrías redirigir a otra página, mostrar un mensaje de éxito, etc.
                     } else {
@@ -266,7 +266,7 @@ function Proveedores() {
                     timer: 1500
                 });
                 setTimeout(() => {
-                    window.location.href = '/proveedores';
+                    window.location.href = '/#/proveedores';
                 }, 2000);
 
 

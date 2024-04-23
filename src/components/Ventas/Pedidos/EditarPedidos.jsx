@@ -321,7 +321,7 @@ const EditarPedidos = () => {
                             timer: 1500
                         });
                         setTimeout(() => {
-                            window.location.href = '/pedidos';
+                            window.location.href = '/#/pedidos';
                         }, 2000);
                         // Aquí podrías redirigir a otra página, mostrar un mensaje de éxito, etc.
                     } else {

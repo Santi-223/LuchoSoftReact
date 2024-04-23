@@ -169,7 +169,7 @@ const Pedidos = () => {
                             timer: 1500
                         });
                         setTimeout(() => {
-                            window.location.href = '/pedidos';
+                            window.location.href = '/#/pedidos';
                         }, 1000);
                         fetchPedido()
                     } else {

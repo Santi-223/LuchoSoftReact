@@ -296,7 +296,7 @@ function App() {
         console.error('Error al enviar los datos:', error);
       }
 
-      window.location.href = '/Compra';
+      window.location.href = '/#/Compra';
     });
   };
   const handlePrecioChange = (e, index) => {
@@ -333,11 +333,11 @@ function App() {
         cancelButtonText: 'No',
       }).then((result) => {
         if (result.isConfirmed) {
-          window.location.href = '/Compra';
+          window.location.href = '/#/Compra';
         }
       });
     } else {
-      window.location.href = '/Compra';
+      window.location.href = '/#/Compra';
     }
   };
 

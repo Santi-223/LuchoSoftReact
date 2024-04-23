@@ -71,7 +71,7 @@ function categoria_insumos() {
                     timer: 1500
                 });
                 setTimeout(() => {
-                    window.location.href = '/CatInsumos';
+                    window.location.href = '/#/CatInsumos';
                 }, 2000);
 
 
@@ -213,7 +213,7 @@ function categoria_insumos() {
                             timer: 1500
                         });
                         setTimeout(() => {
-                            window.location.href = '/CatInsumos';
+                            window.location.href = '/#/CatInsumos';
                         }, 2000);
                         // Aquí podrías redirigir a otra página, mostrar un mensaje de éxito, etc.
                     } else {

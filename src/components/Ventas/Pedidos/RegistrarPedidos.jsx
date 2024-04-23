@@ -247,7 +247,7 @@ function App() {
           timer: 1500
         });
         setTimeout(() => {
-          window.location.href = '/pedidos';
+          window.location.href = '/#/pedidos';
         }, 3000);
       }
 
