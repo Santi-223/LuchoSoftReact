@@ -109,11 +109,13 @@ const Pedidos = () => {
                 <div>
                     {row.estado_pedido ==1 ? (
                         <div className={estilos['acciones']}>
-                        <button name="estado_pedido" id={estilos.estado_pedido} onClick={() => { setSelectedRowId(row.id_pedido); setSelectedRow(row); cambiarEstadoModal1(!estadoModal1) }}><i className={`fa-solid fa-shuffle ${estilos.cambiarestado}`}></i></button>
-                        <Link to={`/editarpedidos/${row.id_pedido}`}>
-                            <button><i className={`fa-solid fa-pen-to-square iconosNaranjas`} ></i></button>
-                        </Link>
-                    </div>
+                            <abbr title="Cambiar Estado">
+                                <button name="estado_pedido" id={estilos.estado_pedido} onClick={() => { setSelectedRowId(row.id_pedido); setSelectedRow(row); cambiarEstadoModal1(!estadoModal1) }}><i className={`fa-solid fa-shuffle ${estilos.cambiarestado}`}></i></button>
+                            </abbr>
+                            <Link to={`/editarpedidos/${row.id_pedido}`}>
+                                <button><i className={`fa-solid fa-pen-to-square iconosNaranjas`} ></i></button>
+                            </Link>
+                        </div>
                     ) : (
                         <div className={estilos['acciones']}>
                             <button name="estado_pedido" id={estilos.estado_pedido_negro}><i className={`fa-solid fa-shuffle ${estilos.estado_pedido_negro}`}></i></button>
@@ -182,6 +184,8 @@ const Pedidos = () => {
 
     return (
         <>
+        
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
             <div id={estilos["titulo"]}>
                 <h2>Pedidos</h2>
@@ -192,7 +196,7 @@ const Pedidos = () => {
                     <Link to="/agregarPedidos">
                         <button className={`${estilos["botonAgregar"]}`} ><i class="fa-solid fa-plus"></i> Agregar</button>
                     </Link>
-                    <button class={`${estilos["boton-generar"]}`}><i class="fa-solid fa-file-pdf"></i></button>
+                    <button class={`${estilos["boton-generar"]}`}><i class="fa-solid fa-download"></i></button>
                 </div>
             </div>
             <div className={estilos["tabla"]}>

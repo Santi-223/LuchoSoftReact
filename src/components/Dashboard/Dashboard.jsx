@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import estilos from '../Dashboard/Dashboard.module.css';
 import Modal from '../Modal';
@@ -7,6 +7,8 @@ import styled from 'styled-components';
 import { useUserContext } from "../UserProvider";
 
 const Dashboard = () => {
+
+  const [cerrarSesion, setCerrarSesion] = useState(false);
 
   const { usuario } = useUserContext();
 
@@ -86,9 +88,7 @@ const Dashboard = () => {
                 showConfirmButton: false,
                 timer: 1500
               });
-              setTimeout(() => {
-                window.location.href = '/dashboard';
-              }, 1000);
+              cambiarEstadoModalActContraseña(false)
               // Aquí podrías redirigir a otra página, mostrar un mensaje de éxito, etc.
             } else {
               console.error('Error al actualizar la contraseña:', response.statusText);
@@ -137,13 +137,17 @@ const Dashboard = () => {
         // Eliminar permisos del localStorage
         localStorage.removeItem('permisos');
 
-        window.location.href = '/login';
+        setCerrarSesion(true);
 
       }
     });
   };
 
   const [estadoModalActContraseña, cambiarEstadoModalActContraseña] = useState(false);
+
+  if (cerrarSesion) {
+    return <Navigate to="/login" />;
+}
 
   return (
     <div>

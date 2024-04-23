@@ -2,6 +2,7 @@
 font-size: 15px;
 margin-top: -20px;
 display: flex;
+color: #48110d;
 }
 
 .contenido {
@@ -85,11 +86,11 @@ input {
   }
   
   .rojo:hover{
-    background: #3e7fc9;
+    background: #b9050517;
   }
   
   .rojo:active{
-    box-shadow: 1px 1px 1px 1px #3e7fc9;
+    box-shadow: 1px 1px 1px 1px #b9050517;
   }
 
   
@@ -109,14 +110,14 @@ input {
 }
 
 .botonAgregar {
-    border: none;
+    border: 1px solid #b90505;
     margin-right: 20px;
-    background-color: #1F67B9;
-    color: white;
+    background-color: white;
+    color: #b90505;
     border-radius: 50px;
     height: 40px;
-    width: 150px;
-    font-size: 15px;
+    width: 120px;
+    font-size: 18px;
 }
 
 .boton-generar {
@@ -125,7 +126,7 @@ input {
     text-align: center;
     font-size: 20px;
     height: 40px;
-    width: 100px;
+    width: 55px;
     border-radius: 50px;
     border: none;
 }
@@ -189,7 +190,7 @@ input {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #1F67B9;
+    background-color: #48110d;
     border-radius: 30px;
     transition: 0.4s;
 }

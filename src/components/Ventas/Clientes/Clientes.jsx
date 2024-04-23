@@ -417,7 +417,8 @@ const Cliente = () => {
         return <div>Cargando...</div>;
     }
     return (
-        <>
+        <div>
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
                 <div id={estilos["tituloCliente"]}>
                     <h1>Clientes</h1>
@@ -425,8 +426,8 @@ const Cliente = () => {
             <div className={estilos['botones']}>
                 <input type="text" placeholder="Buscar..." value={filtro} onChange={handleFiltroChange} className={estilos["busqueda"]} />
                 <div>
-                    <button onClick={() => cambiarEstadoModal1(!estadoModal1)} className={`${estilos.botonAgregar} ${estilos.rojo}`}><i className="fa-solid fa-plus"></i> Agregar</button>
-                    <button className={`${estilos["boton-generar"]} ${estilos.vinotinto}`}><i className="fa-solid fa-file-pdf"></i></button>
+                    <button onClick={() => cambiarEstadoModal1(!estadoModal1)} className={`${estilos.botonAgregar} ${estilos.rojo} bebas-neue-regular`}><i className="fa-solid fa-plus"></i> Agregar</button>
+                    <button className={`${estilos["boton-generar"]} ${estilos.vinotinto}`}><i className="fa-solid fa-download"></i></button>
                 </div>
 
             </div>
@@ -514,7 +515,7 @@ const Cliente = () => {
                     </div>
                 </Contenido>
             </Modal>
-        </>
+        </div>
     )
 }
 // id, nombre, telefono, direccion, funciones

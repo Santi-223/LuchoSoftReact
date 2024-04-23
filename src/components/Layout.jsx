@@ -104,12 +104,17 @@ const Layout = () => {
 
     return (
         <div>
+            <link rel="preconnect" href="https://fonts.googleapis.com"/>
+            <link rel="preconnect" href="https://fonts.gstatic.com" crosorigin/>
+            <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet"/>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
             <div className="barraPrincipal">
                 <div className="contenedor_1">
                     <Link to={"/dashboard"}>
                         <img src="/archivos/imagenes/LuchoGod.png" height="45px" length="45px" alt="Logo" />
                     </Link>
-                    <p id="luchosoft">LuchoSoft</p>
+                    <p id="luchosoft" className="bebas-neue-regular">LuchoSoft</p>
                 </div>
                 <div>
                     <Link to="/dashboard">
@@ -127,10 +132,10 @@ const Layout = () => {
                         {permisoRoles && ( // Mostrar el módulo de configuración solo si el permiso uno está presente
                             <div className="module">
                                 <p className={`module-heading ${selectedModule === "Configuración" ? "selected" : ""}`} onClick={() => handleModuleClick("Configuración")}>
-                                    Configuración <i className="bi bi-chevron-down arrow-icon"></i>
+                                   <i className="bi bi-gear"></i> Configuración <i className="bi bi-chevron-down arrow-icon"></i>
                                 </p>
                                 <Link to={"/roles"}>
-                                    <ul className={`options ${selectedModule === "Configuración" ? "active" : ""}`}>
+                                    <ul className={`options ${selectedModule === "Configuración" ? "active" : ""}`} >
                                         <li>Roles</li>
                                     </ul>
                                 </Link>
@@ -140,7 +145,7 @@ const Layout = () => {
                         {permisoUsuarios && (
                             <div className="module">
                                 <p className={`module-heading ${selectedModule === "Usuarios" ? "selected" : ""}`} onClick={() => handleModuleClick("Usuarios")}>
-                                    Usuarios <i className="bi bi-chevron-down arrow-icon"></i>
+                                   <i className="bi bi-person-circle"></i>Usuarios <i className="bi bi-chevron-down arrow-icon"></i>
                                 </p>
                                 <Link to="/usuarios">
                                     <ul className={`options ${selectedModule === "Usuarios" ? "active" : ""}`}>
@@ -153,7 +158,7 @@ const Layout = () => {
                         {permisoMCompras && (
                             < div className="module">
                                 <p className={`module-heading ${selectedModule === "Compras" ? "selected" : ""}`} onClick={() => handleModuleClick("Compras")}>
-                                    Compras <i className="bi bi-chevron-down arrow-icon"></i>
+                                   <i className="bi bi-cart-check"></i> Compras <i className="bi bi-chevron-down arrow-icon"></i>
                                 </p>
                                 <ul className={`options ${selectedModule === "Compras" ? "active" : ""}`}>
                                     {permisoCatInsumos && (
@@ -182,7 +187,7 @@ const Layout = () => {
                         {permisoOrden && (
                             <div className="module">
                                 <p className={`module-heading ${selectedModule === "Producción" ? "selected" : ""}`} onClick={() => handleModuleClick("Producción")}>
-                                    Producción <i className="bi bi-chevron-down arrow-icon"></i>
+                                   <i className="bi bi-box-seam"></i> Producción <i className="bi bi-chevron-down arrow-icon"></i>
                                 </p>
                                 <ul className={`options ${selectedModule === "Producción" ? "active" : ""}`}>
                                     <Link to="/ordenes_produccion">
@@ -194,7 +199,7 @@ const Layout = () => {
                         {permisoMVentas && (
                             <div className="module">
                                 <p className={`module-heading ${selectedModule === "Ventas" ? "selected" : ""}`} onClick={() => handleModuleClick("Ventas")}>
-                                    Ventas <i className="bi bi-chevron-down arrow-icon"></i>
+                                    <i className="bi bi-receipt"></i>Ventas <i className="bi bi-chevron-down arrow-icon"></i>
                                 </p>
                                 <ul className={`options ${selectedModule === "Ventas" ? "active" : ""}`}>
                                     {permisoCatProductos && (

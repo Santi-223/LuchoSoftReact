@@ -12,17 +12,17 @@ import { height } from "@fortawesome/free-regular-svg-icons/faAddressBook";
 
 
 const EditarPedidos = () => {
-    const [estadoModal1, cambiarEstadoModal1] = useState(false);
-    const [clientes, setclientes] = useState([]);
-    const [filtro, setFiltro] = useState('');
-    const [cliente, setCliente] = useState(null);
+    // const [estadoModal1, cambiarEstadoModal1] = useState(false);
+    // const [clientes, setclientes] = useState([]);
+    // const [filtro, setFiltro] = useState('');
+    // const [cliente, setCliente] = useState(null);
     const [customers, setClientes] = useState([]);
-    const [selectedCliente, setselectedCliente] = useState(null);
-    const [ventanaClienteDetalle, VentanaClienteDetalle] = useState(false);
-    const [tablaClienteDetalle, TablaClienteDetalle] = useState(true);
+    // const [selectedCliente, setselectedCliente] = useState(null);
+    // const [ventanaClienteDetalle, VentanaClienteDetalle] = useState(false);
+    // const [tablaClienteDetalle, TablaClienteDetalle] = useState(true);
     const [listarProductos1, setlistarProductos] = useState([])
-    const [tableRows, setTableRows] = useState([{ nombre: '', precio_unitario: 0, cantidad: '', cantidad_seleccionada: 0, precio_total: 0 }]);
-    const [formChanged, setFormChanged] = useState(false);
+    const [tableRows, setTableRows] = useState([{ id_producto: 0, precio_unitario: 0, cantidad: '', cantidad_seleccionada: 0, precio_total: 0 }]);
+    // const [formChanged, setFormChanged] = useState(false);
     const [scrollEnabled, setScrollEnabled] = useState(false);
     const [pedidoProductos1, setPedidoProductos] = useState([]);
 
@@ -152,7 +152,7 @@ const EditarPedidos = () => {
                             text: 'Producto eliminado correctamente',
                         }).then(() => {
                             // Después de que el usuario haga clic en "OK", recargamos la página
-                            window.location.reload();
+                            setPedidoProductos(pedidoProductos1.filter(producto => producto.id_pedidos_productos !== id_pedidos_productos));
                         });
                     } else {
                         console.error("Error al eliminar el producto:", response.statusText);
@@ -200,14 +200,6 @@ const EditarPedidos = () => {
     useEffect(() => {
         fetchVenta();
     }, []);
-
-    useEffect(() => {
-        if (selectedCliente) {
-            setCliente(
-                customers.find((c) => c.id_cliente === selectedCliente.id_cliente)
-            );
-        }
-    }, [selectedCliente, customers]);
 
     const handleChange1 = (event) => {
         const { name, value } = event.target;
@@ -289,7 +281,7 @@ const EditarPedidos = () => {
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: 'Los campos están vacíos',
+                text: 'Hay campos vacíos',
                 confirmButtonColor: '#1F67B9',
             });
             return;
@@ -305,15 +297,8 @@ const EditarPedidos = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const detallesPedido = tableRows.map((row) => ({
-                        cantidad_producto: parseInt(row.cantidad),
-                        id_producto: listarProductos1.find(
-                            (producto) => producto.id_producto === row.id_producto
-                        ).id_producto,
-                        subtotal: row.precio_unitario * row.cantidad,
-                        
-                    }));
-                    const detallespedido2= pedidosEditar.total_pedido
+
+                    const detallespedido2 = pedidosEditar.total_pedido
                     const totalPedido = tableRows.reduce(
                         (total, row) => total + parseFloat(row.precio_total || 0),
                         0
@@ -347,39 +332,6 @@ const EditarPedidos = () => {
                             text: 'Error al actualizar pedido',
                         });
                     }
-                    // const idpedido=parseInt(id_pedido);
-                    // const pedidosProductosPromises = detallesPedido.map(async (detalle) => {
-                    //     const responsePedidosProductos = await fetch(
-                    //         `https://api-luchosoft-mysql.onrender.com/ventas/pedidos_productos/pedidos/${id_pedido}`,
-                    //         {
-                    //             method: "PUT",
-                    //             headers: {
-                    //                 "Content-Type": "application/json",
-                    //             },
-                    //             body: JSON.stringify({
-                    //                 ...detalle,
-                    //                 subtotal: totalPedido,
-                    //                 fecha_pedido_producto: fechaproductos,
-                    //                 id_pedido: idpedido
-                    //             }),
-                    //         }
-                    //     );
-
-                    //     if (!responsePedidosProductos.ok) {
-                    //         console.error(
-                    //             "Error al enviar los datos de pedidos_productos:",
-                    //             responsePedidosProductos.statusText
-                    //         );
-                    //         throw new Error("Error al enviar los datos de pedidos_productos");
-                    //     }
-
-                    //     const productoRegistrado = await responsePedidosProductos.json();
-                    //     console.log("Producto registrado correctamente:", productoRegistrado);
-                    // });
-                    // await Promise.all(pedidosProductosPromises);
-
-                    // Redirigir después de completar el proceso
-                    // window.location.href = "/pedidos";
 
                 } catch (error) {
                     console.error('Error al actualizar el pedido:', error);
@@ -391,6 +343,83 @@ const EditarPedidos = () => {
                 }
             }
         });
+    }
+
+    const AgregarPedidoDetalle = async (event) => {
+        event.preventDefault();
+        if (tableRows.some((row) => !row.cantidad_seleccionada) || tableRows.some((row) => !row.id_producto)) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Los campos se encuentran vacíos',
+                confirmButtonColor: '#1F67B9',
+            });
+            return;
+        }
+        Swal.fire({
+            title: '¿Deseas Agregar nuevo producto?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: 'gray',
+            confirmButtonText: 'Sí',
+            cancelButtonText: 'Cancelar'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const detallesPedido = tableRows.map((row) => ({
+                        cantidad_producto: parseInt(row.cantidad),
+                        id_producto: tableRows.find(
+                            (producto) => producto.id_producto === row.id_producto
+                        ).id_producto,
+                        subtotal: row.precio_unitario * row.cantidad,
+
+                    }));
+                    const pedidosProductosPromise = detallesPedido.map(async (detalle) => {
+                        const responsePedidosProductos = await fetch(
+                            "https://api-luchosoft-mysql.onrender.com/ventas/pedidos_productos",
+                            {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                },
+                                body: JSON.stringify({
+                                    ...detalle,
+                                    id_pedido: id_pedido,
+                                    fecha_pedido_producto: pedidosEditar.fecha_pedido
+                                }),
+                            });
+                        if (!responsePedidosProductos.ok) {
+                            console.error(
+                                "Error al enviar los datos de pedidos_productos:",
+                                responsePedidosProductos.statusText
+                            );
+                            throw new Error("Error al enviar los datos de pedidos_productos");
+                        }
+                        Swal.fire({
+                            icon: 'success',
+                            title: '',
+                            text: 'Producto Agregado correctamente',
+                        })
+
+                        const productoRegistrado = await responsePedidosProductos.json();
+                        console.log("Producto registrado correctamente:", productoRegistrado);
+                        
+                        setTableRows(tableRows.slice(0, -1).concat({ id_producto: 0, precio_unitario: '', cantidad: '', cantidad_seleccionada: 0, precio_total: 0 }));
+                        
+                    });
+                    await Promise.all(pedidosProductosPromise);
+
+                } catch (error) {
+                    console.error('Error al actualizar la tabla de pedidos productos:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Error al actualizar pedidoProducto',
+                    });
+                }
+            }
+        })
     }
 
 
@@ -418,11 +447,13 @@ const EditarPedidos = () => {
     const handleDeleteRow = (index) => {
         const updatedRows = [...tableRows];
         updatedRows.splice(index, 1);
-        setTableRows(updatedRows);
+        setTableRows(updatedRows);///////////////////////////////////////////////////////////////////////////////////
 
         const total = updatedRows.reduce((accumulator, currentValue) => {
             return accumulator + (parseFloat(currentValue.precio_total) || 0);
         }, 0);
+
+
         setPrecioTotal(total);
 
         setFormChanged(true);
@@ -512,12 +543,15 @@ const EditarPedidos = () => {
     }, [tableRows, pedidoProductos1]);
 
 
+
     return (
         <>
             <link
                 rel="stylesheet"
                 href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
             />
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
             <div classNameName={estilos["contenido2"]}>
                 <div id={estilos["titulo2"]}>
@@ -644,7 +678,8 @@ const EditarPedidos = () => {
                                             <td>
                                                 <input type="number" value={row.cantidad} onChange={(event) => handleCantidadChange2(event, index)} />
                                             </td>
-                                            <td>
+                                            <td style={{ display: "flex" }}>
+                                                <button className="btn btn-success fa-solid fa-check" style={{ height: '30px', width: '40px', fontSize: '15px', borderRadius: '30px', marginRight: '5px' }} onClick={AgregarPedidoDetalle}></button>
                                                 <button onClick={() => handleDeleteRow(index)} className="btn btn-danger fa-solid fa-trash" style={{ height: '30px', width: '40px', fontSize: '15px', borderRadius: '30px' }}></button>
                                             </td>
 
