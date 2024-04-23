@@ -32,7 +32,7 @@ function AgregarUsuarios() {
     useEffect(() => {
         const fetchRoles = async () => {
             try {
-                const response = await fetch('http://localhost:8082/configuracion/roles');
+                const response = await fetch('https://api-luchosoft-mysql.onrender.com/configuracion/roles');
                 if (response.ok) {
                     const data = await response.json();
                     const rolesFiltrados = data.map(rol => ({
@@ -154,7 +154,7 @@ function AgregarUsuarios() {
         }
         else {
             try {
-                const response = await fetch('http://localhost:8082/configuracion/usuarios', {
+                const response = await fetch('https://api-luchosoft-mysql.onrender.com/configuracion/usuarios', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

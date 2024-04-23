@@ -70,7 +70,7 @@ const Dashboard = () => {
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
-            const response = await fetch(`http://localhost:8082/configuracion/contrasenaUsuarios/${usuarioLS.id_usuario}`, {
+            const response = await fetch(`https://api-luchosoft-mysql.onrender.com/configuracion/contrasenaUsuarios/${usuarioLS.id_usuario}`, {
               method: 'PUT',
               headers: {
                 'Content-Type': 'application/json'

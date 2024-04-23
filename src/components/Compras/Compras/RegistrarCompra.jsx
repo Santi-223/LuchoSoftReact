@@ -62,7 +62,7 @@ function App() {
 
   const fetchInsumos = async () => {
     try {
-      const response = await fetch('http://localhost:8082/compras/insumos');
+      const response = await fetch('https://api-luchosoft-mysql.onrender.com/compras/insumos');
       if (response.ok) {
         const data = await response.json();
         const insumosConEstado1 = data.filter(insumo => insumo.estado_insumo === 1);
@@ -82,7 +82,7 @@ function App() {
 
   const fetchProveedores = async () => {
     try {
-      const response = await fetch('http://localhost:8082/compras/proveedores');
+      const response = await fetch('https://api-luchosoft-mysql.onrender.com/compras/proveedores');
       if (response.ok) {
         const data = await response.json();
         // Filtrar los proveedores con estado 1
@@ -237,7 +237,7 @@ function App() {
       try {
         const totalCompra = tableRows.reduce((total, row) => total + parseFloat(row.precio_total || 0), 0);
 
-        const responseCompra = await fetch('http://localhost:8082/compras/compras', {
+        const responseCompra = await fetch('https://api-luchosoft-mysql.onrender.com/compras/compras', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -272,7 +272,7 @@ function App() {
           };
 
           try {
-            const responseComprasInsumos = await fetch('http://localhost:8082/compras/compras_insumos', {
+            const responseComprasInsumos = await fetch('https://api-luchosoft-mysql.onrender.com/compras/compras_insumos', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',

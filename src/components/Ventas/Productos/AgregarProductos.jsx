@@ -33,7 +33,7 @@ function AgregarProductos() {
     useEffect(() => {
         const fetchCategorias = async () => {
             try {
-                const response = await fetch('http://localhost:8082/ventas2/categoria_productos');
+                const response = await fetch('https://api-luchosoft-mysql.onrender.com/ventas2/categoria_productos');
                 if (response.ok) {
                     const data = await response.json();
                     const categoriasFiltradas = data.map(categoria => ({
@@ -108,7 +108,7 @@ function AgregarProductos() {
 
 
         try {
-            const response = await fetch('http://localhost:8082/ventas2/productos', {
+            const response = await fetch('https://api-luchosoft-mysql.onrender.com/ventas2/productos', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

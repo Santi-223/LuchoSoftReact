@@ -28,7 +28,7 @@ const Pedidos = () => {
     })
     const fetchPedido = async () => {
         try {
-            const response = await fetch('http://localhost:8082/ventas/pedidos');
+            const response = await fetch('https://api-luchosoft-mysql.onrender.com/ventas/pedidos');
             if (response.ok) {
                 const data = await response.json();
                 const pedidoData = data.filter(pedido => pedido.estado_pedido !== 3 && pedido.estado_pedido !== 4).map(pedido => ({
@@ -147,7 +147,7 @@ const Pedidos = () => {
                     const row = selectedRow;
                     console.log(`Updating pedido with ID ${id} to status ${nuevoEstado}`);
                     console.log(row);
-                    const response = await fetch(`http://localhost:8082/ventas/pedidos/${id}`, {
+                    const response = await fetch(`https://api-luchosoft-mysql.onrender.com/ventas/pedidos/${id}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json'
