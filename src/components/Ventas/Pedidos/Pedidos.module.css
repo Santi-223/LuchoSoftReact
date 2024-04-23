@@ -6,7 +6,13 @@
 
 #titulo{
     font-size: 20px;
-    margin-top: -25px;
+    margin-top: -15px;
+    display: flex;
+}
+
+#titulo2{
+    font-size: 20px;
+    margin-top: 10px;
     display: flex;
 }
 
@@ -14,6 +20,10 @@
     color: #E12424;
 }
 
+
+input::placeholder {
+    padding-left: 20px;
+}
 
 input {
     border-radius: 3px;
@@ -25,7 +35,6 @@ input {
     color: white;
 
   }
-  
   
   .rojo:hover{
     background: #3e7fc9;
@@ -85,7 +94,7 @@ input {
     text-align: center;
     font-size: 20px;
     height: 40px;
-    width: 100px;
+    width: 60px;
     border-radius: 50px;
     border: none;
 }
@@ -171,7 +180,7 @@ input {
 }
 
 .cambiarestado{
-    color: #818080;
+    color: #818082;
 }
 
 #cliente{
@@ -195,6 +204,7 @@ input {
 .input-container {
     display: block;
     margin-bottom: 15px;
+    margin-top: 10px;
 }
 
 .input-container input{
@@ -224,7 +234,6 @@ input {
 }
 
 .cajaBotonesRPedidos {
-    margin-top: 50px;
     display: flex;
     justify-content: center;
 }
@@ -262,8 +271,8 @@ input {
     display: flex;
     flex-direction: column;
     text-align: left;
-    margin-top: 0px;
-    margin-left: 30px;
+    margin-top: 20px;
+    margin-left: 10px;
 }
 
 .input-field2 {
@@ -327,3 +336,12 @@ input {
     background-color: #b3b1b1;
     color: white;
 }
+
+.icono_negro{
+    color: #b3b1b1;
+}
+
+.estado_pedido_negro{
+    color: #b3b1b1 ;
+}
+

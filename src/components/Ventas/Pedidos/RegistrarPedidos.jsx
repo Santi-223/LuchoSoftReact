@@ -329,13 +329,13 @@ function App() {
       />
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
       <div className={estilos["contenido"]}>
-        <div id={estilos["titulo"]}>
+        <div id={estilos["titulo2"]}>
           <h2>Registrar Pedidos</h2>
         </div>
         <div id={estilos["contenedorcito"]}>
           <div className={estilos["input-container"]}>
             <div id={estilos["kaka"]}>
-              <label htmlFor="fechaPedido"><i className={`fa-solid fa-calendar-days ${estilos["iconosRojos"]}`}></i>Fecha</label>
+              <label htmlFor="fechaPedido">Fecha</label>
               <input
                 id="fechaPedido"
                 name="fecha_pedido"
@@ -357,7 +357,7 @@ function App() {
               />
             </div>
             <div id={estilos["kake"]}>
-              <label htmlFor="Observaciones"> <i className={`fa-solid fa-message ${estilos["iconosRojos"]}`}></i>
+              <label htmlFor="Observaciones">
                 {" "}
                 Observaciones
               </label>
@@ -372,9 +372,9 @@ function App() {
               />
             </div>
             <div id={estilos["cliente"]}>
-              <label htmlFor="cliente">
-                <i className={`fa-solid fa-users ${estilos["iconosRojos"]} select`}></i> Cliente asociado{" "}
-              </label>
+              <p>
+                Cliente asociado
+              </p>
               <select
                 id="cliente"
                 name="id_cliente"
@@ -390,10 +390,40 @@ function App() {
                 ))}
               </select>
             </div>
+            <div className="BotonesPedidos">
+              <div id={estilos["totalpedidos"]}>
+                <label htmlFor="precioPedido">
+                  Total{" "}
+                </label>
+                <input
+                  id="precioPedido"
+                  name="total_pedido"
+                  className={estilos["input-field2"]}
+                  value={precioTotal || ""}
+                  onChange={handleInputChange}
+                  type="number"
+                  placeholder="0"
+                  readOnly={true}
+                  style={{
+                    color: "#999",
+                  }}
+                />
+                <input
+                  id="precioVenta"
+                  name="total_venta"
+                  className="input-field4"
+                  value={precioTotal || ""}
+                  onChange={handleInputChange}
+                  type="number"
+                  placeholder="0"
+                  hidden
+                />
+              </div>
+            </div>
           </div>
           <div className={estilos["TablaDetallePedidos"]}>
             <div className={estilos["agrPedidos"]}>
-              <p><i className={`fa-solid fa-basket-shopping ${estilos["iconosRojos"]}`}></i> Agregar Productos</p>
+              <p>Agregar Productos</p>
               <button type="button" className="btn btn-primary fa-solid fa-plus" onClick={handleAgregarProducto}>
               </button>
             </div>
@@ -478,55 +508,27 @@ function App() {
                           onChange={(e) => handleCantidadChange(e, index)}
                         />
                       </td>
-                      <td style={{ textAlign: "center" }}>
-                        <button
-                          type="button"
-                          className={`btn btn-danger ${estilos['boton-eliminar']}`}
-                          onClick={() => handleDeleteRow(index)}
-                        >
-                          Eliminar
-                        </button>
-                      </td>
+                      {
+                        index !== 0 && (
+                          <td style={{ textAlign: "center" }}>
+                            <button
+                              type="button"
+                              className={`btn btn-danger ${estilos['boton-eliminar']}`}
+                              onClick={() => handleDeleteRow(index)}
+                            >
+                              Eliminar
+                            </button>
+                          </td>
+                        )
+                      }
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
           </div>
-          <div className="BotonesPedidos">
-            <div id={estilos["totalpedidos"]}>
-              <label htmlFor="precioPedido">
-                <i className={`fa-solid fa-dollar-sign ${estilos["iconosRojos"]}`}></i>{" "}
-                Total{" "}
-              </label>
-              <input
-                id="precioPedido"
-                name="total_pedido"
-                className={estilos["input-field2"]}
-                value={precioTotal || ""}
-                onChange={handleInputChange}
-                type="number"
-                placeholder="0"
-                readOnly={true}
-                style={{
-                  color: "#999",
-                }}
-              />
-              <input
-                id="precioVenta"
-                name="total_venta"
-                className="input-field4"
-                value={precioTotal || ""}
-                onChange={handleInputChange}
-                type="number"
-                placeholder="0"
-                hidden
-              />
-            </div>
-          </div>
         </div>
-        <div style={{ marginRight: "200px" }} className="cajaBotonesRPedidos">
-
+        <div className={estilos["cajaBotonesRPedidos"]}>
           <button
             type="submit"
             id="can"

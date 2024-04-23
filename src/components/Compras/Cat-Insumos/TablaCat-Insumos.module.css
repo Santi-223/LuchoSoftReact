@@ -32,6 +32,15 @@
   background: #48110d;
   color: white;
   height: 40px;
+  width: 50px;
+
+  /* Establece el fondo del botón como transparente */
+  border: none;
+  /* Elimina el borde del botón */
+  cursor: pointer;
+  /* Cambia el cursor al pasar sobre el botón */
+
+  border-radius: 100px;
 }
 
 .vinotinto:hover {

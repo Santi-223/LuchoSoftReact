@@ -103,14 +103,25 @@ const Pedidos = () => {
             )
         },
         {
+            
             name: 'Acciones',
             cell: (row) => (
-                <div className={estilos['acciones']}>
-                    <button name="estado_pedido" id={estilos.estado_pedido} onClick={() => { setSelectedRowId(row.id_pedido); setSelectedRow(row); cambiarEstadoModal1(!estadoModal1) }}><i className={`fa-solid fa-shuffle ${estilos.cambiarestado}`}></i></button>
-                    <Link to={`/editarpedidos/${row.id_pedido}`}>
-                        <button><i className={`fa-solid fa-pen-to-square ${estilos.iconosRojos}`} ></i></button>
-                    </Link>
+                <div>
+                    {row.estado_pedido ==1 ? (
+                        <div className={estilos['acciones']}>
+                        <button name="estado_pedido" id={estilos.estado_pedido} onClick={() => { setSelectedRowId(row.id_pedido); setSelectedRow(row); cambiarEstadoModal1(!estadoModal1) }}><i className={`fa-solid fa-shuffle ${estilos.cambiarestado}`}></i></button>
+                        <Link to={`/editarpedidos/${row.id_pedido}`}>
+                            <button><i className={`fa-solid fa-pen-to-square iconosNaranjas`} ></i></button>
+                        </Link>
+                    </div>
+                    ) : (
+                        <div className={estilos['acciones']}>
+                            <button name="estado_pedido" id={estilos.estado_pedido_negro}><i className={`fa-solid fa-shuffle ${estilos.estado_pedido_negro}`}></i></button>
+                            <button><i className={`fa-solid fa-pen-to-square ${estilos.icono_negro}`} ></i></button>
+                        </div>
+                    ) }
                 </div>
+                
             )
         }
     ]
@@ -179,9 +190,9 @@ const Pedidos = () => {
                 <input type="text" placeholder="Buscar..." value={filtro} onChange={handleFiltroChange} className={estilos['busqueda']} />
                 <div>
                     <Link to="/agregarPedidos">
-                        <button className={`boton ${estilos["botonAgregar"]}`} ><i class="fa-solid fa-plus"></i> Agregar</button>
+                        <button className={`${estilos["botonAgregar"]}`} ><i class="fa-solid fa-plus"></i> Agregar</button>
                     </Link>
-                    <button class={`boton ${estilos["boton-generar"]}`}><i class="fa-solid fa-file-pdf"></i></button>
+                    <button class={`${estilos["boton-generar"]}`}><i class="fa-solid fa-file-pdf"></i></button>
                 </div>
             </div>
             <div className={estilos["tabla"]}>

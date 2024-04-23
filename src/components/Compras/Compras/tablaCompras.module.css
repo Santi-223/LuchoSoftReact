@@ -5,7 +5,7 @@
 }
 
 .botonAgregar {
-    background-color: #1F67B9;
+    background-color: #2a5587;
     color: white;
     height: 40px;
     width: 130px;
@@ -30,24 +30,20 @@
 }
 
 
-.vinotinto {
-    background: #48110d;
-    color: white;
-    border: none;
-    border-radius: 50px;
 
+.objeto-compra {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    /* Asegúrate de que display sea block o inline-block para que funcione como un contenedor */
+    display: block;
+    /* Opcional: puedes agregar más estilos según sea necesario */
 }
 
-.vinotinto:hover {
-    background: #771d17;
-}
 
-.vinotinto:active {
-    box-shadow: 1px 1px 1px 1px #771d17;
-}
 
 .botonAgregar:hover {
-    background: #3c77bb;
+    background-color: #2e619c;
   }
   
   .botonAgregar:active {
@@ -71,6 +67,10 @@
     margin-left: 20%;
     margin-bottom: 20px;
 }
+
+/* .modal {
+    margin-top: 150px;
+} */
 
 .botonMorado {
     background-color: #722F37;
@@ -194,6 +194,15 @@ input {
     background: #48110d;
     color: white;
     height: 40px;
+    width: 50px;
+
+    /* Establece el fondo del botón como transparente */
+    border: none;
+    /* Elimina el borde del botón */
+    cursor: pointer;
+    /* Cambia el cursor al pasar sobre el botón */
+
+    border-radius: 100px;
 }
 
 .vinotinto:hover {

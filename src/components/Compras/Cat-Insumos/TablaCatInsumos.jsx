@@ -133,15 +133,18 @@ function categoria_insumos() {
                 <div className={estilos["acciones"]}>
 
                     <button onClick={() => {
-                        cambiarEstadoModalEditar(!estadoModaleditar),
-                            setCategoria_insumosEditar(row)
+                        if (row.estado_categoria_insumos === 1) { // Verifica si el estado es activo
+                            cambiarEstadoModalEditar(!estadoModaleditar),
+                            setCategoria_insumosEditar(row);
+                        }
                     }} className={estilos.boton} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}>
-                        <i className="fa-solid fa-pen-to-square iconosNaranjas"></i>
+                        <i className={`fa-solid fa-pen-to-square ${row.estado_categoria_insumos === 1 ? 'iconosVerdes' : 'iconosGris'}`}></i>
                     </button>
 
                 </div>
             )
         },
+
 
     ]
 

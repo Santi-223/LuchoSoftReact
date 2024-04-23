@@ -118,7 +118,7 @@ const Cliente = () => {
                         )}
                         <span className={`${row.estado_cliente == 1 && estilos['slider2']} ${row.estado_cliente !==1 && estilos['slider']}`}></span>
                     </label>
-                    <button onClick={() => {cambiarEstadoModal2(!estadoModal2),setClientesEditar(row)}}><i className={`fa-solid fa-pen-to-square ${estilos.iconosRojos}`}></i></button>
+                    <button onClick={() => {cambiarEstadoModal2(!estadoModal2),setClientesEditar(row)}}><i className={`fa-solid fa-pen-to-square iconosNaranjas`}></i></button>
                 </div>
             )
         },
@@ -446,7 +446,7 @@ const Cliente = () => {
 				<Contenido>
                         <div className={estilos["contFormsRCliente"]}>
                             <div className={estilos["input1RCliente"]}>
-                                <p><i className="fa-solid fa-key iconosRojosRCliente"></i> Documento del cliente</p>
+                                <p>Documento del cliente</p>
                                 <input
                                  id="id_cliente"
                                  className="input-field"
@@ -459,17 +459,17 @@ const Cliente = () => {
                             </div>
                             <br/>
                             <div className={estilos["input1RCliente"]}>
-                                <p><i className="fa-solid fa-font iconosRojosRCliente"></i> Nombre del cliente</p>
+                                <p>Nombre del cliente</p>
                                 <input id="nombre_cliente" className="input-field" type="text" placeholder="Nombre" name="nombre_cliente" value={ClienteRegistrar.nombre_cliente} onChange={handleChange}/>
                             </div>
                             <br/>
                             <div className={estilos["input1RCliente"]}>
-                                <p><i className="fa-solid fa-phone iconosRojosRCliente"></i> Telefono del cliente</p>
+                                <p>Telefono del cliente</p>
                                 <input id="telefono_cliente" className="input-field" type="text" placeholder="Telefono" name="telefono_cliente" value={ClienteRegistrar.telefono_cliente} onChange={handleChange}/>
                             </div>
                             <br/>
                             <div className={estilos["input1RCliente"]}>
-                                <p><i className="fa-sharp fa-solid fa-location-dot iconosRojosRCliente"></i> Dirección del cliente</p>
+                                <p>Dirección del cliente</p>
                                 <input id="direccion_cliente" className="input-field" type="text" placeholder="Dirección" name="direccion_cliente" value={ClienteRegistrar.direccion_cliente} onChange={handleChange}/>
                             </div>
                             <br/>
@@ -493,17 +493,17 @@ const Cliente = () => {
                 <Contenido>
                     <div className={estilos["contFormsRCliente"]}>
                         <div className={estilos["input1RCliente"]}>
-                            <p><i className="fa-solid fa-font iconosRojosRCliente"></i> Nombre del cliente</p>
+                            <p> Nombre del cliente</p>
                             <input id="nombre_cliente" className="input-field" type="text" placeholder="Nombre" name="nombre_cliente" value={ClientesEditar.nombre_cliente} onChange={handleEditarChange}/>
                         </div>
                         <br/>
                         <div className={estilos["input1RCliente"]}>
-                            <p><i className="fa-solid fa-phone iconosRojosRCliente"></i> Telefono del cliente</p>
+                            <p>Telefono del cliente</p>
                             <input id="telefono_cliente" className="input-field" type="text" placeholder="Telefono" name="telefono_cliente" value={ClientesEditar.telefono_cliente} onChange={handleEditarChange}/>
                         </div>
                         <br/>
                         <div className={estilos["input1RCliente"]}>
-                            <p><i className="fa-sharp fa-solid fa-location-dot iconosRojosRCliente"></i> Dirección del cliente</p>
+                            <p> Dirección del cliente</p>
                             <input id="direccion_cliente" className="input-field" type="text" placeholder="Dirección" name="direccion_cliente" value={ClientesEditar.direccion_cliente} onChange={handleEditarChange}/>
                         </div>
                         <br/>

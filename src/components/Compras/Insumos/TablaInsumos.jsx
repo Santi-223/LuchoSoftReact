@@ -134,10 +134,12 @@ function Insumos() {
                 <div className={estilos["acciones"]}>
 
                     <button onClick={() => {
-                        cambiarEstadoModalEditar(!estadoModaleditar),
-                            setInsumosEditar(row)
+                        if (row.estado_insumo === 1) { // Verifica si el estado es activo
+                            cambiarEstadoModalEditar(!estadoModaleditar);
+                            setInsumosEditar(row);
+                        }
                     }} className={estilos.boton} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}>
-                        <i className="fa-solid fa-pen-to-square iconosNaranjas"></i>
+                        <i className={`fa-solid fa-pen-to-square ${row.estado_insumo === 1 ? 'iconosVerdes' : 'iconosGris'}`}></i>
                     </button>
 
                 </div>
@@ -187,9 +189,10 @@ function Insumos() {
             [name]: value
         }));
     };
+    
     const handleSubmitEditar = async (event) => {
         event.preventDefault();
-    
+        
         // Validar que se haya seleccionado una categoría de insumo
         if (!insumosEditar.id_categoria_insumo) {
             Swal.fire({
@@ -199,8 +202,10 @@ function Insumos() {
             });
             return; // Detener la ejecución si no se seleccionó una categoría
         }
-    
+        
         console.log(insumos);
+        
+    
     
         Swal.fire({
             title: '¿Estás seguro?',
@@ -253,6 +258,23 @@ function Insumos() {
                 }
             }
         });
+    };
+    
+    const handleAgregarClick = () => {
+        // Verificar si hay categoría de insumos con estado en 1
+        const categoriasActivas = categoria_insumo.some(categoria => categoria.estado_categoria_insumos === 1);
+    
+        if (!categoriasActivas) {
+            // Mostrar mensaje de error si no hay categorías activas
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'No hay categorías de insumos activas',
+            });
+        } else {
+            // Si hay categorías activas, cambiar el estado del modal de agregar
+            cambiarEstadoModalAgregar(!estadoModalAgregar);
+        }
     };
     
 
@@ -376,7 +398,7 @@ function Insumos() {
         headCells: {
             style: {
                 textAlign: 'center',
-                backgroundColor: '#f2f2f2',
+                backgroundColor: '#E7E7E7',
                 fontWeight: 'bold',
                 padding: '10px',
                 fontSize: '16px'
@@ -413,11 +435,13 @@ function Insumos() {
 <div className={estilos['divFiltro']}>
     <input type="text" placeholder=" Buscar..." value={filtro} onChange={handleFiltroChange} className={estilos["busqueda"]} />
     <div>
-    <button onClick={() => cambiarEstadoModalAgregar(!estadoModalAgregar)} className={` ${estilos.botonAgregar}`}><i className="fa-solid fa-plus"></i> Agregar</button>
-    
+    <button onClick={handleAgregarClick} className={` ${estilos.botonAgregar}`}>
+    <i className="fa-solid fa-plus"></i> Agregar
+</button>
+
     <button
         style={{ color: "white" }}
-        className={`boton ${estilos.vinotinto}`}
+        className={` ${estilos.vinotinto}`}
         onClick={generarPDF}
     >
         <i className="fa-solid fa-download"></i>
@@ -452,7 +476,7 @@ function Insumos() {
                                         <p id={estilos.textito}>  Nombre</p>
                                         <input
                                             id={estilos.nombreinsumo}
-                                            className={estilos["input2"]}
+                                            className={estilos["inputnombre"]}
                                             type="text"
                                             placeholder="Insertar nombre"
                                             name='nombre_insumo'
@@ -462,7 +486,25 @@ function Insumos() {
                                     </div>
                                     <div className={estilos["espacio"]}></div>
                                     
-                                    <div id={estilos.documentoproveedor}>
+
+                                    <div id={estilos.telefonoproveedor}>
+                                        <p id={estilos.textito} >  Stock</p>
+                                        <input
+                                            className={estilos["inputstock"]}
+                                            type="text"
+                                            placeholder="000"
+                                            name='stock_insumo'
+                                            value={insumos.stock_insumo}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
+
+                                   
+                                </div>
+                                <br />
+                                <div className={estilos["inputIdNombre"]}>
+
+                                <div id={estilos.documentoproveedor}>
                                         <p id={estilos.textito} >  Unidad de medida</p>
                                         <select
                                             className={estilos["input2"]}
@@ -482,43 +524,33 @@ function Insumos() {
                                         </select>
                                     </div>
 
-                                   
-                                </div>
-                                <br />
-                                <div className={estilos["inputIdNombre"]}>
-                                <div id={estilos.telefonoproveedor}>
-                                        <p id={estilos.textito} >  Stock</p>
-                                        <input
-                                            className={estilos["input2"]}
-                                            type="number"
-                                            placeholder="Insertar stock"
-                                            name='stock_insumo'
-                                            value={insumos.stock_insumo}
-                                            onChange={handleChange}
-                                        />
-                                    </div>
+
                                  
                                     <div id={estilos.eo}>
                                         <p id={estilos.textito}>  Categoría insumo</p>
                                         <select
-                                            className={estilos["input2"]}
-                                            name="id_categoria_insumo" // Utiliza el mismo nombre que el campo id_rol
-                                            id={estilos.id_categoria_insumos_input} // Cambia el id para que sea único
-                                            value={insumos.id_categoria_insumos}
-                                            onChange={handleChange}
-                                        >
-                                             <option value="" disabled selected>Seleccionar categoría</option>
-                                            {categoria_insumo.map(categoria_insumo => (
-                                                <option value={categoria_insumo.id_categoria_insumos}>{categoria_insumo.nombre_categoria_insumos}</option>
-                                            ))}
-                                        </select>
+    className={estilos["input2"]}
+    name="id_categoria_insumo" // Utiliza el mismo nombre que el campo id_rol
+    id={estilos.id_categoria_insumos_input} // Cambia el id para que sea único
+    value={insumos.id_categoria_insumos}
+    onChange={handleChange}
+>
+    <option value="" disabled selected>Seleccionar categoría</option>
+    {categoria_insumo
+        .filter(categoria => categoria.estado_categoria_insumos === 1) // Filtrar las categorías con estado 1
+        .map(categoria => (
+            <option key={categoria.id_categoria_insumos} value={categoria.id_categoria_insumos}>
+                {categoria.nombre_categoria_insumos}
+            </option>
+        ))}
+</select>
+
                                     </div>
                               
 
 
                                 </div>
                             </div>
-
 
 
                         </div>
@@ -556,7 +588,7 @@ function Insumos() {
                                         <p id={estilos.textito}>  Nombre</p>
                                         <input
                                             id={estilos.nombreinsumo}
-                                            className={estilos["input2"]}
+                                            className={estilos["inputnombreeditado"]}
                                             type="text"
                                             placeholder="Insertar nombre"
                                             name='nombre_insumo'
@@ -564,8 +596,14 @@ function Insumos() {
                                             onChange={handleEditarChange}
                                         />
                                     </div>
-                                    <div className={estilos["espacio"]}></div>
-                                    <div id={estilos.documentoproveedor}>
+                                    <div className={estilos["espacio2"]}></div>
+    
+
+
+                                </div>
+                                <br />
+                                <div className={estilos["inputIdNombre"]}>
+                                <div id={estilos.documentoproveedor}>
                                         <p id={estilos.textito} >  Unidad de medida</p>
                                         <select
                                             className={estilos["input2"]}
@@ -584,38 +622,27 @@ function Insumos() {
                                             <option value="toneladas">Tonelada</option>
                                         </select>
                                     </div>
-
-
-                                </div>
-                                <br />
-                                <div className={estilos["inputIdNombre"]}>
-                                <div id={estilos.telefonoproveedor}>
-                                        <p id={estilos.textito} >  Stock</p>
-                                        <input
-                                            className={estilos["input2"]}
-                                            type="number"
-                                            placeholder="Insertar stock"
-                                            name='stock_insumo'
-                                            value={insumosEditar.stock_insumo}
-                                            onChange={handleEditarChange}
-                                        />
-                                    </div>
-                                    <div className={estilos["espacio"]}></div>
+                                    <div className={estilos["espacio2"]}></div>
                                     <div id={estilos.eo}>
                                         <p id={estilos.textito}>  Categoría insumo</p>
                                         <select
-                                            className={estilos["input2"]}
-                                            name="id_categoria_insumo" // Utiliza el mismo nombre que el campo id_rol
-                                            id={estilos.id_categoria_insumo_input} // Cambia el id para que sea único
-                                        
-                                            value={insumosEditar.id_categoria_insumo}
-                                            onChange={handleEditarChange}
-                                        >
-                                             <option value={insumos.id_categoria_insumo} disabled selected>Seleccionar categoría</option>
-                                            {categoria_insumo.map(categoria_insumo => (
-                                                <option value={categoria_insumo.id_categoria_insumos}>{categoria_insumo.nombre_categoria_insumos}</option>
-                                            ))}
-                                        </select>
+    className={estilos["input2"]}
+    name="id_categoria_insumo"
+    id={estilos.id_categoria_insumos_input}
+    value={insumosEditar.id_categoria_insumo} // Aquí se debe usar insumosEditar.id_categoria_insumo
+    onChange={handleEditarChange}
+>
+
+    <option value="" disabled selected>Seleccionar categoría</option>
+    {categoria_insumo
+        .filter(categoria => categoria.estado_categoria_insumos === 1) // Filtrar las categorías con estado 1
+        .map(categoria => (
+            <option key={categoria.id_categoria_insumos} value={categoria.id_categoria_insumos}>
+                {categoria.nombre_categoria_insumos}
+            </option>
+        ))}
+</select>
+
                                     </div>
                               
 

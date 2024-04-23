@@ -33,10 +33,23 @@
   justify-content: center;
 }
 
+.error {
+  display: flex;
+  position:fixed
+}
+
 .tabladetalle {
 
-  width: 700px;
+  border: 3px solid rgb(228, 228, 228);
+  border-top: 0; /* Esto oculta el borde superior */
+  border-left: 0; /* Esto oculta el borde superior */
+  border-right: 0; /* Esto oculta el borde superior */
+  width: 600px;
+
+
 }
+
+
 
 .inputfieldtabla {
   padding: 0px;
@@ -102,6 +115,13 @@
   
 }
 
+/* 
+.inputfield3:focus {
+  border: 1px solid #ccc; 
+  outline: none;
+}
+ */
+
 .inputfield4 {
   padding: 0px;
  
@@ -116,6 +136,9 @@
  
  
 }
+
+
+
 
 
 
@@ -155,11 +178,18 @@
   cursor: pointer;
 }
 
+/* .inputInvalido {
+  border: 1px solid red;
+  background-color: #f5c1c1;
+} */
+
 #titulo {
   color: rgb(0, 0, 0);
   display: flex;
   justify-content: start;
   font-size: 25px;
+  position: fixed;
+  margin-left: 20px;
 }
 
 
@@ -307,10 +337,19 @@
   margin: 0 5px;
 }
 
+.tablaDT{
+  border: 3px solid rgb(228, 228, 228);
+
+}
+
 .formulario {
   margin-left: 20px;
   max-width: 480px;
-  
+  margin-top: 50px;
+  border: 3px solid rgb(228, 228, 228);
+  padding-left: 15px;
+  border-radius: 20px;
+  background-color: white;
 }
 
 /* CSS */

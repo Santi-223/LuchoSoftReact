@@ -23,6 +23,7 @@
 
 
 
+
 .divFiltro{
     display: flex;
     justify-content: space-between;
@@ -30,12 +31,19 @@
     margin-right: 20px;
   }
 
-.vinotinto {
+  .vinotinto {
     background: #48110d;
     color: white;
-    border: none;
-    border-radius: 50px;
+    height: 40px;
+    width: 50px;
 
+    /* Establece el fondo del botón como transparente */
+    border: none;
+    /* Elimina el borde del botón */
+    cursor: pointer;
+    /* Cambia el cursor al pasar sobre el botón */
+
+    border-radius: 100px;
 }
 
 .vinotinto:hover {
@@ -121,11 +129,39 @@
   .espacio {
     width: 40px;
   }
+
+  .espacio2 {
+    width: 1px;
+  }
   
   .input2 {
     padding: 15px;
     border-radius: 5px;
     width: 160px;
+    padding: 10px;
+    border: 1px solid #ccc;
+  }
+
+  .inputstock {
+    padding: 15px;
+    border-radius: 5px;
+    width: 100px;
+    padding: 10px;
+    border: 1px solid #ccc;
+  }
+
+  .inputnombre{
+    padding: 15px;
+    border-radius: 5px;
+    width: 220px;
+    padding: 10px;
+    border: 1px solid #ccc;
+  }
+
+  .inputnombreeditado{
+    padding: 15px;
+    border-radius: 5px;
+    width: 360px;
     padding: 10px;
     border: 1px solid #ccc;
   }
@@ -345,6 +381,8 @@ label {
     /* Cambia el cursor al pasar sobre el botón */
 
 }
+
+
 
 .boton:hover {
     background-color: transparent;

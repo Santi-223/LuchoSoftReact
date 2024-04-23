@@ -1,18 +1,26 @@
-import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
-import { Outlet, Link } from "react-router-dom";
+import React, { useState, useEffect, useRef } from 'react';
+import { Outlet, Link, useNavigate  } from "react-router-dom";
 import $ from 'jquery';
 import '../../Layout.css';
 import estilos from './tablaCompras.module.css'
 import Swal from 'sweetalert2';
 import DataTable from "react-data-table-component";
+import { Modal, Button } from 'react-bootstrap';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 
 function Compras() {
+    const [showModal, setShowModal] = useState(false);
+    const [compraSeleccionada, setCompraSeleccionada] = useState(null);
+    const [insumos, setInsumos] = useState([]);
+    const [proveedores, setProveedores] = useState([]);
+    const [isLoadingInsumos, setIsLoadingInsumos] = useState(true);
+    const [isLoadingProveedores, setIsLoadingProveedores] = useState(true);
     const token = localStorage.getItem('token');
     const [compras, setCompras] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const tableRef = useRef(null);
+    const navigate = useNavigate();
     const [filtro, setFiltro] = useState('');
 
     const handleFiltroChange = (e) => {
@@ -25,8 +33,87 @@ function Compras() {
         compra.total_compra.toString().includes(filtro)||
         compra.nombre_proveedor.toString().toLowerCase().includes(filtro)||
         compra.estado_compra.toString().includes(filtro)
-    
     );
+    useEffect(() => {
+        fetchProveedores();
+    }, []);
+
+    const fetchProveedores = async () => {
+        try {
+            const response = await fetch('http://localhost:8082/compras/proveedores/', {
+                headers: {
+                    'token': token
+                }
+            });
+            if (response.ok) {
+                const data = await response.json();
+                setProveedores(data); // Establecer los insumos en el estado
+            } else {
+                console.error('Error al obtener los proveedores');
+            }
+            setIsLoadingProveedores(false);
+        } catch (error) {
+            console.error('Error al obtener los proveedores:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchInsumos();
+    }, []);
+
+    const fetchInsumos = async () => {
+        try {
+            const response = await fetch('http://localhost:8082/compras/insumos/', {
+                headers: {
+                    'token': token
+                }
+            });
+            if (response.ok) {
+                const data = await response.json();
+                setInsumos(data); // Establecer los insumos en el estado
+            } else {
+                console.error('Error al obtener los insumos');
+            }
+            setIsLoadingInsumos(false);
+        } catch (error) {
+            console.error('Error al obtener los insumos:', error);
+        }
+    };
+
+    const getNombreInsumoById = (idInsumo) => {
+        const insumo = insumos.find(insumo => insumo.id_insumo === idInsumo);
+        return insumo ? insumo.nombre_insumo : 'Insumo no encontrado';
+    };
+    
+
+    const handleAgregarCompra = () => {
+        const insumosConEstado1 = insumos.filter(insumo => insumo.estado_insumo === 1);
+        const ProveedoresConEstado1 = proveedores.filter(proveedor => proveedor.estado_proveedor === 1);
+        if (insumosConEstado1.length === 0) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'No hay insumos disponibles para agregar una compra',
+                confirmButtonColor: '#1F67B9',
+            });
+
+
+        }else if (ProveedoresConEstado1.length === 0) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'No hay proveedores disponibles para agregar una compra',
+                confirmButtonColor: '#1F67B9',
+            });
+        }
+        
+        else {
+            // Redireccionar al usuario a la página de registro de compra
+            navigate('/registrarCompra');
+        }
+    };
+
+
     const generarPDF = () => {
         const doc = new jsPDF();
     
@@ -58,6 +145,27 @@ function Compras() {
         // Guardar el PDF
         doc.save("reporte_compras.pdf");
     };
+    const handleMostrarDetalles = async (idCompra) => {
+        try {
+            const response = await fetch('http://localhost:8082/compras/compras_insumos/');
+            const data = await response.json();
+            
+            // Filtrar los datos para obtener solo los objetos con el id_compra deseado
+            const comprasInsumos = data.filter(item => item.id_compra === idCompra);
+    
+            if (comprasInsumos.length > 0) {
+                // Mostrar el modal con los detalles de la compra seleccionada
+                setCompraSeleccionada(comprasInsumos);
+                setShowModal(true);
+            } else {
+                console.log("No se encontraron insumos para la compra con el ID especificado.");
+            }
+        } catch (error) {
+            console.error('Error al obtener los datos:', error);
+        }
+    };
+    
+    
     
 
     const columns = [
@@ -83,28 +191,39 @@ function Compras() {
             sortable: true
         },
         {
-            name : "Proveedor",
-            selector: (row)=>row.nombre_proveedor,
+            name: "Proveedor",
+            selector: (row) => row.nombre_proveedor,
             sortable: true,
+
         },
         {
             name: "Estado",
             cell: (row) => (
-                
                 <div className={estilos["acciones"]}>
-<button className={estilos.boton} onClick={() => handleEstadoCompra(row.id_compra, row.estado_compra)} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '25px' }}>
-    {row.estado_compra === 1 ? (
-        <i className="bi bi-toggle-on" style={{ color: "#1F67B9" }}></i>
-    ) : (
-        <i className="bi bi-toggle-off" style={{ width: "60px", color: "black" }}></i>
-    )}
-</button>
-
+                    <button className={estilos.boton} onClick={() => handleEstadoCompra(row.id_compra, row.estado_compra)} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '25px' }}>
+                        {row.estado_compra === 1 ? (
+                            <i className="bi bi-toggle-on" style={{ color: "#1F67B9" }}></i>
+                        ) : (
+                            <i className="bi bi-toggle-off" style={{ width: "60px", color: "black" }}></i>
+                        )}
+                    </button>
                 </div>
             )
         },
+        {
+            name: "Acciones",
+            cell: (row) => (
+                <div className={estilos["acciones"]}>
+                    <button className={estilos.boton} onClick={() => handleMostrarDetalles(row.id_compra)} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '25px' }}>
+                        <i className="bi bi-info-circle" style={{ color: "#FFA200" }}></i>
+                    </button>
+                </div>
+            )
+        },
+    ];
+    
 
-    ]
+
 
     useEffect(() => {
         fetchCompras();
@@ -228,12 +347,13 @@ const customStyles = {
             <div className={estilos['divFiltro']}>
                 <input type="text" placeholder=" Buscar..." value={filtro} onChange={handleFiltroChange} className={estilos["busqueda"]} />
                 <div>
-                <Link to="/registrarCompra">
-                    <button className={` ${estilos.botonAgregar}`}><i className="fa-solid fa-plus"></i> Agregar</button>
-                </Link>
+             
+                <button onClick={handleAgregarCompra} className={` ${estilos.botonAgregar}`}>
+          <i className="fa-solid fa-plus"></i> Agregar
+        </button>
                 <button
                     style={{ color: "white" }}
-                    className={`boton ${estilos.vinotinto}`}
+                    className={` ${estilos.vinotinto}`}
                     onClick={generarPDF}
                 >
                     <i className="fa-solid fa-download"></i>
@@ -246,6 +366,33 @@ const customStyles = {
             <div className={estilos["tabla"]}>
             <DataTable columns={columns} data={filteredCompras} pagination paginationPerPage={6} highlightOnHover customStyles={customStyles} defaultSortField="id_compra" defaultSortAsc={true}></DataTable>
             </div>
+            <Modal className={estilos["modal"]} show={showModal} onHide={() => setShowModal(false)}>
+    <Modal.Header closeButton>
+        <Modal.Title>Detalles de la compra</Modal.Title>
+    </Modal.Header>
+    <Modal.Body>
+
+        {compraSeleccionada && compraSeleccionada.map((compraInsumo, index) => (
+    <div key={index} className="objeto-compra">
+        <div>
+                        <p>Insumo: {getNombreInsumoById(compraInsumo.id_insumo)}</p>
+            <p>Cantidad: {compraInsumo.cantidad_insumo_compras_insumos}</p>
+            <p>Precio: {compraInsumo.precio_insumo_compras_insumos}</p>
+
+            <p>Total:  {compraInsumo.precio_insumo_compras_insumos * compraInsumo.cantidad_insumo_compras_insumos}</p>
+        </div>
+        {index < compraSeleccionada.length - 1 && <hr />}
+    </div>
+))}
+
+
+    </Modal.Body>
+    <Modal.Footer>
+        <Button variant="secondary" onClick={() => setShowModal(false)}>Cerrar</Button>
+    </Modal.Footer>
+</Modal>
+
+
         </div>
     );
 }

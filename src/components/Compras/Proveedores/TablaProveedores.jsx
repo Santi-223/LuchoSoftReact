@@ -126,19 +126,20 @@ function Proveedores() {
         {
             name: "Acciones",
             cell: (row) => (
-
                 <div className={estilos["acciones"]}>
 
-                    <button onClick={() => {
-                        cambiarEstadoModalEditar(!estadoModaleditar),
-                            setProveedoresEditar(row)
+<button onClick={() => {
+                        if (row.estado_proveedor === 1) { // Verifica si el estado es activo
+                            cambiarEstadoModalEditar(!estadoModaleditar);
+                            setInsumosEditar(row);
+                        }
                     }} className={estilos.boton} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}>
-                        <i className="fa-solid fa-pen-to-square iconosNaranjas"></i>
+                        <i className={`fa-solid fa-pen-to-square ${row.estado_proveedor === 1 ? 'iconosVerdes' : 'iconosGris'}`}></i>
                     </button>
-
                 </div>
             )
         },
+
 
     ]
     const handleSubmitEditar = async (event) => {
@@ -374,7 +375,7 @@ function Proveedores() {
     
     <button
         style={{ color: "white" }}
-        className={`boton ${estilos.vinotinto}`}
+        className={` ${estilos.vinotinto}`}
         onClick={generarPDF}
     >
         <i className="fa-solid fa-download"></i>
