@@ -135,6 +135,7 @@ function Compras() {
             return [id_compra, numero_compra, fecha_compra, total_compra, nombre_proveedor];
         });
     
+        
         // Agregar la tabla al documento PDF
         doc.autoTable({
             startY: 20,
@@ -367,23 +368,26 @@ const customStyles = {
             <DataTable columns={columns} data={filteredCompras} pagination paginationPerPage={6} highlightOnHover customStyles={customStyles} defaultSortField="id_compra" defaultSortAsc={true}></DataTable>
             </div>
             <Modal className={estilos["modal"]} show={showModal} onHide={() => setShowModal(false)}>
+                
     <Modal.Header closeButton>
         <Modal.Title>Detalles de la compra</Modal.Title>
     </Modal.Header>
     <Modal.Body>
 
-        {compraSeleccionada && compraSeleccionada.map((compraInsumo, index) => (
+    {compraSeleccionada && compraSeleccionada.map((compraInsumo, index) => (
     <div key={index} className="objeto-compra">
         <div>
-                        <p>Insumo: {getNombreInsumoById(compraInsumo.id_insumo)}</p>
+            <p>Insumo: {getNombreInsumoById(compraInsumo.id_insumo)}</p>
             <p>Cantidad: {compraInsumo.cantidad_insumo_compras_insumos}</p>
             <p>Precio: {compraInsumo.precio_insumo_compras_insumos}</p>
 
-            <p>Total:  {compraInsumo.precio_insumo_compras_insumos * compraInsumo.cantidad_insumo_compras_insumos}</p>
+            {/* Aquí calculamos el total y lo formateamos */}
+            <p>Total: {(compraInsumo.precio_insumo_compras_insumos * compraInsumo.cantidad_insumo_compras_insumos).toLocaleString('es-ES', { minimumFractionDigits: 2 })}</p>
         </div>
         {index < compraSeleccionada.length - 1 && <hr />}
     </div>
 ))}
+
 
 
     </Modal.Body>
