@@ -39,54 +39,49 @@ function categoria_insumos() {
 
     const handleChange = (event) => {
         const { name, value } = event.target;
+        
+        // Validar que el valor ingresado no contenga caracteres raros
+        if (!/^[a-zA-Z0-9\s]+$/.test(value)) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'El nombre de la categoría de insumo solo puede contener letras y números',
+            });
+            return;
+        }
+    
         setCategoria_insumos1(prevcategoria_insumos => ({
             ...prevcategoria_insumos,
             [name]: value
         }));
     };
+    
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-
-        try {
-            console.log('categoría de insumo  a enviar: ', categoria_insumos1)
-
-
-            const responseCategoria_insumos = await fetch('https://api-luchosoft-mysql.onrender.com/compras/categoria_insumos', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'token': token
-                },
-                body: JSON.stringify(categoria_insumos1)
+    
+        // Validar que el nombre de la categoría de insumo no esté en blanco
+        if (!categoria_insumos1.nombre_categoria_insumos.trim()) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'El nombre de la categoría de insumo no puede estar en blanco',
             });
-
-            if (responseCategoria_insumos.ok) {
-                console.log('categoría de insumo creada exitosamente.');
-
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Registro exitoso',
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-                setTimeout(() => {
-                    window.location.href = '/#/CatInsumos';
-                }, 2000);
-
-
-            } else {
-                console.error('Error al crear la categoría de insumo:', responseCategoria_insumos.statusText);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Error al crear la categoría de insumo',
-                });
-            }
+            return;
+        }
+    
+        try {
+            // Resto del código para enviar la categoría de insumo
         } catch (error) {
             console.error('Error al crear la categoría de insumo:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Error al crear la categoría de insumo',
+            });
         }
     };
+    
 
     const handleEditarChange = (event) => {
         const { name, value } = event.target;
@@ -160,7 +155,7 @@ function categoria_insumos() {
 
     const fetchcategoria_insumos = async () => {
         try {
-            const response = await fetch('https://api-luchosoft-mysql.onrender.com/compras/categoria_insumos');
+            const response = await fetch('http://localhost:8082/compras/categoria_insumos');
             if (response.ok) {
                 const data = await response.json();
                 const categoria_insumosFiltrador = data.map(categoria_insumos => ({
@@ -195,7 +190,7 @@ function categoria_insumos() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await fetch(`https://api-luchosoft-mysql.onrender.com/compras/categoria_insumos/${categoria_insumosEditar.id_categoria_insumos}`, {
+                    const response = await fetch(`http://localhost:8082/compras/categoria_insumos/${categoria_insumosEditar.id_categoria_insumos}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json',
@@ -213,7 +208,7 @@ function categoria_insumos() {
                             timer: 1500
                         });
                         setTimeout(() => {
-                            window.location.href = '/#/CatInsumos';
+                            window.location.href = '/CatInsumos';
                         }, 2000);
                         // Aquí podrías redirigir a otra página, mostrar un mensaje de éxito, etc.
                     } else {
@@ -251,7 +246,7 @@ function categoria_insumos() {
                 try {
                     const nuevoEstado = estadocategoria_insumos === 1 ? 0 : 1;
 
-                    const response = await fetch(`https://api-luchosoft-mysql.onrender.com/compras/estadoCatInsumos/${idcategoria_insumos}`, {
+                    const response = await fetch(`http://localhost:8082/compras/estadoCatInsumos/${idcategoria_insumos}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json',
