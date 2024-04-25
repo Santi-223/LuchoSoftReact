@@ -40,7 +40,7 @@ function Compras() {
 
     const fetchProveedores = async () => {
         try {
-            const response = await fetch('https://api-luchosoft-mysql.onrender.com/compras/proveedores/', {
+            const response = await fetch('http://localhost:8082/compras/proveedores/', {
                 headers: {
                     'token': token
                 }
@@ -63,7 +63,7 @@ function Compras() {
 
     const fetchInsumos = async () => {
         try {
-            const response = await fetch('https://api-luchosoft-mysql.onrender.com/compras/insumos/', {
+            const response = await fetch('http://localhost:8082/compras/insumos/', {
                 headers: {
                     'token': token
                 }
@@ -135,6 +135,7 @@ function Compras() {
             return [id_compra, numero_compra, fecha_compra, total_compra, nombre_proveedor];
         });
     
+        
         // Agregar la tabla al documento PDF
         doc.autoTable({
             startY: 20,
@@ -147,7 +148,7 @@ function Compras() {
     };
     const handleMostrarDetalles = async (idCompra) => {
         try {
-            const response = await fetch('https://api-luchosoft-mysql.onrender.com/compras/compras_insumos/');
+            const response = await fetch('http://localhost:8082/compras/compras_insumos/');
             const data = await response.json();
             
             // Filtrar los datos para obtener solo los objetos con el id_compra deseado
@@ -237,7 +238,7 @@ function Compras() {
 
     const fetchCompras = async () => {
         try {
-            const response = await fetch('https://api-luchosoft-mysql.onrender.com/compras/compras');
+            const response = await fetch('http://localhost:8082/compras/compras');
             if (response.ok) {
                 const data = await response.json();
                 const comprasFiltrador = data.map(compra => ({
@@ -275,7 +276,7 @@ function Compras() {
                 try {
                     const nuevoEstado = estadoCompra === 1 ? 0 : 1;
     
-                    const response = await fetch(`https://api-luchosoft-mysql.onrender.com/compras/compras/${idCompra}`, {
+                    const response = await fetch(`http://localhost:8082/compras/compras/${idCompra}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json',
@@ -367,23 +368,26 @@ const customStyles = {
             <DataTable columns={columns} data={filteredCompras} pagination paginationPerPage={6} highlightOnHover customStyles={customStyles} defaultSortField="id_compra" defaultSortAsc={true}></DataTable>
             </div>
             <Modal className={estilos["modal"]} show={showModal} onHide={() => setShowModal(false)}>
+                
     <Modal.Header closeButton>
         <Modal.Title>Detalles de la compra</Modal.Title>
     </Modal.Header>
     <Modal.Body>
 
-        {compraSeleccionada && compraSeleccionada.map((compraInsumo, index) => (
+    {compraSeleccionada && compraSeleccionada.map((compraInsumo, index) => (
     <div key={index} className="objeto-compra">
         <div>
-                        <p>Insumo: {getNombreInsumoById(compraInsumo.id_insumo)}</p>
+            <p>Insumo: {getNombreInsumoById(compraInsumo.id_insumo)}</p>
             <p>Cantidad: {compraInsumo.cantidad_insumo_compras_insumos}</p>
             <p>Precio: {compraInsumo.precio_insumo_compras_insumos}</p>
 
-            <p>Total:  {compraInsumo.precio_insumo_compras_insumos * compraInsumo.cantidad_insumo_compras_insumos}</p>
+            {/* Aquí calculamos el total y lo formateamos */}
+            <p>Total: {(compraInsumo.precio_insumo_compras_insumos * compraInsumo.cantidad_insumo_compras_insumos).toLocaleString('es-ES', { minimumFractionDigits: 2 })}</p>
         </div>
         {index < compraSeleccionada.length - 1 && <hr />}
     </div>
 ))}
+
 
 
     </Modal.Body>
