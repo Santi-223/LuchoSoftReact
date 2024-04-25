@@ -12,17 +12,9 @@ import { height } from "@fortawesome/free-regular-svg-icons/faAddressBook";
 
 
 const EditarPedidos = () => {
-    // const [estadoModal1, cambiarEstadoModal1] = useState(false);
-    // const [clientes, setclientes] = useState([]);
-    // const [filtro, setFiltro] = useState('');
-    // const [cliente, setCliente] = useState(null);
     const [customers, setClientes] = useState([]);
-    // const [selectedCliente, setselectedCliente] = useState(null);
-    // const [ventanaClienteDetalle, VentanaClienteDetalle] = useState(false);
-    // const [tablaClienteDetalle, TablaClienteDetalle] = useState(true);
     const [listarProductos1, setlistarProductos] = useState([])
     const [tableRows, setTableRows] = useState([{ id_producto: 0, precio_unitario: 0, cantidad: '', cantidad_seleccionada: 0, precio_total: 0 }]);
-    // const [formChanged, setFormChanged] = useState(false);
     const [scrollEnabled, setScrollEnabled] = useState(false);
     const [pedidoProductos1, setPedidoProductos] = useState([]);
 
