@@ -15,7 +15,7 @@ const Cliente = () => {
     const [estadoModal1, cambiarEstadoModal1] = useState(false);
     const [estadoModal2, cambiarEstadoModal2] = useState(false);
     const [ClienteRegistrar, setClienteRegistrar] = useState({
-        id_cliente:0,
+        id_cliente: 0,
         nombre_cliente: '',
         telefono_cliente: '',
         direccion_cliente: '',
@@ -58,7 +58,7 @@ const Cliente = () => {
             setIsLoading(false);
         }
     }, [clientes]);
-    
+
     const handleFiltroChange = (e) => {
         setFiltro(e.target.value);
     };
@@ -66,63 +66,63 @@ const Cliente = () => {
         cliente.id_cliente.toString().includes(filtro) ||
         cliente.nombre_cliente.toLowerCase().includes(filtro.toLowerCase()) ||
         cliente.telefono_cliente.includes(filtro) ||
-        cliente.direccion_cliente.toString().includes(filtro)||
-        cliente.cliente_frecuente.toString().includes(filtro)||
+        cliente.direccion_cliente.toString().includes(filtro) ||
+        cliente.cliente_frecuente.toString().includes(filtro) ||
         cliente.estado_cliente.toString().includes(filtro)
 
     );
 
-   
-    
-    const columns =[
+
+
+    const columns = [
         {
-            name : "Documento",
-            selector: (row)=>row.id_cliente,
+            name: "Documento",
+            selector: (row) => row.id_cliente,
             sortable: true
         },
         {
-            name : "Nombre",
-            selector: (row)=>row.nombre_cliente,
+            name: "Nombre",
+            selector: (row) => row.nombre_cliente,
             sortable: true
         },
         {
-            name : "Teléfono",
-            selector: (row)=>row.telefono_cliente,
+            name: "Teléfono",
+            selector: (row) => row.telefono_cliente,
             sortable: true
         },
         {
-            name : "Dirección",
-            selector: (row)=>row.direccion_cliente,
+            name: "Dirección",
+            selector: (row) => row.direccion_cliente,
             sortable: true
         },
         {
-            name : "Cliente Frecuente",
-            selector : (row) =>row.cliente_frecuente ===1 ? 'Frecuente' : 'No frecuente',
+            name: "Cliente Frecuente",
+            selector: (row) => row.cliente_frecuente === 1 ? 'Frecuente' : 'No frecuente',
             sortable: true,
-            cell: (row) =>(
+            cell: (row) => (
                 <div>
-                    <button className={`${estilos["frecuente-button"]} ${row.cliente_frecuente !== 1 && estilos['no-frecuente-button']}`} onClick={()=>handleClienteFrecuente(row)} >{row.cliente_frecuente ==1 ? 'Frecuente' : 'No frecuente'}</button>
+                    <button className={`${estilos["frecuente-button"]} ${row.cliente_frecuente !== 1 && estilos['no-frecuente-button']}`} onClick={() => handleClienteFrecuente(row)} >{row.cliente_frecuente == 1 ? 'Frecuente' : 'No frecuente'}</button>
                 </div>
             ),
         },
         {
-            name : "Acciones",
-            cell : (row) =>(
-                <div className= {estilos["acciones"]}>
+            name: "Acciones",
+            cell: (row) => (
+                <div className={estilos["acciones"]}>
                     <label className={estilos["switch"]} >
                         <input type="checkbox" onChange={() => handleEstadoCliente(row)} />
-                        {row.estado_cliente ===1 ? (
+                        {row.estado_cliente === 1 ? (
                             <span className={`${row.estado_cliente == 1 && estilos['slider2']}`}></span>
-                        ):(
-                            <span className={`${row.estado_cliente !==1 && estilos['slider']}`}></span>
+                        ) : (
+                            <span className={`${row.estado_cliente !== 1 && estilos['slider']}`}></span>
                         )}
-                        <span className={`${row.estado_cliente == 1 && estilos['slider2']} ${row.estado_cliente !==1 && estilos['slider']}`}></span>
+                        <span className={`${row.estado_cliente == 1 && estilos['slider2']} ${row.estado_cliente !== 1 && estilos['slider']}`}></span>
                     </label>
-                    <button onClick={() => {cambiarEstadoModal2(!estadoModal2),setClientesEditar(row)}}><i className={`fa-solid fa-pen-to-square iconosNaranjas`}></i></button>
+                    <button onClick={() => { cambiarEstadoModal2(!estadoModal2), setClientesEditar(row) }}><i className={`fa-solid fa-pen-to-square iconosNaranjas`}></i></button>
                 </div>
             )
         },
-        
+
     ]
 
     const handleChange = (event) => {
@@ -143,7 +143,7 @@ const Cliente = () => {
 
     const RegistrarCliente = async (event) => {
         event.preventDefault();
-        if(ClienteRegistrar.id_cliente===0 && ClienteRegistrar.nombre_cliente==='' && ClienteRegistrar.telefono_cliente==='' && ClienteRegistrar.direccion_cliente===''){
+        if (ClienteRegistrar.id_cliente === 0 && ClienteRegistrar.nombre_cliente === '' && ClienteRegistrar.telefono_cliente === '' && ClienteRegistrar.direccion_cliente === '') {
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
@@ -151,7 +151,7 @@ const Cliente = () => {
                 confirmButtonColor: '#1F67B9',
             });
             return;
-        }else if(ClienteRegistrar.id_cliente === 0){
+        } else if (ClienteRegistrar.id_cliente === 0) {
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
@@ -159,7 +159,7 @@ const Cliente = () => {
                 confirmButtonColor: '#1F67B9',
             });
             return;
-        }else if(ClienteRegistrar.nombre_cliente===''){
+        } else if (ClienteRegistrar.nombre_cliente === '') {
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
@@ -167,7 +167,7 @@ const Cliente = () => {
                 confirmButtonColor: '#1F67B9',
             });
             return;
-        }else if(ClienteRegistrar.telefono_cliente===''){
+        } else if (ClienteRegistrar.telefono_cliente === '') {
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
@@ -175,7 +175,7 @@ const Cliente = () => {
                 confirmButtonColor: '#1F67B9',
             });
             return;
-        }else if(ClienteRegistrar.direccion_cliente ===''){
+        } else if (ClienteRegistrar.direccion_cliente === '') {
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
@@ -194,6 +194,7 @@ const Cliente = () => {
             });
 
             if (responseProveedores.ok) {
+                fetchVenta();
                 console.log('Cliente creado exitosamente.');
 
                 Swal.fire({
@@ -202,8 +203,20 @@ const Cliente = () => {
                     showConfirmButton: false,
                     timer: 1500
                 });
+
+                setClienteRegistrar(
+                    {
+                        id_cliente: 0,
+                        nombre_cliente: '',
+                        telefono_cliente: '',
+                        direccion_cliente: '',
+                        cliente_frecuente: 1,
+                        estado_cliente: 1
+                    }
+                )
+
                 setTimeout(() => {
-                    window.location.href = '/#/clientes';
+                    cambiarEstadoModal1(false)
                 }, 2000);
 
 
@@ -233,26 +246,26 @@ const Cliente = () => {
             if (result.isConfirmed) {
                 try {
                     const nuevoEstado = row.estado_cliente === 1 ? 0 : 1;
-                    if(nuevoEstado===0){
+                    if (nuevoEstado === 0) {
                         const response = await fetch(`https://api-luchosoft-mysql.onrender.com/ventas/clientes/${row.id_cliente}`, {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            ...row,
-                            cliente_frecuente: nuevoEstado,
-                            estado_cliente: nuevoEstado
-                        })
-                        
-                    });
-                    if (response.ok) {
-                        // Actualización exitosa, actualizar la lista de clientes
-                        fetchVenta();
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                ...row,
+                                cliente_frecuente: nuevoEstado,
+                                estado_cliente: nuevoEstado
+                            })
+
+                        });
+                        if (response.ok) {
+                            // Actualización exitosa, actualizar la lista de clientes
+                            fetchVenta();
+                        } else {
+                            console.error('Error al actualizar el estado del usuario');
+                        }
                     } else {
-                        console.error('Error al actualizar el estado del usuario');
-                    }
-                    }else{                        
                         const response = await fetch(`https://api-luchosoft-mysql.onrender.com/ventas/clientes/${row.id_cliente}`, {
                             method: 'PUT',
                             headers: {
@@ -262,7 +275,7 @@ const Cliente = () => {
                                 ...row,
                                 estado_cliente: nuevoEstado
                             })
-                            
+
                         });
                         if (response.ok) {
                             // Actualización exitosa, actualizar la lista de compras
@@ -278,9 +291,9 @@ const Cliente = () => {
         });
     };
 
-    const handleClienteFrecuente = async (row) =>{
+    const handleClienteFrecuente = async (row) => {
         // const estado_cliente=row.estado_cliente === 0 
-        if(row.estado_cliente===0){
+        if (row.estado_cliente === 0) {
             Swal.fire({
                 icon: 'error',
                 title: 'ERROR',
@@ -311,7 +324,7 @@ const Cliente = () => {
                             ...row,
                             cliente_frecuente: nuevoEstado
                         })
-                        
+
                     });
                     if (response.ok) {
                         // Actualización exitosa, actualizar la lista de compras
@@ -329,7 +342,7 @@ const Cliente = () => {
     const EditarCliente = async (event) => {
         event.preventDefault();
         console.log(clientes)
-        if(ClientesEditar.nombre_cliente===''&&ClientesEditar.telefono_cliente===''&&ClientesEditar.direccion_cliente===''){
+        if (ClientesEditar.nombre_cliente === '' && ClientesEditar.telefono_cliente === '' && ClientesEditar.direccion_cliente === '') {
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
@@ -337,7 +350,7 @@ const Cliente = () => {
                 confirmButtonColor: '#1F67B9',
             });
             return;
-        }else if(ClientesEditar.nombre_cliente===''){
+        } else if (ClientesEditar.nombre_cliente === '') {
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
@@ -345,7 +358,7 @@ const Cliente = () => {
                 confirmButtonColor: '#1F67B9',
             });
             return;
-        }else if(ClientesEditar.telefono_cliente===''){
+        } else if (ClientesEditar.telefono_cliente === '') {
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
@@ -353,7 +366,7 @@ const Cliente = () => {
                 confirmButtonColor: '#1F67B9',
             });
             return;
-        }else if(ClientesEditar.direccion_cliente===''){
+        } else if (ClientesEditar.direccion_cliente === '') {
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
@@ -420,9 +433,9 @@ const Cliente = () => {
         <div>
             <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-                <div id={estilos["tituloCliente"]}>
-                    <h1>Clientes</h1>
-                </div>
+            <div id={estilos["tituloCliente"]}>
+                <h1>Clientes</h1>
+            </div>
             <div className={estilos['botones']}>
                 <input type="text" placeholder="Buscar..." value={filtro} onChange={handleFiltroChange} className={estilos["busqueda"]} />
                 <div>
@@ -435,52 +448,52 @@ const Cliente = () => {
                 <DataTable columns={columns} data={filteredClientes} pagination paginationPerPage={6} highlightOnHover></DataTable>
             </div>
             <Modal
-				estado={estadoModal1}
-				cambiarEstado={cambiarEstadoModal1}
-				titulo="Registrar Cliente"
-				mostrarHeader={true}
-				mostrarOverlay={true}
-				posicionModal={'center'}
+                estado={estadoModal1}
+                cambiarEstado={cambiarEstadoModal1}
+                titulo="Registrar Cliente"
+                mostrarHeader={true}
+                mostrarOverlay={true}
+                posicionModal={'center'}
                 width={'500px'}
-				padding={'10px'}
-			>
-				<Contenido>
-                        <div className={estilos["contFormsRCliente"]}>
-                            <div className={estilos["input1RCliente"]}>
-                                <p>Documento del cliente</p>
-                                <input
-                                 id="id_cliente"
-                                 className="input-field"
-                                 type="number"
-                                 placeholder="10203040"
-                                 name="id_cliente"
-                                 value={ClienteRegistrar.id_cliente}
-                                 onChange={handleChange}
-                                 />
-                            </div>
-                            <br/>
-                            <div className={estilos["input1RCliente"]}>
-                                <p>Nombre del cliente</p>
-                                <input id="nombre_cliente" className="input-field" type="text" placeholder="Nombre" name="nombre_cliente" value={ClienteRegistrar.nombre_cliente} onChange={handleChange}/>
-                            </div>
-                            <br/>
-                            <div className={estilos["input1RCliente"]}>
-                                <p>Telefono del cliente</p>
-                                <input id="telefono_cliente" className="input-field" type="text" placeholder="Telefono" name="telefono_cliente" value={ClienteRegistrar.telefono_cliente} onChange={handleChange}/>
-                            </div>
-                            <br/>
-                            <div className={estilos["input1RCliente"]}>
-                                <p>Dirección del cliente</p>
-                                <input id="direccion_cliente" className="input-field" type="text" placeholder="Dirección" name="direccion_cliente" value={ClienteRegistrar.direccion_cliente} onChange={handleChange}/>
-                            </div>
-                            <br/>
+                padding={'10px'}
+            >
+                <Contenido>
+                    <div className={estilos["contFormsRCliente"]}>
+                        <div className={estilos["input1RCliente"]}>
+                            <p>Documento del cliente</p>
+                            <input
+                                id="id_cliente"
+                                className="input-field"
+                                type="number"
+                                placeholder="10203040"
+                                name="id_cliente"
+                                value={ClienteRegistrar.id_cliente}
+                                onChange={handleChange}
+                            />
                         </div>
-                        <div className={estilos["BotonesClientes"]}>
-                            <button type='submit' onClick={RegistrarCliente} className={estilos['RegistrarCliente']}>Aceptar</button>
-                            <button onClick={() => cambiarEstadoModal1(!estadoModal1)}>Cancelar</button>
+                        <br />
+                        <div className={estilos["input1RCliente"]}>
+                            <p>Nombre del cliente</p>
+                            <input id="nombre_cliente" className="input-field" type="text" placeholder="Nombre" name="nombre_cliente" value={ClienteRegistrar.nombre_cliente} onChange={handleChange} />
                         </div>
-				</Contenido>
-			</Modal>
+                        <br />
+                        <div className={estilos["input1RCliente"]}>
+                            <p>Telefono del cliente</p>
+                            <input id="telefono_cliente" className="input-field" type="text" placeholder="Telefono" name="telefono_cliente" value={ClienteRegistrar.telefono_cliente} onChange={handleChange} />
+                        </div>
+                        <br />
+                        <div className={estilos["input1RCliente"]}>
+                            <p>Dirección del cliente</p>
+                            <input id="direccion_cliente" className="input-field" type="text" placeholder="Dirección" name="direccion_cliente" value={ClienteRegistrar.direccion_cliente} onChange={handleChange} />
+                        </div>
+                        <br />
+                    </div>
+                    <div className={estilos["BotonesClientes"]}>
+                        <button type='submit' onClick={RegistrarCliente} className={estilos['RegistrarCliente']}>Aceptar</button>
+                        <button onClick={() => cambiarEstadoModal1(!estadoModal1)}>Cancelar</button>
+                    </div>
+                </Contenido>
+            </Modal>
             <Modal
                 estado={estadoModal2}
                 cambiarEstado={cambiarEstadoModal2}
@@ -495,23 +508,23 @@ const Cliente = () => {
                     <div className={estilos["contFormsRCliente"]}>
                         <div className={estilos["input1RCliente"]}>
                             <p> Nombre del cliente</p>
-                            <input id="nombre_cliente" className="input-field" type="text" placeholder="Nombre" name="nombre_cliente" value={ClientesEditar.nombre_cliente} onChange={handleEditarChange}/>
+                            <input id="nombre_cliente" className="input-field" type="text" placeholder="Nombre" name="nombre_cliente" value={ClientesEditar.nombre_cliente} onChange={handleEditarChange} />
                         </div>
-                        <br/>
+                        <br />
                         <div className={estilos["input1RCliente"]}>
                             <p>Telefono del cliente</p>
-                            <input id="telefono_cliente" className="input-field" type="text" placeholder="Telefono" name="telefono_cliente" value={ClientesEditar.telefono_cliente} onChange={handleEditarChange}/>
+                            <input id="telefono_cliente" className="input-field" type="text" placeholder="Telefono" name="telefono_cliente" value={ClientesEditar.telefono_cliente} onChange={handleEditarChange} />
                         </div>
-                        <br/>
+                        <br />
                         <div className={estilos["input1RCliente"]}>
                             <p> Dirección del cliente</p>
-                            <input id="direccion_cliente" className="input-field" type="text" placeholder="Dirección" name="direccion_cliente" value={ClientesEditar.direccion_cliente} onChange={handleEditarChange}/>
+                            <input id="direccion_cliente" className="input-field" type="text" placeholder="Dirección" name="direccion_cliente" value={ClientesEditar.direccion_cliente} onChange={handleEditarChange} />
                         </div>
-                        <br/>
+                        <br />
                     </div>
                     <div className={estilos["BotonesClientes"]}>
-                            <button type='submit' onClick={EditarCliente}  className={estilos['RegistrarCliente']}>Aceptar</button>
-                            <button onClick={() => cambiarEstadoModal2(!estadoModal2)}>Cancelar</button>
+                        <button type='submit' onClick={EditarCliente} className={estilos['RegistrarCliente']}>Aceptar</button>
+                        <button onClick={() => cambiarEstadoModal2(!estadoModal2)}>Cancelar</button>
                     </div>
                 </Contenido>
             </Modal>
