@@ -131,7 +131,7 @@ function Proveedores() {
 <button onClick={() => {
                         if (row.estado_proveedor === 1) { // Verifica si el estado es activo
                             cambiarEstadoModalEditar(!estadoModaleditar);
-                            setInsumosEditar(row);
+                            setProveedoresEditar(row);
                         }
                     }} className={estilos.boton} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}>
                         <i className={`fa-solid fa-pen-to-square ${row.estado_proveedor === 1 ? 'iconosVerdes' : 'iconosGris'}`}></i>
@@ -144,60 +144,59 @@ function Proveedores() {
     ]
     const handleSubmitEditar = async (event) => {
         event.preventDefault();
-
-        console.log(proveedores)
-
-        Swal.fire({
-            title: '¿Estás seguro?',
-            text: '¿Deseas actualizar la información del proveedor?',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Sí',
-            cancelButtonText: 'Cancelar'
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                try {
-                    const response = await fetch(`https://api-luchosoft-mysql.onrender.com/compras/proveedores/${proveedoresEditar.id_proveedor}`, {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'token': token
-                        },
-                        body: JSON.stringify(proveedoresEditar)
+    
+        // Verificar que todos los campos estén llenos
+        const { nombre_proveedor, documento_proveedor, telefono_proveedor, direccion_proveedor } = proveedoresEditar;
+        if (nombre_proveedor.trim() !== '' && documento_proveedor.trim() !== '' && telefono_proveedor.trim() !== '' && direccion_proveedor.trim() !== '') {
+            try {
+                // Tu código para enviar el formulario de edición
+                console.log('proveedor a actualizar: ', proveedoresEditar);
+    
+                const response = await fetch(`http://localhost:8082/compras/proveedores/${proveedoresEditar.id_proveedor}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'token': token
+                    },
+                    body: JSON.stringify(proveedoresEditar)
+                });
+    
+                if (response.ok) {
+                    console.log('proveedor actualizado exitosamente.');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Proveedor actualizado exitosamente',
+                        showConfirmButton: false,
+                        timer: 1500
                     });
-
-                    if (response.ok) {
-                        console.log('proveedor actualizado exitosamente.');
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'proveedor actualizado exitosamente',
-                            showConfirmButton: false,
-                            timer: 1500
-                        });
-                        setTimeout(() => {
-                            window.location.href = '/#/proveedores';
-                        }, 2000);
-                        // Aquí podrías redirigir a otra página, mostrar un mensaje de éxito, etc.
-                    } else {
-                        console.error('Error al actualizar el proveedor:', response.statusText);
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'Error al actualizar el proveedor',
-                        });
-                    }
-                } catch (error) {
-                    console.error('Error al actualizar el proveedor:', error);
+                    setTimeout(() => {
+                        window.location.href = '/proveedores';
+                    }, 2000);
+                    // Aquí podrías redirigir a otra página, mostrar un mensaje de éxito, etc.
+                } else {
+                    console.error('Error al actualizar el proveedor:', response.statusText);
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
                         text: 'Error al actualizar el proveedor',
                     });
                 }
+            } catch (error) {
+                console.error('Error al actualizar el proveedor:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Error al actualizar el proveedor',
+                });
             }
-        });
+        } else {
+            // Mostrar mensaje de error si algún campo está vacío
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Por favor completa todos los campos',
+            });
+        }
     };
 
     useEffect(() => {
@@ -212,7 +211,7 @@ function Proveedores() {
 
     const fetchproveedores = async () => {
         try {
-            const response = await fetch('https://api-luchosoft-mysql.onrender.com/compras/proveedores');
+            const response = await fetch('http://localhost:8082/compras/proveedores');
             if (response.ok) {
                 const data = await response.json();
                 const proveedoresFiltrador = data.map(proveedor => ({
@@ -242,44 +241,55 @@ function Proveedores() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-
-        try {
-            console.log('proveedor a enviar: ', proveedores1)
-
-
-            const responseProveedores = await fetch('https://api-luchosoft-mysql.onrender.com/compras/proveedores', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'token': token
-                },
-                body: JSON.stringify(proveedores1)
-            });
-
-            if (responseProveedores.ok) {
-                console.log('Proveedor creado exitosamente.');
-
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Registro exitoso',
-                    showConfirmButton: false,
-                    timer: 1500
+    
+        // Verificar que todos los campos estén llenos
+        const { nombre_proveedor, documento_proveedor, telefono_proveedor, direccion_proveedor } = proveedores1;
+        if (nombre_proveedor.trim() !== '' && documento_proveedor.trim() !== '' && telefono_proveedor.trim() !== '' && direccion_proveedor.trim() !== '') {
+            try {
+                // Tu código para enviar el formulario
+                console.log('proveedor a enviar: ', proveedores1);
+    
+                const responseProveedores = await fetch('http://localhost:8082/compras/proveedores', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'token': token
+                    },
+                    body: JSON.stringify(proveedores1)
                 });
-                setTimeout(() => {
-                    window.location.href = '/#/proveedores';
-                }, 2000);
-
-
-            } else {
-                console.error('Error al crear el proveedor:', responseProveedores.statusText);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Error al crear el proveedor',
-                });
+    
+                if (responseProveedores.ok) {
+                    console.log('Proveedor creado exitosamente.');
+    
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Registro exitoso',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                    setTimeout(() => {
+                        window.location.href = '/proveedores';
+                    }, 2000);
+    
+    
+                } else {
+                    console.error('Error al crear el proveedor:', responseProveedores.statusText);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Error al crear el proveedor',
+                    });
+                }
+            } catch (error) {
+                console.error('Error al crear el proveedor:', error);
             }
-        } catch (error) {
-            console.error('Error al crear el proveedor:', error);
+        } else {
+            // Mostrar mensaje de error si algún campo está vacío
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Por favor completa todos los campos',
+            });
         }
     };
 
@@ -290,6 +300,8 @@ function Proveedores() {
             [name]: value
         }));
     };
+
+    
     
     const handleEstadoproveedor = async (idproveedor, estadoproveedor) => {
         Swal.fire({
@@ -306,7 +318,7 @@ function Proveedores() {
                 try {
                     const nuevoEstado = estadoproveedor === 1 ? 0 : 1;
 
-                    const response = await fetch(`https://api-luchosoft-mysql.onrender.com/compras/estadoProveedor/${idproveedor}`, {
+                    const response = await fetch(`http://localhost:8082/compras/estadoProveedor/${idproveedor}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json',
