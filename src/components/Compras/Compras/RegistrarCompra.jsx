@@ -28,7 +28,7 @@ function App() {
   const [scrollEnabled, setScrollEnabled] = useState(false);
   const [selectedInsumos, setSelectedInsumos] = useState(new Set());
   const [formChanged, setFormChanged] = useState(false);
-  const [inputValido, setInputValido] = useState(true);
+  // const [inputValido, setInputValido] = useState(true);
   const [inputValido2, setInputValido2] = useState(Array(tableRows.length).fill(true));
 
 
@@ -99,13 +99,13 @@ function App() {
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    if (name === 'numero_compra') {
-      if (value.length > 5) {
-        setInputValido(false);
-      } else {
-        setInputValido(true);
-      }
-    }
+    // if (name === 'numero_compra') {
+    //   if (value.length > 5) {
+    //     setInputValido(false);
+    //   } else {
+    //     setInputValido(true);
+    //   }
+    // }
     setCompra({ ...compra, [name]: value });
     setFormChanged(true);
   };
@@ -138,14 +138,17 @@ function App() {
     setFormChanged(true);
   };
 
+  
   const handleCantidadChange = (event, index) => {
     let { value } = event.target;
-  
-    // Filtrar caracteres no deseados, mantener solo números y el punto
-    value = value.replace(/[^\d.]/g, '');
-  
-    // Verificar si el valor actual es diferente del valor filtrado
-    if (event.target.value !== value) {
+    
+    // Convertir el valor a un número y asegurarse de que no sea negativo
+    value = parseFloat(value) >= 0 ? parseFloat(value) : 0;
+    
+    // Validar el formato del número
+    const isValidFormat = /^\d*\.?\d*$/.test(value.toString());
+    
+    if (!isValidFormat) {
       setInputValido2(prevState => {
         const newState = [...prevState];
         newState[index] = false;
@@ -157,30 +160,29 @@ function App() {
         newState[index] = true;
         return newState;
       });
+    
+      const updatedRows = tableRows.map((row, rowIndex) => {
+        if (rowIndex === index) {
+          const cantidad = parseFloat(value) || 0;
+          const precioUnitario = parseFloat(row.precio_unitario) || 0;
+          const precioTotal = (cantidad * precioUnitario).toFixed(2); // Aquí se recorta el número decimal
+          return { ...row, cantidad: value, cantidad_seleccionada: cantidad, precio_total: precioTotal };
+        }
+        return row;
+      });
+    
+      setTableRows(updatedRows);
+    
+      const total = updatedRows.reduce((accumulator, currentValue) => {
+        return accumulator + (parseFloat(currentValue.cantidad_seleccionada) * parseFloat(currentValue.precio_unitario) || 0);
+      }, 0);
+      setPrecioTotal(total.toFixed(2)); // Recortar el precio total
+      setFormChanged(true);
     }
-  
-    const updatedRows = tableRows.map((row, rowIndex) => {
-      if (rowIndex === index) {
-        const cantidad = parseFloat(value) || 0;
-        const precioUnitario = parseFloat(row.precio_unitario) || 0;
-        const precioTotal = cantidad * precioUnitario;
-        return { ...row, cantidad: value, cantidad_seleccionada: cantidad, precio_total: precioTotal };
-      }
-      return row;
-    });
-  
-    setTableRows(updatedRows);
-  
-    const total = updatedRows.reduce((accumulator, currentValue) => {
-      return accumulator + (parseFloat(currentValue.precio_total) || 0);
-    }, 0);
-    setPrecioTotal(total);
-    setFormChanged(true);
   };
   
+
   
-
-
 
   const handleSubmitCompra = async (event, totalCompra, precio) => {
     event.preventDefault();
@@ -207,16 +209,16 @@ function App() {
       return;
     }
 
-    if (!inputValido) {
-      // Verifica si el input es válido o si hay campos vacíos
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'El número de compra no puede tener más de 5 números',
-        confirmButtonColor: '#1F67B9',
-      });
-      return;
-    }
+    // if (!inputValido) {
+    //   // Verifica si el input es válido o si hay campos vacíos
+    //   Swal.fire({
+    //     icon: 'error',
+    //     title: 'Error',
+    //     text: 'El número de compra no puede tener más de 5 números',
+    //     confirmButtonColor: '#1F67B9',
+    //   });
+    //   return;
+    // }
     if (!inputValido2.every(valido => valido)) {
       // Verifica si el input es válido o si hay campos vacíos
       Swal.fire({
@@ -298,28 +300,25 @@ function App() {
 
       window.location.href = '/#/Compra';
     });
+
   };
   const handlePrecioChange = (e, index) => {
     const { value } = e.target;
     const updatedRows = tableRows.map((row, rowIndex) => {
       if (rowIndex === index) {
-        return { ...row, precio: value, precio_unitario: parseFloat(value) || 0 };
+        return { ...row, precio: value, precio_unitario: (parseFloat(value) || 0).toFixed(2) }; // Recortar el precio unitario
       }
       return row;
     });
     setTableRows(updatedRows);
-
+    
     const total = updatedRows.reduce((accumulator, currentValue) => {
-      return accumulator + (parseFloat(currentValue.precio_unitario) || 0);
+      return accumulator + (parseFloat(currentValue.cantidad_seleccionada) * parseFloat(currentValue.precio_unitario) || 0);
     }, 0);
-    setPrecioTotal(total);
-
-    if (updatedRows.length > 6) {
-      setScrollEnabled(true);
-    }
+    
+    setPrecioTotal(total.toFixed(2)); // Recortar el precio total
     setFormChanged(true);
   };
-
   const handleCancel = () => {
     if (formChanged) {
       Swal.fire({
@@ -363,7 +362,7 @@ function App() {
   return (
     <div className='contenido-2' style={{ overflowX: 'hidden' }}>
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
-      <form onSubmit={(event) => handleSubmitCompra(event, compra.total_compra, precio)}>
+      <form onSubmit={(event) => handleSubmitCompra(event, compra.total_compra, precio)} noValidate>
         <div className={estilos.contenido} >
           <div>
             <h1 id={estilos.titulo}>Compras</h1>
@@ -389,7 +388,8 @@ function App() {
                 <input
                   id="numeroCompra"
                   name="numero_compra"
-                  className={`${estilos.inputfield3} ${!inputValido ? estilos.inputInvalido : ''}`}
+                  className={`${estilos.inputfield3} 
+                 `}
                   value={compra.numero_compra}
                   onChange={handleInputChange}
                   minLength={1}
@@ -398,7 +398,7 @@ function App() {
                   placeholder="000"
                   style={{ marginLeft: "30px" }}
                 />
-                {!inputValido && <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '27px' }}>Máximo 5 números</p>}
+                {/* {!inputValido && <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '27px' }}>Máximo 5 números</p>} */}
               </div>
             </div>
             <br />
@@ -474,7 +474,7 @@ function App() {
                       <input
                         className={`${estilos.inputfieldtabla} ${(!inputValido2[index] && tableRows[index].cantidad !== '') ? estilos.inputInvalido2 : ''}`}
                         style={{ width: "100px" }}
-                        type="float"
+                        type="number"
                         onChange={(e) => handleCantidadChange(e, index)}
                       />
 
