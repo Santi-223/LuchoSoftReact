@@ -20,7 +20,7 @@ const Layout = () => {
     const [permisoMCompras, setPermisoMCompras] = useState(false);
     const [permisoMVentas, setPermisoMVentas] = useState(false);
 
-    const { usuario, permisos } = useUserContext();
+    const { usuarioLogueado, permisos } = useUserContext();
 
     useEffect(() => {
 
@@ -119,7 +119,7 @@ const Layout = () => {
                 <div>
                     <Link to="/dashboard">
                         <a className="usuario-link">
-                            <img src={usuario && usuario.imagen_usuario} alt="" />
+                            <img src={usuarioLogueado && usuarioLogueado.imagen_usuario} alt="" />
                         </a>
                     </Link>
                 </div>

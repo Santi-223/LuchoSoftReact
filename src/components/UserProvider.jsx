@@ -22,14 +22,23 @@ export function UserProvider(props) {
         permisos = decodedToken.permisos;
     }
 
-    const userContextValue = {
-        usuario: usuario,
+    const [userContextValue, setUserContextValue] = useState({
+        usuarioLogueado: usuario,
         token: token,
         permisos: permisos
+    });
+
+    const actualizarUsuarioLogueado = (nuevoUsuario) => {
+        const newUserContextValue = {
+            ...userContextValue,
+            usuarioLogueado: nuevoUsuario
+        };
+
+        setUserContextValue(newUserContextValue);
     };
 
     return (
-        <userContext.Provider value={userContextValue}>
+        <userContext.Provider value={{ ...userContextValue, actualizarUsuarioLogueado }}>
             {props.children}
         </userContext.Provider>
     );

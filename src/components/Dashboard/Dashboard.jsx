@@ -10,9 +10,9 @@ const Dashboard = () => {
 
   const [cerrarSesion, setCerrarSesion] = useState(false);
 
-  const { usuario } = useUserContext();
+  const { usuarioLogueado } = useUserContext();
 
-  const usuarioLS = usuario;
+  const usuarioLS = usuarioLogueado;
 
   const [usuario2, setUsuario2] = useState({
     contraseñaAntigua: '',
@@ -81,15 +81,25 @@ const Dashboard = () => {
             });
 
             if (response.ok) {
-              console.log('Contraseña actualizada exitosamente.');
+              console.log('Contraseña actualizada exitosamente, debes volver a iniciar sesión.');
               Swal.fire({
                 icon: 'success',
-                title: 'Contraseña actualizada exitosamente',
+                title: 'Contraseña actualizada exitosamente, debes volver a iniciar sesión.',
                 showConfirmButton: false,
-                timer: 1500
+                timer: 1800
               });
-              cambiarEstadoModalActContraseña(false)
-              // Aquí podrías redirigir a otra página, mostrar un mensaje de éxito, etc.
+              localStorage.removeItem('token');
+
+              // Eliminar usuario del localStorage
+              localStorage.removeItem('usuario');
+
+              // Eliminar permisos del localStorage
+              localStorage.removeItem('permisos');
+
+              setTimeout(() => {
+                window.location.href = '/#/login';
+              }, 1800);
+
             } else {
               console.error('Error al actualizar la contraseña:', response.statusText);
               Swal.fire({
@@ -147,7 +157,7 @@ const Dashboard = () => {
 
   if (cerrarSesion) {
     return <Navigate to="/login" />;
-}
+  }
 
   return (
     <div>

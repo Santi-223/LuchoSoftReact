@@ -16,14 +16,21 @@
 }
 
 .botonAgregar {
-    background-color: #1F67B9;
-    color: white;
-    height: 40px;
-    width: 130px;
+    border: 1px solid #b90505;
     margin-right: 20px;
-    border: none;
+    background-color: white;
+    color: #b90505;
     border-radius: 50px;
-}
+    height: 40px;
+    width: 120px;
+    font-size: 18px;
+  }
+  
+  .botonAgregar:hover{
+    background: #b905052d;
+    color: white;
+  
+  }
 
 
 .divFiltro{
@@ -266,6 +273,7 @@ label {
     margin-top: 20px;
     margin-right: 20px;
 }
+
 
 .busqueda {
     height: 30px;

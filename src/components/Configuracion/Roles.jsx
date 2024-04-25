@@ -588,7 +588,7 @@ function Roles() {
             <div className={estilos['divFiltro']}>
                 <input type="text" placeholder=" Buscar..." value={filtro} onChange={handleFiltroChange} className={estilos["busqueda"]} />
                 <div className={estilos["botones"]}>
-                    <button onClick={() => cambiarEstadoModalAgregar(!estadoModalAgregar)} className={`${estilos.botonAgregar}`}><i className="fa-solid fa-plus"></i> Agregar</button>
+                    <button onClick={() => cambiarEstadoModalAgregar(!estadoModalAgregar)} className={`${estilos.botonAgregar} bebas-neue-regular`}><i className="fa-solid fa-plus"></i> Agregar</button>
                 </div>
             </div>
             <div className={estilos["tabla"]}>

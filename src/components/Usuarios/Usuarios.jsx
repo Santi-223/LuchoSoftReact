@@ -6,9 +6,12 @@ import '../Layout.css'
 import estilos from '../Usuarios/Usuarios.module.css'
 import Swal from 'sweetalert2';
 import DataTable from "react-data-table-component";
+import { useUserContext } from "../UserProvider";
 
 function Usuarios() {
 
+    const { usuarioLogueado  } = useUserContext();
+    
     // Obtener el token del localStorage
     const token = localStorage.getItem('token');
 
@@ -28,8 +31,9 @@ function Usuarios() {
         usuario.telefono_usuario.toString().includes(filtro) ||
         usuario.direccion_usuario.toLowerCase().includes(filtro.toLowerCase()) ||
         usuario.id_rol.toString().includes(filtro)
-
     );
+
+    const filteredUsuarioSinEspecifico = filteredUsuario.filter(usuario => usuario.id_usuario !== usuarioLogueado.id_usuario);
 
     const columns = [
         {
@@ -256,6 +260,17 @@ function Usuarios() {
         });
     };
 
+    const customStyles = {
+        headCells: {
+            style: {
+                textAlign: 'center',
+                fontWeight: 'bold',
+                padding: '10px',
+                fontSize: '16px'
+            },
+        }
+    };
+
 
     if (isLoading) {
         return <div>Cargando...</div>;
@@ -280,11 +295,11 @@ function Usuarios() {
                 <Link to="/agregarUsuarios">
 
 
-                    <button className={`${estilos.botonAgregar}`}><i className="fa-solid fa-plus"></i> Agregar</button>
+                    <button className={`${estilos.botonAgregar} bebas-neue-regular`}><i className="fa-solid fa-plus"></i> Agregar</button>
                 </Link>
             </div>
             <div className={estilos["tabla"]}>
-                <DataTable columns={columns} data={filteredUsuario} pagination paginationPerPage={6} highlightOnHover></DataTable>
+                <DataTable customStyles={customStyles} columns={columns} data={filteredUsuarioSinEspecifico} pagination paginationPerPage={6} highlightOnHover></DataTable>
             </div>
         </div>
     );

@@ -3,9 +3,19 @@ import '../Layout.css'
 import estilos from '../Usuarios/Usuarios.module.css'
 import { Navigate, useParams, Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import { useUserContext } from "../UserProvider";
 
 function EditarUsuario() {
+
+    const [isLoading, setIsLoading] = useState(true);
+
+    const { usuarioLogueado, actualizarUsuarioLogueado  } = useUserContext();
+
+    console.log("id user log: ", usuarioLogueado.id_usuario)
+    
     const [redirect, setRedirect] = useState(false);
+
+    const [redirect2, setRedirect2] = useState(false);
 
     const [roles, setRoles] = useState([]);
 
@@ -33,6 +43,7 @@ function EditarUsuario() {
                     const usuarioFiltrado = data[0];
                     setUsuario(usuarioFiltrado);
                     console.log(usuarioFiltrado)
+                    setIsLoading(false)
                 } else {
                     console.error('Error al obtener el usuario');
                 }
@@ -196,17 +207,66 @@ function EditarUsuario() {
                         });
 
                         if (response.ok) {
-                            console.log('Usuario actualizado exitosamente.');
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Usuario actualizado exitosamente',
-                                showConfirmButton: false,
-                                timer: 1500
-                            });
-                            setTimeout(() => {
-                                setRedirect(true);
-                            }, 1000);
-                            // Aquí podrías redirigir a otra página, mostrar un mensaje de éxito, etc.
+                            
+                            if(usuario.id_usuario == usuarioLogueado.id_usuario){
+
+                                try {
+                                    const response = await fetch('https://api-luchosoft-mysql.onrender.com/auth/login', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json'
+                                        },
+                                        body: JSON.stringify(usuario)
+                                    });
+                        
+                                    if (response.ok) {
+                                        const data = await response.json(); // Convertir la respuesta a JSON
+                        
+                                        // Almacenar en el localStorage
+                                        localStorage.setItem('token', data.token);
+                                        
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: `Su usuario ha sido actualizado`,
+                                            showConfirmButton: false,
+                                            timer: 1500
+                                        });
+
+                                        actualizarUsuarioLogueado(usuario);
+
+                                        setTimeout(() => {
+                                            setRedirect2(true);
+                                        }, 1000);
+                    
+                                    } else {
+                                        console.error('Error al refrescar:', response.statusText);
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Error',
+                                            text: 'Error al refrescar',
+                                        });
+                                    }
+                                } catch (error) {
+                                    console.error('Error al acceder:', error);
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error',
+                                        text: 'Error al acceder',
+                                    });
+                                }
+
+                            }else{
+                                console.log('Usuario actualizado exitosamente.');
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Usuario actualizado exitosamente',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                });
+                                setTimeout(() => {
+                                    setRedirect(true);
+                                }, 1000);
+                            }
                         } else {
                             console.error('Error al actualizar el usuario:', response.statusText);
                             Swal.fire({
@@ -229,8 +289,16 @@ function EditarUsuario() {
 
     };
 
+    if (redirect2) {
+        return <Navigate to={'/dashboard'}></Navigate>
+    }
+
     if (redirect) {
         return <Navigate to={'/usuarios'}></Navigate>
+    }
+
+    if (isLoading) {
+        return <div>Cargando...</div>;
     }
 
     return (
@@ -265,6 +333,7 @@ function EditarUsuario() {
                                             id={estilos.id_usuario}
                                             value={usuario.id_usuario}
                                             onChange={handleChange}
+                                            readOnly
                                         />
                                         <span></span>
                                     </div>

@@ -6,7 +6,7 @@ import { useUserContext } from "../components/UserProvider";
 
 const PrivateRoute = ({ prot, children }) => {
 
-    const { usuario, permisos } = useUserContext();
+    const { usuarioLogueado, permisos } = useUserContext();
 
     let auth = false;
 
@@ -28,19 +28,19 @@ const PrivateRoute = ({ prot, children }) => {
                     icon: "error",
                     title: "Error",
                     text: "Su sesión ha expirado",
-                }).then(async (result) => {
-                    if (result.isConfirmed) {
-                        localStorage.removeItem('token');
+                })
+                localStorage.removeItem('token');
 
-                        // Eliminar usuario del localStorage
-                        localStorage.removeItem('usuario');
-        
-                        // Eliminar permisos del localStorage
-                        localStorage.removeItem('permisos');
-        
-                        window.location.href = '/#/login';
-                    }
-                });
+                // Eliminar usuario del localStorage
+                localStorage.removeItem('usuario');
+
+                // Eliminar permisos del localStorage
+                localStorage.removeItem('permisos');
+
+                setTimeout(() => {
+                    window.location.href = '/#/login';
+                  }, 1500);
+
             }
         } catch (error) {
             console.error('Error al validar el token:', error);
