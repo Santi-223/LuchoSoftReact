@@ -40,7 +40,7 @@ function Compras() {
 
     const fetchProveedores = async () => {
         try {
-            const response = await fetch('http://localhost:8082/compras/proveedores/', {
+            const response = await fetch('https://api-luchosoft-mysql.onrender.com/compras/proveedores/', {
                 headers: {
                     'token': token
                 }
@@ -63,7 +63,7 @@ function Compras() {
 
     const fetchInsumos = async () => {
         try {
-            const response = await fetch('http://localhost:8082/compras/insumos/', {
+            const response = await fetch('https://api-luchosoft-mysql.onrender.com/compras/insumos/', {
                 headers: {
                     'token': token
                 }
@@ -148,7 +148,7 @@ function Compras() {
     };
     const handleMostrarDetalles = async (idCompra) => {
         try {
-            const response = await fetch('http://localhost:8082/compras/compras_insumos/');
+            const response = await fetch('https://api-luchosoft-mysql.onrender.com/compras/compras_insumos/');
             const data = await response.json();
             
             // Filtrar los datos para obtener solo los objetos con el id_compra deseado
@@ -238,7 +238,7 @@ function Compras() {
 
     const fetchCompras = async () => {
         try {
-            const response = await fetch('http://localhost:8082/compras/compras');
+            const response = await fetch('https://api-luchosoft-mysql.onrender.com/compras/compras');
             if (response.ok) {
                 const data = await response.json();
                 const comprasFiltrador = data.map(compra => ({
@@ -276,7 +276,7 @@ function Compras() {
                 try {
                     const nuevoEstado = estadoCompra === 1 ? 0 : 1;
     
-                    const response = await fetch(`http://localhost:8082/compras/compras/${idCompra}`, {
+                    const response = await fetch(`https://api-luchosoft-mysql.onrender.com/compras/compras/${idCompra}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json',

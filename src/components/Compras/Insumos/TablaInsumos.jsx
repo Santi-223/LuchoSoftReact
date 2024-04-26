@@ -161,7 +161,7 @@ function Insumos() {
     useEffect(() => {
         const fetchCategoria_insumo = async () => {
             try {
-                const response = await fetch('http://localhost:8082/compras/categoria_insumos');
+                const response = await fetch('https://api-luchosoft-mysql.onrender.com/compras/categoria_insumos');
                 if (response.ok) {
                     const data = await response.json();
                     const categoria_insumoFiltrados = data.map(categoria_insumo => ({
@@ -219,7 +219,7 @@ function Insumos() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await fetch(`http://localhost:8082/compras/insumos/${insumosEditar.id_insumo}`, {
+                    const response = await fetch(`https://api-luchosoft-mysql.onrender.com/compras/insumos/${insumosEditar.id_insumo}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json',
@@ -237,7 +237,7 @@ function Insumos() {
                             timer: 1500
                         });
                         setTimeout(() => {
-                            window.location.href = '/insumos';
+                            window.location.href = '/#/insumos';
                         }, 2000);
                         // Aquí podrías redirigir a otra página, mostrar un mensaje de éxito, etc.
                     } else {
@@ -285,7 +285,7 @@ function Insumos() {
             console.log('insumo a enviar: ', insumos1)
 
 
-            const responseInsumos = await fetch('http://localhost:8082/compras/insumos', {
+            const responseInsumos = await fetch('https://api-luchosoft-mysql.onrender.com/compras/insumos', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -304,7 +304,7 @@ function Insumos() {
                     timer: 1500
                 });
                 setTimeout(() => {
-                    window.location.href = '/insumos';
+                    window.location.href = '/#/insumos';
                 }, 2000);
 
 
@@ -331,7 +331,7 @@ function Insumos() {
 
     const fetchinsumos = async () => {
         try {
-            const response = await fetch('http://localhost:8082/compras/insumos');
+            const response = await fetch('https://api-luchosoft-mysql.onrender.com/compras/insumos');
             if (response.ok) {
                 const data = await response.json();
                 const insumosFiltrador = data.map(insumo => ({
@@ -370,7 +370,7 @@ function Insumos() {
                 try {
                     const nuevoEstado = estadoinsumo === 1 ? 0 : 1;
 
-                    const response = await fetch(`http://localhost:8082/compras/estadoInsumo/${idinsumo}`, {
+                    const response = await fetch(`https://api-luchosoft-mysql.onrender.com/compras/estadoInsumo/${idinsumo}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json',

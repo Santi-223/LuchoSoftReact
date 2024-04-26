@@ -147,12 +147,12 @@ function Proveedores() {
     
         // Verificar que todos los campos estén llenos
         const { nombre_proveedor, documento_proveedor, telefono_proveedor, direccion_proveedor } = proveedoresEditar;
-        if (nombre_proveedor.trim() !== '' && documento_proveedor.trim() !== '' && telefono_proveedor.trim() !== '' && direccion_proveedor.trim() !== '') {
+        if (nombre_proveedor.trim() !== '' && telefono_proveedor.trim() !== '' && direccion_proveedor.trim() !== '') {
             try {
                 // Tu código para enviar el formulario de edición
                 console.log('proveedor a actualizar: ', proveedoresEditar);
     
-                const response = await fetch(`http://localhost:8082/compras/proveedores/${proveedoresEditar.id_proveedor}`, {
+                const response = await fetch(`https://api-luchosoft-mysql.onrender.com/compras/proveedores/${proveedoresEditar.id_proveedor}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -170,7 +170,9 @@ function Proveedores() {
                         timer: 1500
                     });
                     setTimeout(() => {
-                        window.location.href = '/proveedores';
+                        window.location.href = '/#/proveedores';
+                        fetchproveedores()
+                    cambiarEstadoModalEditar(false)
                     }, 2000);
                     // Aquí podrías redirigir a otra página, mostrar un mensaje de éxito, etc.
                 } else {
@@ -211,7 +213,7 @@ function Proveedores() {
 
     const fetchproveedores = async () => {
         try {
-            const response = await fetch('http://localhost:8082/compras/proveedores');
+            const response = await fetch('https://api-luchosoft-mysql.onrender.com/compras/proveedores');
             if (response.ok) {
                 const data = await response.json();
                 const proveedoresFiltrador = data.map(proveedor => ({
@@ -249,7 +251,7 @@ function Proveedores() {
                 // Tu código para enviar el formulario
                 console.log('proveedor a enviar: ', proveedores1);
     
-                const responseProveedores = await fetch('http://localhost:8082/compras/proveedores', {
+                const responseProveedores = await fetch('https://api-luchosoft-mysql.onrender.com/compras/proveedores', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -268,7 +270,16 @@ function Proveedores() {
                         timer: 1500
                     });
                     setTimeout(() => {
-                        window.location.href = '/proveedores';
+                        fetchproveedores()
+                            setProveedores1({
+                                nombre_proveedor: '',
+                                documento_proveedor: '',
+                                telefono_proveedor: '',
+                                direccion_proveedor: '',
+                                estado_proveedor: 1
+                            
+                            })
+                        cambiarEstadoModalAgregar(false)
                     }, 2000);
     
     
@@ -318,7 +329,7 @@ function Proveedores() {
                 try {
                     const nuevoEstado = estadoproveedor === 1 ? 0 : 1;
 
-                    const response = await fetch(`http://localhost:8082/compras/estadoProveedor/${idproveedor}`, {
+                    const response = await fetch(`https://api-luchosoft-mysql.onrender.com/compras/estadoProveedor/${idproveedor}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json',
