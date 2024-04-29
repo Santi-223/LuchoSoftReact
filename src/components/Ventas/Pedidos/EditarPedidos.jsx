@@ -143,8 +143,7 @@ const EditarPedidos = () => {
                             title: '',
                             text: 'Producto eliminado correctamente',
                         }).then(() => {
-                            // Después de que el usuario haga clic en "OK", recargamos la página
-                            setPedidoProductos(pedidoProductos1.filter(producto => producto.id_pedidos_productos !== id_pedidos_productos));
+                            listarpedidosProductos();
                         });
                     } else {
                         console.error("Error al eliminar el producto:", response.statusText);
@@ -388,6 +387,7 @@ const EditarPedidos = () => {
                             );
                             throw new Error("Error al enviar los datos de pedidos_productos");
                         }
+                        listarpedidosProductos();
                         Swal.fire({
                             icon: 'success',
                             title: '',
@@ -416,22 +416,23 @@ const EditarPedidos = () => {
 
 
     useEffect(() => {
-        const listarpedidosProductos = async () => {
-            try {
-                const response = await fetch(`http://localhost:8082/ventas/pedidos_productos/pedidos/${id_pedido}`);
-                if (response.ok) {
-                    const data = await response.json();
-                    console.log(data);
-                    setPedidoProductos(data)
-                } else {
-                    console.error('Error al obtener pedidos_productos');
-                }
-            } catch (error) {
-                console.error('Error al obtener pedidos_productos:', error);
-            }
-        }
         listarpedidosProductos();
     }, []);
+
+    const listarpedidosProductos = async () => {
+        try {
+            const response = await fetch(`https://api-luchosoft-mysql.onrender.com/ventas/pedidos_productos/pedidos/${id_pedido}`);
+            if (response.ok) {
+                const data = await response.json();
+                console.log(data);
+                setPedidoProductos(data)
+            } else {
+                console.error('Error al obtener pedidos_productos');
+            }
+        } catch (error) {
+            console.error('Error al obtener pedidos_productos:', error);
+        }
+    }
 
     const handleFiltroChange = (e) => {
         setFiltro(e.target.value);
@@ -558,11 +559,12 @@ const EditarPedidos = () => {
                         </div>
                         <div id={estilos["kake"]}>
                             <p id="skady">Descripción del Pedido</p>
-                            <textarea name="observaciones" id="descripcion" cols="5" rows="4" value={pedidosEditar.observaciones} onChange={handleChange}></textarea>
+                            <textarea name="observaciones" id="descripcion" cols="5" rows="4" style={{resize: 'none'}} className={estilos['textarea']} value={pedidosEditar.observaciones} onChange={handleChange}></textarea>
                             {/* <input id="descripcion" className={estilos["input-field2"]} type="text" value={pedidosEditar.observaciones} onChange={handleChange} /> */}
                         </div>
                         <div id={estilos["cliente"]}>
                             <p>Cliente asociado</p>
+                            
                             <select name="id_cliente" id=""
                                 value={pedidosEditar.id_cliente} onChange={handleChange}>
                                 <option>Seleccione un rol</option>

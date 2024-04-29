@@ -346,3 +346,8 @@ input {
     color: #b3b1b1 ;
 }
 
+.textarea{
+    width: 200px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}

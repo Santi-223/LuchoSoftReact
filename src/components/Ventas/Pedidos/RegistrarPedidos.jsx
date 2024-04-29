@@ -4,9 +4,12 @@ import Swal from "sweetalert2";
 import styled from "styled-components";
 import estilos from './Pedidos.module.css';
 import { Link } from "react-router-dom";
+import { useUserContext } from "../../UserProvider";
 function App() {
   const token = localStorage.getItem("token");
   const [productos, setProductos] = useState([]);
+  const { usuario } = useUserContext();
+
   const [isLoading, setIsLoading] = useState(true);
   const [pedido, setPedido] = useState({
     observaciones: "",
@@ -16,7 +19,7 @@ function App() {
     total_venta: 0,
     total_pedido: 0,
     id_cliente: 0,
-    id_usuario: 1,
+    id_usuario: usuario.id_usuario,
   });
   const [clientes, setClientes] = useState([]);
   const tableRef = useRef(null);
