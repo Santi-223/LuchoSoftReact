@@ -1,7 +1,12 @@
 #iconoEditar {
-  margin-top: -30px;
-  margin-left: 80px;
-  font-size: 30px;
+  margin-left: 10px;
+  font-size: 20px;
+}
+
+#divEd {
+  display: flex;
+  margin-top: 10px;
+  justify-content: center;
 }
 
 #iconoEditar a {

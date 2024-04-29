@@ -28,6 +28,7 @@ const PrivateRoute = ({ prot, children }) => {
                     icon: "error",
                     title: "Error",
                     text: "Su sesión ha expirado",
+                    showConfirmButton: false
                 })
                 localStorage.removeItem('token');
 

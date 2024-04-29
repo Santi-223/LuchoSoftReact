@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, Navigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import estilos from '../Dashboard/Dashboard.module.css';
@@ -13,6 +13,12 @@ const Dashboard = () => {
   const { usuarioLogueado } = useUserContext();
 
   const usuarioLS = usuarioLogueado;
+
+  const [roles, setRoles] = useState([]);
+
+  useEffect(() => {
+    fetchRoles();
+  }, []);
 
   const [usuario2, setUsuario2] = useState({
     contraseñaAntigua: '',
@@ -124,6 +130,26 @@ const Dashboard = () => {
 
   };
 
+  const fetchRoles = async () => {
+    try {
+      const response = await fetch('https://api-luchosoft-mysql.onrender.com/configuracion/roles');
+      if (response.ok) {
+        const data = await response.json();
+        const rolesFiltrados = data.map(rol => ({
+          id_rol: rol.id_rol,
+          nombre_rol: rol.nombre_rol,
+          descripcion_rol: rol.descripcion_rol,
+          estado_rol: rol.estado_rol,
+        }));
+        setRoles(rolesFiltrados);
+      } else {
+        console.error('Error al obtener las compras');
+      }
+    } catch (error) {
+      console.error('Error al obtener las compras:', error);
+    }
+  };
+
   const alertaCerrarSesion = () => {
     // Mostrar una alerta de confirmación
     Swal.fire({
@@ -172,10 +198,16 @@ const Dashboard = () => {
           <div id={estilos.titulo}><h1>Inicio</h1></div>
           <div id={estilos.perfil}>
             <div id={estilos.imgPerfil}><img src={usuarioLS && usuarioLS.imagen_usuario} height="120vh" length="120vh" alt="Perfil" /></div>
-
-            <div id={estilos.iconoEditar}><Link to={`/editarUsuarios/${usuarioLS && usuarioLS.id_usuario}`}><i className="fa-solid fa-pen-to-square"></i></Link></div>
-
-            <div id={estilos.usuario2Registrado}><h6>Administrador</h6></div>
+            <div id={estilos.divEd}>
+              <div id={estilos.usuario2Registrado}><p>{
+                roles.map(rol => {
+                  if (rol.id_rol === usuarioLS.id_rol) {
+                    return rol.nombre_rol;
+                  } else {
+                    return null;
+                  }
+                })}</p></div><div id={estilos.iconoEditar}><Link to={`/editarUsuarios/${usuarioLS && usuarioLS.id_usuario}`}><i className="fa-solid fa-pen-to-square"></i></Link></div>
+            </div>
           </div>
         </center>
 
