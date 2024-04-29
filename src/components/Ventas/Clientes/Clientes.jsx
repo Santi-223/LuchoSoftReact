@@ -403,8 +403,8 @@ const Cliente = () => {
                             timer: 1500
                         });
                         setTimeout(() => {
-                            window.location.href = '/#/clientes';
-                        }, 2000);
+                            cambiarEstadoModal2(false)
+                        }, 1000);
                         // Aquí podrías redirigir a otra página, mostrar un mensaje de éxito, etc.
                     } else {
                         console.error('Error al actualizar el cliente:', response.statusText);

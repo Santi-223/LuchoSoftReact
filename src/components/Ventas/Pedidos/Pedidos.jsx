@@ -4,10 +4,10 @@ import { Link } from 'react-router-dom';
 import estilos from '../Pedidos/Pedidos.module.css';
 import DataTable from 'react-data-table-component';
 import moment from "moment";
-import Modal from '../Clientes/modal';
 import styled from 'styled-components';
 import Swal from 'sweetalert2';
 import { event } from 'jquery';
+import Modal from '../../Modal';
 
 
 
@@ -15,6 +15,7 @@ const Pedidos = () => {
     const [Pedidos, setPedidos] = useState([]);
     const [filtro, setFiltro] = useState('');
     const [estadoModal1, cambiarEstadoModal1] = useState(false);
+    const [estadoModal2, cambiarEstadoModal2] = useState(false);
     const [selectedRowId, setSelectedRowId] = useState(null);
     const [selectedRow, setSelectedRow] = useState({
         observaciones: '',
@@ -115,11 +116,17 @@ const Pedidos = () => {
                             <Link to={`/editarpedidos/${row.id_pedido}`}>
                                 <button><i className={`fa-solid fa-pen-to-square iconosNaranjas`} ></i></button>
                             </Link>
+                            <abbr title="Ver detalle">
+                                <button onClick={()=>cambiarEstadoModal2(!estadoModal2)}><i className={`fa-regular fa-eye ${estilos.icono_negro}`}></i></button>
+                            </abbr>
                         </div>
                     ) : (
                         <div className={estilos['acciones']}>
                             <button name="estado_pedido" id={estilos.estado_pedido_negro}><i className={`fa-solid fa-shuffle ${estilos.estado_pedido_negro}`}></i></button>
                             <button><i className={`fa-solid fa-pen-to-square ${estilos.icono_negro}`} ></i></button>
+                            <abbr title="Ver detalle">
+                                <button onClick={()=>cambiarEstadoModal2(!estadoModal2)}><i className={`fa-regular fa-eye ${estilos.icono_negro}`}></i></button>
+                            </abbr>
                         </div>
                     ) }
                 </div>
@@ -234,6 +241,29 @@ const Pedidos = () => {
                     </div>
                 </Contenido>
             </Modal>
+            <Modal
+                estado={estadoModal2}
+                cambiarEstado={cambiarEstadoModal2}
+                titulo={`Información`}
+                mostrarHeader={true}
+                mostrarOverlay={true}
+                posicionModal={'center'}
+                width={'500px'}
+                padding={'10px'}
+            >
+                <Contenido>
+                    <div>
+                        <div>
+                            {selectedRowId && selectedRowId.map((Pedido, index)=>(
+                                <div key={index}>
+                                    <p>observaciones: {Pedido.observaciones}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                    
+                </Contenido>
+            </Modal>
         </>
     )
 }
@@ -287,3 +317,4 @@ const Contenido = styled.div`
 		border-radius: 3px;
 	}
 `;
+

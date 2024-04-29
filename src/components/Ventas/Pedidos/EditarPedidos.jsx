@@ -418,7 +418,7 @@ const EditarPedidos = () => {
     useEffect(() => {
         const listarpedidosProductos = async () => {
             try {
-                const response = await fetch(`https://api-luchosoft-mysql.onrender.com/ventas/pedidos_productos/pedidos/${id_pedido}`);
+                const response = await fetch(`http://localhost:8082/ventas/pedidos_productos/pedidos/${id_pedido}`);
                 if (response.ok) {
                     const data = await response.json();
                     console.log(data);
