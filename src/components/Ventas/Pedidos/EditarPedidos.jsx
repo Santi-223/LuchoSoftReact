@@ -535,7 +535,7 @@ const EditarPedidos = () => {
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" />
             <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
             <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
-            <div classNameName={estilos["contenido2"]}>
+            <div className={estilos["contenido"]}>
                 <div id={estilos["titulo2"]}>
                     <h2>Editar Pedido</h2>
                 </div>
@@ -549,9 +549,8 @@ const EditarPedidos = () => {
                             <p id="skady">Descripción del Pedido</p>
                             <textarea name="observaciones" id="descripcion" cols="5" rows="4" style={{resize: 'none'}} className={estilos['textarea']} value={pedidosEditar.observaciones} onChange={handleChange}></textarea>
                         </div>
-                        <div id={estilos["cliente"]}>
-                            <p>Cliente asociado</p>
-                            
+                        <div className={estilos.cliente}>
+                            <p>Cliente asociado</p>                            
                             <select name="id_cliente" id="" value={pedidosEditar.id_cliente} onChange={handleChange} className={estilos["input-field22"]}>
                                 <option>Seleccione un Cliente</option>
                                 {
@@ -574,7 +573,7 @@ const EditarPedidos = () => {
                     <div className={estilos["TablaDetallePedidos"]}>
                         <div className={estilos["agrPedidos"]}>
                             <p>Agregar Productos</p>
-                            <button className="btn btn-primary fa-solid fa-plus" style={{ height: '30px' }} onClick={addTableRow}></button>
+                            <button className={`btn btn-light fa-solid fa-plus ${estilos.AgregarProducto}`} style={{ height: '30px', border:'1px solid #b90505', color: '#b90505'}} onClick={addTableRow}></button>
                         </div>
                         <div style={{ overflowY: scrollEnabled ? 'scroll' : 'auto', maxHeight: '300px' }}>
                             <table>
@@ -671,7 +670,7 @@ const EditarPedidos = () => {
                     </div>
                 </div>
                 <div className={estilos["cajaBotonesRPedidos"]}>
-                    <button type='submit' onClick={editarPedido} className={estilos["boton-azul"]} >Guardar</button>
+                    <button type='submit' onClick={editarPedido} className={`${estilos["boton-azul"]} bebas-neue-regular`} >Guardar</button>
 
                     <Link to="/pedidos">
                         <button className={estilos["boton-gris"]} type="button">Cancelar</button>

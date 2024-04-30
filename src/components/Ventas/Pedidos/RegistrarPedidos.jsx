@@ -246,9 +246,6 @@ function App() {
           showConfirmButton: false,
           timer: 1500
         });
-        setTimeout(() => {
-          window.location.href = '/#/pedidos';
-        }, 3000);
       }
 
       if (!responsePedido.ok) {
@@ -290,7 +287,7 @@ function App() {
       await Promise.all(pedidosProductosPromises);
 
       // Redirigir después de completar el proceso
-      window.location.href = "/pedidos";
+      window.location.href = "/#/pedidos";
     } catch (error) {
       console.error("Error al enviar los datos del pedido:", error);
     }
@@ -371,7 +368,7 @@ function App() {
                 className={estilos['textarea']} 
               />
             </div>
-            <div id={estilos["cliente"]}>
+            <div className={estilos["cliente"]}>
               <p>
                 Cliente asociado
               </p>
