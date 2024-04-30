@@ -4,11 +4,15 @@
 
 
 
-#titulo{
-    font-size: 20px;
-    margin-top: -15px;
+.titulo{
+    font-size: 35px;
     display: flex;
+    color: #48110d;
 }
+.titulo h1{
+    font-size: 35px;
+}
+
 
 #titulo2{
     font-size: 20px;
@@ -34,29 +38,26 @@ input {
     background: #E12424;
     color: white;
 
-  }
-  
-  .rojo:hover{
-    background: #3e7fc9;
-  }
-  
-  .rojo:active{
-    box-shadow: 1px 1px 1px 1px #3e7fc9;
-  }
+}
 
-  .boton-azul{
-    background: #1F67B9;
-    color: white;
-  }
-  
-  .boton-azul:hover{
-    background: #3d7dc7;
-    
-  }
-  
-  .boton-azul:active{
-    box-shadow: 1px 1px 1px 1px #5388c4;
-  }
+.rojo:hover{
+background: #3e7fc9;
+}
+
+.rojo:active{
+box-shadow: 1px 1px 1px 1px #3e7fc9;
+}
+
+.boton-azul{
+border: 2px solid #b90505;
+background: white;
+color: #b90505;
+}
+
+.boton-azul:hover{
+background: #b9050517;
+
+}
 
 /*------------------*/
 
@@ -73,19 +74,19 @@ input {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-top: 19px;
 }
 
 
 .botonAgregar {
-    border: none;
+    border: 1px solid #b90505;
     margin-right: 20px;
-    background-color: #1F67B9;
-    color: white;
+    background-color: white;
+    color: #b90505;
     border-radius: 50px;
     height: 40px;
-    width: 150px;
-    font-size: 15px;
-    margin-left: -250px;
+    width: 120px;
+    font-size: 18px;
 }
 
 .boton-generar {
@@ -187,11 +188,6 @@ input {
 #cliente{
     display:block;
     margin-top: 20px;
-    align-items: center;
-}
-
-#cliente p{
-    margin-right: 20px;
 }
 
 #cliente label{

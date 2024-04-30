@@ -1,15 +1,10 @@
 import React from "react";
-import DataTable from "react-data-table-component";
 import { Link, useParams } from "react-router-dom";
-import Modal from '../Clientes/modal';
 import styled from "styled-components";
 import { useState, useEffect } from "react";
-import { event } from "jquery";
-import moment from "moment";
 import Swal from 'sweetalert2'
 import estilos from './Pedidos.module.css';
-import { height } from "@fortawesome/free-regular-svg-icons/faAddressBook";
-
+import { useUserContext } from "../../UserProvider";
 
 const EditarPedidos = () => {
     const [customers, setClientes] = useState([]);
@@ -17,7 +12,7 @@ const EditarPedidos = () => {
     const [tableRows, setTableRows] = useState([{ id_producto: 0, precio_unitario: 0, cantidad: '', cantidad_seleccionada: 0, precio_total: 0 }]);
     const [scrollEnabled, setScrollEnabled] = useState(false);
     const [pedidoProductos1, setPedidoProductos] = useState([]);
-
+    const { usuario } = useUserContext();
     //editar pedidos
 
     const { id_pedido } = useParams();
@@ -30,7 +25,7 @@ const EditarPedidos = () => {
         total_pedido: 0,
         total_venta: 0,
         id_cliente: 0,
-        id_usuario: 1
+        id_usuario: usuario.id_usuario
     })
 
     const [clienteEditar, setClienteEditar] = useState([])
@@ -535,24 +530,17 @@ const EditarPedidos = () => {
         setpedidostEditar({ ...pedidosEditar, total_pedido: totalPedido });
     }, [tableRows, pedidoProductos1]);
 
-
-
     return (
         <>
-            <link
-                rel="stylesheet"
-                href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-            />
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" />
             <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
-
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
             <div classNameName={estilos["contenido2"]}>
                 <div id={estilos["titulo2"]}>
                     <h2>Editar Pedido</h2>
                 </div>
                 <div id={estilos["contenedorcito"]}>
                     <div className={estilos["input-container"]}>
-
                         <div id={estilos["kaka"]}>
                             <p id="skad">Fecha del Pedido</p>
                             <input id="fecha_pedido" className={estilos["input-field"]} name="fecha_pedido" type="date" value={pedidosEditar.fecha_pedido.slice(0, 10)} onChange={handleChange} />
@@ -560,14 +548,12 @@ const EditarPedidos = () => {
                         <div id={estilos["kake"]}>
                             <p id="skady">Descripción del Pedido</p>
                             <textarea name="observaciones" id="descripcion" cols="5" rows="4" style={{resize: 'none'}} className={estilos['textarea']} value={pedidosEditar.observaciones} onChange={handleChange}></textarea>
-                            {/* <input id="descripcion" className={estilos["input-field2"]} type="text" value={pedidosEditar.observaciones} onChange={handleChange} /> */}
                         </div>
                         <div id={estilos["cliente"]}>
                             <p>Cliente asociado</p>
                             
-                            <select name="id_cliente" id=""
-                                value={pedidosEditar.id_cliente} onChange={handleChange}>
-                                <option>Seleccione un rol</option>
+                            <select name="id_cliente" id="" value={pedidosEditar.id_cliente} onChange={handleChange} className={estilos["input-field22"]}>
+                                <option>Seleccione un Cliente</option>
                                 {
                                     clienteEditar.map(cliente => {
                                         return <option value={cliente.id_cliente}>{cliente.nombre_cliente}-{cliente.id_cliente}</option>

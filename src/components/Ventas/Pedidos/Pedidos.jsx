@@ -6,10 +6,7 @@ import DataTable from 'react-data-table-component';
 import moment from "moment";
 import styled from 'styled-components';
 import Swal from 'sweetalert2';
-import { event } from 'jquery';
 import Modal from '../../Modal';
-
-
 
 const Pedidos = () => {
     const [Pedidos, setPedidos] = useState([]);
@@ -17,6 +14,7 @@ const Pedidos = () => {
     const [estadoModal1, cambiarEstadoModal1] = useState(false);
     const [estadoModal2, cambiarEstadoModal2] = useState(false);
     const [selectedRowId, setSelectedRowId] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
     const [selectedRow, setSelectedRow] = useState({
         observaciones: '',
         fecha_venta: '',
@@ -27,6 +25,7 @@ const Pedidos = () => {
         id_cliente: '',
         id_usuario: ''
     })
+    //Función para mapear la api de pedidos
     const fetchPedido = async () => {
         try {
             const response = await fetch('https://api-luchosoft-mysql.onrender.com/ventas/pedidos');
@@ -55,18 +54,22 @@ const Pedidos = () => {
     useEffect(() => {
         fetchPedido();
     }, []);
+    //Función para filtrar los datos de la  tabla de pedido 
     const handleFiltroChange = (e) => {
         setFiltro(e.target.value);
     };
+    useEffect(() => {
+        if (Pedidos.length > 0) {
+            setIsLoading(false);
+        }
+    }, [Pedidos]);
 
     const filteredPedidos = Pedidos.filter(pedido =>
         pedido.id_pedido.toString().includes(filtro) ||
         pedido.observaciones.toLowerCase().includes(filtro.toLowerCase()) ||
         pedido.total_pedido.toString().includes(filtro)
     );
-
-
-
+    //Función para poder renombrar los estados del pedido
     const estadoMapping = {
         1: 'Pendiente',
         2: 'Cancelado',
@@ -103,8 +106,7 @@ const Pedidos = () => {
                 <button className={`${row.estado_pedido === 1 && estilos['estado1-button']} ${row.estado_pedido === 2 && estilos['estado2-button']} ${row.estado_pedido === 3 && estilos['estado3-button']}`}>{estadoMapping[row.estado_pedido]}</button>
             )
         },
-        {
-            
+        {            
             name: 'Acciones',
             cell: (row) => (
                 <div>
@@ -129,13 +131,11 @@ const Pedidos = () => {
                             </abbr>
                         </div>
                     ) }
-                </div>
-                
+                </div>                
             )
         }
-    ]
-      
-
+    ]      
+    //Función para cambiar el estado
     const handleEstadoPedidos = async (selectedRowId, selectedRow, event) => {
         event.preventDefault();
         Swal.fire({
@@ -165,7 +165,6 @@ const Pedidos = () => {
                             ...row,
                             estado_pedido: nuevoEstado,
                         })
-
                     });
                     if (response.ok) {
                         console.log('Pedido actualizado exitosamente.');
@@ -188,23 +187,23 @@ const Pedidos = () => {
             }
         });
     };
-
+    if (isLoading) {
+        return <div>Cargando...</div>;
+    }
     return (
-        <>
-        
-            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" />
+        <>        
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
             <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
             <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
-            <link href="https://cdn.datatables.net/2.0.2/css/dataTables.semanticui.css" rel="stylesheet" />
             <link href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.css" rel="stylesheet" />
-            <div id={estilos["titulo"]}>
-                <h2>Pedidos</h2>
+            <div className={estilos["titulo"]}>
+                <h1>Pedidos</h1>
             </div>
             <div className={estilos["botones"]}>
                 <input type="text" placeholder="Buscar..." value={filtro} onChange={handleFiltroChange} className={estilos['busqueda']} />
                 <div>
                     <Link to="/agregarPedidos">
-                        <button className={`${estilos["botonAgregar"]}`} ><i class="fa-solid fa-plus"></i> Agregar</button>
+                        <button className={`${estilos["botonAgregar"]} bebas-neue-regular`} ><i class="fa-solid fa-plus"></i> Agregar</button>
                     </Link>
                     <button class={`${estilos["boton-generar"]}`}><i class="fa-solid fa-download"></i></button>
                 </div>
@@ -244,7 +243,7 @@ const Pedidos = () => {
             <Modal
                 estado={estadoModal2}
                 cambiarEstado={cambiarEstadoModal2}
-                titulo={`Información`}
+                titulo='Detalle Pedido'
                 mostrarHeader={true}
                 mostrarOverlay={true}
                 posicionModal={'center'}
@@ -254,11 +253,8 @@ const Pedidos = () => {
                 <Contenido>
                     <div>
                         <div>
-                            {selectedRowId && selectedRowId.map((Pedido, index)=>(
-                                <div key={index}>
-                                    <p>observaciones: {Pedido.observaciones}</p>
-                                </div>
-                            ))}
+                            <p>Cliente:</p>
+                            
                         </div>
                     </div>
                     
@@ -276,7 +272,6 @@ const ContenedorBotones = styled.div`
 	justify-content: center;
 	gap: 20px;
 `;
-
 const Boton = styled.button`
 	display: block;
 	padding: 10px 30px;
@@ -294,23 +289,19 @@ const Boton = styled.button`
 		background: #0066FF;
 	}
 `;
-
 const Contenido = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-
 	h1 {
 		font-size: 42px;
 		font-weight: 700;
 		margin-bottom: 10px;
 	}
-
 	p {
 		font-size: 16px;
 		margin-bottom: 11px;
 	}
-
 	img {
 		width: 100%;
 		vertical-align: top;

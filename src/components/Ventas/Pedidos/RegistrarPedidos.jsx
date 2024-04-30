@@ -9,7 +9,6 @@ function App() {
   const token = localStorage.getItem("token");
   const [productos, setProductos] = useState([]);
   const { usuario } = useUserContext();
-
   const [isLoading, setIsLoading] = useState(true);
   const [pedido, setPedido] = useState({
     observaciones: "",
@@ -59,12 +58,10 @@ function App() {
     const updatedRows = [...tableRows];
     updatedRows.splice(index, 1);
     setTableRows(updatedRows);
-
     const total = updatedRows.reduce((accumulator, currentValue) => {
       return accumulator + (parseFloat(currentValue.precio_total) || 0);
     }, 0);
     setPrecioTotal(total);
-
     setFormChanged(true);
   };
 
@@ -326,10 +323,7 @@ function App() {
 
   return (
     <>
-      <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-      />
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
       <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
       <div className={estilos["contenido"]}>
@@ -373,6 +367,8 @@ function App() {
                 type="text"
                 placeholder="Observaciones"
                 cols="5" rows="4"
+                style={{resize: 'none'}}
+                className={estilos['textarea']} 
               />
             </div>
             <div id={estilos["cliente"]}>
@@ -536,7 +532,7 @@ function App() {
           <button
             type="submit"
             id="can"
-            className={estilos["boton-azul"]}
+            className={`${estilos["boton-azul"]} bebas-neue-regular`}
             disabled={!formChanged}
             onClick={handleSubmitPedido}
           >
