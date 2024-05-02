@@ -92,7 +92,7 @@ const Layout = () => {
         return () => {
             document.removeEventListener("click", handleClickOutside);
         };
-    }, [permisos]);
+    }, [usuarioLogueado, permisos]);
 
     const handleModuleClick = (module) => {
         setSelectedModule(selectedModule === module ? null : module);

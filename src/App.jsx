@@ -33,6 +33,7 @@ import Cliente from './components/Ventas/Clientes/Clientes';
 import EditarPedidos from './components/Ventas/Pedidos/EditarPedidos';
 
 import { UserProvider } from './components/UserProvider';
+import EditarPerfil from "./components/Usuarios/EditarPerfil";
 
 function App() {
 
@@ -67,6 +68,11 @@ function App() {
           <Route path="/editarUsuarios/:id_usuario" element={
             <PrivateRoute prot={2}>
               <EditarUsuarios />
+            </PrivateRoute>}
+          />
+          <Route path="/editarPerfil/:id_usuario" element={
+            <PrivateRoute prot={0}>
+              <EditarPerfil />
             </PrivateRoute>}
           />
           <Route path="/roles" element={

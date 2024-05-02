@@ -206,7 +206,7 @@ const Dashboard = () => {
                   } else {
                     return null;
                   }
-                })}</p></div><div id={estilos.iconoEditar}><Link to={`/editarUsuarios/${usuarioLS && usuarioLS.id_usuario}`}><i className="fa-solid fa-pen-to-square"></i></Link></div>
+                })}</p></div><div id={estilos.iconoEditar}><Link to={`/editarPerfil/${usuarioLS && usuarioLS.id_usuario}`}><i className="fa-solid fa-pen-to-square"></i></Link></div>
             </div>
           </div>
         </center>

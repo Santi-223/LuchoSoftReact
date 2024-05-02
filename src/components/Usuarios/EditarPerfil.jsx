@@ -5,15 +5,15 @@ import { Navigate, useParams, Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { useUserContext } from "../UserProvider";
 
-function EditarUsuario() {
+function EditarPerfil() {
 
     const [isLoading, setIsLoading] = useState(true);
 
-    const { usuarioLogueado, actualizarUsuarioLogueado } = useUserContext();
+    const [permisoEdRol, setPermisoEdRol] = useState(false);
+
+    const { usuarioLogueado, actualizarUsuarioLogueado, permisos } = useUserContext();
 
     console.log("id user log: ", usuarioLogueado.id_usuario)
-
-    const [redirect, setRedirect] = useState(false);
 
     const [roles, setRoles] = useState([]);
 
@@ -33,6 +33,11 @@ function EditarUsuario() {
     });
 
     useEffect(() => {
+
+        if (permisos && permisos.includes(1)) {
+            setPermisoEdRol(true);
+        }
+
         const fetchUsuario = async () => {
             try {
                 const response = await fetch(`https://api-luchosoft-mysql.onrender.com/configuracion/usuarios/${id_usuario}`);
@@ -206,17 +211,51 @@ function EditarUsuario() {
 
                         if (response.ok) {
 
-                            console.log('Usuario actualizado exitosamente.');
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Usuario actualizado exitosamente',
-                                showConfirmButton: false,
-                                timer: 1500
-                            });
-                            setTimeout(() => {
-                                setRedirect(true);
-                            }, 1000);
+                            try {
+                                const response = await fetch('https://api-luchosoft-mysql.onrender.com/auth/login', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify(usuario)
+                                });
 
+                                if (response.ok) {
+                                    const data = await response.json(); // Convertir la respuesta a JSON
+
+                                    // Almacenar en el localStorage
+                                    localStorage.setItem('token', data.token);
+
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: `Su usuario ha sido actualizado`,
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    });
+
+                                    actualizarUsuarioLogueado(usuario);
+
+                                    setTimeout(() => {
+                                        window.location.href = '/#/dashboard',
+                                            window.location.reload();
+                                    }, 500);
+
+                                } else {
+                                    console.error('Error al refrescar:', response.statusText);
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error',
+                                        text: 'Error al refrescar',
+                                    });
+                                }
+                            } catch (error) {
+                                console.error('Error al acceder:', error);
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: 'Error al acceder',
+                                });
+                            }
                         } else {
                             console.error('Error al actualizar el usuario:', response.statusText);
                             Swal.fire({
@@ -239,10 +278,6 @@ function EditarUsuario() {
 
     };
 
-    if (redirect) {
-        return <Navigate to={'/usuarios'}></Navigate>
-    }
-
     if (isLoading) {
         return <div>Cargando...</div>;
     }
@@ -258,7 +293,7 @@ function EditarUsuario() {
                 <br />
                 <center>
                     <div id={estilos.titulo}>
-                        <h1>Editar Usuario</h1>
+                        <h1>Editar Perfil</h1>
                         <br />
                         <br />
                         <br />
@@ -361,22 +396,27 @@ function EditarUsuario() {
                                 <div className={estilos["formulario__grupo2"]} id={estilos.grupo__id_rol}>
                                     <label htmlFor="id_rol">Seleccionar Rol</label>
                                     <div className={estilos["formulario__grupo-input"]}>
-                                        <select
-                                            className={estilos["input-field2"]}
-                                            name="id_rol" // Utiliza el mismo nombre que el campo id_rol
-                                            id={estilos.id_rol} // Cambia el id para que sea único
-                                            value={usuario.id_rol}
-                                            onChange={handleChange}
-                                        >
-                                            <option value={0}>Seleccione un rol</option>
-                                            {roles.map(rol => {
-                                                if (rol.estado_rol != false) {
-                                                    return <option value={rol.id_rol}>{rol.nombre_rol}</option>
-                                                }
-                                            })}
-                                        </select>
+                                        {permisoEdRol ? (
+                                            <select
+                                                className={estilos["input-field2"]}
+                                                name="id_rol"
+                                                id={estilos.id_rol}
+                                                value={usuario.id_rol}
+                                                onChange={handleChange}
+                                            >
+                                                <option value={0}>Seleccione un rol</option>
+                                                {roles.map(rol => {
+                                                    if (rol.estado_rol != false) {
+                                                        return <option value={rol.id_rol}>{rol.nombre_rol}</option>
+                                                    }
+                                                })}
+                                            </select>
+                                        ) : (
+                                            <p>Permiso de edición no disponible</p>
+                                        )}
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                         <div id={estilos.cosas}>
@@ -413,4 +453,4 @@ function EditarUsuario() {
     );
 }
 
-export default EditarUsuario;
+export default EditarPerfil;

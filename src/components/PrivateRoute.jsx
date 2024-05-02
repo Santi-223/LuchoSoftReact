@@ -25,8 +25,8 @@ const PrivateRoute = ({ prot, children }) => {
             });
             if (!response.ok) {
                 Swal.fire({
-                    icon: "error",
-                    title: "Error",
+                    icon: "warning",
+                    title: "Advertencia",
                     text: "Su sesión ha expirado",
                     showConfirmButton: false
                 })
