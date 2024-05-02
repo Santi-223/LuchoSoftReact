@@ -140,8 +140,8 @@ function Productos() {
     const fetchproductos = async () => {
         try {
             const [productosResponse, categoriasResponse] = await Promise.all([
-                fetch('https://api-luchosoft-mysql.onrender.com/ventas2/productos'),
-                fetch('https://api-luchosoft-mysql.onrender.com/ventas2/categoria_productos') // Suponiendo que esta es la ruta para obtener las categorías
+                fetch('http://localhost:8082/ventas2/productos'),
+                fetch('http://localhost:8082/ventas2/categoria_productos') // Suponiendo que esta es la ruta para obtener las categorías
             ]);
     
             if (productosResponse.ok && categoriasResponse.ok) {
@@ -186,7 +186,7 @@ function Productos() {
                 try {
                     const nuevoEstado = estadoproducto === 1 ? 0 : 1;
 
-                    const response = await fetch(`https://api-luchosoft-mysql.onrender.com/ventas2/estadoProducto/${idproducto}`, {
+                    const response = await fetch(`http://localhost:8082/ventas2/estadoProducto/${idproducto}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json'

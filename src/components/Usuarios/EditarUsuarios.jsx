@@ -35,7 +35,7 @@ function EditarUsuario() {
     useEffect(() => {
         const fetchUsuario = async () => {
             try {
-                const response = await fetch(`https://api-luchosoft-mysql.onrender.com/configuracion/usuarios/${id_usuario}`);
+                const response = await fetch(`http://localhost:8082/configuracion/usuarios/${id_usuario}`);
                 if (response.ok) {
                     const data = await response.json();
                     const usuarioFiltrado = data[0];
@@ -64,7 +64,7 @@ function EditarUsuario() {
     useEffect(() => {
         const fetchRoles = async () => {
             try {
-                const response = await fetch('https://api-luchosoft-mysql.onrender.com/configuracion/roles');
+                const response = await fetch('http://localhost:8082/configuracion/roles');
                 if (response.ok) {
                     const data = await response.json();
                     const rolesFiltrados = data.map(rol => ({
@@ -196,7 +196,7 @@ function EditarUsuario() {
             }).then(async (result) => {
                 if (result.isConfirmed) {
                     try {
-                        const response = await fetch(`https://api-luchosoft-mysql.onrender.com/configuracion/usuarios/${usuario.id_usuario}`, {
+                        const response = await fetch(`http://localhost:8082/configuracion/usuarios/${usuario.id_usuario}`, {
                             method: 'PUT',
                             headers: {
                                 'Content-Type': 'application/json'

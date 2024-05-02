@@ -95,8 +95,8 @@ function OrdenesProduccion() {
 
     const fetchOrdenes = async () => {
         try {
-            const ordenesResponse = await fetch('https://api-luchosoft-mysql.onrender.com/orden/orden_produccion');
-            const usuariosResponse = await fetch('https://api-luchosoft-mysql.onrender.com/configuracion/usuarios');
+            const ordenesResponse = await fetch('http://localhost:8082/orden/orden_produccion');
+            const usuariosResponse = await fetch('http://localhost:8082/configuracion/usuarios');
 
             if (ordenesResponse.ok && usuariosResponse.ok) {
                 const ordenesData = await ordenesResponse.json();

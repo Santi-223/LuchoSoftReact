@@ -35,7 +35,7 @@ const Ventas = () => {
     // ]
     const fetchVenta = async () => {
         try {
-            const response = await fetch('https://api-luchosoft-mysql.onrender.com/ventas/pedidos');
+            const response = await fetch('http://localhost:8082/ventas/pedidos');
             if (response.ok) {
                 const data = await response.json();
                 const ventaData = data.filter(venta => venta.estado_pedido === 3 || venta.estado_pedido === 4).map(venta => ({
@@ -138,7 +138,7 @@ const Ventas = () => {
                 try {
                     const nuevoEstado = row.estado_pedido === 3 ? 4 : 3;
 
-                    const response = await fetch(`https://api-luchosoft-mysql.onrender.com/ventas/pedidos/${row.id_pedido}`, {
+                    const response = await fetch(`http://localhost:8082/ventas/pedidos/${row.id_pedido}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json'

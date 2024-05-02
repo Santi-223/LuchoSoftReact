@@ -55,7 +55,7 @@ const EditarPedidos = () => {
     useEffect(() => {
         const ListarPedidos = async () => {
             try {
-                const response = await fetch(`https://api-luchosoft-mysql.onrender.com/ventas/pedidos/${id_pedido}`);
+                const response = await fetch(`http://localhost:8082/ventas/pedidos/${id_pedido}`);
                 if (response.ok) {
                     const data = await response.json();
                     const pedidoData = data[0];
@@ -84,7 +84,7 @@ const EditarPedidos = () => {
     useEffect(() => {
         const listarCliente = async () => {
             try {
-                const response = await fetch(`https://api-luchosoft-mysql.onrender.com/ventas/clientes`);
+                const response = await fetch(`http://localhost:8082/ventas/clientes`);
                 if (response.ok) {
                     const data = await response.json();
                     setClienteEditar(data);
@@ -101,7 +101,7 @@ const EditarPedidos = () => {
     useEffect(() => {
         const listarProductos = async () => {
             try {
-                const response = await fetch(`https://api-luchosoft-mysql.onrender.com/ventas2/productos`);
+                const response = await fetch(`http://localhost:8082/ventas2/productos`);
                 if (response.ok) {
                     const data = await response.json();
                     const productosData = data.map(productos => ({
@@ -137,7 +137,7 @@ const EditarPedidos = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await fetch(`https://api-luchosoft-mysql.onrender.com/ventas/pedidos_productos/${id_pedidos_productos}`, {
+                    const response = await fetch(`http://localhost:8082/ventas/pedidos_productos/${id_pedidos_productos}`, {
                         method: 'DELETE',
                         headers: {
                             'Content-Type': 'application/json'
@@ -177,7 +177,7 @@ const EditarPedidos = () => {
 
     const fetchVenta = async () => {
         try {
-            const response = await fetch('https://api-luchosoft-mysql.onrender.com/ventas/clientes');
+            const response = await fetch('http://localhost:8082/ventas/clientes');
             if (response.ok) {
                 const data = await response.json();
                 const clienteData = data.filter(cliente => cliente.cliente_frecuente === 1).map(cliente => ({
@@ -304,7 +304,7 @@ const EditarPedidos = () => {
                         0
                     );
                     const fechaproductos = pedidosEditar.fecha_pedido
-                    const response = await fetch(`https://api-luchosoft-mysql.onrender.com/ventas/pedidos/${id_pedido}`, {
+                    const response = await fetch(`http://localhost:8082/ventas/pedidos/${id_pedido}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json'
@@ -377,7 +377,7 @@ const EditarPedidos = () => {
                     }));
                     const pedidosProductosPromise = detallesPedido.map(async (detalle) => {
                         const responsePedidosProductos = await fetch(
-                            "https://api-luchosoft-mysql.onrender.com/ventas/pedidos_productos",
+                            "http://localhost:8082/ventas/pedidos_productos",
                             {
                                 method: "POST",
                                 headers: {
@@ -426,7 +426,7 @@ const EditarPedidos = () => {
     useEffect(() => {
         const listarpedidosProductos = async () => {
             try {
-                const response = await fetch(`https://api-luchosoft-mysql.onrender.com/ventas/pedidos_productos/pedidos/${id_pedido}`);
+                const response = await fetch(`http://localhost:8082/ventas/pedidos_productos/pedidos/${id_pedido}`);
                 if (response.ok) {
                     const data = await response.json();
                     console.log(data);

@@ -31,7 +31,7 @@ const Cliente = () => {
 
     const fetchVenta = async () => {
         try {
-            const response = await fetch('https://api-luchosoft-mysql.onrender.com/ventas/clientes');
+            const response = await fetch('http://localhost:8082/ventas/clientes');
             if (response.ok) {
                 const data = await response.json();
                 const clienteData = data.map(cliente => ({
@@ -185,7 +185,7 @@ const Cliente = () => {
             return;
         }
         try {
-            const responseProveedores = await fetch('https://api-luchosoft-mysql.onrender.com/ventas/clientes', {
+            const responseProveedores = await fetch('http://localhost:8082/ventas/clientes', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -234,7 +234,7 @@ const Cliente = () => {
                 try {
                     const nuevoEstado = row.estado_cliente === 1 ? 0 : 1;
                     if(nuevoEstado===0){
-                        const response = await fetch(`https://api-luchosoft-mysql.onrender.com/ventas/clientes/${row.id_cliente}`, {
+                        const response = await fetch(`http://localhost:8082/ventas/clientes/${row.id_cliente}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json'
@@ -253,7 +253,7 @@ const Cliente = () => {
                         console.error('Error al actualizar el estado del usuario');
                     }
                     }else{                        
-                        const response = await fetch(`https://api-luchosoft-mysql.onrender.com/ventas/clientes/${row.id_cliente}`, {
+                        const response = await fetch(`http://localhost:8082/ventas/clientes/${row.id_cliente}`, {
                             method: 'PUT',
                             headers: {
                                 'Content-Type': 'application/json'
@@ -302,7 +302,7 @@ const Cliente = () => {
                 try {
                     const nuevoEstado = row.cliente_frecuente === 1 ? 0 : 1;
 
-                    const response = await fetch(`https://api-luchosoft-mysql.onrender.com/ventas/clientes/${row.id_cliente}`, {
+                    const response = await fetch(`http://localhost:8082/ventas/clientes/${row.id_cliente}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json'
@@ -373,7 +373,7 @@ const Cliente = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await fetch(`https://api-luchosoft-mysql.onrender.com/ventas/clientes/${ClientesEditar.id_cliente}`, {
+                    const response = await fetch(`http://localhost:8082/ventas/clientes/${ClientesEditar.id_cliente}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json'

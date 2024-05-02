@@ -121,7 +121,7 @@ function Usuarios() {
 
     const fetchUsuarios = async () => {
         try {
-            const response = await fetch('https://api-luchosoft-mysql.onrender.com/configuracion/usuarios');
+            const response = await fetch('http://localhost:8082/configuracion/usuarios');
             if (response.ok) {
                 const data = await response.json();
                 const usuariosFiltrador = data.map(usuario => ({
@@ -145,7 +145,7 @@ function Usuarios() {
 
     const fetchRoles = async () => {
         try {
-            const response = await fetch('https://api-luchosoft-mysql.onrender.com/configuracion/roles');
+            const response = await fetch('http://localhost:8082/configuracion/roles');
             if (response.ok) {
                 const data = await response.json();
                 const rolesFiltrados = data.map(rol => ({
@@ -177,7 +177,7 @@ function Usuarios() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await fetch(`https://api-luchosoft-mysql.onrender.com/configuracion/usuarios/${idUsuario}`, {
+                    const response = await fetch(`http://localhost:8082/configuracion/usuarios/${idUsuario}`, {
                         method: 'DELETE',
                         headers: {
                             'token': token
@@ -231,7 +231,7 @@ function Usuarios() {
                 try {
                     const nuevoEstado = estadoUsuario === 1 ? 0 : 1;
 
-                    const response = await fetch(`https://api-luchosoft-mysql.onrender.com/configuracion/estadoUsuarios/${idUsuario}`, {
+                    const response = await fetch(`http://localhost:8082/configuracion/estadoUsuarios/${idUsuario}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json'

@@ -159,7 +159,7 @@ function Proveedores() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await fetch(`https://api-luchosoft-mysql.onrender.com/compras/proveedores/${proveedoresEditar.id_proveedor}`, {
+                    const response = await fetch(`http://localhost:8082/compras/proveedores/${proveedoresEditar.id_proveedor}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json',
@@ -212,7 +212,7 @@ function Proveedores() {
 
     const fetchproveedores = async () => {
         try {
-            const response = await fetch('https://api-luchosoft-mysql.onrender.com/compras/proveedores');
+            const response = await fetch('http://localhost:8082/compras/proveedores');
             if (response.ok) {
                 const data = await response.json();
                 const proveedoresFiltrador = data.map(proveedor => ({
@@ -247,7 +247,7 @@ function Proveedores() {
             console.log('proveedor a enviar: ', proveedores1)
 
 
-            const responseProveedores = await fetch('https://api-luchosoft-mysql.onrender.com/compras/proveedores', {
+            const responseProveedores = await fetch('http://localhost:8082/compras/proveedores', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -306,7 +306,7 @@ function Proveedores() {
                 try {
                     const nuevoEstado = estadoproveedor === 1 ? 0 : 1;
 
-                    const response = await fetch(`https://api-luchosoft-mysql.onrender.com/compras/estadoProveedor/${idproveedor}`, {
+                    const response = await fetch(`http://localhost:8082/compras/estadoProveedor/${idproveedor}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json',
