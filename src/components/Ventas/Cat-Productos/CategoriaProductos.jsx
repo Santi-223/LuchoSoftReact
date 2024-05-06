@@ -95,7 +95,7 @@ function CategoriasProductos() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await fetch(`http://localhost:8082/ventas2/categoria_productos/${categoriasEditar.id_categoria_productos}`, {
+                    const response = await fetch(`https://api-luchosoft-mysql.onrender.com/ventas2/categoria_productos/${categoriasEditar.id_categoria_productos}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json'
@@ -147,7 +147,7 @@ function CategoriasProductos() {
 
     const fetchcategorias = async () => {
         try {
-            const response = await fetch('http://localhost:8082/ventas2/categoria_productos');
+            const response = await fetch('https://api-luchosoft-mysql.onrender.com/ventas2/categoria_productos');
             if (response.ok) {
                 const data = await response.json();
                 const categoriasFiltrador = data.map(categoria => ({
@@ -202,7 +202,7 @@ function CategoriasProductos() {
         try {
             console.log('categoría de producto a enviar: ', categorias1)
 
-            const responseCategorias = await fetch('http://localhost:8082/ventas2/categoria_productos', {
+            const responseCategorias = await fetch('https://api-luchosoft-mysql.onrender.com/ventas2/categoria_productos', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -260,7 +260,7 @@ function CategoriasProductos() {
                 try {
                     const nuevoEstado = estadocategoria === 1 ? 0 : 1;
 
-                    const response = await fetch(`http://localhost:8082/ventas2/estadoCategoria/${idcategoria}`, {
+                    const response = await fetch(`https://api-luchosoft-mysql.onrender.com/ventas2/estadoCategoria/${idcategoria}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json'

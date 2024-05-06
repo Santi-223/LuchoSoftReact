@@ -27,7 +27,7 @@ function Acceso() {
         console.log(usuario)
 
         try {
-            const response = await fetch('http://localhost:8082/auth/login', {
+            const response = await fetch('https://api-luchosoft-mysql.onrender.com/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

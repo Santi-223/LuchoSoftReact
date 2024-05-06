@@ -25,7 +25,7 @@ function RecuperarContrasena() {
         console.log(usuario)
 
         try {
-            const response = await fetch('http://localhost:8082/configuracion/enviarCorreo', {
+            const response = await fetch('https://api-luchosoft-mysql.onrender.com/configuracion/enviarCorreo', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

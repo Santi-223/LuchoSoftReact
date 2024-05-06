@@ -18,7 +18,7 @@ const PrivateRoute = ({ publ, prot, children }) => {
 
     const validarToken = async () => {
         try {
-            const response = await fetch('http://localhost:8082/configuracion/validarJwt', {
+            const response = await fetch('https://api-luchosoft-mysql.onrender.com/configuracion/validarJwt', {
                 headers: {
                     'token': token
                 }

@@ -40,7 +40,7 @@ function EditarPerfil() {
 
         const fetchUsuario = async () => {
             try {
-                const response = await fetch(`http://localhost:8082/configuracion/usuarios/${id_usuario}`);
+                const response = await fetch(`https://api-luchosoft-mysql.onrender.com/configuracion/usuarios/${id_usuario}`);
                 if (response.ok) {
                     const data = await response.json();
                     const usuarioFiltrado = data[0];
@@ -69,7 +69,7 @@ function EditarPerfil() {
     useEffect(() => {
         const fetchRoles = async () => {
             try {
-                const response = await fetch('http://localhost:8082/configuracion/roles');
+                const response = await fetch('https://api-luchosoft-mysql.onrender.com/configuracion/roles');
                 if (response.ok) {
                     const data = await response.json();
                     const rolesFiltrados = data.map(rol => ({
@@ -201,7 +201,7 @@ function EditarPerfil() {
             }).then(async (result) => {
                 if (result.isConfirmed) {
                     try {
-                        const response = await fetch(`http://localhost:8082/configuracion/usuarios/${usuario.id_usuario}`, {
+                        const response = await fetch(`https://api-luchosoft-mysql.onrender.com/configuracion/usuarios/${usuario.id_usuario}`, {
                             method: 'PUT',
                             headers: {
                                 'Content-Type': 'application/json'
@@ -212,7 +212,7 @@ function EditarPerfil() {
                         if (response.ok) {
 
                             try {
-                                const response = await fetch('http://localhost:8082/auth/login', {
+                                const response = await fetch('https://api-luchosoft-mysql.onrender.com/auth/login', {
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': 'application/json'

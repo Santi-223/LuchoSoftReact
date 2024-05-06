@@ -23,7 +23,7 @@ function EditarProductos() {
     useEffect(() => {
         const fetchProducto = async () => {
             try {
-                const response = await fetch(`http://localhost:8082/ventas2/productos/${id_producto}`);
+                const response = await fetch(`https://api-luchosoft-mysql.onrender.com/ventas2/productos/${id_producto}`);
                 if (response.ok) {
                     const data = await response.json();
                     const productoFiltrado = data[0];
@@ -50,7 +50,7 @@ function EditarProductos() {
     useEffect(() => {
         const fetchCategorias = async () => {
             try {
-                const response = await fetch('http://localhost:8082/ventas2/categoria_productos');
+                const response = await fetch('https://api-luchosoft-mysql.onrender.com/ventas2/categoria_productos');
                 if (response.ok) {
                     const data = await response.json();
                     const categoriasFiltradas = data.map(categoria => ({
@@ -84,7 +84,7 @@ function EditarProductos() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await fetch(`http://localhost:8082/ventas2/productos/${producto.id_producto}`, {
+                    const response = await fetch(`https://api-luchosoft-mysql.onrender.com/ventas2/productos/${producto.id_producto}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json'
