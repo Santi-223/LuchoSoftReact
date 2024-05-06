@@ -507,6 +507,13 @@ label {
     border: 1px solid #ccc;
   }
   
+  .input-largo {
+    padding: 15px;
+    border-radius: 5px;
+    width: 360px;
+    padding: 10px;
+    border: 1px solid #ccc;
+  }
   
   
   #seleccionarpermisos {

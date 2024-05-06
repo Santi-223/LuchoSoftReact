@@ -192,6 +192,37 @@ function Insumos() {
     
     const handleSubmitEditar = async (event) => {
         event.preventDefault();
+
+
+            // Validar que el nombre tenga al menos 3 letras
+    if (insumos1.nombre_insumo.length < 3) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'El nombre del insumo debe tener al menos 3 letras',
+        });
+        return;
+    }
+        if (!insumos1.nombre_insumo || !insumos1.unidadesDeMedida_insumo || !insumos1.stock_insumo || !insumos1.id_categoria_insumo) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Por favor completa todos los campos obligatorios',
+            });
+            return;
+        }
+
+        const regex = /^[a-zA-Z0-9\s#,;.-]*$/; 
+    
+        if (!regex.test(insumos1.nombre_insumo) || !regex.test(insumos1.unidadesDeMedida_insumo) || !regex.test(insumos1.stock_insumo)) {
+            // Mostrar alerta con SweetAlert
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Los campos no pueden contener caracteres especiales',
+            });
+            return;
+        }
         
         // Validar que se haya seleccionado una categoría de insumo
         if (!insumosEditar.id_categoria_insumo) {
@@ -238,6 +269,8 @@ function Insumos() {
                         });
                         setTimeout(() => {
                             window.location.href = '/#/insumos';
+                            fetchinsumos()
+                            cambiarEstadoModalEditar(false)
                         }, 2000);
                         // Aquí podrías redirigir a otra página, mostrar un mensaje de éxito, etc.
                     } else {
@@ -281,10 +314,51 @@ function Insumos() {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
+    // Validar que el stock sea un número positivo
+    if (insumos1.stock_insumo <= 0) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'El stock debe ser un número positivo',
+        });
+        return;
+    }
+        
+            // Validar que el nombre tenga al menos 3 letras
+    if (insumos1.nombre_insumo.length < 3) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'El nombre del insumo debe tener al menos 3 letras',
+        });
+        return;
+    }
+
+        if (!insumos1.nombre_insumo || !insumos1.unidadesDeMedida_insumo || !insumos1.stock_insumo || !insumos1.id_categoria_insumo) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Por favor completa todos los campos obligatorios',
+            });
+            return;
+        }
+    
+        // Validar que no haya caracteres especiales en los campos
+        const regex = /^[a-zA-Z0-9\s#,;.-]*$/; 
+    
+        if (!regex.test(insumos1.nombre_insumo) || !regex.test(insumos1.unidadesDeMedida_insumo) || !regex.test(insumos1.stock_insumo)) {
+            // Mostrar alerta con SweetAlert
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Los campos no pueden contener caracteres especiales',
+            });
+            return;
+        }
+    
         try {
             console.log('insumo a enviar: ', insumos1)
-
-
+    
             const responseInsumos = await fetch('https://api-luchosoft-mysql.onrender.com/compras/insumos', {
                 method: 'POST',
                 headers: {
@@ -293,10 +367,10 @@ function Insumos() {
                 },
                 body: JSON.stringify(insumos1)
             });
-
+    
             if (responseInsumos.ok) {
                 console.log('Insumo creado exitosamente.');
-
+    
                 Swal.fire({
                     icon: 'success',
                     title: 'Registro exitoso',
@@ -304,10 +378,16 @@ function Insumos() {
                     timer: 1500
                 });
                 setTimeout(() => {
-                    window.location.href = '/#/insumos';
+                    fetchinsumos()
+                    setinsumos1({
+                        nombre_insumo: '',
+                        unidadesDeMedida_insumo: '',
+                        stock_insumo: '',
+                        estado_insumo: 1,
+                        id_categoria_insumo: '',
+                    })
+                    cambiarEstadoModalAgregar(false)
                 }, 2000);
-
-
             } else {
                 console.error('Error al crear el insumo:', responseInsumos.statusText);
                 Swal.fire({
@@ -320,6 +400,8 @@ function Insumos() {
             console.error('Error al crear el insumo:', error);
         }
     };
+    
+    
 
     const handleChange = (event) => {
         const { name, value } = event.target;

@@ -148,47 +148,57 @@ function Proveedores() {
         // Verificar que todos los campos estén llenos
         const { nombre_proveedor, documento_proveedor, telefono_proveedor, direccion_proveedor } = proveedoresEditar;
         if (nombre_proveedor.trim() !== '' && telefono_proveedor.trim() !== '' && direccion_proveedor.trim() !== '') {
-            try {
-                // Tu código para enviar el formulario de edición
-                console.log('proveedor a actualizar: ', proveedoresEditar);
+            // Validar que los campos no contengan caracteres especiales
+            const regex = /^[a-zA-Z0-9\s#,;.-]*$/; // Expresión regular que permite letras, números, espacios, '#' y '-'
+            if (regex.test(nombre_proveedor) && regex.test(telefono_proveedor) && regex.test(direccion_proveedor)) {
+                try {
+                    // Tu código para enviar el formulario de edición
+                    console.log('proveedor a actualizar: ', proveedoresEditar);
     
-                const response = await fetch(`https://api-luchosoft-mysql.onrender.com/compras/proveedores/${proveedoresEditar.id_proveedor}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'token': token
-                    },
-                    body: JSON.stringify(proveedoresEditar)
-                });
-    
-                if (response.ok) {
-                    console.log('proveedor actualizado exitosamente.');
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Proveedor actualizado exitosamente',
-                        showConfirmButton: false,
-                        timer: 1500
+                    const response = await fetch(`https://api-luchosoft-mysql.onrender.com/compras/proveedores/${proveedoresEditar.id_proveedor}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'token': token
+                        },
+                        body: JSON.stringify(proveedoresEditar)
                     });
-                    setTimeout(() => {
-                        window.location.href = '/#/proveedores';
-                        fetchproveedores()
-                    cambiarEstadoModalEditar(false)
-                    }, 2000);
-                    // Aquí podrías redirigir a otra página, mostrar un mensaje de éxito, etc.
-                } else {
-                    console.error('Error al actualizar el proveedor:', response.statusText);
+    
+                    if (response.ok) {
+                        console.log('proveedor actualizado exitosamente.');
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Proveedor actualizado exitosamente',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                        setTimeout(() => {
+                            window.location.href = '/#/proveedores';
+                            fetchproveedores()
+                            cambiarEstadoModalEditar(false)
+                        }, 2000);
+                        // Aquí podrías redirigir a otra página, mostrar un mensaje de éxito, etc.
+                    } else {
+                        console.error('Error al actualizar el proveedor:', response.statusText);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Error al actualizar el proveedor',
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error al actualizar el proveedor:', error);
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
                         text: 'Error al actualizar el proveedor',
                     });
                 }
-            } catch (error) {
-                console.error('Error al actualizar el proveedor:', error);
+            } else {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: 'Error al actualizar el proveedor',
+                    text: 'Por favor ingresa caracteres válidos en todos los campos',
                 });
             }
         } else {
@@ -247,52 +257,62 @@ function Proveedores() {
         // Verificar que todos los campos estén llenos
         const { nombre_proveedor, documento_proveedor, telefono_proveedor, direccion_proveedor } = proveedores1;
         if (nombre_proveedor.trim() !== '' && documento_proveedor.trim() !== '' && telefono_proveedor.trim() !== '' && direccion_proveedor.trim() !== '') {
-            try {
-                // Tu código para enviar el formulario
-                console.log('proveedor a enviar: ', proveedores1);
+            // Validar que los campos no contengan caracteres especiales
+            const regex = /^[a-zA-Z0-9\s#,;.-]*$/; // Expresión regular que permite letras, números, espacios, '#' y '-'
+            if (regex.test(nombre_proveedor) && regex.test(documento_proveedor) && regex.test(telefono_proveedor) && regex.test(direccion_proveedor)) {
+                try {
+                    // Tu código para enviar el formulario
+                    console.log('proveedor a enviar: ', proveedores1);
     
-                const responseProveedores = await fetch('https://api-luchosoft-mysql.onrender.com/compras/proveedores', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'token': token
-                    },
-                    body: JSON.stringify(proveedores1)
-                });
-    
-                if (responseProveedores.ok) {
-                    console.log('Proveedor creado exitosamente.');
-    
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Registro exitoso',
-                        showConfirmButton: false,
-                        timer: 1500
+                    const responseProveedores = await fetch('https://api-luchosoft-mysql.onrender.com/compras/proveedores', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'token': token
+                        },
+                        body: JSON.stringify(proveedores1)
                     });
-                    setTimeout(() => {
-                        fetchproveedores()
-                            setProveedores1({
-                                nombre_proveedor: '',
-                                documento_proveedor: '',
-                                telefono_proveedor: '',
-                                direccion_proveedor: '',
-                                estado_proveedor: 1
-                            
-                            })
-                        cambiarEstadoModalAgregar(false)
-                    }, 2000);
+    
+                    if (responseProveedores.ok) {
+                        console.log('Proveedor creado exitosamente.');
+    
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Registro exitoso',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                        setTimeout(() => {
+                            fetchproveedores()
+                                setProveedores1({
+                                    nombre_proveedor: '',
+                                    documento_proveedor: '',
+                                    telefono_proveedor: '',
+                                    direccion_proveedor: '',
+                                    estado_proveedor: 1
+    
+                                })
+                            cambiarEstadoModalAgregar(false)
+                        }, 2000);
     
     
-                } else {
-                    console.error('Error al crear el proveedor:', responseProveedores.statusText);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'Error al crear el proveedor',
-                    });
+                    } else {
+                        console.error('Error al crear el proveedor:', responseProveedores.statusText);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Error al crear el proveedor',
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error al crear el proveedor:', error);
                 }
-            } catch (error) {
-                console.error('Error al crear el proveedor:', error);
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Por favor ingresa caracteres válidos en todos los campos',
+                });
             }
         } else {
             // Mostrar mensaje de error si algún campo está vacío
@@ -432,7 +452,7 @@ function Proveedores() {
                                         <p id={estilos.textito}>  Nombre</p>
                                         <input
                                             id={estilos.nombreproveedor}
-                                            className={estilos["input2"]}
+                                            className={estilos["input-largo"]}
                                             type="text"
                                             placeholder="Insertar nombre"
                                             name='nombre_proveedor'
@@ -440,7 +460,14 @@ function Proveedores() {
                                             onChange={handleChange}
                                         />
                                     </div>
-                                    <div id={estilos.documentoproveedor}>
+
+
+
+                                </div>
+                                <br />
+                                <div className={estilos["inputIdNombre"]}>
+
+                                <div id={estilos.documentoproveedor}>
                                         <p id={estilos.textito} >  Documento</p>
                                         <input
                                             className={estilos["input2"]}
@@ -451,11 +478,7 @@ function Proveedores() {
                                             onChange={handleChange}
                                         />
                                     </div>
-
-
-                                </div>
-                                <br />
-                                <div className={estilos["inputIdNombre"]}>
+                                    <div className={estilos["espacio"]}></div>
                                 <div id={estilos.telefonoproveedor}>
                                         <p id={estilos.textito} >  Teléfono</p>
                                         <input
@@ -467,12 +490,20 @@ function Proveedores() {
                                             onChange={handleChange}
                                         />
                                     </div>
-                                    <div className={estilos["espacio"]}></div>
-                                    <div id={estilos.eo}>
+                             
+
+                              
+
+
+                                </div>
+                                <br />
+                                <div className={estilos["inputIdNombre"]}>
+                               
+                                <div id={estilos.eo}>
                                         <p id={estilos.textito}>  Dirección</p>
                                         <input
                                             id={estilos.direccionproveedor}
-                                            className={estilos["input2"]}
+                                            className={estilos["input-largo"]}
                                             type="text"
                                             placeholder="Insertar dirección"
                                             name='direccion_proveedor'
@@ -480,8 +511,6 @@ function Proveedores() {
                                             onChange={handleChange}
                                         />
                                     </div>
-                              
-
 
                                 </div>
                             </div>
@@ -523,7 +552,7 @@ function Proveedores() {
                                         <p id={estilos.textito} > Nombre</p>
                                         <input
                                             id={estilos.nombreproveedor}
-                                            className={estilos["input2"]}
+                                            className={estilos["input-largo"]}
                                             type="text"
                                             placeholder="Insertar nombre"
                                             name='nombre_proveedor'
@@ -532,18 +561,7 @@ function Proveedores() {
                                         />
                                     </div>
                                     
-                                    <div id={estilos.eo}>
-                                        <p id={estilos.textito} > Documento</p>
-                                        <input
-                                            id={estilos.docmentoproveedor}
-                                            className={estilos["input2"]}
-                                            type="number"
-                                            placeholder="Insertar documento"
-                                            name='documento_proveedor'
-                                            value={proveedoresEditar.documento_proveedor}
-                                            onChange={handleEditarChange}
-                                        />
-                                    </div>
+
                                 </div>
                                 
                                 <br />
@@ -562,10 +580,26 @@ function Proveedores() {
                                     </div>
                                     <div className={estilos["espacio"]}></div>
                                     <div id={estilos.eo}>
+                                        <p id={estilos.textito} > Documento</p>
+                                        <input
+                                            id={estilos.docmentoproveedor}
+                                            className={estilos["input2"]}
+                                            type="number"
+                                            placeholder="Insertar documento"
+                                            name='documento_proveedor'
+                                            value={proveedoresEditar.documento_proveedor}
+                                            onChange={handleEditarChange}
+                                        />
+                                    </div>
+
+                                </div>
+
+                                <div className={estilos["inputIdNombre"]}>
+                                <div id={estilos.eo}>
                                         <p id={estilos.textito}> Dirección</p>
                                         <input
                                             id={estilos.direccionproveedor}
-                                            className={estilos["input2"]}
+                                            className={estilos["input-largo"]}
                                             type="text"
                                             placeholder="Insertar dirección"
                                             name='direccion_proveedor'
@@ -574,7 +608,6 @@ function Proveedores() {
                                         />
                                     </div>
                                 </div>
-
                             </div>
 
                         </div>

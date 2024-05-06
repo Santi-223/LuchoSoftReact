@@ -187,6 +187,17 @@ function App() {
   const handleSubmitCompra = async (event, totalCompra, precio) => {
     event.preventDefault();
 
+    if (totalCompra < 50) {
+      // Mostrar alerta indicando que el mínimo es 50 pesos colombianos
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'El total de la compra debe ser al menos 50 pesos colombianos',
+        confirmButtonColor: '#1F67B9',
+      });
+      return;
+    }
+
     if (!compra.fecha_compra || !compra.numero_compra || !compra.id_proveedor || tableRows.some(row => !row.nombre || !row.precio)) {
       // Verifica si el input es válido o si hay campos vacíos
       Swal.fire({
