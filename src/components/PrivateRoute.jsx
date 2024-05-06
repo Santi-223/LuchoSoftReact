@@ -4,7 +4,7 @@ import Login from '../components/Login/Login';
 import Swal from 'sweetalert2';
 import { useUserContext } from "../components/UserProvider";
 
-const PrivateRoute = ({ prot, children }) => {
+const PrivateRoute = ({ publ, prot, children }) => {
 
     const { usuarioLogueado, permisos } = useUserContext();
 
@@ -67,10 +67,14 @@ const PrivateRoute = ({ prot, children }) => {
         cont = true
     }
 
-    if (auth) {
+    if(publ && !auth){
+        return children;
+    }else if (publ && auth && cont){
+        return <Navigate to="/default"/>
+    }else if (!publ && auth){
         return cont ? children : <Navigate to="/dashboard" />
-    } else {
-        return cont ? children : <Navigate to="/login" />
+    }else{
+        return <Navigate to="/login"/>
     }
 
 }

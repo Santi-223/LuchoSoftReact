@@ -4,13 +4,11 @@ import estilos from '../Login/Login.module.css';
 import '../Layout.css';
 import Swal from 'sweetalert2';
 
-function Acceso() {
+function RecuperarContrasena() {
 
-    const [usuarioAutenticado, setUsuarioAutenticado] = useState(false);
 
     const [usuario, setUsuario] = useState({
         email: '',
-        contraseña: ''
     });
 
     const handleChange = (event) => {
@@ -27,7 +25,7 @@ function Acceso() {
         console.log(usuario)
 
         try {
-            const response = await fetch('http://localhost:8082/auth/login', {
+            const response = await fetch('http://localhost:8082/configuracion/enviarCorreo', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -36,42 +34,36 @@ function Acceso() {
             });
 
             if (response.ok) {
-                const data = await response.json(); // Convertir la respuesta a JSON
-
-                // Almacenar en el localStorage
-                localStorage.setItem('token', data.token);
-
                 Swal.fire({
                     icon: 'success',
-                    title: `Acceso exitoso`,
+                    title: `Se le notificara un correo con el enlace para recuperar su contraseña.`,
                     showConfirmButton: false,
                     timer: 1500
                 });
 
-                setUsuarioAutenticado(true);
-                // Aquí podrías redirigir a otra página, mostrar un mensaje de éxito, etc.
+                setTimeout(() => {
+                    window.location.href = '/#/login';
+                  }, 2000);
+
             } else {
-                console.error('Error al accceder:', response.statusText);
+                const errorData = await response.json();
+
+                console.error('Error al enviar el correo', response);
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: 'Usuario o contraseña incorrecto',
+                    text: errorData.msg,
                 });
             }
         } catch (error) {
-            console.error('Error al acceder:', error);
+            console.error('Error:', error);
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: 'Error al acceder',
+                text: 'Error',
             });
         }
     };
-
-    // Si el usuario está autenticado, redirige al dashboard
-    if (usuarioAutenticado) {
-        return <Navigate to="/dashboard" />;
-    }
 
     // Si el usuario no está autenticado, muestra la página de acceso
     return (
@@ -79,12 +71,12 @@ function Acceso() {
             <div className={estilos["contenido"]}>
                 <center>
 
-                    <div id={estilos.titulo}><h1>Bienvenido</h1></div>
+                    <div id={estilos.titulo}><h1>Recuperar contraseña</h1></div>
                 </center>
                 <div className={estilos["divActualizarContraseña"]}>
                     <form onSubmit={handleSubmit}>
                         <div className={estilos["input-group"]}>
-                            <label for="contrasenaAntigua">Ingrese correo</label>
+                            <label for="contrasenaAntigua">Ingrese el correo electronico de recuperación</label>
                             <input
                                 type="email"
                                 id={estilos.correoacceso}
@@ -94,35 +86,15 @@ function Acceso() {
                                 onChange={handleChange}
                             />
                         </div>
-
-                        <div className={estilos["input-group"]}>
-                            <label for="password">Ingrese contraseña</label>
-                            <input
-                                type="password"
-                                id={estilos.contrasenaacceso}
-                                required
-                                name="contraseña"
-                                value={usuario.contraseña}
-                                onChange={handleChange}
-                            />
-                        </div>
-                        <div>
-                            <Link to={'/recuperarContrasena'}>
-                                <label className={["yellow-underline"]}>Recuperar contraseña</label>
-                            </Link>
-                        </div>
                         <div className={estilos["cajaBotonesRegistro"]}>
-                            <button className={estilos["rojo"]} type="submit">Acceder</button>
+                            <button className={estilos["rojo"]} type="submit">Enviar</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-        /**<div>
-            <h1>Página de Acceso</h1>
-            <button onClick={handleLogin}>Iniciar Sesión</button>
-        </div>**/
+
     );
 }
 
-export default Acceso;
+export default RecuperarContrasena;
