@@ -134,6 +134,13 @@ function EditarUsuario() {
                 text: "El campo de teléfono debe tener 7 o más carácteres.",
             })
         }
+        else if (usuario.telefono_usuario.length > 13) {
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "El campo de teléfono no puede tener más de 13 carácteres.",
+            })
+        }
         else if (usuario.direccion_usuario.length == 0) {
             Swal.fire({
                 icon: "error",

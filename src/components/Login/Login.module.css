@@ -1,3 +1,26 @@
+.pagina-enter {
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+.pagina-enter-active {
+  opacity: 1;
+  transform: translateX(0%);
+  transition: opacity 1000ms, transform 1000ms; /* Aumenta el tiempo de transición */
+}
+
+.pagina-exit {
+  opacity: 1;
+  transform: translateX(0%);
+}
+
+.pagina-exit-active {
+  opacity: 0;
+  transform: translateX(-100%);
+  transition: opacity 1000ms, transform 1000ms; /* Aumenta el tiempo de transición */
+}
+
+
 #iconoEditar {
   margin-top: -30px;
   margin-left: 80px;
@@ -6,17 +29,10 @@
 }
 
 .contenido{
-  margin-top: 15vh;
+  margin-top: 10vh;
 }
 
-body {
-  background-image: url('/src/assets/imagen.jpeg');
-  /* Ruta a la imagen */
-  background-size: cover;
-  /* Ajustar la imagen al tamaño del div */
-  background-position: center;
-  /* Posicionar la imagen en el centro */
-}
+
 
 #perfil {
   margin-top: 8px;
@@ -122,7 +138,7 @@ body {
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  width: 45%;
+  width: 200px;
   /* Ajusta el ancho de los botones */
 }
 
@@ -144,11 +160,19 @@ body {
   /* Ajusta el ancho de los botones */
 }
 
+a .grisL{
+  text-decoration: none;
+  /* Elimina el subrayado del texto */
+  width: 200px;
+  margin-left: 10px;
+  justify-content: center;
+}
+
 
 .rojo {
   background: #1F67B9;
   color: white;
-
+  width: 900px;
 }
 
 .rojo:hover {
@@ -157,6 +181,21 @@ body {
 
 .rojo:active {
   box-shadow: 1px 1px 1px 1px #3c77bb;
+}
+
+.grisL {
+  background: #a7a7a7;
+  color: white;
+  display: flex;
+}
+
+.grisL:hover {
+  background: #adadad;
+
+}
+
+.grisL:active {
+  box-shadow: 1px 1px 1px 1px #adadad;
 }
 
 .vinotinto {

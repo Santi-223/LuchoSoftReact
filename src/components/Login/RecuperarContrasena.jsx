@@ -43,7 +43,7 @@ function RecuperarContrasena() {
 
                 setTimeout(() => {
                     window.location.href = '/#/login';
-                  }, 2000);
+                }, 2000);
 
             } else {
                 const errorData = await response.json();
@@ -71,7 +71,7 @@ function RecuperarContrasena() {
             <div className={estilos["contenido"]}>
                 <center>
 
-                    <div id={estilos.titulo}><h1>Recuperar contraseña</h1></div>
+                    <div id={estilos.titulo}><img src="/archivos/imagenes/logo.png" width="600px"></img></div>
                 </center>
                 <div className={estilos["divActualizarContraseña"]}>
                     <form onSubmit={handleSubmit}>
@@ -88,6 +88,9 @@ function RecuperarContrasena() {
                         </div>
                         <div className={estilos["cajaBotonesRegistro"]}>
                             <button className={estilos["rojo"]} type="submit">Enviar</button>
+                            <Link to='acceso'>
+                            <button className={estilos["grisL"]} type="submit">Cancelar</button>
+                            </Link>
                         </div>
                     </form>
                 </div>

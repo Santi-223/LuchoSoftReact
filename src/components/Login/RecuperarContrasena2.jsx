@@ -94,7 +94,7 @@ function RecuperarContrasena2() {
             <div className={estilos["contenido"]}>
                 <center>
 
-                    <div id={estilos.titulo}><h1>Recuperar contraseña</h1></div>
+                    <div id={estilos.titulo}><img src="/archivos/imagenes/logo.png" width="600px"></img></div>
                 </center>
                 <div className={estilos["divActualizarContraseña"]}>
                     <form onSubmit={handleSubmit}>

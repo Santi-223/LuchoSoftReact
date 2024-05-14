@@ -199,7 +199,7 @@ function Usuarios() {
                         console.error('Error al eliminar el usuario:', errorData.msg);
                         Swal.fire({
                             icon: 'error',
-                            title: 'Error al eliminar el usuario',
+                            title: 'No se pudo eliminar el usuario.',
                             text: errorData.msg
                         });
                     }
@@ -208,8 +208,7 @@ function Usuarios() {
                     console.error('Error al eliminar el usuario:', error);
                     Swal.fire({
                         icon: 'error',
-                        title: 'Error al crear el usuario',
-                        text: error
+                        title: 'No se pudo eliminar el usuario.',
                     });
                 }
             }

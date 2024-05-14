@@ -3,6 +3,7 @@ import { Navigate, Link } from "react-router-dom";
 import estilos from '../Login/Login.module.css';
 import '../Layout.css';
 import Swal from 'sweetalert2';
+import { CSSTransition } from 'react-transition-group';
 
 function Acceso() {
 
@@ -41,13 +42,6 @@ function Acceso() {
                 // Almacenar en el localStorage
                 localStorage.setItem('token', data.token);
 
-                Swal.fire({
-                    icon: 'success',
-                    title: `Acceso exitoso`,
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-
                 setUsuarioAutenticado(true);
                 // Aquí podrías redirigir a otra página, mostrar un mensaje de éxito, etc.
             } else {
@@ -70,7 +64,9 @@ function Acceso() {
 
     // Si el usuario está autenticado, redirige al dashboard
     if (usuarioAutenticado) {
-        return <Navigate to="/dashboard" />;
+        return <CSSTransition in={true} timeout={500} classNames="pagina">
+            <Navigate to="/dashboard" />
+        </CSSTransition>
     }
 
     // Si el usuario no está autenticado, muestra la página de acceso
@@ -79,7 +75,7 @@ function Acceso() {
             <div className={estilos["contenido"]}>
                 <center>
 
-                    <div id={estilos.titulo}><h1>Bienvenido</h1></div>
+                    <div id={estilos.titulo}><img src="/archivos/imagenes/logo.png" width="600px"></img></div>
                 </center>
                 <div className={estilos["divActualizarContraseña"]}>
                     <form onSubmit={handleSubmit}>

@@ -66,17 +66,19 @@ function Roles() {
         {
             name: "Permisos",
             cell: (row) => (
-                rolesPermisos.map(rp => {
-                    if (row.id_rol === rp.id_rol) {
-                        return permisos.map(permiso => {
-                            if (permiso.id_permiso == rp.id_permiso) {
-                                return `${permiso.nombre_permiso}\n`
-                            }
-                        });
-                    } else {
-                        return null;
-                    }
-                })
+                <ul>{
+                    rolesPermisos.map(rp => {
+                        if (row.id_rol === rp.id_rol) {
+                            return permisos.map(permiso => {
+                                if (permiso.id_permiso == rp.id_permiso) {
+                                    return <li>{permiso.nombre_permiso}</li>
+                                }
+                            });
+                        } else {
+                            return null;
+                        }
+                    })
+                }</ul>
             ),
             sortable: true,
         },
@@ -568,6 +570,7 @@ function Roles() {
             });
         }
     };
+    
 
     if (isLoading) {
         return <div>Cargando...</div>;
