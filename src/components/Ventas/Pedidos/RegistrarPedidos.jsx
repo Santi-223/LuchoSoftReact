@@ -424,10 +424,10 @@ function App() {
               <button type="button" className="btn btn-primary fa-solid fa-plus" onClick={handleAgregarProducto}>
               </button>
             </div>
-            <div style={{ overflowY: scrollEnabled ? 'scroll' : 'auto', maxHeight: '300px' }}>
+            <div style={{ overflowY: scrollEnabled ? 'scroll' : 'auto', maxHeight: '300px', width: '150%'}} >
               <table
                 className="tablaDT ui celled table"
-                style={{ width: "50%" }}
+                style={{ border: 'none'}}
                 ref={tableRef}
               >
                 <thead className="rojo thead-fixed">
@@ -469,8 +469,8 @@ function App() {
                 </thead>
                 <tbody>
                   {tableRows.map((row, index) => (
-                    <tr key={index}>
-                      <td style={{ textAlign: "center" }}>
+                    <tr key={index} className={estilos.tabladetalle}>
+                      <td style={{ textAlign: "center"}}>
                         <select
                           className={estilos["input-field-tabla"]}
                           value={row.nombre}

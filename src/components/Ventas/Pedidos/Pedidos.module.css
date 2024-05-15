@@ -202,6 +202,15 @@ background: #b9050517;
     margin-left: 100px;
 }
 
+.tabladetalle{
+    border: 1px solid rgb(228, 228, 228);
+  border-top: 0; /* Esto oculta el borde superior */
+  border-left: 0; /* Esto oculta el borde izquierdo */
+  border-right: 0; /* Esto oculta el borde derecho */
+  width: 600px;
+}
+
+
 .input-container {
     display: block;
     margin-bottom: 15px;
@@ -316,13 +325,12 @@ background: #b9050517;
     padding: 0px;
    
     border-radius: 5px;
-    width: 150px;
+    width: 170px;
     display: flex;
   
     height: 27px;
     border: 1px solid #ccc;
     justify-content: start;
-    margin-left: 0px;
    
    
   }

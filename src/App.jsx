@@ -155,6 +155,7 @@ function App() {
           <Route path="/pedidos" element={<Pedidos />} />
           <Route path="/clientes" element={<Cliente />} />
           <Route path="/editarpedidos/:id_pedido" element={<EditarPedidos />} />
+          
 
         </Route>
       </Routes>

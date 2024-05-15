@@ -279,3 +279,12 @@ input {
     background-color: #1F67B9;
     color: #ffffff;
 }
+
+.input-field {
+    padding: 10px;
+
+    border-radius: 5px;
+    width: 350px; /* Cambia este valor para ajustar el ancho del input */
+    padding: 10px;
+    border: 1px solid #ccc;
+}

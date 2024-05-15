@@ -15,7 +15,7 @@ const Cliente = () => {
     const [estadoModal1, cambiarEstadoModal1] = useState(false);
     const [estadoModal2, cambiarEstadoModal2] = useState(false);
     const [ClienteRegistrar, setClienteRegistrar] = useState({
-        id_cliente: 0,
+        id_cliente: '',
         nombre_cliente: '',
         telefono_cliente: '',
         direccion_cliente: '',
@@ -143,15 +143,15 @@ const Cliente = () => {
 
     const RegistrarCliente = async (event) => {
         event.preventDefault();
-        if (ClienteRegistrar.id_cliente === 0 && ClienteRegistrar.nombre_cliente === '' && ClienteRegistrar.telefono_cliente === '' && ClienteRegistrar.direccion_cliente === '') {
+        if (ClienteRegistrar.id_cliente === '' && ClienteRegistrar.nombre_cliente === '' && ClienteRegistrar.telefono_cliente === '' && ClienteRegistrar.direccion_cliente === '') {
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: 'Hay campos vacíos',
+                text: 'Los campos se encuentran vacíos',
                 confirmButtonColor: '#1F67B9',
             });
             return;
-        } else if (ClienteRegistrar.id_cliente === 0) {
+        } else if (ClienteRegistrar.id_cliente === '') {
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
@@ -462,29 +462,27 @@ const Cliente = () => {
                         <div className={estilos["input1RCliente"]}>
                             <p>Documento del cliente</p>
                             <input
-                                id="id_cliente"
-                                className="input-field"
-                                type="number"
-                                placeholder="10203040"
-                                name="id_cliente"
-                                value={ClienteRegistrar.id_cliente}
-                                onChange={handleChange}
+                                id="id_cliente" className={estilos["input-field"]} type="number" placeholder="10203040" name="id_cliente" value={ClienteRegistrar.id_cliente}
+                                onChange={handleChange} onBlur={(e)=>console.log(e.target.value)}
                             />
                         </div>
                         <br />
                         <div className={estilos["input1RCliente"]}>
                             <p>Nombre del cliente</p>
-                            <input id="nombre_cliente" className="input-field" type="text" placeholder="Nombre" name="nombre_cliente" value={ClienteRegistrar.nombre_cliente} onChange={handleChange} />
+                            <input id="nombre_cliente" className={estilos["input-field"]}type="text" placeholder="Nombre" name="nombre_cliente"
+                             value={ClienteRegistrar.nombre_cliente} onChange={handleChange} />
                         </div>
                         <br />
                         <div className={estilos["input1RCliente"]}>
                             <p>Telefono del cliente</p>
-                            <input id="telefono_cliente" className="input-field" type="text" placeholder="Telefono" name="telefono_cliente" value={ClienteRegistrar.telefono_cliente} onChange={handleChange} />
+                            <input id="telefono_cliente" className={estilos["input-field"]}type="text" placeholder="Telefono" name="telefono_cliente"
+                            value={ClienteRegistrar.telefono_cliente} onChange={handleChange} />
                         </div>
                         <br />
                         <div className={estilos["input1RCliente"]}>
                             <p>Dirección del cliente</p>
-                            <input id="direccion_cliente" className="input-field" type="text" placeholder="Dirección" name="direccion_cliente" value={ClienteRegistrar.direccion_cliente} onChange={handleChange} />
+                            <input id="direccion_cliente" className={estilos["input-field"]} type="text" placeholder="Dirección" name="direccion_cliente" 
+                            value={ClienteRegistrar.direccion_cliente} onChange={handleChange} />
                         </div>
                         <br />
                     </div>
@@ -508,17 +506,17 @@ const Cliente = () => {
                     <div className={estilos["contFormsRCliente"]}>
                         <div className={estilos["input1RCliente"]}>
                             <p> Nombre del cliente</p>
-                            <input id="nombre_cliente" className="input-field" type="text" placeholder="Nombre" name="nombre_cliente" value={ClientesEditar.nombre_cliente} onChange={handleEditarChange} />
+                            <input id="nombre_cliente" className={estilos["input-field"]}type="text" placeholder="Nombre" name="nombre_cliente" value={ClientesEditar.nombre_cliente} onChange={handleEditarChange} />
                         </div>
                         <br />
                         <div className={estilos["input1RCliente"]}>
                             <p>Telefono del cliente</p>
-                            <input id="telefono_cliente" className="input-field" type="text" placeholder="Telefono" name="telefono_cliente" value={ClientesEditar.telefono_cliente} onChange={handleEditarChange} />
+                            <input id="telefono_cliente" className={estilos["input-field"]}type="text" placeholder="Telefono" name="telefono_cliente" value={ClientesEditar.telefono_cliente} onChange={handleEditarChange} />
                         </div>
                         <br />
                         <div className={estilos["input1RCliente"]}>
                             <p> Dirección del cliente</p>
-                            <input id="direccion_cliente" className="input-field" type="text" placeholder="Dirección" name="direccion_cliente" value={ClientesEditar.direccion_cliente} onChange={handleEditarChange} />
+                            <input id="direccion_cliente" className={estilos["input-field"]} type="text" placeholder="Dirección" name="direccion_cliente" value={ClientesEditar.direccion_cliente} onChange={handleEditarChange} />
                         </div>
                         <br />
                     </div>
