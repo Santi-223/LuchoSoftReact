@@ -13,6 +13,8 @@ function Compras() {
     const [showModal, setShowModal] = useState(false);
     const [compraSeleccionada, setCompraSeleccionada] = useState(null);
     const [insumos, setInsumos] = useState([]);
+    const [showDetalleModal, setShowDetalleModal] = useState(false);
+    const [detalleCompra, setDetalleCompra] = useState(null);
     const [proveedores, setProveedores] = useState([]);
     const [isLoadingInsumos, setIsLoadingInsumos] = useState(true);
     const [isLoadingProveedores, setIsLoadingProveedores] = useState(true);
@@ -22,6 +24,8 @@ function Compras() {
     const tableRef = useRef(null);
     const navigate = useNavigate();
     const [filtro, setFiltro] = useState('');
+    const [showMainDataModal, setShowMainDataModal] = useState(false);
+
 
     const handleFiltroChange = (e) => {
         setFiltro(e.target.value);
@@ -113,6 +117,24 @@ function Compras() {
         }
     };
 
+    const handleMostrarCompra = async (idCompra) => {
+        try {
+            const response = await fetch(`https://api-luchosoft-mysql.onrender.com/compras/compras/${idCompra}`);
+            const data = await response.json();
+            if (response.ok) {
+                // Establecer la compra seleccionada como un objeto individual
+                setCompraSeleccionada(data);
+                setShowMainDataModal(true);
+            } else {
+                console.error('Error al obtener la compra:', data.error);
+            }
+        } catch (error) {
+            console.error('Error al obtener la compra:', error);
+        }
+    };
+    
+    
+    
 
     const generarPDF = () => {
         const doc = new jsPDF();
@@ -146,6 +168,13 @@ function Compras() {
         // Guardar el PDF
         doc.save("reporte_compras.pdf");
     };
+
+
+    const handleMostrarDetalle = (compra) => {
+        setDetalleCompra(compra); // Establece los datos de la fila seleccionada
+        setShowDetalleModal(true); // Muestra el modal
+    };
+
     const handleMostrarDetalles = async (idCompra) => {
         try {
             const response = await fetch('https://api-luchosoft-mysql.onrender.com/compras/compras_insumos/');
@@ -211,16 +240,27 @@ function Compras() {
                 </div>
             )
         },
-        {
-            name: "Acciones",
-            cell: (row) => (
-                <div className={estilos["acciones"]}>
-                    <button className={estilos.boton} onClick={() => handleMostrarDetalles(row.id_compra)} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '25px' }}>
-                        <i className="bi bi-info-circle" style={{ color: "#FFA200" }}></i>
-                    </button>
-                </div>
-            )
-        },
+{
+    name: "Acciones",
+    cell: (row) => (
+        <div className={estilos["acciones"]}>
+            <button 
+                className={estilos.boton} 
+                onClick={() => handleMostrarDetalle(row)} // Llama a la función handleMostrarDetalle y pasa la fila como argumento
+                style={{ cursor: 'pointer', textAlign: 'center', fontSize: '25px' }}
+            >
+                <i className="bi bi-eye" style={{ color: "#5F597A" }}></i>
+            </button>
+            <button 
+                className={estilos.boton} 
+                onClick={() => handleMostrarDetalles(row.id_compra)} 
+                style={{ cursor: 'pointer', textAlign: 'center', fontSize: '25px' }}
+            >
+                <i className="bi bi-info-circle" style={{ color: "#FFA200" }}></i>
+            </button>
+        </div>
+    )
+}
     ];
     
 
@@ -367,6 +407,35 @@ const customStyles = {
             <div className={estilos["tabla"]}>
             <DataTable columns={columns} data={filteredCompras} pagination paginationPerPage={6} highlightOnHover customStyles={customStyles} defaultSortField="id_compra" defaultSortAsc={true}></DataTable>
             </div>
+
+
+
+<Modal 
+    className={estilos["modal"]} 
+    show={showDetalleModal} 
+    onHide={() => setShowDetalleModal(false)}
+>
+    <Modal.Header closeButton>
+        <Modal.Title>Datos de la compra</Modal.Title>
+    </Modal.Header>
+    <Modal.Body>
+        {/* Muestra los datos de la fila seleccionada */}
+        {detalleCompra && (
+            <div>
+                <p>ID de compra: {detalleCompra.id_compra}</p>
+                <p>Número de compra: {detalleCompra.numero_compra}</p>
+                <p>Fecha de compra: {detalleCompra.fecha_compra}</p>
+                <p>Total de la compra: {detalleCompra.total_compra}</p>
+                <p>Proveedor de la compra: {detalleCompra.nombre_proveedor}</p>
+                {/* Muestra más detalles si es necesario */}
+            </div>
+        )}
+    </Modal.Body>
+    <Modal.Footer>
+        <Button variant="secondary" onClick={() => setShowDetalleModal(false)}>Cerrar</Button>
+    </Modal.Footer>
+</Modal>
+
             <Modal className={estilos["modal"]} show={showModal} onHide={() => setShowModal(false)}>
                 
     <Modal.Header closeButton>

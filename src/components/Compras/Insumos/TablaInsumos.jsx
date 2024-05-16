@@ -14,6 +14,8 @@ import 'jspdf-autotable';
 function Insumos() {
     const token = localStorage.getItem('token');
     const [insumos, setinsumos] = useState([]);
+    const [selectedItem, setSelectedItem] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [estadoModaleditar, cambiarEstadoModalEditar] = useState(false);
     const [categoria_insumo, setCategoria_insumo] = useState([]);
     const [insumos1, setinsumos1] = useState({
@@ -142,6 +144,23 @@ function Insumos() {
                         <i className={`fa-solid fa-pen-to-square ${row.estado_insumo === 1 ? 'iconosVerdes' : 'iconosGris'}`}></i>
                     </button>
 
+                </div>
+            )
+        },
+        {
+            name: "Detalles",
+            cell: (row) => (
+                <div className={estilos["acciones"]}>
+                    <button
+                        onClick={() => {
+                            setSelectedItem(row);
+                            setIsModalOpen(true);
+                        }}
+                        className={estilos.boton}
+                        style={{ cursor: 'pointer', textAlign: 'center', fontSize: '25px' }}
+                    >
+                       <i className="bi bi-eye" style={{ color: "#5F597A" }}></i>
+                    </button>
                 </div>
             )
         },
@@ -314,8 +333,18 @@ function Insumos() {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
+
+        
+        if (!insumos1.nombre_insumo || !insumos1.unidadesDeMedida_insumo || !insumos1.stock_insumo || !insumos1.id_categoria_insumo) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Por favor completa todos los campos obligatorios',
+            });
+            return;
+        }
     // Validar que el stock sea un número positivo
-    if (insumos1.stock_insumo <= 0) {
+    if (insumos1.stock_insumo < 0) {
         Swal.fire({
             icon: 'error',
             title: 'Error',
@@ -323,6 +352,16 @@ function Insumos() {
         });
         return;
     }
+
+        // Validar que el stock sea un número positivo
+        if (insumos1.stock_insumo > 5000000) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'El stock no puede tiene un límite de 5 millones',
+            });
+            return;
+        }
         
             // Validar que el nombre tenga al menos 3 letras
     if (insumos1.nombre_insumo.length < 3) {
@@ -334,14 +373,6 @@ function Insumos() {
         return;
     }
 
-        if (!insumos1.nombre_insumo || !insumos1.unidadesDeMedida_insumo || !insumos1.stock_insumo || !insumos1.id_categoria_insumo) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Por favor completa todos los campos obligatorios',
-            });
-            return;
-        }
     
         // Validar que no haya caracteres especiales en los campos
         const regex = /^[a-zA-Z0-9\s#,;.-]*$/; 
@@ -534,6 +565,31 @@ function Insumos() {
             <div className={estilos["tabla"]}>
                 <DataTable columns={columns} data={filteredinsumos} pagination paginationPerPage={6} highlightOnHover customStyles={customStyles} defaultSortField="id_insumo" defaultSortAsc={true}></DataTable>
             </div>
+
+            <Modal
+                estado={isModalOpen}
+                cambiarEstado={setIsModalOpen}
+                titulo="Detalles del Insumo"
+                mostrarHeader={true}
+                mostrarOverlay={true}
+                posicionModal={'center'}
+                width={'500px'}
+                padding={'20px'}
+            >
+                <Contenido2>
+                    {selectedItem && (
+                        <>
+                            <p>ID: {selectedItem.id_insumo}</p>
+                            <p>Nombre: {selectedItem.nombre_insumo}</p>
+                            <p>Medida: {selectedItem.unidadesDeMedida_insumo}</p>
+                            <p>Stock: {selectedItem.stock_insumo}</p>
+                            <p>Categoría: {selectedItem.nombre_categoria}</p>
+                        </>
+                    )}
+                </Contenido2>
+
+
+            </Modal>
 
             <Modal
                 estado={estadoModalAgregar}
@@ -753,25 +809,43 @@ function Insumos() {
 }
 
 const Contenido = styled.div`
-	display: flex;
-	flex-direction: column;
-	align-items: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
-	h1 {
-		font-size: 42px;
-		font-weight: 700;
-		margin-bottom: 10px;
-	}
+    h1 {
+        font-size: 42px;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
 
-	p {
-		font-size: 18px;
-		margin-bottom: 20px;
-	}
 
-	img {
-		width: 100%;
-		vertical-align: top;
-		border-radius: 3px;
-	}
+
+    img {
+        width: 100%;
+        vertical-align: top;
+        border-radius: 3px;
+    }
+`;
+
+
+const Contenido2 = styled.div`
+    display: flex;
+    flex-direction: column;
+
+
+    h1 {
+        font-size: 42px;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+
+
+    img {
+        width: 100%;
+        vertical-align: top;
+        border-radius: 3px;
+    }
 `;
 export default Insumos;

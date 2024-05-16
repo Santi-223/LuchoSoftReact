@@ -48,6 +48,14 @@ function categoria_insumos() {
     const handleSubmit = async (event) => {
         event.preventDefault();
     
+        if (categoria_insumos1.nombre_categoria_insumos.length < 3) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'El nombre de la categorìa de insumo debe tener al menos 3 letras',
+            });
+            return;
+        }
         // Validar que el nombre no esté vacío
         if (categoria_insumos1.nombre_categoria_insumos.trim() === '') {
             Swal.fire({
