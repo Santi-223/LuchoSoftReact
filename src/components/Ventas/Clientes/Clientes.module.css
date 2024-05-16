@@ -281,10 +281,10 @@ input {
 }
 
 .input-field {
-    padding: 10px;
-
+    height: 100px;
     border-radius: 5px;
     width: 350px; /* Cambia este valor para ajustar el ancho del input */
     padding: 10px;
     border: 1px solid #ccc;
+    font-size: 10px;
 }

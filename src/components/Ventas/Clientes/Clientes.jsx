@@ -7,6 +7,8 @@ import estilos from '../Clientes/Clientes.module.css';
 import Modal from './modal';
 import styled from 'styled-components';
 import Swal from 'sweetalert2';
+import TextField from '@mui/material/TextField';
+import { event } from "jquery";
 
 const Cliente = () => {
     const [clientes, setclientes] = useState([]);
@@ -425,6 +427,25 @@ const Cliente = () => {
             }
         });
     };
+    const [cedula, setCedula]=React.useState("");
+    const [leyenda, setLeyenda]= React.useState("");
+    const[errorTitulo, setErrorTitulo]= React.useState(false);
+    const validacion =(event)=>{
+        handleChange(event);
+        setCedula(event.target.value);
+        if(cedula.length==9){
+            setErrorTitulo(false);
+            setLeyenda("");
+        }else if(cedula.length<10){
+            setErrorTitulo(true);
+            setLeyenda("El dígito no puede ser menor de 10");
+        
+        }else if(cedula.length>10){
+            setErrorTitulo(true);
+            setLeyenda("El número de cédula no puede ser mayor de 10");
+        }
+
+     }
 
     if (isLoading) {
         return <div>Cargando...</div>;
@@ -460,29 +481,29 @@ const Cliente = () => {
                 <Contenido>
                     <div className={estilos["contFormsRCliente"]}>
                         <div className={estilos["input1RCliente"]}>
-                            <p>Documento del cliente</p>
-                            <input
-                                id="id_cliente" className={estilos["input-field"]} type="number" placeholder="10203040" name="id_cliente" value={ClienteRegistrar.id_cliente}
-                                onChange={handleChange} onBlur={(e)=>console.log(e.target.value)}
+                            <p>Documento del cliente</p>                        
+                            <TextField
+                                id="id_cliente" className={estilos["input-field"]} type="number" placeholder="10203040" name="id_cliente"
+                                value={ClienteRegistrar.id_cliente} onChange={validacion} error={errorTitulo} size="small" 
+                                helperText={<span style={{fontSize: '11px'}}>{leyenda}</span>}
                             />
                         </div>
-                        <br />
                         <div className={estilos["input1RCliente"]}>
                             <p>Nombre del cliente</p>
                             <input id="nombre_cliente" className={estilos["input-field"]}type="text" placeholder="Nombre" name="nombre_cliente"
-                             value={ClienteRegistrar.nombre_cliente} onChange={handleChange} />
+                             value={ClienteRegistrar.nombre_cliente} onChange={validacion} />
                         </div>
                         <br />
                         <div className={estilos["input1RCliente"]}>
                             <p>Telefono del cliente</p>
                             <input id="telefono_cliente" className={estilos["input-field"]}type="text" placeholder="Telefono" name="telefono_cliente"
-                            value={ClienteRegistrar.telefono_cliente} onChange={handleChange} />
+                            value={ClienteRegistrar.telefono_cliente} onChange={validacion} />
                         </div>
                         <br />
                         <div className={estilos["input1RCliente"]}>
                             <p>Dirección del cliente</p>
                             <input id="direccion_cliente" className={estilos["input-field"]} type="text" placeholder="Dirección" name="direccion_cliente" 
-                            value={ClienteRegistrar.direccion_cliente} onChange={handleChange} />
+                            value={ClienteRegistrar.direccion_cliente} onChange={validacion} />
                         </div>
                         <br />
                     </div>
