@@ -427,25 +427,26 @@ const Cliente = () => {
             }
         });
     };
-    const [cedula, setCedula]=React.useState("");
-    const [leyenda, setLeyenda]= React.useState("");
-    const[errorTitulo, setErrorTitulo]= React.useState(false);
-    const validacion =(event)=>{
+    const [cedula, setCedula] = React.useState("");
+    const [leyenda, setLeyenda] = React.useState("");
+    const [errorTitulo, setErrorTitulo] = React.useState(false);
+    const validacion = (event) => {
         handleChange(event);
         setCedula(event.target.value);
-        if(cedula.length==9){
-            setErrorTitulo(false);
-            setLeyenda("");
-        }else if(cedula.length<10){
+
+        // Realizar la validación en función del estado actualizado 'cedula'
+        if (event.target.value.length <=9) {
             setErrorTitulo(true);
             setLeyenda("El dígito no puede ser menor de 10");
-        
-        }else if(cedula.length>10){
+        } else if (event.target.value.length === 10) {
+            setErrorTitulo(false);
+            setLeyenda("");
+        } else if (event.target.value.length >= 10) {
             setErrorTitulo(true);
             setLeyenda("El número de cédula no puede ser mayor de 10");
         }
 
-     }
+    }
 
     if (isLoading) {
         return <div>Cargando...</div>;
@@ -481,29 +482,29 @@ const Cliente = () => {
                 <Contenido>
                     <div className={estilos["contFormsRCliente"]}>
                         <div className={estilos["input1RCliente"]}>
-                            <p>Documento del cliente</p>                        
+                            <p>Documento del cliente</p>
                             <TextField
                                 id="id_cliente" className={estilos["input-field"]} type="number" placeholder="10203040" name="id_cliente"
-                                value={ClienteRegistrar.id_cliente} onChange={validacion} error={errorTitulo} size="small" 
-                                helperText={<span style={{fontSize: '11px'}}>{leyenda}</span>}
+                                value={ClienteRegistrar.id_cliente} onChange={validacion} error={errorTitulo} size="small"
+                                helperText={<span style={{ fontSize: '11px' }}>{leyenda}</span>}
                             />
                         </div>
                         <div className={estilos["input1RCliente"]}>
                             <p>Nombre del cliente</p>
-                            <input id="nombre_cliente" className={estilos["input-field"]}type="text" placeholder="Nombre" name="nombre_cliente"
-                             value={ClienteRegistrar.nombre_cliente} onChange={validacion} />
-                        </div>
+                            <TextField id="nombre_cliente" className={estilos["input-field"]} type="text" placeholder="Nombre" name="nombre_cliente"
+                                value={ClienteRegistrar.nombre_cliente} onChange={validacion} size="small" />
+                        </div> 
                         <br />
                         <div className={estilos["input1RCliente"]}>
                             <p>Telefono del cliente</p>
-                            <input id="telefono_cliente" className={estilos["input-field"]}type="text" placeholder="Telefono" name="telefono_cliente"
-                            value={ClienteRegistrar.telefono_cliente} onChange={validacion} />
+                            <input id="telefono_cliente" className={estilos["input-field"]} type="text" placeholder="Telefono" name="telefono_cliente"
+                                value={ClienteRegistrar.telefono_cliente} onChange={validacion} />
                         </div>
                         <br />
                         <div className={estilos["input1RCliente"]}>
                             <p>Dirección del cliente</p>
-                            <input id="direccion_cliente" className={estilos["input-field"]} type="text" placeholder="Dirección" name="direccion_cliente" 
-                            value={ClienteRegistrar.direccion_cliente} onChange={validacion} />
+                            <input id="direccion_cliente" className={estilos["input-field"]} type="text" placeholder="Dirección" name="direccion_cliente"
+                                value={ClienteRegistrar.direccion_cliente} onChange={validacion} />
                         </div>
                         <br />
                     </div>
@@ -527,12 +528,12 @@ const Cliente = () => {
                     <div className={estilos["contFormsRCliente"]}>
                         <div className={estilos["input1RCliente"]}>
                             <p> Nombre del cliente</p>
-                            <input id="nombre_cliente" className={estilos["input-field"]}type="text" placeholder="Nombre" name="nombre_cliente" value={ClientesEditar.nombre_cliente} onChange={handleEditarChange} />
+                            <input id="nombre_cliente" className={estilos["input-field"]} type="text" placeholder="Nombre" name="nombre_cliente" value={ClientesEditar.nombre_cliente} onChange={handleEditarChange} />
                         </div>
                         <br />
                         <div className={estilos["input1RCliente"]}>
                             <p>Telefono del cliente</p>
-                            <input id="telefono_cliente" className={estilos["input-field"]}type="text" placeholder="Telefono" name="telefono_cliente" value={ClientesEditar.telefono_cliente} onChange={handleEditarChange} />
+                            <input id="telefono_cliente" className={estilos["input-field"]} type="text" placeholder="Telefono" name="telefono_cliente" value={ClientesEditar.telefono_cliente} onChange={handleEditarChange} />
                         </div>
                         <br />
                         <div className={estilos["input1RCliente"]}>
