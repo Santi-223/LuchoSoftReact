@@ -3,8 +3,15 @@ import './registroOrdenes.css';
 import { Outlet, Link } from "react-router-dom";
 import { Table, Pagination } from 'react-bootstrap';
 import Swal from 'sweetalert2';
+import { useUserContext } from "../UserProvider";
+
+
 
 function AgregarOrdenes() {
+    const { usuario } = useUserContext();
+
+    const usuarioLO = usuario;
+
     const [insumos, setInsumos] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [precio, setPrecio] = useState(0);
@@ -14,7 +21,7 @@ function AgregarOrdenes() {
         id_orden_de_produccion: '',
         descripcion_orden: '',
         fecha_orden: '',
-        id_usuario: ''
+        id_usuario: usuarioLO.id_usuario
     });
     const [usuarios, setUsuarios] = useState([]);
     const tableRef = useRef(null);
@@ -118,6 +125,17 @@ function AgregarOrdenes() {
 
     const handleCantidadChange = (event, index) => {
         const { value } = event.target;
+        // Verificar si el valor ingresado es negativo
+        if (parseFloat(value) <= 0) {
+            // Mostrar un mensaje de error
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'La cantidad no puede ser negativa o igual a cero',
+                confirmButtonColor: '#1F67B9',
+            });
+            return; // Salir de la función sin hacer cambios
+        }
         const updatedRows = tableRows.map((row, rowIndex) => {
             if (rowIndex === index) {
                 const cantidad = parseFloat(value) || 0;
@@ -126,20 +144,21 @@ function AgregarOrdenes() {
             return row;
         });
         setTableRows(updatedRows);
-
+    
         setFormChanged(true);
     };
+    
 
     const handleSubmitOrden = async (event) => {
         event.preventDefault();
         const regex = /^[a-zA-Z0-9.,?!¡¿\s]+$/; // Expresión regular para permitir letras, números y algunos caracteres especiales
 
         // Verificar caracteres especiales en el campo de fecha y usuario
-        if (!regex.test(orden.descripcion_orden) ) {
+        if (!regex.test(orden.descripcion_orden)) {
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: 'Evita caracteres especiales en el campos de descrpción.',
+                text: 'Evita caracteres especiales en el campo de descripción.',
                 confirmButtonColor: '#1F67B9',
             });
             return;
@@ -149,7 +168,7 @@ function AgregarOrdenes() {
             const insumo = insumos.find(i => i.nombre_insumo === row.nombre);
             return insumo && parseFloat(row.cantidad) > insumo.stock_insumo;
         });
-    
+
         if (invalidInsumos.length > 0) {
             Swal.fire({
                 icon: 'error',
@@ -159,10 +178,10 @@ function AgregarOrdenes() {
             });
             return;
         }
-       
-       
 
-        if (!orden.fecha_orden || !orden.id_usuario || tableRows.some(row => !row.nombre || !row.cantidad)) {
+
+
+        if (!orden.fecha_orden || tableRows.some(row => !row.nombre || !row.cantidad)) {
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
@@ -171,7 +190,7 @@ function AgregarOrdenes() {
             });
             return;
         }
-      
+
 
         Swal.fire({
             icon: 'success',
@@ -262,7 +281,7 @@ function AgregarOrdenes() {
     };
 
     if (isLoading) {
-        return <div>Cargando,por favor espere...</div>;
+        return <div>Cargando, por favor espere...</div>;
     }
 
     const indexOfLastInsumo = currentPage * insumosPerPage;
@@ -287,73 +306,74 @@ function AgregarOrdenes() {
                 <div className='contenido-' >
                     <div className='formulario'>
                         <div>
-                            <h1 id="titulo">Ordenes de producción</h1>
-                        </div>
-                        <div className='inputs-up'>
+                            <h1 id="titulo">Órdenes de producción</h1>
+                        </div><br />
+
+                            <div className='inputs-up'>
+                                <div className='contenedor-input' >
+                                    <label style={{ marginLeft: "-130px" }} htmlFor="fechaCompra"> Fecha</label>
+                                    <p>Fecha</p>
+                                    <input
+                                        id="fechaCompra"
+                                        name="fecha_orden"
+                                        className="input-field"
+                                        value={orden.fecha_orden}
+                                        onChange={handleInputChange}
+                                        type="date"
+                                        style={{ width: "270px", height: "40px" }}
+
+                                    />
+                                </div>
+
+
+                            </div><br /><br />
                             <div className='contenedor-input' >
-                                <label style={{ marginLeft: "-130px" }} htmlFor="fechaCompra"> Fecha</label>
-                                <p>Fecha</p>
-                                <input
+                                <label style={{ marginLeft: "-130px" }} htmlFor="fechaCompra"> Descripción</label>
+                                <p>Descripción</p>
+                                <textarea
                                     id="fechaCompra"
-                                    name="fecha_orden"
-                                    className="input-field"
-                                    value={orden.fecha_orden}
+                                    name="descripcion_orden"
+                                    className=""
+                                    value={orden.descripcion_orden}
                                     onChange={handleInputChange}
-                                    type="date"
-                                    style={{ width: "270px", height: "40px" }}
-
+                                    cols="33" rows="4"
+                                    type="text"
+                                    style={{ resize: 'none' }}
                                 />
+                            </div><br />
+                            <div id="kaka">
+                                <p>Usuario</p>
+                                <select
+                                    id="proveedor"
+                                    name="id_usuario"
+                                    className="input-field2"
+                                    style={{ width: "270px", height: "40px" }}
+                                    value={orden.id_usuario}
+                                    readOnly={true}
+                                    onChange={handleInputChange}>
+                                    <option value="">{usuario.nombre_usuario}</option>
+
+                                </select>
                             </div>
-
-
-                        </div>
-                        <div className='contenedor-input' >
-                            <label style={{ marginLeft: "-130px" }} htmlFor="fechaCompra"> Descripción</label>
-                            <p>Descripción</p>
-                            <input
-                                id="fechaCompra"
-                                name="descripcion_orden"
-                                className="input-field"
-                                value={orden.descripcion_orden}
-                                onChange={handleInputChange}
-                                type="text"
-                                style={{ width: "270px", height: "40px" }}
-
-
-                            />
-                        </div>
-                        <div id="kaka">
-                            <label style={{ marginLeft: "-230px" }} htmlFor="proveedor"><i className="fa-solid fa-users iconosRojos select"></i> Usuario </label>
-                            <p>Usuario</p>
-                            <select
-                                id="proveedor"
-                                name="id_usuario"
-                                className="input-field2"
-                                style={{ width: "270px", height: "40px" }}
-                                value={orden.id_usuario}
-                                onChange={handleInputChange}>
-                                <option value="">Seleccione un usuario</option>
-                                {usuarios.map((usuario) => (
-                                    <option key={usuario.id_usuario} value={usuario.id_usuario}>
-                                        {usuario.nombre_usuario}
-                                    </option>
-                                ))}
-
-                            </select>
-                        </div>
-                        <div className='inputs-up'>
-                            <div className='contenedor-input'>
-                                <button className='boton azulado2' type="button" onClick={addTableRow}><center>+ Insumo</center></button>
+                            <br /><br />
+                            <div className='inputs-up'>
+                                <div className='contenedor-input'>
+                                    <button className='boton azulado2' type="button" onClick={addTableRow}><center>+ Insumo</center></button>
+                                </div>
                             </div>
                         </div>
-                    </div>
+
+
+
                     <hr style={{ margin: '10px 0', border: 'none', borderTop: '1px solid black' }} />
-                    <div className='tabla-detalle' style={{ overflowY: scrollEnabled ? 'scroll' : 'auto', maxHeight: '500px' }}>
+                    <div className='tabla-detalle' style={{ overflowY: scrollEnabled ? 'scroll' : 'auto', maxHeight: '400px' }}>
                         <table className="tablaDT ui celled table" style={{ width: "70%", marginTop: "10%" }} ref={tableRef}>
                             <thead className="rojo thead-fixed">
                                 <tr>
-                                    <th style={{ textAlign: "left", backgroundColor: '#1F67B9', color: "white" }}><i className="fa-solid fa-font "></i > Nombre Insumo</th>
-                                    <th style={{ textAlign: "left", backgroundColor: '#1F67B9', color: "white" }}><i className="fa-solid fa-coins "></i> Cantidad</th>
+                                    <th style={{ textAlign: "left", backgroundColor: '#1F67B9', color: "white" }}> Nombre Insumo</th>
+                                    <th style={{ textAlign: "left", backgroundColor: '#1F67B9', color: "white" }}> Cantidad</th>
+                                    <th style={{ textAlign: "left", backgroundColor: '#1F67B9', color: "white" }}></th>
+
                                 </tr>
                             </thead>
                             <tbody>

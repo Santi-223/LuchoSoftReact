@@ -82,11 +82,11 @@ function AgregarProductos() {
         }
 
         // Validar el campo de precio
-        if (isNaN(producto.precio_producto) || parseFloat(producto.precio_producto) <= 0) {
+        if (isNaN(producto.precio_producto) || parseFloat(producto.precio_producto) <50) {
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: 'Ingresa un precio válido.',
+                text: 'Ingresa un precio válido, debe ser mayor o igual que 50',
                 confirmButtonText: 'Aceptar'
             });
             return; // Detener la ejecución si el precio no es válido
@@ -154,8 +154,7 @@ function AgregarProductos() {
             <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
             <link href="https://cdn.datatables.net/2.0.2/css/dataTables.semanticui.css" rel="stylesheet" />
             <link href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.css" rel="stylesheet" />
-
-            <h1>Registro Producto</h1>
+            <h1 style={{ marginTop: '-10px' }} >Registro Producto</h1>
 
             <div className={estilos.contenido2}>
                 <br />
@@ -166,13 +165,13 @@ function AgregarProductos() {
                         <br /><b></b>
                     </div>
                 </center>
-                <div style={{ justifyContent: 'space-between' }} id={estilos.contenedorsitos}>
-                    <div id={estilos.contenedorsito}>
+                <div style={{ justifyContent: 'space-between', marginTop: '-50px' }} id={estilos.contenedorsitos}>
+                    <div style={{ marginTop: '-20px' }} id={estilos.contenedorsito}>
                         <div style={{ marginBottom: "20px" }} className={estilos["input-container"]}>
                             <div className={estilos["formulariogrupo"]} id={estilos.grupo__nombre}>
                                 <label htmlFor="nombre">Nombre</label>
                                 <div className={estilos["formulario__grupo-input"]}>
-                                    <input className={estilos["input-field"]} type="text" name="nombre_producto" id={estilos.nombre} value={producto.nombre_producto} onChange={handleChange} />
+                                    <input style={{ width: '350px' }} className={estilos["input-field"]} type="text" name="nombre_producto" id={estilos.nombre} value={producto.nombre_producto} onChange={handleChange} />
                                     <span></span>
                                 </div>
                             </div>
@@ -183,7 +182,8 @@ function AgregarProductos() {
                             <div className={estilos["formulariogrupo"]} id={estilos.grupo__descripcion}>
                                 <label htmlFor="descripcion">Descripción</label>
                                 <div className={estilos["formulario__grupo-input"]}>
-                                    <input className={estilos["input-field"]} type="text" name="descripcion_producto" id={estilos.descripcion} value={producto.descripcion_producto} onChange={handleChange} />
+                                    <textarea cols="33" rows="4"
+                                        style={{ resize: 'none', width: '350px' }} className={estilos["input-field"]} type="text" name="descripcion_producto" id={estilos.descripcion} value={producto.descripcion_producto} onChange={handleChange} />
                                     <span></span>
                                 </div>
                             </div>
@@ -193,7 +193,7 @@ function AgregarProductos() {
                             <div className={estilos["formulariogrupo"]} id={estilos.grupo__precio}>
                                 <label htmlFor="precio">Precio</label>
                                 <div className={estilos["formulario__grupo-input"]}>
-                                    <input className={estilos["input-field"]} type="number" name="precio_producto" id={estilos.precio} value={producto.precio_producto} onChange={handleChange} />
+                                    <input style={{ width: '350px' }} className={estilos["input-field"]} type="number" name="precio_producto" id={estilos.precio} value={producto.precio_producto} onChange={handleChange} />
                                     <span></span>
                                 </div>
                             </div>
@@ -202,7 +202,7 @@ function AgregarProductos() {
 
                         <div style={{}} className={estilos["input-container"]}>
                             <div className={estilos["formulario__grupo2"]} id={estilos.grupo__id_categoria}>
-                                <label style={{ marginLeft: "20px" }} htmlFor="id_categoria_producto">Seleccionar Categoría</label>
+                                <label style={{ marginLeft: "20px", marginTop:'10px' }} htmlFor="id_categoria_producto"></label>
                                 <div className={estilos["formulario__grupo-input"]}>
                                     <select
                                         className={estilos["input-field2"]}
@@ -210,8 +210,9 @@ function AgregarProductos() {
                                         id={estilos.id_categoria_producto}
                                         value={producto.id_categoria_producto}
                                         onChange={handleChange}
-                                        style={{ width: "200px", marginLeft: "20px" }}
+                                        style={{ width: "350px", marginLeft: "20px" }}
                                     >
+                                    
                                         <option>Seleccione una categoría</option>
                                         {categorias.map(categoria => (
                                             <option key={categoria.id_categoria_productos} value={categoria.id_categoria_productos}>{categoria.nombre_categoria_productos}</option>
@@ -251,7 +252,7 @@ function AgregarProductos() {
 
 
             </div><br /><br /><br /><br />
-            <div className={estilos["botonsito"]}>
+            <div style={{ marginTop: '-35px' }} className={estilos["botonsito"]}>
                 <button className={`boton ${estilos.azul}`} onClick={handleSubmit}><i></i> Guardar</button>
                 <Link to="/productos">
                     <button className={`boton ${estilos.gris}`} onClick={handleCancelar}><i className={[""]}></i> Cancelar</button>

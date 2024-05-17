@@ -135,7 +135,7 @@ function EditarProductos() {
         <link href="https://cdn.datatables.net/2.0.2/css/dataTables.semanticui.css" rel="stylesheet" />
         <link href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.css" rel="stylesheet" />
         
-        <h1>Editar Producto</h1>
+        <h1 style={{ marginTop:'-10px' }}>Editar Producto</h1>
         <div className={estilos["contenido2"]}>
             <br />
             <center>
@@ -146,8 +146,8 @@ function EditarProductos() {
                 </div>
             </center>
             <form onSubmit={handleSubmit}>
-                <div id={estilos.contenedorsitos}>
-                    <div id={estilos.contenedorsito}>
+                <div style={{ marginTop:'-44px', marginLeft:'100px' }} id={estilos.contenedorsitos}>
+                    <div style={{ marginTop:'-20px' }} id={estilos.contenedorsito}>
                         <div className={estilos["input-container"]}>
                             <div className={estilos["formulario__grupo"]} id={estilos.grupo__id_producto}>
                                 <label htmlFor="id_producto"></label>
@@ -173,6 +173,8 @@ function EditarProductos() {
                                         id={estilos.nombre_producto}
                                         value={producto.nombre_producto}
                                         onChange={handleChange}
+                                        style={{ width: '350px' }}
+
                                     />
                                     <span></span>
                                 </div>
@@ -190,7 +192,7 @@ function EditarProductos() {
                                         id={estilos.precio_producto}
                                         value={producto.precio_producto}
                                         onChange={handleChange}
-                                        style={{ marginLeft: "20px" }}
+                                        style={{ marginLeft: "20px", width: '350px'}}
                                     />
                                     <span></span>
                                 </div>
@@ -206,7 +208,7 @@ function EditarProductos() {
                                     id={estilos.descripcion_producto}
                                     value={producto.descripcion_producto}
                                     onChange={handleChange}
-                                    style={{ marginLeft: "30px" }}
+                                    style={{ marginLeft: "30px", width: '350px' }}
 
                                 />
                                 <span></span>
@@ -216,7 +218,7 @@ function EditarProductos() {
                         
                         <div className={estilos["input-container"]}>
                             <div className={estilos["formulario__grupo2"]} id={estilos.grupo__id_categoria}>
-                                <label htmlFor="id_categoria_producto">Seleccionar Categoría</label>
+                                <label htmlFor="id_categoria_producto"></label>
                                 <div className={estilos["formulario__grupo-input"]}>
                                     <select
                                         className={estilos["input-field2"]}
@@ -224,6 +226,8 @@ function EditarProductos() {
                                         id={estilos.id_categoria_producto}
                                         value={producto.id_categoria_producto}
                                         onChange={handleChange}
+                                        style={{width: '350px' }}
+
                                     >
                                         <option>Seleccione una categoría</option>
                                         {categorias.map(categoria => (
@@ -264,7 +268,7 @@ function EditarProductos() {
 
                 </div>
                 <br /><br /><br /><br />
-                <div className={estilos["botonsito"]}>
+                <div style={{ marginTop:'-35px' }} className={estilos["botonsito"]}>
                     <button className={`boton ${estilos.azul}`} type='submit'><p className={estilos.textoBoton}>Guardar</p></button>
                     <Link className={`boton ${estilos.gris}`} to='/productos'><p>Cancelar</p></Link>
                 </div>

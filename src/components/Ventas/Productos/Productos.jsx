@@ -72,7 +72,7 @@ function Productos() {
         {
             name: "Imagen",
             cell: (row) => (
-                <img src={row.imagen_producto ? row.imagen_producto : 'https://tse2.mm.bing.net/th?id=OIP.U8HnwxkbTkhoZ_DTf7sCSgHaHa&pid=Api&P=0&h=180'} style={{ width: '70px', height: '70px' }} />
+                <img src={row.imagen_producto ? row.imagen_producto : 'https://tse2.mm.bing.net/th?id=OIP.U8HnwxkbTkhoZ_DTf7sCSgHaHa&pid=Api&P=0&h=180'} style={{ width: '70px', height: '60px' }} />
             ),
             sortable: true
         },
@@ -274,7 +274,7 @@ function Productos() {
 
 
             <div className={estilos["tabla"]} style={{ maxWidth: '100%', overflowX: 'auto' }}> {/* Aplicar estilos CSS al contenedor de la tabla */}
-                <DataTable columns={columns} data={filteredproductos} pagination paginationPerPage={6} highlightOnHover customStyles={customStyles} defaultSortField="id_producto" defaultSortAsc={true}></DataTable>
+                <DataTable columns={columns} data={filteredproductos} pagination paginationPerPage={5} highlightOnHover customStyles={customStyles} defaultSortField="id_producto" defaultSortAsc={true}></DataTable>
             </div>
         </div>
     );
