@@ -197,7 +197,7 @@ function CategoriasProductos() {
             });
             return; // Detener la ejecución si hay caracteres especiales en el nombre de la categoría
         }
-        
+
 
         try {
             console.log('categoría de producto a enviar: ', categorias1)
@@ -319,140 +319,143 @@ function CategoriasProductos() {
             </div>
 
 
-            <div className={estilos['filtro']}>
-                <br />
+            <div className={estilos['divFiltro']}>
                 <input type="text" placeholder=" Buscar..." value={filtro} onChange={handleFiltroChange} className={estilos["busqueda"]} />
-                <div className={estilos.botones}>
-                    <button onClick={() => cambiarEstadoModalAgregar(!estadoModalAgregar)} className={`boton ${estilos.botonAgregar}`}><i className="fa-solid fa-plus"></i> Agregar</button>
+                <div>
+                    <button onClick={() => cambiarEstadoModalAgregar(!estadoModalAgregar)} className={` ${estilos.botonAgregar}`}>
+                        <i className="fa-solid fa-plus"></i> Agregar
+                    </button>
                 </div>
+
             </div>
 
-            <div className={estilos["tabla"]}>
-                <DataTable columns={columns} data={filteredcategorias} pagination paginationPerPage={6} highlightOnHover customStyles={customStyles} defaultSortField="id_categoria_productos" defaultSortAsc={true}></DataTable>
+                
+                <div className={estilos["tabla"]}>
+                    <DataTable columns={columns} data={filteredcategorias} pagination paginationPerPage={6} highlightOnHover customStyles={customStyles} defaultSortField="id_categoria_productos" defaultSortAsc={true}></DataTable>
+                </div>
+                <Modal
+                    estado={estadoModalAgregar}
+                    cambiarEstado={cambiarEstadoModalAgregar}
+                    titulo="Registar"
+                    mostrarHeader={true}
+                    mostrarOverlay={true}
+                    posicionModal={'center'}
+                    width={'500px'}
+                    padding={'20px'}
+                >
+                    <Contenido>
+
+                        <form onSubmit={handleSubmit}>
+                            <div id={estilos.contenedorsito}>
+                                <div id={estilos.contInput}>
+                                    <br />
+                                    <br />
+                                    <div className={estilos["inputIdNombre"]}>
+
+                                        <div>
+                                            <p id={estilos.textito}>  Nombre</p>
+                                            <input
+                                                id={estilos.nombreproveedor}
+                                                className={estilos["input2"]}
+                                                type="text"
+                                                placeholder="Insertar nombre"
+                                                name='nombre_categoria_productos'
+                                                value={categorias.nombre_categoria_productos}
+                                                onChange={handleChange}
+                                                style={{ width: "250px", height: "40px" }}
+                                            />
+                                        </div>
+
+                                    </div>
+                                    <br />
+                                </div>
+
+                            </div>
+                            <center>
+                                <div className={estilos["cajaBotones"]}>
+                                    <button onclick="registrar()" className={estilos.azulado3} type="submit"><p style={{ marginLeft: "-10px" }}> Guardar</p> </button>
+                                    <div className={estilos["espacioEntreBotones"]}></div>
+                                    <button style={{ color: "white", }} onClick={() => cambiarEstadoModalAgregar(!estadoModalAgregar)} className={estilos.gris} type="button"> <p style={{ marginLeft: "-13px" }}> Cancelar</p></button>
+                                </div>
+                            </center>
+                        </form>
+                    </Contenido>
+                </Modal>
+
+                <Modal
+                    estado={estadoModaleditar}
+                    cambiarEstado={cambiarEstadoModalEditar}
+                    titulo="Actualizar"
+                    mostrarHeader={true}
+                    mostrarOverlay={true}
+                    posicionModal={'center'}
+                    width={'500px'}
+                    padding={'20px'}
+                >
+                    <Contenido>
+
+                        <form onSubmit={handleSubmitEditar}>
+                            <div id={estilos.contenedorsito}>
+                                <div id={estilos.contInput}>
+                                    <br />
+                                    <br />
+                                    <div className={estilos["input-container"]}>
+                                        <div id={estilos.eo}>
+                                            <p id={estilos.textito} > Nombre</p>
+                                            <input
+                                                id={estilos.nombreproveedor}
+                                                className={estilos["input2"]}
+                                                type="text"
+                                                placeholder="Insertar nombre"
+                                                name='nombre_categoria_productos'
+                                                value={categoriasEditar.nombre_categoria_productos}
+                                                onChange={handleEditarChange}
+                                            />
+                                        </div>
+
+                                    </div>
+                                    <br />
+
+                                    <br />
+                                </div>
+                            </div>
+                            <br />
+                            <center>
+                                <div className={estilos["cajaBotones"]}>
+                                    <button onClick={() => registrar()} className={estilos.azulado3} type="submit"><p style={{ marginLeft: "-10px" }}> Guardar</p> </button>
+
+                                    <div className={estilos["espacioEntreBotones"]}></div>
+                                    <button style={{ color: "white" }} onClick={() => cambiarEstadoModalEditar(!estadoModaleditar)} className={estilos.gris} type="button"> <p style={{ marginLeft: "-13px" }}> Cancelar</p></button>
+                                </div>
+                            </center>
+                        </form>
+                    </Contenido>
+                </Modal>
             </div>
-            <Modal
-                estado={estadoModalAgregar}
-                cambiarEstado={cambiarEstadoModalAgregar}
-                titulo="Registar"
-                mostrarHeader={true}
-                mostrarOverlay={true}
-                posicionModal={'center'}
-                width={'500px'}
-                padding={'20px'}
-            >
-                <Contenido>
-
-                    <form onSubmit={handleSubmit}>
-                        <div id={estilos.contenedorsito}>
-                            <div id={estilos.contInput}>
-                                <br />
-                                <br />
-                                <div className={estilos["inputIdNombre"]}>
-
-                                    <div>
-                                        <p id={estilos.textito}>  Nombre</p>
-                                        <input
-                                            id={estilos.nombreproveedor}
-                                            className={estilos["input2"]}
-                                            type="text"
-                                            placeholder="Insertar nombre"
-                                            name='nombre_categoria_productos'
-                                            value={categorias.nombre_categoria_productos}
-                                            onChange={handleChange}
-                                            style={{ width: "250px", height: "40px"}}
-                                        />
-                                    </div>
-
-                                </div>
-                                <br />
-                            </div>
-
-                        </div>
-                        <center>
-                            <div className={estilos["cajaBotones"]}>
-                                <button onclick="registrar()" className={estilos.azulado3} type="submit"><p style={{ marginLeft: "-10px" }}> Guardar</p> </button>
-                                <div className={estilos["espacioEntreBotones"]}></div>
-                                <button style={{ color: "white", }} onClick={() => cambiarEstadoModalAgregar(!estadoModalAgregar)} className={estilos.gris} type="button"> <p style={{ marginLeft: "-13px" }}> Cancelar</p></button>
-                            </div>
-                        </center>
-                    </form>
-                </Contenido>
-            </Modal>
-
-            <Modal
-                estado={estadoModaleditar}
-                cambiarEstado={cambiarEstadoModalEditar}
-                titulo="Actualizar"
-                mostrarHeader={true}
-                mostrarOverlay={true}
-                posicionModal={'center'}
-                width={'500px'}
-                padding={'20px'}
-            >
-                <Contenido>
-
-                    <form onSubmit={handleSubmitEditar}>
-                        <div id={estilos.contenedorsito}>
-                            <div id={estilos.contInput}>
-                                <br />
-                                <br />
-                                <div className={estilos["input-container"]}>
-                                    <div id={estilos.eo}>
-                                        <p id={estilos.textito} > Nombre</p>
-                                        <input
-                                            id={estilos.nombreproveedor}
-                                            className={estilos["input2"]}
-                                            type="text"
-                                            placeholder="Insertar nombre"
-                                            name='nombre_categoria_productos'
-                                            value={categoriasEditar.nombre_categoria_productos}
-                                            onChange={handleEditarChange}
-                                        />
-                                    </div>
-
-                                </div>
-                                <br />
-
-                                <br />
-                            </div>
-                        </div>
-                        <br />
-                        <center>
-                            <div className={estilos["cajaBotones"]}>
-                                <button onClick={() => registrar()} className={estilos.azulado3} type="submit"><p style={{ marginLeft: "-10px" }}> Guardar</p> </button>
-
-                                <div className={estilos["espacioEntreBotones"]}></div>
-                                <button style={{ color: "white" }} onClick={() => cambiarEstadoModalEditar(!estadoModaleditar)} className={estilos.gris} type="button"> <p style={{ marginLeft: "-13px" }}> Cancelar</p></button>
-                            </div>
-                        </center>
-                    </form>
-                </Contenido>
-            </Modal>
-        </div>
-    );
+            );
 }
 
-const Contenido = styled.div`
-	display: flex;
-	flex-direction: column;
-	align-items: center;
+            const Contenido = styled.div`
+            display: flex;
+            flex-direction: column;
+            align-items: center;
 
-	h1 {
-		font-size: 42px;
-		font-weight: 700;
-		margin-bottom: 10px;
+            h1 {
+                font - size: 42px;
+            font-weight: 700;
+            margin-bottom: 10px;
 	}
 
-	p {
-		font-size: 18px;
-		margin-bottom: 20px;
+            p {
+                font - size: 18px;
+            margin-bottom: 20px;
 	}
 
-	img {
-		width: 100%;
-		vertical-align: top;
-		border-radius: 3px;
+            img {
+                width: 100%;
+            vertical-align: top;
+            border-radius: 3px;
 	}
-`;
+            `;
 
-export default CategoriasProductos;
+            export default CategoriasProductos;
