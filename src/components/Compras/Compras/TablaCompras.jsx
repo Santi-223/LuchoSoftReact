@@ -405,7 +405,7 @@ const customStyles = {
  
           
             <div className={estilos["tabla"]}>
-            <DataTable columns={columns} data={filteredCompras} pagination paginationPerPage={6} highlightOnHover customStyles={customStyles} defaultSortField="id_compra" defaultSortAsc={true}></DataTable>
+            <DataTable columns={columns} data={filteredCompras} pagination paginationPerPage={5} highlightOnHover customStyles={customStyles} defaultSortField="id_compra" defaultSortAsc={true}></DataTable>
             </div>
 
 
