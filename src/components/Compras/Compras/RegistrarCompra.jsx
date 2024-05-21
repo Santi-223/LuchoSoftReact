@@ -187,6 +187,28 @@ function App() {
   const handleSubmitCompra = async (event, totalCompra, precio) => {
     event.preventDefault();
 
+    if (tableRows.some(row => parseFloat(row.precio) < 0)) {
+      // Verifica si el precio es negativo
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'El precio no puede ser negativo',
+        confirmButtonColor: '#1F67B9',
+      });
+      return;
+    }
+
+    if (tableRows.some(row => parseFloat(row.precio) < 50)) {
+      // Verifica si el precio es negativo
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'El precio no puede ser menor de 50 pesos colombianos.',
+        confirmButtonColor: '#1F67B9',
+      });
+      return;
+    }
+
     if (!compra.fecha_compra || !compra.numero_compra || !compra.id_proveedor || tableRows.some(row => !row.nombre || !row.precio)) {
       // Verifica si el input es válido o si hay campos vacíos
       Swal.fire({
@@ -448,10 +470,10 @@ function App() {
             <table className="tablaDT ui celled table" style={{ width: "100%" }} ref={tableRef}>
               <thead className={estilos.theadfixed}>
                 <tr>
-                  <th style={{ textAlign: "center", backgroundColor: '#1F67B9', color: "white" }}><i className="fa-solid fa-font "></i > Nombre Insumo</th>
-                  <th style={{ textAlign: "center", backgroundColor: '#1F67B9', color: "white" }}><i className="fa-solid fa-coins "></i> Precio</th>
-                  <th style={{ textAlign: "center", backgroundColor: '#1F67B9', color: "white" }}><i className="fa-solid fa-coins "></i> Cantidad</th>
-                  <th style={{ textAlign: "center", backgroundColor: '#1F67B9', color: "white" }}><i className="fa-solid fa-coins "></i></th>
+                  <th style={{ textAlign: "center", backgroundColor: '#1F67B9', color: "white" }}> Nombre Insumo</th>
+                  <th style={{ textAlign: "center", backgroundColor: '#1F67B9', color: "white" }}> Precio</th>
+                  <th style={{ textAlign: "center", backgroundColor: '#1F67B9', color: "white" }}> Cantidad</th>
+                  <th style={{ textAlign: "center", backgroundColor: '#1F67B9', color: "white" }}></th>
                 </tr>
               </thead>
               <tbody>

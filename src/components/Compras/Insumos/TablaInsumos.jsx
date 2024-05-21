@@ -14,6 +14,8 @@ import 'jspdf-autotable';
 function Insumos() {
     const token = localStorage.getItem('token');
     const [insumos, setinsumos] = useState([]);
+    const [selectedItem, setSelectedItem] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [estadoModaleditar, cambiarEstadoModalEditar] = useState(false);
     const [categoria_insumo, setCategoria_insumo] = useState([]);
     const [insumos1, setinsumos1] = useState({
@@ -47,13 +49,14 @@ function Insumos() {
         insumo.estado_insumo.toString().includes(filtro)
 
     );
+    
 
     const generarPDF = () => {
         const doc = new jsPDF();
-    
+
         // Encabezado del PDF
         doc.text("Reporte de Insumos", 20, 10);
-    
+
         // Definir las columnas que se mostrarán en el informe
         const columnasInforme = [
             "Id",
@@ -62,24 +65,24 @@ function Insumos() {
             "Stock",
             "Categoría"
         ];
-    
+
         // Filtrar los datos de los insumos para incluir solo las columnas deseadas
         const datosInforme = filteredinsumos.map(insumo => {
             const { id_insumo, nombre_insumo, unidadesDeMedida_insumo, stock_insumo, nombre_categoria } = insumo;
             return [id_insumo, nombre_insumo, unidadesDeMedida_insumo, stock_insumo, nombre_categoria];
         });
-    
+
         // Agregar la tabla al documento PDF
         doc.autoTable({
             startY: 20,
             head: [columnasInforme],
             body: datosInforme
         });
-    
+
         // Guardar el PDF
         doc.save("reporte_insumos.pdf");
     };
-    
+
 
 
     const columns = [
@@ -115,9 +118,9 @@ function Insumos() {
             cell: (row) => (
 
                 <div className={estilos["acciones"]}>
-                    <button className={estilos.boton} onClick={() => handleEstadoinsumo(row.id_insumo, row.estado_insumo)} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '25px' }}>
+                    <button className={estilos.boton} onClick={() => handleEstadoinsumo(row.id_insumo, row.estado_insumo)} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '30px' }}>
                         {row.estado_insumo === 1 ? (
-                            <i className="bi bi-toggle-on" style={{ color: "#1F67B9" }}></i>
+                            <i className="bi bi-toggle-on" style={{ color: "#48110d" }}></i>
                         ) : (
                             <i className="bi bi-toggle-off" style={{ width: "60px", color: "black" }}></i>
                         )}
@@ -128,23 +131,34 @@ function Insumos() {
             )
         },
         {
-            name: "Acciones",
+            name: "ㅤㅤAcciones",
             cell: (row) => (
-
                 <div className={estilos["acciones"]}>
 
+<button onClick={() => {
+                        if (row.estado_insumo === 1) { // Solo abre el modal si el estado es activo
+                            setSelectedItem(row);
+                            setIsModalOpen(true);
+                        }
+                    }} className={estilos.boton} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '25px' }}>
+                        <i className={`bi ${row.estado_insumo === 0 ? 'bi-eye-slash cerrado' : 'bi-eye'}`} style={{ color: row.estado_insumo === 0 ? "gray" : "#1A008E", pointerEvents: row.estado_insumo === 0 ? "none" : "auto" }}></i>
+                    </button>
+                    {/* Botón para editar */}
                     <button onClick={() => {
-                        if (row.estado_insumo === 1) { // Verifica si el estado es activo
+                        if (row.estado_insumo === 1) {
                             cambiarEstadoModalEditar(!estadoModaleditar);
                             setInsumosEditar(row);
                         }
                     }} className={estilos.boton} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}>
-                        <i className={`fa-solid fa-pen-to-square ${row.estado_insumo === 1 ? 'iconosVerdes' : 'iconosGris'}`}></i>
+                        <i className={`fa-solid fa-pen-to-square ${row.estado_insumo === 1 ? 'iconosNaranjas' : 'iconosGris'}`}></i>
                     </button>
 
+                    <button onClick={() => handleEliminarInsumo(row.id_insumo)} disabled={row.estado_insumo === 0} className={estilos.boton} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '25px' }}>
+                        <i className={`bi bi-trash ${row.estado_insumo === 0 ? 'basuraDesactivada' : ''}`} style={{ color: row.estado_insumo === 0 ? "gray" : "red" }}></i>
+                    </button>
                 </div>
             )
-        },
+        }
 
     ]
 
@@ -182,6 +196,60 @@ function Insumos() {
     }, []);
 
 
+
+    const handleEliminarInsumo = (idInsumo) => {
+        // Mostrar un mensaje de confirmación antes de eliminar
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: '¿Deseas eliminar este insumo?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const response = await fetch(`https://api-luchosoft-mysql.onrender.com/compras/insumos/${idInsumo}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'token': token
+                        }
+                    });
+    
+                    if (response.ok) {
+                        // Insumo eliminado exitosamente
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Insumo eliminado',
+                            text: 'El insumo ha sido eliminado correctamente',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                        // Actualizar la lista de insumos
+                        fetchinsumos();
+                    } else {
+                        console.error('Error al eliminar el insumo:', response.statusText);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Error al eliminar el insumo',
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error al eliminar el insumo:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Error al eliminar el insumo',
+                    });
+                }
+            }
+        });
+    };
+
     const handleEditarChange = (event) => {
         const { name, value } = event.target;
         setInsumosEditar(previnsumos => ({
@@ -189,10 +257,27 @@ function Insumos() {
             [name]: value
         }));
     };
-    
+
     const handleSubmitEditar = async (event) => {
         event.preventDefault();
+
+
+
+
+        const regex = /^[a-zA-Z0-9\s#,;.()-]*$/;
+
+        if (!regex.test(insumos1.nombre_insumo) || !regex.test(insumos1.unidadesDeMedida_insumo) || !regex.test(insumos1.stock_insumo)) {
+            // Mostrar alerta con SweetAlert
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Los campos no pueden contener caracteres especiales',
+            });
+            return;
+        }
         
+        
+
         // Validar que se haya seleccionado una categoría de insumo
         if (!insumosEditar.id_categoria_insumo) {
             Swal.fire({
@@ -202,11 +287,11 @@ function Insumos() {
             });
             return; // Detener la ejecución si no se seleccionó una categoría
         }
-        
+
         console.log(insumos);
-        
-    
-    
+
+
+
         Swal.fire({
             title: '¿Estás seguro?',
             text: '¿Deseas actualizar la información del insumo?',
@@ -227,7 +312,7 @@ function Insumos() {
                         },
                         body: JSON.stringify(insumosEditar)
                     });
-    
+
                     if (response.ok) {
                         console.log('insumo actualizado exitosamente.');
                         Swal.fire({
@@ -238,6 +323,8 @@ function Insumos() {
                         });
                         setTimeout(() => {
                             window.location.href = '/#/insumos';
+                            fetchinsumos()
+                            cambiarEstadoModalEditar(false)
                         }, 2000);
                         // Aquí podrías redirigir a otra página, mostrar un mensaje de éxito, etc.
                     } else {
@@ -259,11 +346,11 @@ function Insumos() {
             }
         });
     };
-    
+
     const handleAgregarClick = () => {
         // Verificar si hay categoría de insumos con estado en 1
         const categoriasActivas = categoria_insumo.some(categoria => categoria.estado_categoria_insumos === 1);
-    
+
         if (!categoriasActivas) {
             // Mostrar mensaje de error si no hay categorías activas
             Swal.fire({
@@ -276,14 +363,68 @@ function Insumos() {
             cambiarEstadoModalAgregar(!estadoModalAgregar);
         }
     };
-    
+
 
     const handleSubmit = async (event) => {
         event.preventDefault();
 
+
+
+        if (!insumos1.nombre_insumo || !insumos1.unidadesDeMedida_insumo || !insumos1.stock_insumo || !insumos1.id_categoria_insumo) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Por favor completa todos los campos obligatorios',
+            });
+            return;
+        }
+        // Validar que el stock sea un número positivo
+        if (insumos1.stock_insumo < 0) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'El stock debe ser un número positivo',
+            });
+            return;
+        }
+
+        // Validar que el stock sea un número positivo
+        if (insumos1.stock_insumo > 5000000) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'El stock no puede tiene un límite de 5 millones',
+            });
+            return;
+        }
+
+        // Validar que el nombre tenga al menos 3 letras
+        if (insumos1.nombre_insumo.length < 3) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'El nombre del insumo debe tener al menos 3 letras',
+            });
+            return;
+        }
+
+
+        // Validar que no haya caracteres especiales en los campos
+        const regex = /^[a-zA-Z0-9\s#,;.()-]*$/;
+
+        if (!regex.test(insumos1.nombre_insumo) || !regex.test(insumos1.unidadesDeMedida_insumo) || !regex.test(insumos1.stock_insumo)) {
+            // Mostrar alerta con SweetAlert
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Los campos no pueden contener caracteres especiales',
+            });
+            return;
+        }
+        
+
         try {
             console.log('insumo a enviar: ', insumos1)
-
 
             const responseInsumos = await fetch('https://api-luchosoft-mysql.onrender.com/compras/insumos', {
                 method: 'POST',
@@ -304,10 +445,16 @@ function Insumos() {
                     timer: 1500
                 });
                 setTimeout(() => {
-                    window.location.href = '/#/insumos';
+                    fetchinsumos()
+                    setinsumos1({
+                        nombre_insumo: '',
+                        unidadesDeMedida_insumo: '',
+                        stock_insumo: '',
+                        estado_insumo: 1,
+                        id_categoria_insumo: '',
+                    })
+                    cambiarEstadoModalAgregar(false)
                 }, 2000);
-
-
             } else {
                 console.error('Error al crear el insumo:', responseInsumos.statusText);
                 Swal.fire({
@@ -320,6 +467,8 @@ function Insumos() {
             console.error('Error al crear el insumo:', error);
         }
     };
+
+
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -425,33 +574,67 @@ function Insumos() {
             <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
             <link href="https://cdn.datatables.net/2.0.2/css/dataTables.semanticui.css" rel="stylesheet" />
             <link href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.css" rel="stylesheet" />
-            <div>
+            <div id={estilos["titulo"]}>
                 <h1>Insumos</h1>
             </div>
 
-<br />
+            <br />
 
 
-<div className={estilos['divFiltro']}>
-    <input type="text" placeholder=" Buscar..." value={filtro} onChange={handleFiltroChange} className={estilos["busqueda"]} />
-    <div>
-    <button onClick={handleAgregarClick} className={` ${estilos.botonAgregar}`}>
-    <i className="fa-solid fa-plus"></i> Agregar
-</button>
+            <div className={estilos['divFiltro']}>
+                <input type="text" placeholder=" Buscar..." value={filtro} onChange={handleFiltroChange} className={estilos["busqueda"]} />
+                <div>
+                    <button onClick={handleAgregarClick} className={` ${estilos.botonAgregar} ${estilos.rojo} bebas-neue-regular`}><i className="fa-solid fa-plus"></i> Agregar</button>
 
-    <button
-        style={{ color: "white" }}
-        className={` ${estilos.vinotinto}`}
-        onClick={generarPDF}
-    >
-        <i className="fa-solid fa-download"></i>
-    </button>
-</div>
-</div>
+                    <button
+                        style={{ color: "white" }}
+                        className={` ${estilos.vinotinto}`}
+                        onClick={generarPDF}
+                    >
+                        <i className="fa-solid fa-download"></i>
+                    </button>
+                </div>
+            </div>
 
             <div className={estilos["tabla"]}>
-                <DataTable columns={columns} data={filteredinsumos} pagination paginationPerPage={6} highlightOnHover customStyles={customStyles} defaultSortField="id_insumo" defaultSortAsc={true}></DataTable>
+                <DataTable columns={columns} data={filteredinsumos} pagination paginationPerPage={5} highlightOnHover></DataTable>
             </div>
+
+            <Modal
+                estado={isModalOpen}
+                cambiarEstado={setIsModalOpen}
+                titulo="Detalles del Insumo"
+                mostrarHeader={true}
+                mostrarOverlay={true}
+                posicionModal={'center'}
+                width={'500px'}
+                padding={'20px'}
+            >
+
+
+                {/* Contenido del modal */}
+                {selectedItem && (
+                    <>
+                        <p>ID: {selectedItem.id_insumo}</p>
+                        <p>Nombre: {selectedItem.nombre_insumo}</p>
+                        <p>Medida: {selectedItem.unidadesDeMedida_insumo}</p>
+                        <p>Stock: {selectedItem.stock_insumo}</p>
+                        <p>Categoría: {selectedItem.nombre_categoria}</p>
+                    </>
+                )}
+
+                <hr />
+                <button
+                    type="button"
+                    className="btn btn-secondary"
+                    id={estilos['secondary']}
+                    onClick={() => setIsModalOpen(false)}
+                >
+                    Cerrar
+                </button>
+
+            </Modal>
+
 
             <Modal
                 estado={estadoModalAgregar}
@@ -485,7 +668,7 @@ function Insumos() {
                                         />
                                     </div>
                                     <div className={estilos["espacio"]}></div>
-                                    
+
 
                                     <div id={estilos.telefonoproveedor}>
                                         <p id={estilos.textito} >  Stock</p>
@@ -499,12 +682,12 @@ function Insumos() {
                                         />
                                     </div>
 
-                                   
+
                                 </div>
                                 <br />
                                 <div className={estilos["inputIdNombre"]}>
 
-                                <div id={estilos.documentoproveedor}>
+                                    <div id={estilos.documentoproveedor}>
                                         <p id={estilos.textito} >  Unidad de medida</p>
                                         <select
                                             className={estilos["input2"]}
@@ -525,28 +708,28 @@ function Insumos() {
                                     </div>
 
 
-                                 
+
                                     <div id={estilos.eo}>
                                         <p id={estilos.textito}>  Categoría insumo</p>
                                         <select
-    className={estilos["input2"]}
-    name="id_categoria_insumo" // Utiliza el mismo nombre que el campo id_rol
-    id={estilos.id_categoria_insumos_input} // Cambia el id para que sea único
-    value={insumos.id_categoria_insumos}
-    onChange={handleChange}
->
-    <option value="" disabled selected>Seleccionar categoría</option>
-    {categoria_insumo
-        .filter(categoria => categoria.estado_categoria_insumos === 1) // Filtrar las categorías con estado 1
-        .map(categoria => (
-            <option key={categoria.id_categoria_insumos} value={categoria.id_categoria_insumos}>
-                {categoria.nombre_categoria_insumos}
-            </option>
-        ))}
-</select>
+                                            className={estilos["input2"]}
+                                            name="id_categoria_insumo" // Utiliza el mismo nombre que el campo id_rol
+                                            id={estilos.id_categoria_insumos_input} // Cambia el id para que sea único
+                                            value={insumos.id_categoria_insumos}
+                                            onChange={handleChange}
+                                        >
+                                            <option value="" disabled selected>Seleccionar categoría</option>
+                                            {categoria_insumo
+                                                .filter(categoria => categoria.estado_categoria_insumos === 1) // Filtrar las categorías con estado 1
+                                                .map(categoria => (
+                                                    <option key={categoria.id_categoria_insumos} value={categoria.id_categoria_insumos}>
+                                                        {categoria.nombre_categoria_insumos}
+                                                    </option>
+                                                ))}
+                                        </select>
 
                                     </div>
-                              
+
 
 
                                 </div>
@@ -554,13 +737,14 @@ function Insumos() {
 
 
                         </div>
-                        <center>
-                            <div className={estilos["cajaBotones"]}>
-                                <button onclick="registrar()" className={estilos.azulado3} type="submit"><p style={{ marginLeft: "-10px" }}> Guardar</p> </button>
-                                <div className={estilos["espacioEntreBotones"]}></div>
-                                <button style={{ color: "white", }} onClick={() => cambiarEstadoModalAgregar(!estadoModalAgregar)} className={estilos.gris} type="button"> <p style={{ marginLeft: "-13px" }}> Cancelar</p></button>
-                            </div>
-                        </center>
+                        <br />
+                        <div className={estilos["BotonesClientes"]}>
+                            <button onclick="registrar()" className={estilos['azulado']} type="submit"><p>Aceptar</p> </button>
+
+                            <button onClick={() => cambiarEstadoModalAgregar(!estadoModalAgregar)} className={estilos['gris']} type="button"> <p>Cancelar</p></button>
+                        </div>
+
+
                     </form>
                 </Contenido>
             </Modal>
@@ -578,7 +762,7 @@ function Insumos() {
                 <Contenido>
 
                     <form onSubmit={handleSubmitEditar}>
-                    <div id={estilos.contenedorsito}>
+                        <div id={estilos.contenedorsito}>
                             <div id={estilos.contInput}>
                                 <br />
                                 <br />
@@ -597,13 +781,13 @@ function Insumos() {
                                         />
                                     </div>
                                     <div className={estilos["espacio2"]}></div>
-    
+
 
 
                                 </div>
                                 <br />
                                 <div className={estilos["inputIdNombre"]}>
-                                <div id={estilos.documentoproveedor}>
+                                    <div id={estilos.documentoproveedor}>
                                         <p id={estilos.textito} >  Unidad de medida</p>
                                         <select
                                             className={estilos["input2"]}
@@ -626,25 +810,25 @@ function Insumos() {
                                     <div id={estilos.eo}>
                                         <p id={estilos.textito}>  Categoría insumo</p>
                                         <select
-    className={estilos["input2"]}
-    name="id_categoria_insumo"
-    id={estilos.id_categoria_insumos_input}
-    value={insumosEditar.id_categoria_insumo} // Aquí se debe usar insumosEditar.id_categoria_insumo
-    onChange={handleEditarChange}
->
+                                            className={estilos["input2"]}
+                                            name="id_categoria_insumo"
+                                            id={estilos.id_categoria_insumos_input}
+                                            value={insumosEditar.id_categoria_insumo} // Aquí se debe usar insumosEditar.id_categoria_insumo
+                                            onChange={handleEditarChange}
+                                        >
 
-    <option value="" disabled selected>Seleccionar categoría</option>
-    {categoria_insumo
-        .filter(categoria => categoria.estado_categoria_insumos === 1) // Filtrar las categorías con estado 1
-        .map(categoria => (
-            <option key={categoria.id_categoria_insumos} value={categoria.id_categoria_insumos}>
-                {categoria.nombre_categoria_insumos}
-            </option>
-        ))}
-</select>
+                                            <option value="" disabled selected>Seleccionar categoría</option>
+                                            {categoria_insumo
+                                                .filter(categoria => categoria.estado_categoria_insumos === 1) 
+                                                .map(categoria => (
+                                                    <option key={categoria.id_categoria_insumos} value={categoria.id_categoria_insumos}>
+                                                        {categoria.nombre_categoria_insumos}
+                                                    </option>
+                                                ))}
+                                        </select>
 
                                     </div>
-                              
+
 
 
                                 </div>
@@ -654,14 +838,17 @@ function Insumos() {
 
                         </div>
 
-                      
-                        <center>
-                            <div className={estilos["cajaBotones"]}>
-                            <button onClick={() => registrar()} className={estilos.azulado3} type="submit"><p style={{ marginLeft: "-10px" }}> Guardar</p> </button>
+<br />
 
-                                <div className={estilos["espacioEntreBotones"]}></div>
-                                <button style={{color: "white"}} onClick={() => cambiarEstadoModalEditar(!estadoModaleditar)} className={estilos.gris} type="button"> <p style={{ marginLeft: "-13px" }}> Cancelar</p></button>
+                        <center>
+                            <div className={estilos["BotonesClientes"]}>
+                                <button onClick={() => registrar()} className={estilos['azulado']} type="submit"><p> Aceptar</p> </button>
+
+                
+                                <button  onClick={() => cambiarEstadoModalEditar(!estadoModaleditar)} className={estilos['gris']} type="button"> <p> Cancelar</p></button>
                             </div>
+
+
                         </center>
                     </form>
                 </Contenido>
@@ -671,25 +858,43 @@ function Insumos() {
 }
 
 const Contenido = styled.div`
-	display: flex;
-	flex-direction: column;
-	align-items: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
-	h1 {
-		font-size: 42px;
-		font-weight: 700;
-		margin-bottom: 10px;
-	}
+    h1 {
+        font-size: 42px;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
 
-	p {
-		font-size: 18px;
-		margin-bottom: 20px;
-	}
 
-	img {
-		width: 100%;
-		vertical-align: top;
-		border-radius: 3px;
-	}
+
+    img {
+        width: 100%;
+        vertical-align: top;
+        border-radius: 3px;
+    }
+`;
+
+
+const Contenido2 = styled.div`
+    display: flex;
+    flex-direction: column;
+
+
+    h1 {
+        font-size: 42px;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+
+
+    img {
+        width: 100%;
+        vertical-align: top;
+        border-radius: 3px;
+    }
 `;
 export default Insumos;
