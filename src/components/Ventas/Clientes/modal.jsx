@@ -47,7 +47,7 @@ const Overlay = styled.div`
 	top: 0;
 	left: 0;
 	background: ${props => props.mostrarOverlay ? 'rgba(0,0,0,.5)' : 'rgba(0,0,0,0)'};
-	padding: 40px;
+	padding: 0px;
 	display: flex;
 	align-items: ${props => props.posicionModal ? props.posicionModal : 'center'};
 	justify-content: center;

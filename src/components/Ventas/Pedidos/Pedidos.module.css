@@ -49,21 +49,31 @@ box-shadow: 1px 1px 1px 1px #3e7fc9;
 }
 
 .boton-azul{
-border: 1px solid #b90505;
-background: #b90505c5;
-color: white;
+background-color: #154360;
+    color: white;
 }
 
 .boton-azul:hover{
-background: #b9050517;
+background: #154360d7;
 
 }
 
 /*------------------*/
 
 .AgregarProducto:hover{
-    background: #b9050517;
+    background: #b90505a1;
+    color: white;
+    border: none;
 
+}
+
+.AgregarProducto{
+    width: 40px;
+    background-color: white;
+    height: 20px;
+    border-radius: 10px;
+    color: #b90505;
+    border: 1px solid #b90505;
 }
 
 
@@ -341,10 +351,13 @@ background: #b9050517;
 }
 
 .boton-gris{
-    background-color: #b3b1b1;
+    background-color: #B3B6B7;
     color: white;
 }
 
+.boton-gris:hover{
+    background-color: #b3b6b7b3;
+}
 .icono_negro{
     color: #b3b1b1;
 }
@@ -357,4 +370,10 @@ background: #b9050517;
     width: 200px;
     border: 1px solid #ccc;
     border-radius: 5px;
+}
+
+.cabeceraTabla{
+    text-align: center;
+    background-color: #154360;
+    color: white;
 }

@@ -246,19 +246,32 @@ input {
 }
 
 .contFormsRCliente {
-    display: inline-block;
+    /* display: inline-block; */
     /* Alinea los formularios horizontalmente */
     text-align: left;
     /* Alinea el contenido de los formularios a la izquierda */
     margin: 0;
     /* Centra los formularios horizontalmente */
     font-size: 2px;
+    /* width: 90%; */
 }
 
-.input1RCliente input {
-    width: 300px;
-    height: 20px;
+.input1RCliente{
+    padding: 0px;
+    height: 50em;
 }
+
+.input1RCliente label {
+    font-size: 7em;
+}
+
+
+.input1RCliente TextField {
+    width: 100%;
+    margin: 0px;
+}
+
+
 
 .BotonesClientes{
     display: flex;

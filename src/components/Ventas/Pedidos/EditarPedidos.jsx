@@ -573,33 +573,16 @@ const EditarPedidos = () => {
                     <div className={estilos["TablaDetallePedidos"]}>
                         <div className={estilos["agrPedidos"]}>
                             <p>Agregar Productos</p>
-                            <button className={`btn btn-light fa-solid fa-plus ${estilos.AgregarProducto}`} style={{ height: '30px', border:'1px solid #b90505', color: '#b90505'}} onClick={addTableRow}></button>
+                            <button className={`fa-solid fa-plus ${estilos.AgregarProducto}`} style={{ height: '30px'}} onClick={addTableRow}></button>
                         </div>
                         <div style={{ overflowY: scrollEnabled ? 'scroll' : 'auto', maxHeight: '300px' }}>
-                            <table>
+                            <table style={{borderRadius: '90px'}}>
                                 <thead>
                                     <tr>
-                                        <th style={{
-                                            textAlign: "center",
-                                            backgroundColor: "#1F67B9",
-                                            color: "white",
-                                        }}>Nombre</th>
-                                        <th style={{
-                                            textAlign: "center",
-                                            backgroundColor: "#1F67B9",
-                                            color: "white",
-                                        }}> Precio</th>
-                                        <th style={{
-                                            textAlign: "center",
-                                            backgroundColor: "#1F67B9",
-                                            color: "white",
-
-                                        }}>Cantidad</th>
-                                        <th style={{
-                                            textAlign: "center",
-                                            backgroundColor: "#1F67B9",
-                                            color: "white",
-                                        }}>Acciones</th>
+                                        <th className={estilos.cabeceraTabla}>Nombre</th>
+                                        <th className={estilos.cabeceraTabla}> Precio</th>
+                                        <th className={estilos.cabeceraTabla}>Cantidad</th>
+                                        <th className={estilos.cabeceraTabla}>Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -667,10 +650,11 @@ const EditarPedidos = () => {
                                 </tbody>
                             </table>
                         </div>
+                            <span style={{ fontSize: '13px', color: '#ffc64b'}}> <i className="bi bi-info-circle"> </i>Recuerda que si desea cancelar la modificación, elimina los productos recien agregados</span>
                     </div>
                 </div>
                 <div className={estilos["cajaBotonesRPedidos"]}>
-                    <button type='submit' onClick={editarPedido} className={`${estilos["boton-azul"]} bebas-neue-regular`} >Guardar</button>
+                    <button type='submit' onClick={editarPedido} className={`${estilos["boton-azul"]} `} >Guardar</button>
 
                     <Link to="/pedidos">
                         <button className={estilos["boton-gris"]} type="button">Cancelar</button>
