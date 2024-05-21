@@ -1,4 +1,4 @@
-import React, { useState, useEffect, setIsLoading } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../Layout.css';
 import estilos from '../Usuarios/Usuarios.module.css';
 import { Navigate, Link } from 'react-router-dom';
@@ -6,7 +6,6 @@ import Swal from 'sweetalert2';
 
 function AgregarUsuarios() {
     const [redirect, setRedirect] = useState(false);
-
     const [roles, setRoles] = useState([]);
 
     const [usuario, setUsuario] = useState({
@@ -21,12 +20,18 @@ function AgregarUsuarios() {
         id_rol: ''
     });
 
+    const [imgUsuario, setImgUsuario] = useState(null); // Cambiado a null
+
     const handleChange = (event) => {
         const { name, value } = event.target;
         setUsuario(prevUsuario => ({
             ...prevUsuario,
             [name]: value
         }));
+    };
+
+    const handleFileChange = (event) => {
+        setImgUsuario(event.target.files[0]);
     };
 
     useEffect(() => {
@@ -42,160 +47,174 @@ function AgregarUsuarios() {
                         estado_rol: rol.estado_rol,
                     }));
                     setRoles(rolesFiltrados);
-                    console.log(roles);
                 } else {
-                    console.error('Error al obtener las compras');
+                    console.error('Error al obtener los roles');
                 }
             } catch (error) {
-                console.error('Error al obtener las compras:', error);
+                console.error('Error al obtener los roles:', error);
             }
         };
 
         fetchRoles(); // Llama a la función fetchRoles cuando se monta el componente
-
     }, []);
-
 
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        console.log(usuario)
-
-        if (usuario.id_usuario.length == 0) {
+        if (usuario.id_usuario.length === 0) {
             Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: "El campo de identificación esta vacío.",
-            })
+                text: "El campo de identificación está vacío.",
+            });
+            return;
         }
-        else if (usuario.id_usuario.length < 5) {
+        if (usuario.id_usuario.length < 5) {
             Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: "El campo de identificación debe tener 5 o más carácteres.",
-            })
+                text: "El campo de identificación debe tener 5 o más caracteres.",
+            });
+            return;
         }
-        else if (usuario.nombre_usuario.length == 0) {
+        if (usuario.nombre_usuario.length === 0) {
             Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: "El campo de nombre esta vacío.",
-            })
+                text: "El campo de nombre está vacío.",
+            });
+            return;
         }
-        else if (usuario.nombre_usuario.length < 5) {
+        if (usuario.nombre_usuario.length < 5) {
             Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: "El campo de nombre debe tener 5 o más carácteres.",
-            })
+                text: "El campo de nombre debe tener 5 o más caracteres.",
+            });
+            return;
         }
-        else if (usuario.telefono_usuario.length == 0) {
+        if (usuario.telefono_usuario.length === 0) {
             Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: "El campo de teléfono esta vacío.",
-            })
+                text: "El campo de teléfono está vacío.",
+            });
+            return;
         }
-        else if (usuario.telefono_usuario.length < 7) {
+        if (usuario.telefono_usuario.length < 7) {
             Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: "El campo de teléfono debe tener 7 o más carácteres.",
-            })
+                text: "El campo de teléfono debe tener 7 o más caracteres.",
+            });
+            return;
         }
-        else if (usuario.direccion_usuario.length == 0) {
+        if (usuario.direccion_usuario.length === 0) {
             Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: "El campo de dirección esta vacío.",
-            })
+                text: "El campo de dirección está vacío.",
+            });
+            return;
         }
-        else if (usuario.direccion_usuario.length < 7) {
+        if (usuario.direccion_usuario.length < 7) {
             Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: "El campo de dirección debe tener 7 o más carácteres.",
-            })
+                text: "El campo de dirección debe tener 7 o más caracteres.",
+            });
+            return;
         }
-        else if (usuario.email.length == 0) {
+        if (usuario.email.length === 0) {
             Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: "El campo de email esta vacío.",
-            })
+                text: "El campo de email está vacío.",
+            });
+            return;
         }
-        else if (usuario.email.length < 5) {
+        if (usuario.email.length < 5) {
             Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: "El campo de email debe tener 5 o más carácteres.",
-            })
+                text: "El campo de email debe tener 5 o más caracteres.",
+            });
+            return;
         }
-        else if (usuario.contraseña.length == 0) {
+        if (usuario.contraseña.length === 0) {
             Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: "El campo de contraseña esta vacío.",
-            })
+                text: "El campo de contraseña está vacío.",
+            });
+            return;
         }
-        else if (usuario.contraseña.length < 8) {
+        if (usuario.contraseña.length < 8) {
             Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: "La contraseña debe tener 8 o más carácteres.",
-            })
+                text: "La contraseña debe tener 8 o más caracteres.",
+            });
+            return;
         }
-        else if (usuario.id_rol == 0) {
+        if (usuario.id_rol === 0) {
             Swal.fire({
                 icon: "error",
                 title: "Error",
                 text: "Debes seleccionar un rol.",
-            })
+            });
+            return;
         }
-        else {
-            try {
-                const response = await fetch('https://api-luchosoft-mysql.onrender.com/configuracion/usuarios', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(usuario)
-                });
 
-                if (response.ok) {
-                    console.log('Usuario creado exitosamente.');
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Usuario creado exitosamente',
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
-                    setTimeout(() => {
-                        setRedirect(true);
-                    }, 1000);
-                    // Aquí podrías redirigir a otra página, mostrar un mensaje de éxito, etc.
-                } else {
-                    const errorData = await response.json(); // Parsear el cuerpo de la respuesta como JSON
-                    console.error('Error al crear el usuario:', errorData.msg);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error al crear el usuario',
-                        text: errorData.msg,
-                    });
-                }
-            } catch (error) {
-                console.error('Error al crear el usuario:', error);
+        try {
+            const formUsuario = new FormData();
+            formUsuario.append('imgUsuario', imgUsuario); // Usar imgUsuario directamente
+            formUsuario.append('id_usuario', usuario.id_usuario);
+            formUsuario.append('nombre_usuario', usuario.nombre_usuario);
+            formUsuario.append('email', usuario.email);
+            formUsuario.append('contrasena', usuario.contraseña);
+            formUsuario.append('telefono_usuario', usuario.telefono_usuario); // Corregido el valor
+            formUsuario.append('direccion_usuario', usuario.direccion_usuario);
+            formUsuario.append('estado_usuario', '1');
+            formUsuario.append('id_rol', usuario.id_rol);
+
+            const response = await fetch('https://api-luchosoft-mysql.onrender.com/configuracion/usuarios', {
+                method: 'POST',
+                body: formUsuario
+            });
+
+            if (response.ok) {
+                console.log('Usuario creado exitosamente.');
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Usuario creado exitosamente',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                setTimeout(() => {
+                    setRedirect(true);
+                }, 1000);
+            } else {
+                const errorData = await response.json(); // Parsear el cuerpo de la respuesta como JSON
+                console.error('Error al crear el usuario:', errorData);
                 Swal.fire({
                     icon: 'error',
                     title: 'Error al crear el usuario',
-                    text: error.msg
+                    text: errorData,
                 });
             }
+        } catch (error) {
+            console.error('Error al crear el usuario:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error al crear el usuario',
+                text: error.message
+            });
         }
     };
 
     if (redirect) {
-        return <Navigate to={'/usuarios'}></Navigate>
+        return <Navigate to={'/usuarios'} />;
     }
 
     return (
@@ -217,7 +236,6 @@ function AgregarUsuarios() {
                 </center>
                 <form onSubmit={handleSubmit}>
                     <div id={estilos.contenedorsitos}>
-
                         <div id={estilos.contenedorsito}>
                             <div className={estilos["input-container"]}>
                                 <div className={estilos["formulario__grupo"]} id={estilos.grupo__id_usuario}>
@@ -251,7 +269,7 @@ function AgregarUsuarios() {
                             </div>
                             <div className={estilos["input-container"]}>
                                 <div className={estilos["formulario__grupo"]} id={estilos.grupo__telefono}>
-                                    <label htmlFor="telefono_usuario">Telefono</label>
+                                    <label htmlFor="telefono_usuario">Teléfono</label>
                                     <div className={estilos["formulario__grupo-input"]}>
                                         <input
                                             className={estilos["input-field2"]}
@@ -282,7 +300,7 @@ function AgregarUsuarios() {
 
                             <div className={estilos["input-container"]}>
                                 <div className={estilos["eo"]}>
-                                    <p className={estilos[""]}>Email</p>
+                                    <p>Email</p>
                                     <input
                                         className={estilos["input-field"]}
                                         type="email"
@@ -320,9 +338,10 @@ function AgregarUsuarios() {
                                         >
                                             <option value={0}>Seleccione un rol</option>
                                             {roles.map(rol => {
-                                                if (rol.estado_rol != false) {
-                                                    return <option value={rol.id_rol}>{rol.nombre_rol}</option>
+                                                if (rol.estado_rol !== false) {
+                                                    return <option key={rol.id_rol} value={rol.id_rol}>{rol.nombre_rol}</option>;
                                                 }
+                                                return null;
                                             })}
                                         </select>
                                     </div>
@@ -331,22 +350,22 @@ function AgregarUsuarios() {
                         </div>
                         <div id={estilos.cosas}>
                             <center>
-                                <div className={`${estilos.divImagen} `} >
+                                <div className={`${estilos.divImagen} `}>
                                     <p>URL Imagen</p>
                                     <img id={estilos.imagen}
-                                        src={usuario.imagen_usuario ? usuario.imagen_usuario : 'https://tse2.mm.bing.net/th?id=OIP.U8HnwxkbTkhoZ_DTf7sCSgHaHa&pid=Api&P=0&h=180'} />
+                                        src={usuario.imagen_usuario ? usuario.imagen_usuario : 'https://tse2.mm.bing.net/th?id=OIP.U8HnwxkbTkhoZ_DTf7sCSgHaHa&pid=Api&P=0&h=180'}
+                                        alt="Imagen del usuario"
+                                    />
                                     <div>
                                         <input
                                             id={estilos.imagen_usuario}
                                             className={estilos["input-field2"]}
-                                            type="text"
+                                            type="file"
                                             placeholder="URL de la imagen"
                                             name='imagen_usuario'
-                                            value={usuario.imagen_usuario}
-                                            onChange={handleChange}
+                                            onChange={handleFileChange}
                                         />
                                     </div>
-
                                 </div>
                             </center>
                         </div>

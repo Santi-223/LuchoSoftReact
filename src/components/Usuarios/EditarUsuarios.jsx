@@ -32,6 +32,12 @@ function EditarUsuario() {
         id_rol: ''
     });
 
+    const [imgUsuario, setImgUsuario] = useState(null); // Cambiado a null
+
+    const handleFileChange = (event) => {
+        setImgUsuario(event.target.files[0]);
+    };
+
     useEffect(() => {
         const fetchUsuario = async () => {
             try {
@@ -203,12 +209,19 @@ function EditarUsuario() {
             }).then(async (result) => {
                 if (result.isConfirmed) {
                     try {
+                        const formUsuario = new FormData();
+                        formUsuario.append('imgUsuario', imgUsuario); // Usar imgUsuario directamente
+                        formUsuario.append('id_usuario', usuario.id_usuario);
+                        formUsuario.append('nombre_usuario', usuario.nombre_usuario);
+                        formUsuario.append('email', usuario.email);
+                        formUsuario.append('contrasena', usuario.contraseña);
+                        formUsuario.append('telefono_usuario', usuario.telefono_usuario); // Corregido el valor
+                        formUsuario.append('direccion_usuario', usuario.direccion_usuario);
+                        formUsuario.append('estado_usuario', '1');
+                        formUsuario.append('id_rol', usuario.id_rol);
                         const response = await fetch(`https://api-luchosoft-mysql.onrender.com/configuracion/usuarios/${usuario.id_usuario}`, {
                             method: 'PUT',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify(usuario)
+                            body: formUsuario
                         });
 
                         if (response.ok) {
@@ -396,11 +409,10 @@ function EditarUsuario() {
                                         <input
                                             id={estilos.imagen_usuario}
                                             className={estilos["input-field2"]}
-                                            type="text"
+                                            type="file"
                                             placeholder="URL de la imagen"
                                             name='imagen_usuario'
-                                            value={usuario.imagen_usuario}
-                                            onChange={handleChange}
+                                            onChange={handleFileChange}
                                         />
                                     </div>
 
