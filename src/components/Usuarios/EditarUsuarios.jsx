@@ -33,9 +33,12 @@ function EditarUsuario() {
     });
 
     const [imgUsuario, setImgUsuario] = useState(null); // Cambiado a null
+    const [imgPreview, setImgPreview] = useState(''); // Nuevo estado para la URL de la imagen
 
     const handleFileChange = (event) => {
-        setImgUsuario(event.target.files[0]);
+        const file = event.target.files[0];
+        setImgUsuario(file);
+        setImgPreview(URL.createObjectURL(file)); // Crear una URL para la imagen seleccionada
     };
 
     useEffect(() => {
@@ -401,10 +404,12 @@ function EditarUsuario() {
                         </div>
                         <div id={estilos.cosas}>
                             <center>
-                                <div className={`${estilos.divImagen} `} >
+                                <div className={`${estilos.divImagen} `}>
                                     <p>URL Imagen</p>
                                     <img id={estilos.imagen}
-                                        src={usuario.imagen_usuario ? usuario.imagen_usuario : 'https://tse2.mm.bing.net/th?id=OIP.U8HnwxkbTkhoZ_DTf7sCSgHaHa&pid=Api&P=0&h=180'} />
+                                        src={imgPreview || usuario.imagen_usuario || 'https://tse2.mm.bing.net/th?id=OIP.U8HnwxkbTkhoZ_DTf7sCSgHaHa&pid=Api&P=0&h=180'}
+                                        alt="Imagen del usuario"
+                                    />
                                     <div>
                                         <input
                                             id={estilos.imagen_usuario}
@@ -415,7 +420,6 @@ function EditarUsuario() {
                                             onChange={handleFileChange}
                                         />
                                     </div>
-
                                 </div>
                             </center>
                         </div>
