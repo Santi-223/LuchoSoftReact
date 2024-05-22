@@ -436,7 +436,7 @@ const Cliente = () => {
         // Realizar la validación en función del estado actualizado 'cedula'
         if (event.target.value.length <=9) {
             setErrorTitulo(true);
-            setLeyenda("El dígito no puede ser menor de 10");
+            setLeyenda("El dígito no puede ser menor de 10");            
         } else if (event.target.value.length === 10) {
             setErrorTitulo(false);
             setLeyenda("");
@@ -510,7 +510,7 @@ const Cliente = () => {
                     </div>
                     <div className={estilos["BotonesClientes"]}>
                         <button type='submit' onClick={RegistrarCliente} className={estilos['RegistrarCliente']}>Aceptar</button>
-                        <button onClick={() => cambiarEstadoModal1(!estadoModal1)}>Cancelar</button>
+                        <button onClick={() => cambiarEstadoModal1(!estadoModal1, setErrorTitulo(false),setCedula(""))}>Cancelar</button>
                     </div>
                 </Contenido>
             </Modal>
