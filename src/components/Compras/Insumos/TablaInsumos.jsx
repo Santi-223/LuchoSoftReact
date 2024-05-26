@@ -49,7 +49,6 @@ function Insumos() {
         insumo.estado_insumo.toString().includes(filtro)
 
     );
-    
 
     const generarPDF = () => {
         const doc = new jsPDF();

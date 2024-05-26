@@ -5,15 +5,14 @@
 }
 
 .botonAgregar {
-    border: 1px solid #b90505;
-    margin-right: 20px;
-    background-color: white;
-    color: #b90505;
-    border-radius: 50px;
+    background-color: #2a5587;
+    color: white;
     height: 40px;
-    width: 120px;
-    font-size: 18px;
-}
+    width: 130px;
+    margin-right: 20px;
+    border: none;
+    border-radius: 50px;
+  }
 
 
   
@@ -44,6 +43,14 @@
 }
 
 
+
+.botonAgregar:hover {
+    background-color: #2e619c;
+  }
+  
+  .botonAgregar:active {
+    box-shadow: 1px 1px 1px 1px #3c77bb;
+  }
 
 .azulado {
 
@@ -170,20 +177,19 @@ input {
     background-color: #ccc;
 }
 
-#titulo {
-    font-size: 15px;
-    margin-top: 0px;
-    display: flex;
-    color: #48110d;
+
+.rojo {
+    background: #E12424;
+    color: white;
+
 }
 
-
 .rojo:hover {
-    background: #b9050517;
+    background: #f33928;
 }
 
 .rojo:active {
-    box-shadow: 1px 1px 1px 1px #b9050517;
+    box-shadow: 1px 1px 1px 1px #f33928;
 }
 
 .vinotinto {

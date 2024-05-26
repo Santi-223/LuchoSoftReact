@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Outlet, Link, useNavigate } from "react-router-dom";
+import { Outlet, Link, useNavigate  } from "react-router-dom";
 import $ from 'jquery';
 import '../../Layout.css';
 import estilos from './tablaCompras.module.css'
@@ -20,13 +20,11 @@ function Compras() {
     const [isLoadingProveedores, setIsLoadingProveedores] = useState(true);
     const token = localStorage.getItem('token');
     const [compras, setCompras] = useState([]);
-    const [selectedItem, setSelectedItem] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const tableRef = useRef(null);
     const navigate = useNavigate();
     const [filtro, setFiltro] = useState('');
     const [showMainDataModal, setShowMainDataModal] = useState(false);
-
 
 
     const handleFiltroChange = (e) => {
@@ -36,8 +34,8 @@ function Compras() {
         compra.id_compra.toString().includes(filtro) ||
         compra.numero_compra.toString().includes(filtro) ||
         compra.fecha_compra.toString().includes(filtro) ||
-        compra.total_compra.toString().includes(filtro) ||
-        compra.nombre_proveedor.toString().toLowerCase().includes(filtro) ||
+        compra.total_compra.toString().includes(filtro)||
+        compra.nombre_proveedor.toString().toLowerCase().includes(filtro)||
         compra.estado_compra.toString().includes(filtro)
     );
     useEffect(() => {
@@ -90,7 +88,7 @@ function Compras() {
         const insumo = insumos.find(insumo => insumo.id_insumo === idInsumo);
         return insumo ? insumo.nombre_insumo : 'Insumo no encontrado';
     };
-
+    
 
     const handleAgregarCompra = () => {
         const insumosConEstado1 = insumos.filter(insumo => insumo.estado_insumo === 1);
@@ -104,7 +102,7 @@ function Compras() {
             });
 
 
-        } else if (ProveedoresConEstado1.length === 0) {
+        }else if (ProveedoresConEstado1.length === 0) {
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
@@ -112,7 +110,7 @@ function Compras() {
                 confirmButtonColor: '#1F67B9',
             });
         }
-
+        
         else {
             // Redireccionar al usuario a la página de registro de compra
             navigate('/registrarCompra');
@@ -134,16 +132,16 @@ function Compras() {
             console.error('Error al obtener la compra:', error);
         }
     };
-
-
-
+    
+    
+    
 
     const generarPDF = () => {
         const doc = new jsPDF();
-
+    
         // Encabezado del PDF
         doc.text("Reporte de Compras", 20, 10);
-
+    
         // Definir las columnas que se mostrarán en el informe (excluyendo "Estado")
         const columnasInforme = [
             "Id",
@@ -152,21 +150,21 @@ function Compras() {
             "Total compra",
             "Proveedor"
         ];
-
+    
         // Filtrar los datos de las compras para incluir solo las columnas deseadas
         const datosInforme = filteredCompras.map(compra => {
             const { id_compra, numero_compra, fecha_compra, total_compra, nombre_proveedor } = compra;
             return [id_compra, numero_compra, fecha_compra, total_compra, nombre_proveedor];
         });
-
-
+    
+        
         // Agregar la tabla al documento PDF
         doc.autoTable({
             startY: 20,
             head: [columnasInforme],
             body: datosInforme
         });
-
+    
         // Guardar el PDF
         doc.save("reporte_compras.pdf");
     };
@@ -181,10 +179,10 @@ function Compras() {
         try {
             const response = await fetch('https://api-luchosoft-mysql.onrender.com/compras/compras_insumos/');
             const data = await response.json();
-
+            
             // Filtrar los datos para obtener solo los objetos con el id_compra deseado
             const comprasInsumos = data.filter(item => item.id_compra === idCompra);
-
+    
             if (comprasInsumos.length > 0) {
                 // Mostrar el modal con los detalles de la compra seleccionada
                 setCompraSeleccionada(comprasInsumos);
@@ -196,30 +194,30 @@ function Compras() {
             console.error('Error al obtener los datos:', error);
         }
     };
-
-
-
+    
+    
+    
 
     const columns = [
         {
-            name: "Id",
-            selector: (row) => row.id_compra,
+            name : "Id",
+            selector: (row)=>row.id_compra,
             sortable: true
         },
         {
-            name: "Número",
-            selector: (row) => row.numero_compra,
+            name : "Número",
+            selector: (row)=>row.numero_compra,
             sortable: true
         },
         {
-            name: "Fecha",
-            selector: (row) => row.fecha_compra,
+            name : "Fecha",
+            selector: (row)=>row.fecha_compra,
             sortable: true,
-
+            
         },
         {
-            name: "Total compra",
-            selector: (row) => row.total_compra,
+            name : "Total compra",
+            selector: (row)=>row.total_compra,
             sortable: true
         },
         {
@@ -232,9 +230,9 @@ function Compras() {
             name: "Estado",
             cell: (row) => (
                 <div className={estilos["acciones"]}>
-                    <button className={estilos.boton} onClick={() => handleEstadoCompra(row.id_compra, row.estado_compra)} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '30px' }}>
+                    <button className={estilos.boton} onClick={() => handleEstadoCompra(row.id_compra, row.estado_compra)} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '25px' }}>
                         {row.estado_compra === 1 ? (
-                            <i className="bi bi-toggle-on" style={{ color: "#48110d" }}></i>
+                            <i className="bi bi-toggle-on" style={{ color: "#1F67B9" }}></i>
                         ) : (
                             <i className="bi bi-toggle-off" style={{ width: "60px", color: "black" }}></i>
                         )}
@@ -242,34 +240,29 @@ function Compras() {
                 </div>
             )
         },
-        {
-            name: "Acciones",
-            cell: (row) => (
-                <div className={estilos["acciones"]}>
-                    <button onClick={() => {
-                        if (row.estado_compra === 1) { // Solo abre el modal si el estado es activo
-                            handleMostrarDetalle(row)
-                        }
-                    }} className={estilos.boton}
-                       style={{ cursor: 'pointer', textAlign: 'center', fontSize: '25px' }}>
-                        <i className={`bi ${row.estado_compra === 0 ? 'bi-eye-slash cerrado' : 'bi-eye'}`} style={{ color: row.estado_compra === 0 ? "gray" : "#1A008E", pointerEvents: row.estado_compra === 0 ? "none" : "auto" }}></i>
-                    </button>
-
-                    <button onClick={() => {
-                        if (row.estado_compra === 1) { // Solo abre el modal si el estado es activo
-                            handleMostrarDetalles(row.id_compra)
-                        }
-                    }}
-                        className={estilos.boton}
-                        style={{ cursor: 'pointer', textAlign: 'center', fontSize: '25px' }}
-                    >
-                        <i className={`bi ${row.estado_compra === 0 ? ' bi-info-circle' : 'bi-info-circle'}`} style={{ color: row.estado_compra === 0 ? "gray" : "#FFA200", pointerEvents: row.estado_compra === 0 ? "none" : "auto" }}></i>
-                    </button>
-                </div>
-            )
-        }
+{
+    name: "Acciones",
+    cell: (row) => (
+        <div className={estilos["acciones"]}>
+            <button 
+                className={estilos.boton} 
+                onClick={() => handleMostrarDetalle(row)} // Llama a la función handleMostrarDetalle y pasa la fila como argumento
+                style={{ cursor: 'pointer', textAlign: 'center', fontSize: '25px' }}
+            >
+                <i className="bi bi-eye" style={{ color: "#5F597A" }}></i>
+            </button>
+            <button 
+                className={estilos.boton} 
+                onClick={() => handleMostrarDetalles(row.id_compra)} 
+                style={{ cursor: 'pointer', textAlign: 'center', fontSize: '25px' }}
+            >
+                <i className="bi bi-info-circle" style={{ color: "#FFA200" }}></i>
+            </button>
+        </div>
+    )
+}
     ];
-
+    
 
 
 
@@ -306,7 +299,7 @@ function Compras() {
     };
 
 
-
+ 
 
     const handleEstadoCompra = async (idCompra, estadoCompra) => {
         Swal.fire({
@@ -322,7 +315,7 @@ function Compras() {
             if (result.isConfirmed) {
                 try {
                     const nuevoEstado = estadoCompra === 1 ? 0 : 1;
-
+    
                     const response = await fetch(`https://api-luchosoft-mysql.onrender.com/compras/compras/${idCompra}`, {
                         method: 'PUT',
                         headers: {
@@ -333,7 +326,7 @@ function Compras() {
                             estado_compra: nuevoEstado
                         })
                     });
-
+    
                     if (response.ok) {
                         // Actualización exitosa, actualizar la lista de compras
                         fetchCompras();
@@ -346,7 +339,7 @@ function Compras() {
             }
         });
     };
-
+    
     const formatDate = (dateString) => {
         const date = new Date(dateString);
         const year = date.getFullYear();
@@ -354,26 +347,26 @@ function Compras() {
         const day = String(date.getDate()).padStart(2, '0');
         return `${year}/${month}/${day}`;
     };
+    
 
-
-    const customStyles = {
-        headCells: {
-            style: {
-                textAlign: 'center',
-                backgroundColor: '#f2f2f2',
-                fontWeight: 'bold',
-                padding: '10px',
-                fontSize: '16px'
-            },
+const customStyles = {
+    headCells: {
+        style: {
+            textAlign: 'center',
+            backgroundColor: '#f2f2f2',
+            fontWeight: 'bold',
+            padding: '10px',
+            fontSize: '16px'
         },
-        cells: {
-            style: {
-                textAlign: 'center',
+    },
+    cells: {
+        style: {
+            textAlign: 'center',
 
-                fontSize: '13px'
-            },
+            fontSize: '13px'
         },
-    };
+    },
+};
 
 
     if (isLoading) {
@@ -387,88 +380,90 @@ function Compras() {
             <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
             <link href="https://cdn.datatables.net/2.0.2/css/dataTables.semanticui.css" rel="stylesheet" />
             <link href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.css" rel="stylesheet" />
-            <div id={estilos["titulo"]}>
-                <h1>Compras</h1>
+            <div>
+            <h1>Compras</h1>
             </div>
-            <br />
+<br />
 
             <div className={estilos['divFiltro']}>
                 <input type="text" placeholder=" Buscar..." value={filtro} onChange={handleFiltroChange} className={estilos["busqueda"]} />
                 <div>
-
-                <button onClick={handleAgregarCompra} className={` ${estilos.botonAgregar} ${estilos.rojo} bebas-neue-regular`}><i className="fa-solid fa-plus"></i> Agregar</button>
-                    <button
-                        style={{ color: "white" }}
-                        className={` ${estilos.vinotinto}`}
-                        onClick={generarPDF}
-                    >
-                        <i className="fa-solid fa-download"></i>
-                    </button>
-                </div>
+             
+                <button onClick={handleAgregarCompra} className={` ${estilos.botonAgregar}`}>
+          <i className="fa-solid fa-plus"></i> Agregar
+        </button>
+                <button
+                    style={{ color: "white" }}
+                    className={` ${estilos.vinotinto}`}
+                    onClick={generarPDF}
+                >
+                    <i className="fa-solid fa-download"></i>
+                </button>
+            </div>
             </div>
 
-
-
+ 
+          
             <div className={estilos["tabla"]}>
-                <DataTable columns={columns} data={filteredCompras} pagination paginationPerPage={5} highlightOnHover></DataTable>
+            <DataTable columns={columns} data={filteredCompras} pagination paginationPerPage={5} highlightOnHover customStyles={customStyles} defaultSortField="id_compra" defaultSortAsc={true}></DataTable>
             </div>
 
 
 
-            <Modal
-                className={estilos["modal"]}
-                show={showDetalleModal}
-                onHide={() => setShowDetalleModal(false)}
-            >
-                <Modal.Header closeButton>
-                    <Modal.Title>Datos de la compra</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    {/* Muestra los datos de la fila seleccionada */}
-                    {detalleCompra && (
-                        <div>
-                            <p>ID de compra: {detalleCompra.id_compra}</p>
-                            <p>Número de compra: {detalleCompra.numero_compra}</p>
-                            <p>Fecha de compra: {detalleCompra.fecha_compra}</p>
-                            <p>Total de la compra: {detalleCompra.total_compra}</p>
-                            <p>Proveedor de la compra: {detalleCompra.nombre_proveedor}</p>
-                            {/* Muestra más detalles si es necesario */}
-                        </div>
-                    )}
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowDetalleModal(false)}>Cerrar</Button>
-                </Modal.Footer>
-            </Modal>
+<Modal 
+    className={estilos["modal"]} 
+    show={showDetalleModal} 
+    onHide={() => setShowDetalleModal(false)}
+>
+    <Modal.Header closeButton>
+        <Modal.Title>Datos de la compra</Modal.Title>
+    </Modal.Header>
+    <Modal.Body>
+        {/* Muestra los datos de la fila seleccionada */}
+        {detalleCompra && (
+            <div>
+                <p>ID de compra: {detalleCompra.id_compra}</p>
+                <p>Número de compra: {detalleCompra.numero_compra}</p>
+                <p>Fecha de compra: {detalleCompra.fecha_compra}</p>
+                <p>Total de la compra: {detalleCompra.total_compra}</p>
+                <p>Proveedor de la compra: {detalleCompra.nombre_proveedor}</p>
+                {/* Muestra más detalles si es necesario */}
+            </div>
+        )}
+    </Modal.Body>
+    <Modal.Footer>
+        <Button variant="secondary" onClick={() => setShowDetalleModal(false)}>Cerrar</Button>
+    </Modal.Footer>
+</Modal>
 
             <Modal className={estilos["modal"]} show={showModal} onHide={() => setShowModal(false)}>
+                
+    <Modal.Header closeButton>
+        <Modal.Title>Detalles de la compra</Modal.Title>
+    </Modal.Header>
+    <Modal.Body>
 
-                <Modal.Header closeButton>
-                    <Modal.Title>Detalles de la compra</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
+    {compraSeleccionada && compraSeleccionada.map((compraInsumo, index) => (
+    <div key={index} className="objeto-compra">
+        <div>
+            <p>Insumo: {getNombreInsumoById(compraInsumo.id_insumo)}</p>
+            <p>Cantidad: {compraInsumo.cantidad_insumo_compras_insumos}</p>
+            <p>Precio: {compraInsumo.precio_insumo_compras_insumos}</p>
 
-                    {compraSeleccionada && compraSeleccionada.map((compraInsumo, index) => (
-                        <div key={index} className="objeto-compra">
-                            <div>
-                                <p>Insumo: {getNombreInsumoById(compraInsumo.id_insumo)}</p>
-                                <p>Cantidad: {compraInsumo.cantidad_insumo_compras_insumos}</p>
-                                <p>Precio: {compraInsumo.precio_insumo_compras_insumos}</p>
-
-                                {/* Aquí calculamos el total y lo formateamos */}
-                                <p>Total: {(compraInsumo.precio_insumo_compras_insumos * compraInsumo.cantidad_insumo_compras_insumos).toLocaleString('es-ES', { minimumFractionDigits: 2 })}</p>
-                            </div>
-                            {index < compraSeleccionada.length - 1 && <hr />}
-                        </div>
-                    ))}
+            {/* Aquí calculamos el total y lo formateamos */}
+            <p>Total: {(compraInsumo.precio_insumo_compras_insumos * compraInsumo.cantidad_insumo_compras_insumos).toLocaleString('es-ES', { minimumFractionDigits: 2 })}</p>
+        </div>
+        {index < compraSeleccionada.length - 1 && <hr />}
+    </div>
+))}
 
 
 
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowModal(false)}>Cerrar</Button>
-                </Modal.Footer>
-            </Modal>
+    </Modal.Body>
+    <Modal.Footer>
+        <Button variant="secondary" onClick={() => setShowModal(false)}>Cerrar</Button>
+    </Modal.Footer>
+</Modal>
 
 
         </div>
