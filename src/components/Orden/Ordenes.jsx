@@ -5,11 +5,16 @@ import "./../Layout.css";
 import estilos from './Ordenes.module.css'
 import Swal from 'sweetalert2';
 import DataTable from "react-data-table-component";
+import { Modal, Button } from 'react-bootstrap';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 
 function OrdenesProduccion() {
+    const [showModal, setShowModal] = useState(false);
+    const [ordenSeleccionada, setOrdenSeleccionada] = useState(null);
+    const [insumos, setInsumos] = useState([]);
     const [usuarios, setUsuarios] = useState([]);
+    const token = localStorage.getItem('token');
     const [ordenes, setOrdenes] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const tableRef = useRef(null);
@@ -25,6 +30,36 @@ function OrdenesProduccion() {
         orden.fecha_orden.toString().includes(filtro) ||
         orden.id_usuario.toString().includes(filtro)
     );
+
+    useEffect(() => {
+        fetchInsumos();
+    }, []);
+
+    const fetchInsumos = async () => {
+        try {
+            const response = await fetch('https://api-luchosoft-mysql.onrender.com/compras/insumos/', {
+                headers: {
+                    'token': token // Asegúrate de que 'token' esté definido
+                }
+            });
+            if (response.ok) {
+                const data = await response.json();
+                setInsumos(data); // Establecer los insumos en el estado
+                console.log('Insumos cargados:', data); // Agregar un log para verificar los insumos cargados
+            } else {
+                console.error('Error al obtener los insumos');
+            }
+        } catch (error) {
+            console.error('Error al obtener los insumos:', error);
+        }
+    };
+    
+
+    const getNombreInsumoById = (idInsumo) => {
+        const insumo = insumos.find(insumo => insumo.id_insumo === idInsumo);
+        return insumo ? insumo.nombre_insumo : 'Insumo no encontrado';
+    };
+    
 
 
     const generarPDF = () => {
@@ -57,6 +92,25 @@ function OrdenesProduccion() {
         // Guardar el PDF
         doc.save("reporte_ordenes.pdf");
     };
+    const handleMostrarDetalles = async (idOrden) => {
+        try {
+            const response = await fetch('https://api-luchosoft-mysql.onrender.com/orden/orden_insumo/');
+            const data = await response.json();
+
+            // Filtrar los datos para obtener solo los objetos con el id_compra deseado
+            const ordenInsumos = data.filter(item => item.id_orden_de_produccion === idOrden);
+
+            if (ordenInsumos.length > 0) {
+                // Mostrar el modal con los detalles de la compra seleccionada
+                setOrdenSeleccionada(ordenInsumos);
+                setShowModal(true);
+            } else {
+                console.log("No se encontraron insumos para la compra con el ID especificado.");
+            }
+        } catch (error) {
+            console.error('Error al obtener los datos:', error);
+        }
+    };
 
     const columns = [
         {
@@ -79,7 +133,17 @@ function OrdenesProduccion() {
             name: "Usuario",
             selector: (row) => row.nombre_usuario,
             sortable: true
-        }
+        },
+        {
+            name: "Acciones",
+            cell: (row) => (
+                <div className={estilos["acciones"]}>
+                    <button className={estilos.boton} onClick={() => handleMostrarDetalles(row.id_orden_de_produccion)} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '25px' }}>
+                        <i className="bi bi-info-circle" style={{ color: "#FFA200" }}></i>
+                    </button>
+                </div>
+            )
+        },
 
     ]
 
@@ -197,6 +261,32 @@ function OrdenesProduccion() {
             <div className={estilos["tabla"]}>
                 <DataTable columns={columns} data={filteredOrdenes} pagination paginationPerPage={6} highlightOnHover customStyles={customStyles} defaultSortField="id_orden_de_produccion" defaultSortAsc={true}></DataTable>
             </div>
+            <Modal className={estilos["modal"]} show={showModal} onHide={() => setShowModal(false)}>
+
+                <Modal.Header closeButton>
+                    <Modal.Title>Detalles de la orden</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+
+                    {ordenSeleccionada && ordenSeleccionada.map((ordenInsumo, index) => (
+                        <div key={index} className="objeto-compra">
+                            <div>
+                                <p>Insumo: {getNombreInsumoById(ordenInsumo.id_insumo)}</p>
+                                <p>Cantidad: {ordenInsumo.cantidad_insumo_orden_insumos}</p>
+                                <p>Descripcion: {ordenInsumo.descripcion_orden_insumos}</p>
+                            </div>
+                            {index < ordenSeleccionada.length - 1 && <hr />}
+                        </div>
+                    ))}
+
+
+
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowModal(false)}>Cerrar</Button>
+                </Modal.Footer>
+            </Modal>
+
         </div>
     );
 }
