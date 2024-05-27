@@ -14,19 +14,22 @@ function Proveedores() {
     const token = localStorage.getItem('token');
     const [proveedores, setProveedores] = useState([]);
     const [estadoModaleditar, cambiarEstadoModalEditar] = useState(false);
+    
     const [proveedores1, setProveedores1] = useState({
         nombre_proveedor: '',
         documento_proveedor: '',
         telefono_proveedor: '',
         direccion_proveedor: '',
-        estado_proveedor: 1
+        estado_proveedor: 1,
+        tipo_documento: ''
     });
     const [proveedoresEditar, setProveedoresEditar] = useState({
         nombre_proveedor: '',
         documento_proveedor: '',
         telefono_proveedor: '',
         direccion_proveedor: '',
-        estado_proveedor: 1
+        estado_proveedor: 1,
+        tipo_documento: ''
     });
     const [isLoading, setIsLoading] = useState(true);
     const [estadoModalAgregar, cambiarEstadoModalAgregar] = useState(false);
@@ -43,8 +46,8 @@ function Proveedores() {
         proveedor.documento_proveedor.toString().includes(filtro) ||
         proveedor.telefono_proveedor.toString().includes(filtro) ||
         proveedor.direccion_proveedor.toString().toLowerCase().includes(filtro) ||
-        proveedor.estado_proveedor.toString().includes(filtro)
-
+        proveedor.estado_proveedor.toString().includes(filtro) ||
+        proveedor.tipo_documento.toString().includes(filtro)
     );
 
     const generarPDF = () => {
@@ -57,15 +60,16 @@ function Proveedores() {
         const columnasInforme = [
             "Id",
             "Nombre",
+            "Tipo Documento",
             "Teléfono",
             "Dirección"
         ];
-    
-        // Filtrar los datos de los proveedores para incluir solo las columnas deseadas
+        
         const datosInforme = filteredproveedores.map(proveedor => {
-            const { id_proveedor, nombre_proveedor, documento_proveedor, telefono_proveedor, direccion_proveedor } = proveedor;
-            return [id_proveedor, nombre_proveedor, documento_proveedor. telefono_proveedor, direccion_proveedor];
+            const { id_proveedor, nombre_proveedor, tipo_documento, documento_proveedor, telefono_proveedor, direccion_proveedor } = proveedor;
+            return [id_proveedor, nombre_proveedor, tipo_documento, documento_proveedor, telefono_proveedor, direccion_proveedor];
         });
+        
     
         // Agregar la tabla al documento PDF
         doc.autoTable({
@@ -91,6 +95,11 @@ function Proveedores() {
             sortable: true
         },
         {
+            name: "Tipo Documento",
+            selector: (row) => row.tipo_documento,
+            sortable: true
+        },
+        {
             name: "Documento",
             selector: (row) => row.documento_proveedor,
             sortable: true,
@@ -99,7 +108,6 @@ function Proveedores() {
             name: "Teléfono",
             selector: (row) => row.telefono_proveedor,
             sortable: true,
-
         },
         {
             name: "Dirección",
@@ -141,7 +149,9 @@ function Proveedores() {
         },
 
 
-    ]
+        // Resto de columnas
+    ];
+    
     const handleSubmitEditar = async (event) => {
         event.preventDefault();
     
@@ -223,12 +233,13 @@ function Proveedores() {
 
     const fetchproveedores = async () => {
         try {
-            const response = await fetch('https://api-luchosoft-mysql.onrender.com/compras/proveedores');
+            const response = await fetch('https://api-luchosoft-mysql.onrender.com/compras/proveedores/');
             if (response.ok) {
                 const data = await response.json();
                 const proveedoresFiltrador = data.map(proveedor => ({
                     id_proveedor: proveedor.id_proveedor,
                     nombre_proveedor: proveedor.nombre_proveedor,
+                    tipo_documento: proveedor.tipo_documento,
                     documento_proveedor: proveedor.documento_proveedor,
                     telefono_proveedor: proveedor.telefono_proveedor,
                     direccion_proveedor: proveedor.direccion_proveedor,
@@ -255,16 +266,16 @@ function Proveedores() {
         event.preventDefault();
     
         // Verificar que todos los campos estén llenos
-        const { nombre_proveedor, documento_proveedor, telefono_proveedor, direccion_proveedor } = proveedores1;
-        if (nombre_proveedor.trim() !== '' && documento_proveedor.trim() !== '' && telefono_proveedor.trim() !== '' && direccion_proveedor.trim() !== '') {
+        const { nombre_proveedor, documento_proveedor, telefono_proveedor, direccion_proveedor, tipo_documento } = proveedores1;
+        if (nombre_proveedor.trim() !== '' && documento_proveedor.trim() !== '' && telefono_proveedor.trim() !== '' && direccion_proveedor.trim() !== '' && tipo_documento.trim() !== '') {
             // Validar que los campos no contengan caracteres especiales
             const regex = /^[a-zA-Z0-9\s#,;.-]*$/; // Expresión regular que permite letras, números, espacios, '#' y '-'
-            if (regex.test(nombre_proveedor) && regex.test(documento_proveedor) && regex.test(telefono_proveedor) && regex.test(direccion_proveedor)) {
+            if (regex.test(nombre_proveedor) && regex.test(documento_proveedor) && regex.test(telefono_proveedor) && regex.test(direccion_proveedor) && regex.test(tipo_documento)) {
                 try {
                     // Tu código para enviar el formulario
                     console.log('proveedor a enviar: ', proveedores1);
     
-                    const responseProveedores = await fetch('https://api-luchosoft-mysql.onrender.com/compras/proveedores', {
+                    const responseProveedores = await fetch('https://api-luchosoft-mysql.onrender.com/compras/proveedores/', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -289,7 +300,8 @@ function Proveedores() {
                                     documento_proveedor: '',
                                     telefono_proveedor: '',
                                     direccion_proveedor: '',
-                                    estado_proveedor: 1
+                                    estado_proveedor: 1,
+                                    tipo_documento: ''
     
                                 })
                             cambiarEstadoModalAgregar(false)
@@ -349,7 +361,7 @@ function Proveedores() {
                 try {
                     const nuevoEstado = estadoproveedor === 1 ? 0 : 1;
 
-                    const response = await fetch(`https://api-luchosoft-mysql.onrender.com/compras/estadoProveedor/${idproveedor}`, {
+                    const response = await fetch(`https://api-luchosoft-mysql.onrender.com/compras/proveedores/${idproveedor}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json',
@@ -464,8 +476,25 @@ function Proveedores() {
 
 
                                 </div>
-                                <br />
+
+
+
                                 <div className={estilos["inputIdNombre"]}>
+
+                                <div>
+        <p id={estilos.textito}>Tipo Documento</p>
+        <select
+            className={estilos["input-chiquito"]}
+            name='tipo_documento'
+            value={proveedores1.tipo_documento}
+            onChange={handleChange}
+        >
+            <option value="">Selección</option>
+            <option value="NIT">NIT</option>
+            <option value="T.I">T.I</option>
+            <option value="C.C">C.C</option>
+        </select>
+    </div>
 
                                 <div id={estilos.documentoproveedor}>
                                         <p id={estilos.textito} >  Documento</p>
@@ -478,11 +507,14 @@ function Proveedores() {
                                             onChange={handleChange}
                                         />
                                     </div>
-                                    <div className={estilos["espacio"]}></div>
+                            
+
+                                </div>
+                             
                                 <div id={estilos.telefonoproveedor}>
                                         <p id={estilos.textito} >  Teléfono</p>
                                         <input
-                                            className={estilos["input2"]}
+                                            className={estilos["input-largo"]}
                                             type="number"
                                             placeholder="Insertar teléfono"
                                             name='telefono_proveedor'
@@ -490,14 +522,10 @@ function Proveedores() {
                                             onChange={handleChange}
                                         />
                                     </div>
-                             
-
-                              
-
-
-                                </div>
-                                <br />
+                                    <br />
                                 <div className={estilos["inputIdNombre"]}>
+
+
                                
                                 <div id={estilos.eo}>
                                         <p id={estilos.textito}>  Dirección</p>
@@ -505,7 +533,7 @@ function Proveedores() {
                                             id={estilos.direccionproveedor}
                                             className={estilos["input-largo"]}
                                             type="text"
-                                            placeholder="Insertar dirección"
+                                            placeholder="Insertar"
                                             name='direccion_proveedor'
                                             value={proveedores1.direccion_proveedor}
                                             onChange={handleChange}
@@ -564,23 +592,41 @@ function Proveedores() {
 
                                 </div>
                                 
-                                <br />
+                             
                                 <div className={estilos["inputIdNombre"]}>
-                                <div id={estilos.eo}>
-                                        <p id={estilos.textito} > Teléfono</p>
-                                        <input
-                                            id={estilos.telefonoproveedor}
-                                            className={estilos["input2"]}
-                                            type="number"
-                                            placeholder="Insertar teléfono"
-                                            name='telefono_proveedor'
-                                            value={proveedoresEditar.telefono_proveedor}
-                                            onChange={handleEditarChange}
-                                        />
-                                    </div>
+                                <div>
+        <p id={estilos.textito}>Tipo Documento</p>
+        <select
+            className={estilos["input-chiquito"]}
+            name='tipo_documento'
+            value={proveedoresEditar.tipo_documento}
+            onChange={handleEditarChange}
+        >
+            <option value="">{proveedoresEditar.tipo_documento}</option>
+            <option value="NIT">NIT</option>
+            <option value="T.I">T.I</option>
+            <option value="C.C">C.C</option>
+
+        </select>
+    </div>
+
+
+
+                                    
+
+
+
                                     <div className={estilos["espacio"]}></div>
+                                    <div className={estilos["inputIdNombre"]}>
+
+</div>
+
                                     <div id={estilos.eo}>
+
+                                        
                                         <p id={estilos.textito} > Documento</p>
+
+                                        
                                         <input
                                             id={estilos.docmentoproveedor}
                                             className={estilos["input2"]}
@@ -593,6 +639,20 @@ function Proveedores() {
                                     </div>
 
                                 </div>
+
+                                <div id={estilos.eo}>
+                                        <p id={estilos.textito} > Teléfono</p>
+                                        <input
+                                            id={estilos.telefonoproveedor}
+                                            className={estilos["input-largo"]}
+                                            type="number"
+                                            placeholder="Insertar teléfono"
+                                            name='telefono_proveedor'
+                                            value={proveedoresEditar.telefono_proveedor}
+                                            onChange={handleEditarChange}
+                                        />
+                                    </div>
+                                    <br />
 
                                 <div className={estilos["inputIdNombre"]}>
                                 <div id={estilos.eo}>
