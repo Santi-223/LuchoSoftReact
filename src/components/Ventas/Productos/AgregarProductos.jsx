@@ -22,6 +22,16 @@ function AgregarProductos() {
     });
 
 
+    const [imgProducto, setimgProducto] = useState(null); // Cambiado a null
+    const [imgPreview, setImgPreview] = useState(''); // Nuevo estado para la URL de la imagen
+
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        setimgProducto(file);
+        setImgPreview(URL.createObjectURL(file)); // Crear una URL para la imagen seleccionada
+    };
+
+
     const handleChange = (event) => {
         const { name, value } = event.target;
         setProducto(prevProducto => ({
@@ -54,9 +64,8 @@ function AgregarProductos() {
 
 
     const handleSubmit = async () => {
-        console.log("Productos:", producto[0])
-
-
+        console.log("Productos:", producto[0]);
+    
         if (!producto.nombre_producto || !producto.descripcion_producto || !producto.precio_producto || !producto.id_categoria_producto) {
             Swal.fire({
                 icon: 'error',
@@ -66,12 +75,11 @@ function AgregarProductos() {
             });
             return; // Detener la ejecución si hay campos vacíos
         }
-
+    
         // Validar caracteres especiales
         const regex = /^[a-zA-Z0-9.,?!¡¿\s]+$/; // Expresión regular para permitir letras, números y algunos caracteres especiales
-
-        if (!regex.test(producto.nombre_producto) ||
-            !regex.test(producto.descripcion_producto)) {
+    
+        if (!regex.test(producto.nombre_producto) || !regex.test(producto.descripcion_producto)) {
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
@@ -80,9 +88,9 @@ function AgregarProductos() {
             });
             return; // Detener la ejecución si hay caracteres especiales en campos de texto
         }
-
+    
         // Validar el campo de precio
-        if (isNaN(producto.precio_producto) || parseFloat(producto.precio_producto) <50) {
+        if (isNaN(producto.precio_producto) || parseFloat(producto.precio_producto) < 50) {
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
@@ -91,56 +99,53 @@ function AgregarProductos() {
             });
             return; // Detener la ejecución si el precio no es válido
         }
-
+    
         try {
-            // Tu código de envío del formulario sigue aquí
-        } catch (error) {
-            console.error('Error:', error.message);
-            // Muestra el SweetAlert de error
-            await Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Hubo un error al registrar el producto.',
-                confirmButtonText: 'Aceptar'
-            });
-        }
-
-
-
-        try {
+            const formProducto = new FormData();
+            formProducto.append('imgProducto', imgProducto); // Usar imgProducto directamente
+            formProducto.append('id_producto', producto.id_producto);
+            formProducto.append('nombre_producto', producto.nombre_producto);
+            formProducto.append('descripcion_producto', producto.descripcion_producto);
+            formProducto.append('precio_producto', producto.precio_producto);
+            formProducto.append('estado_producto', '1');
+            formProducto.append('id_categoria_producto', producto.id_categoria_producto);
+    
             const response = await fetch('https://api-luchosoft-mysql.onrender.com/ventas2/productos', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(producto)
+                body: formProducto
             });
-
-            if (!response.ok) {
-                throw new Error('Error al registrar el producto');
+    
+            if (response.ok) {
+                console.log('Producto creado exitosamente.');
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Producto creado exitosamente',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                setTimeout(() => {
+                    setRedirect(true);
+                }, 1000);
+            } else {
+                const errorData = await response.json(); // Parsear el cuerpo de la respuesta como JSON
+                console.error('Error al crear el producto:', errorData);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error al crear el producto',
+                    text: JSON.stringify(errorData), // Mostrar el error de manera más clara
+                });
             }
-
-            // Muestra el SweetAlert de éxito
-            await Swal.fire({
-                icon: 'success',
-                title: 'Registro exitoso',
-                text: 'El producto se ha registrado correctamente',
-                confirmButtonText: 'Aceptar'
-            });
-
-            // Redirige a la página de productos
-            window.location.href = '/#/productos';
         } catch (error) {
-            console.error('Error:', error.message);
-            // Muestra el SweetAlert de error
-            await Swal.fire({
+            console.error('Error al crear el producto:', error);
+            Swal.fire({
                 icon: 'error',
-                title: 'Error',
-                text: 'Hubo un error al registrar el producto.',
-                confirmButtonText: 'Aceptar'
+                title: 'Error al crear el producto',
+                text: error.message
             });
         }
     };
+    
+
 
 
     const handleCancelar = () => {
@@ -202,7 +207,7 @@ function AgregarProductos() {
 
                         <div style={{}} className={estilos["input-container"]}>
                             <div className={estilos["formulario__grupo2"]} id={estilos.grupo__id_categoria}>
-                                <label style={{ marginLeft: "20px", marginTop:'10px' }} htmlFor="id_categoria_producto"></label>
+                                <label style={{ marginLeft: "20px", marginTop: '10px' }} htmlFor="id_categoria_producto"></label>
                                 <div className={estilos["formulario__grupo-input"]}>
                                     <select
                                         className={estilos["input-field2"]}
@@ -212,7 +217,7 @@ function AgregarProductos() {
                                         onChange={handleChange}
                                         style={{ width: "350px", marginLeft: "20px" }}
                                     >
-                                    
+
                                         <option>Seleccione una categoría</option>
                                         {categorias.map(categoria => (
                                             <option key={categoria.id_categoria_productos} value={categoria.id_categoria_productos}>{categoria.nombre_categoria_productos}</option>
@@ -226,23 +231,22 @@ function AgregarProductos() {
                     </div>
                     <div id={estilos.cosas}>
                         <center>
-                            <div style={{ marginRight: "75px" }} className={`${estilos.divImagen} `} >
-                                <p>URL Imagen</p><br /><br />
-                                <img style={{ width: "250px", height: "170px", marginTop: "-20px" }} id={estilos.imagen}
-                                    src={producto.imagen_producto ? producto.imagen_producto : 'https://tse2.mm.bing.net/th?id=OIP.U8HnwxkbTkhoZ_DTf7sCSgHaHa&pid=Api&P=0&h=180'} />
+                            <div className={`${estilos.divImagen} `}>
+                                <p>URL Imagen</p>
+                                <img id={estilos.imagen}
+                                    src={imgPreview || producto.imagen_producto || 'https://tse2.mm.bing.net/th?id=OIP.U8HnwxkbTkhoZ_DTf7sCSgHaHa&pid=Api&P=0&h=180'}
+                                    alt="Imagen del producto"
+                                />
                                 <div>
-                                    <br /><br /><br />
                                     <input
                                         id={estilos.imagen_producto}
                                         className={estilos["input-field2"]}
-                                        type="text"
+                                        type="file"
                                         placeholder="URL de la imagen"
                                         name='imagen_producto'
-                                        value={producto.imagen_producto}
-                                        onChange={handleChange}
+                                        onChange={handleFileChange}
                                     />
                                 </div>
-
                             </div>
                         </center>
                     </div>

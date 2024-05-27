@@ -128,153 +128,152 @@ function EditarProductos() {
     }
 
     return (
-    <div>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" />
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
-        <link href="https://cdn.datatables.net/2.0.2/css/dataTables.semanticui.css" rel="stylesheet" />
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.css" rel="stylesheet" />
-        
-        <h1 style={{ marginTop:'-10px' }}>Editar Producto</h1>
-        <div className={estilos["contenido2"]}>
-            <br />
-            <center>
-                <div id={estilos.titulo}>
-                    <br />
-                    <br />
-                    <br />
-                </div>
-            </center>
-            <form onSubmit={handleSubmit}>
-                <div style={{ marginTop:'-44px', marginLeft:'100px' }} id={estilos.contenedorsitos}>
-                    <div style={{ marginTop:'-20px' }} id={estilos.contenedorsito}>
-                        <div className={estilos["input-container"]}>
-                            <div className={estilos["formulario__grupo"]} id={estilos.grupo__id_producto}>
-                                <label htmlFor="id_producto"></label>
-                                <div className={estilos["formulario__grupo-input"]}>
-                                    <input
-                                        className={estilos["input-field2"]}
-                                        type="hidden"
-                                        name="id_producto"
-                                        id={estilos.id_producto}
-                                        value={producto.id_producto}
-                                        onChange={handleChange}
-                                    />
-                                    <span></span>
+        <div>
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" />
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+            <link href="https://cdn.datatables.net/2.0.2/css/dataTables.semanticui.css" rel="stylesheet" />
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.css" rel="stylesheet" />
+
+            <h1 style={{ marginTop: '-10px' }}>Editar Producto</h1>
+            <div className={estilos["contenido2"]}>
+                <br />
+                <center>
+                    <div id={estilos.titulo}>
+                        <br />
+                        <br />
+                        <br />
+                    </div>
+                </center>
+                <form onSubmit={handleSubmit}>
+                    <div style={{ marginTop: '-44px', marginLeft: '100px' }} id={estilos.contenedorsitos}>
+                        <div style={{ marginTop: '-20px' }} id={estilos.contenedorsito}>
+                            <div className={estilos["input-container"]}>
+                                <div className={estilos["formulario__grupo"]} id={estilos.grupo__id_producto}>
+                                    <label htmlFor="id_producto"></label>
+                                    <div className={estilos["formulario__grupo-input"]}>
+                                        <input
+                                            className={estilos["input-field2"]}
+                                            type="hidden"
+                                            name="id_producto"
+                                            id={estilos.id_producto}
+                                            value={producto.id_producto}
+                                            onChange={handleChange}
+                                        />
+                                        <span></span>
+                                    </div>
+                                </div>
+                                <div className={estilos["formulario__grupo2"]}>
+                                    <label htmlFor="nombre_producto">Nombre</label>
+                                    <div className={estilos["formulario__grupo-input"]}>
+                                        <input
+                                            className={estilos["input-field2"]}
+                                            type="text"
+                                            name="nombre_producto"
+                                            id={estilos.nombre_producto}
+                                            value={producto.nombre_producto}
+                                            onChange={handleChange}
+                                            style={{ width: '350px' }}
+
+                                        />
+                                        <span></span>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div style={{ marginLeft: "-20px" }} className={estilos["input-container"]}>
+                                <div className={estilos["formulario__grupo"]} id={estilos.grupo__precio}>
+                                    <label style={{ marginTop: "-90px", marginLeft: "20px" }} htmlFor="precio_producto">Precio</label>
+                                    <div className={estilos["formulario__grupo-input"]}>
+                                        <input
+                                            className={estilos["input-field2"]}
+                                            type="text"
+                                            name="precio_producto"
+                                            id={estilos.precio_producto}
+                                            value={producto.precio_producto}
+                                            onChange={handleChange}
+                                            style={{ marginLeft: "20px", width: '350px' }}
+                                        />
+                                        <span></span>
+                                    </div>
                                 </div>
                             </div>
-                            <div className={estilos["formulario__grupo2"]}>
-                                <label htmlFor="nombre_producto">Nombre</label>
+                            <div style={{ marginLeft: "-30px" }} className={estilos["formulario__grupo2"]} id={estilos.grupo__descripcion}>
+                                <label style={{ marginTop: "-90px", marginLeft: "30px" }} htmlFor="descripcion_producto">Descripción</label>
                                 <div className={estilos["formulario__grupo-input"]}>
                                     <input
                                         className={estilos["input-field2"]}
                                         type="text"
-                                        name="nombre_producto"
-                                        id={estilos.nombre_producto}
-                                        value={producto.nombre_producto}
+                                        name="descripcion_producto"
+                                        id={estilos.descripcion_producto}
+                                        value={producto.descripcion_producto}
                                         onChange={handleChange}
-                                        style={{ width: '350px' }}
+                                        style={{ marginLeft: "30px", width: '350px' }}
 
                                     />
                                     <span></span>
                                 </div>
                             </div>
 
-                        </div>
-                        <div style={{marginLeft: "-20px" }} className={estilos["input-container"]}>
-                            <div className={estilos["formulario__grupo"]} id={estilos.grupo__precio}>
-                                <label style={{ marginTop: "-90px", marginLeft: "20px" }} htmlFor="precio_producto">Precio</label>
-                                <div className={estilos["formulario__grupo-input"]}>
-                                    <input
-                                        className={estilos["input-field2"]}
-                                        type="text"
-                                        name="precio_producto"
-                                        id={estilos.precio_producto}
-                                        value={producto.precio_producto}
-                                        onChange={handleChange}
-                                        style={{ marginLeft: "20px", width: '350px'}}
-                                    />
-                                    <span></span>
+
+                            <div className={estilos["input-container"]}>
+                                <div className={estilos["formulario__grupo2"]} id={estilos.grupo__id_categoria}>
+                                    <label htmlFor="id_categoria_producto"></label>
+                                    <div className={estilos["formulario__grupo-input"]}>
+                                        <select
+                                            className={estilos["input-field2"]}
+                                            name="id_categoria_producto"
+                                            id={estilos.id_categoria_producto}
+                                            value={producto.id_categoria_producto}
+                                            onChange={handleChange}
+                                            style={{ width: '350px' }}
+
+                                        >
+                                            <option>Seleccione una categoría</option>
+                                            {categorias.map(categoria => (
+                                                <option key={categoria.id_categoria_productos} value={categoria.id_categoria_productos}>{categoria.nombre_categoria_productos}</option>
+                                            ))}
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
+
+
+
+
                         </div>
-                        <div style={{marginLeft: "-30px" }}  className={estilos["formulario__grupo2"]} id={estilos.grupo__descripcion}>
-                            <label style={{ marginTop: "-90px", marginLeft: "30px" }} htmlFor="descripcion_producto">Descripción</label>
-                            <div className={estilos["formulario__grupo-input"]}>
-                                <input
-                                    className={estilos["input-field2"]}
-                                    type="text"
-                                    name="descripcion_producto"
-                                    id={estilos.descripcion_producto}
-                                    value={producto.descripcion_producto}
-                                    onChange={handleChange}
-                                    style={{ marginLeft: "30px", width: '350px' }}
+                        <div id={estilos.cosas}>
+                            <center>
+                                <div className={`${estilos.divImagen} `} >
+                                    <p>URL Imagen</p>
+                                    <img id={estilos.imagen}
+                                        src={producto.imagen_producto ? producto.imagen_producto : 'https://tse2.mm.bing.net/th?id=OIP.U8HnwxkbTkhoZ_DTf7sCSgHaHa&pid=Api&P=0&h=180'} />
+                                    <div>
+                                        <input
+                                            id={estilos.imagen_producto}
+                                            className={estilos["input-field2"]}
+                                            type="file"
+                                            placeholder="URL de la imagen"
+                                            name='imagen_usuario'
+                                            value={producto.imagen_producto}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
 
-                                />
-                                <span></span>
-                            </div>
-                        </div>
-
-                        
-                        <div className={estilos["input-container"]}>
-                            <div className={estilos["formulario__grupo2"]} id={estilos.grupo__id_categoria}>
-                                <label htmlFor="id_categoria_producto"></label>
-                                <div className={estilos["formulario__grupo-input"]}>
-                                    <select
-                                        className={estilos["input-field2"]}
-                                        name="id_categoria_producto"
-                                        id={estilos.id_categoria_producto}
-                                        value={producto.id_categoria_producto}
-                                        onChange={handleChange}
-                                        style={{width: '350px' }}
-
-                                    >
-                                        <option>Seleccione una categoría</option>
-                                        {categorias.map(categoria => (
-                                            <option key={categoria.id_categoria_productos} value={categoria.id_categoria_productos}>{categoria.nombre_categoria_productos}</option>
-                                        ))}
-                                    </select>
                                 </div>
-                            </div>
+                            </center>
                         </div>
-
-
 
 
                     </div>
-                    <div id={estilos.cosas}>
-                        <center>
-                            <div style={{marginLeft: "100px" }} className={`${estilos.divImagen} `} >
-                                <p>URL Imagen</p><br /><br />
-                                <img style={{ width: "250px", height: "170px", marginTop: "-20px" }} id={estilos.imagen}
-                                    src={producto.imagen_producto ? producto.imagen_producto : 'https://tse2.mm.bing.net/th?id=OIP.U8HnwxkbTkhoZ_DTf7sCSgHaHa&pid=Api&P=0&h=180'} />
-                                <div>
-                                    <br /><br /><br />
-                                    <input
-                                        id={estilos.imagen_producto}
-                                        className={estilos["input-field2"]}
-                                        type="text"
-                                        placeholder="URL de la imagen"
-                                        name='imagen_producto'
-                                        value={producto.imagen_producto}
-                                        onChange={handleChange}
-                                    />
-                                </div>
-
-                            </div>
-                        </center>
+                    <br /><br /><br /><br />
+                    <div style={{ marginTop: '-35px' }} className={estilos["botonsito"]}>
+                        <button className={`boton ${estilos.azul}`} type='submit'><p className={estilos.textoBoton}>Guardar</p></button>
+                        <Link className={`boton ${estilos.gris}`} to='/productos'><p>Cancelar</p></Link>
                     </div>
-
-
-                </div>
-                <br /><br /><br /><br />
-                <div style={{ marginTop:'-35px' }} className={estilos["botonsito"]}>
-                    <button className={`boton ${estilos.azul}`} type='submit'><p className={estilos.textoBoton}>Guardar</p></button>
-                    <Link className={`boton ${estilos.gris}`} to='/productos'><p>Cancelar</p></Link>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
-    </div>
     );
 }
 
