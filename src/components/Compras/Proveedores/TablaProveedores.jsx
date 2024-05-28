@@ -13,6 +13,8 @@ import 'jspdf-autotable';
 function Proveedores() {
     const token = localStorage.getItem('token');
     const [proveedores, setProveedores] = useState([]);
+    const [selectedItem, setSelectedItem] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [estadoModaleditar, cambiarEstadoModalEditar] = useState(false);
     
     const [proveedores1, setProveedores1] = useState({
@@ -81,21 +83,74 @@ function Proveedores() {
         // Guardar el PDF
         doc.save("reporte_proveedores.pdf");
     };
+
+    const handleEliminarProveedor = (idProveedor) => {
+        // Mostrar un mensaje de confirmación antes de eliminar
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: '¿Deseas eliminar este proveedor?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const response = await fetch(`https://api-luchosoft-mysql.onrender.com/compras/proveedores/${idProveedor}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'token': token
+                        }
+                    });
+    
+                    if (response.ok) {
+                        // Insumo eliminado exitosamente
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Proveedor eliminado',
+
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+            
+                        fetchproveedores();
+                    } else {
+                        console.error('Error al eliminar el proveedor:', response.statusText);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'El proveedor está siendo usado en alguna compra',
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error al eliminar el proveedor:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Error al eliminar el proveedor',
+                    });
+                }
+            }
+        });
+    };
     
 
     const columns = [
-        {
-            name: "Id",
-            selector: (row) => row.id_proveedor,
-            sortable: true
-        },
+        // {
+        //     name: "Id",
+        //     selector: (row) => row.id_proveedor,
+        //     sortable: true
+        // },
         {
             name: "Nombre",
             selector: (row) => row.nombre_proveedor,
             sortable: true
         },
         {
-            name: "Tipo Documento",
+            name: "Tipo Doc",
             selector: (row) => row.tipo_documento,
             sortable: true
         },
@@ -119,9 +174,9 @@ function Proveedores() {
             cell: (row) => (
 
                 <div className={estilos["acciones"]}>
-                    <button className={estilos.boton} onClick={() => handleEstadoproveedor(row.id_proveedor, row.estado_proveedor)} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '25px' }}>
+                    <button className={estilos.boton} onClick={() => handleEstadoproveedor(row.id_proveedor, row.estado_proveedor)} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '30px' }}>
                         {row.estado_proveedor === 1 ? (
-                            <i className="bi bi-toggle-on" style={{ color: "#1F67B9" }}></i>
+                            <i className="bi bi-toggle-on" style={{ color: "#48110d" }}></i>
                         ) : (
                             <i className="bi bi-toggle-off" style={{ width: "60px", color: "black" }}></i>
                         )}
@@ -132,21 +187,34 @@ function Proveedores() {
             )
         },
         {
-            name: "Acciones",
+            name: "ㅤㅤAcciones",
             cell: (row) => (
                 <div className={estilos["acciones"]}>
 
 <button onClick={() => {
-                        if (row.estado_proveedor === 1) { // Verifica si el estado es activo
+                        if (row.estado_proveedor === 1) { // Solo abre el modal si el estado es activo
+                            setSelectedItem(row);
+                            setIsModalOpen(true);
+                        }
+                    }} className={estilos.boton} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '25px' }}>
+                        <i className={`bi ${row.estado_proveedor === 0 ? 'bi-eye-slash cerrado' : 'bi-eye'}`} style={{ color: row.estado_proveedor === 0 ? "gray" : "#1A008E", pointerEvents: row.estado_proveedor === 0 ? "none" : "auto" }}></i>
+                    </button>
+                    {/* Botón para editar */}
+                    <button onClick={() => {
+                        if (row.estado_proveedor === 1) {
                             cambiarEstadoModalEditar(!estadoModaleditar);
                             setProveedoresEditar(row);
                         }
                     }} className={estilos.boton} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}>
-                        <i className={`fa-solid fa-pen-to-square ${row.estado_proveedor === 1 ? 'iconosVerdes' : 'iconosGris'}`}></i>
+                        <i className={`fa-solid fa-pen-to-square ${row.estado_proveedor === 1 ? 'iconosNaranjas' : 'iconosGris'}`}></i>
+                    </button>
+
+                    <button onClick={() => handleEliminarProveedor(row.id_proveedor)} disabled={row.estado_proveedor === 0} className={estilos.boton} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '25px' }}>
+                        <i className={`bi bi-trash ${row.estado_proveedor === 0 ? 'basuraDesactivada' : ''}`} style={{ color: row.estado_proveedor === 0 ? "gray" : "red" }}></i>
                     </button>
                 </div>
             )
-        },
+        }
 
 
         // Resto de columnas
@@ -416,8 +484,8 @@ function Proveedores() {
             <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
             <link href="https://cdn.datatables.net/2.0.2/css/dataTables.semanticui.css" rel="stylesheet" />
             <link href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.css" rel="stylesheet" />
-            <div>
-                <h1>Proveedores</h1>
+            <div id={estilos["titulo"]}>
+                <h1>Insumos</h1>
             </div>
 
             <br />
@@ -426,7 +494,7 @@ function Proveedores() {
 <div className={estilos['divFiltro']}>
     <input type="text" placeholder=" Buscar..." value={filtro} onChange={handleFiltroChange} className={estilos["busqueda"]} />
     <div>
-    <button onClick={() => cambiarEstadoModalAgregar(!estadoModalAgregar)} className={` ${estilos.botonAgregar}`}><i className="fa-solid fa-plus"></i> Agregar</button>
+    <button onClick={() => cambiarEstadoModalAgregar(!estadoModalAgregar)} className={` ${estilos.botonAgregar} ${estilos.rojo} bebas-neue-regular`}><i className="fa-solid fa-plus"></i> Agregar</button>
     
     <button
         style={{ color: "white" }}
@@ -439,8 +507,46 @@ function Proveedores() {
 </div>
 
             <div className={estilos["tabla"]}>
-                <DataTable columns={columns} data={filteredproveedores} pagination paginationPerPage={6} highlightOnHover customStyles={customStyles} defaultSortField="id_proveedor" defaultSortAsc={true}></DataTable>
+                <DataTable columns={columns} data={filteredproveedores} pagination paginationPerPage={6} ></DataTable>
             </div>
+
+            <Modal
+                estado={isModalOpen}
+                cambiarEstado={setIsModalOpen}
+                titulo="Detalles del Proveedor"
+                mostrarHeader={true}
+                mostrarOverlay={true}
+                posicionModal={'center'}
+                width={'500px'}
+                padding={'20px'}
+            >
+
+
+                {/* Contenido del modal */}
+                {selectedItem && (
+                    <>
+                        <p>ID: {selectedItem.id_proveedor}</p>
+                        <p>Nombre: {selectedItem.nombre_proveedor}</p>
+                        <p>Tipo de documento: {selectedItem.tipo_documento}</p>
+                        <p>Documento: {selectedItem.documento_proveedor}</p>
+                        <p>Teléfono: {selectedItem.telefono_proveedor}</p>
+                        <p>Dirección: {selectedItem.direccion_proveedor}</p>
+                    </>
+                )}
+
+                <hr />
+                <button
+                    type="button"
+                    className="btn btn-secondary"
+                    id={estilos['secondary']}
+                    onClick={() => setIsModalOpen(false)}
+                >
+                    Cerrar
+                </button>
+
+            </Modal>
+
+
             <Modal
                 estado={estadoModalAgregar}
                 cambiarEstado={cambiarEstadoModalAgregar}
@@ -547,15 +653,16 @@ function Proveedores() {
 
                         </div>
                         <center>
-                            <div className={estilos["cajaBotones"]}>
-                                <button onclick="registrar()" className={estilos.azulado3} type="submit"><p style={{ marginLeft: "-10px" }}> Guardar</p> </button>
-                                <div className={estilos["espacioEntreBotones"]}></div>
-                                <button style={{ color: "white", }} onClick={() => cambiarEstadoModalAgregar(!estadoModalAgregar)} className={estilos.gris} type="button"> <p style={{ marginLeft: "-13px" }}> Cancelar</p></button>
-                            </div>
+                        <div className={estilos["BotonesClientes"]}>
+                            <button onclick="registrar()" className={estilos['azulado']} type="submit"><p>Aceptar</p> </button>
+
+                            <button onClick={() => cambiarEstadoModalAgregar(!estadoModalAgregar)} className={estilos['gris']} type="button"> <p>Cancelar</p></button>
+                        </div>
                         </center>
                     </form>
                 </Contenido>
             </Modal>
+
 
             <Modal
                 estado={estadoModaleditar}
@@ -616,7 +723,7 @@ function Proveedores() {
 
 
 
-                                    <div className={estilos["espacio"]}></div>
+                                    <div className={estilos["espacio"]}> </div>
                                     <div className={estilos["inputIdNombre"]}>
 
 </div>

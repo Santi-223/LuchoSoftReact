@@ -5,13 +5,37 @@
 }
 
 .botonAgregar {
-background-color: #1F67B9;
-color: white;
-height: 40px;
-width: 130px;
-margin-right: 20px;
-border: none;
-border-radius: 50px;
+  border: 1px solid #b90505;
+  margin-right: 20px;
+  background-color: white;
+  color: #b90505;
+  border-radius: 50px;
+  height: 40px;
+  width: 120px;
+  font-size: 18px;
+}
+
+.boton {
+  background-color: transparent;
+  /* Establece el fondo del botón como transparente */
+  border: none;
+  /* Elimina el borde del botón */
+  cursor: pointer;
+  /* Cambia el cursor al pasar sobre el botón */
+
+}
+
+/* Estilos CSS */
+.bi.bi-eye.cerrado::before {
+  content: "\e85f"; /* Ícono de ojo cerrado */
+}
+
+
+
+
+.boton:hover {
+  background-color: transparent;
+  /* Establece el fondo del botón como transparente al pasar sobre él */
 }
 
 .descargar {
@@ -45,21 +69,46 @@ border-radius: 100px;
   box-shadow: 1px 1px 1px 1px #771d17;
 }
 
-.botonAgregar:hover {
+
+
+.azulado {
+  background-color: #1F67B9;
+  color: #ffffff;
+
+}
+
+.BotonesClientes {
+  display: flex;
+  justify-content: center;
+
+  margin-top: 10px;
+
+}
+
+.BotonesClientes button {
+  height: 45px;
+  width: 100px;
+  margin-right: 20px;
+  margin-left: 20px;
+  border-radius: 10px;
+  border: none;
+
+}
+
+.azulado:hover {
   background: #3c77bb;
 }
 
-.botonAgregar:active {
+.azulado:active {
   box-shadow: 1px 1px 1px 1px #3c77bb;
 }
 
-.azulado {
+.rojo:hover {
+  background: #b9050517;
+}
 
-  color: white;
-  height: 50px;
-  min-width: 130px;
-  margin-left: 100%;
-  margin-bottom: -20px;
+.rojo:active {
+  box-shadow: 1px 1px 1px 1px #b9050517;
 }
 
 .botonRojo {
@@ -205,17 +254,18 @@ border-radius: 100px;
 }
 
 .gris {
-  background: rgb(128, 128, 128);
-  min-width: 120px;
+  background: rgb(222, 222, 222);
+  color: black;
 
 }
 
+
 .gris:hover {
-  background: rgb(146, 146, 146);
+  background: rgb(229, 229, 229);
 }
 
 .gris:active {
-  box-shadow: 1px 1px 1px 1px rgb(146, 146, 146);
+  box-shadow: 1px 1px 1px 1px rgb(233, 233, 233);
 }
 
 .parrafoGris {
@@ -258,19 +308,8 @@ input {
 }
 
 
-.rojo {
-  background: #E12424;
-  color: white;
 
-}
 
-.rojo:hover {
-  background: #f33928;
-}
-
-.rojo:active {
-  box-shadow: 1px 1px 1px 1px #f33928;
-}
 
 
 .input-container {
@@ -362,7 +401,12 @@ label {
   margin-right: 20px;
 }
 
-
+#titulo {
+  font-size: 15px;
+  margin-top: 0px;
+  display: flex;
+  color: #48110d;
+}
 
 .conosRojos {
   color: #E12424;
@@ -620,22 +664,6 @@ td {
 }
 
 
-
-.rojo {
-  background: #E12424;
-  color: white;
-  display: flex;
-  justify-content: center;
-
-}
-
-.rojo:hover {
-  background: #f33928;
-}
-
-.rojo:active {
-  box-shadow: 1px 1px 1px 1px #f33928;
-}
 
 
 
