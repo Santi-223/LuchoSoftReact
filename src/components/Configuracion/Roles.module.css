@@ -1,4 +1,4 @@
-.titulo{
+.titulo {
   display: flex;
   justify-content: space-between;
 }
@@ -18,13 +18,13 @@
   font-size: 18px;
 }
 
-.botonAgregar:hover{
+.botonAgregar:hover {
   background: #b905052d;
   color: white;
 
 }
 
-.divFiltro{
+.divFiltro {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -388,16 +388,20 @@ td {
 
 /* Estilos para el botón de eliminar */
 .boton {
-  background-color: transparent; /* Establece el fondo del botón como transparente */
-  border: none; /* Elimina el borde del botón */
-  cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+  background-color: transparent;
+  /* Establece el fondo del botón como transparente */
+  border: none;
+  /* Elimina el borde del botón */
+  cursor: pointer;
+  /* Cambia el cursor al pasar sobre el botón */
 }
 
 .boton:hover {
-  background-color: transparent; /* Establece el fondo del botón como transparente al pasar sobre él */
+  background-color: transparent;
+  /* Establece el fondo del botón como transparente al pasar sobre él */
 }
 
-.tabla{
+.tabla {
   border-collapse: collapse;
   border: 1px solid gray;
   border-radius: 10px;
@@ -412,4 +416,22 @@ td {
   border-radius: 20px;
   width: 500px;
   margin-top: 5px;
+}
+
+.inputInvalido {
+  padding: 15px;
+  border-radius: 5px;
+  width: 350px;
+  padding: 10px;
+  border: 1px solid red;
+  /* background-color: #f5c1c1; */
+}
+
+.inputInvalido2 {
+  padding: 15px;
+  border-radius: 5px;
+  width: 160px;
+  padding: 10px;
+  border: 1px solid red;
+  /* background-color: #f5c1c1; */
 }

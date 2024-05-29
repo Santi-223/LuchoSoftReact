@@ -8,6 +8,23 @@ function AgregarUsuarios() {
     const [redirect, setRedirect] = useState(false);
     const [roles, setRoles] = useState([]);
 
+    const [inputValidoId, setInputValidoId] = useState(true);
+    const [errorId, setErrorId] = useState('')
+    const [inputValidoNombre, setInputValidoNombre] = useState(true);
+    const [errorNombre, setErrorNombre] = useState('')
+    const [inputValidadoTelefono, setInputValidoTelefono] = useState(true);
+    const [errorTelefono, setErrorTelefono] = useState('')
+    const [inputValidadoDireccion, setInputValidoDireccion] = useState(true);
+    const [errorDireccion, setErrorDireccion] = useState('')
+    const [inputValidadoEmail, setInputValidoEmail] = useState(true);
+    const [errorEmail, setErrorEmail] = useState('')
+    const [inputValidadoContrasena, setInputValidoContrasena] = useState(true);
+    const [errorContrasena, setErrorContrasena] = useState('')
+    const [inputValidadoRol, setInputValidoRol] = useState(true);
+    const [errorRol, setErrorRol] = useState('')
+    const [inputValidadoImg, setInputValidoImg] = useState(true);
+    const [errorImg, setErrorImg] = useState('')
+
     const [usuario, setUsuario] = useState({
         id_usuario: '',
         imagen_usuario: '',
@@ -25,12 +42,188 @@ function AgregarUsuarios() {
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
-        setImgUsuario(file);
-        setImgPreview(URL.createObjectURL(file)); // Crear una URL para la imagen seleccionada
+        setImgUsuario(file); // Guarda el archivo seleccionado en el estado imgUsuario
+        setImgPreview(URL.createObjectURL(file)); // Crea una URL para mostrar la vista previa de la imagen
+
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/gif']; // Tipos MIME permitidos
+
+            if (file && allowedTypes.includes(file.type)) {
+                setErrorImg(''); // Limpia el mensaje de error
+                setInputValidoImg(true);
+                setImgUsuario(file); // Guarda el archivo seleccionado en el estado imgUsuario
+                setImgPreview(URL.createObjectURL(file)); // Crea una URL para mostrar la vista previa de la imagen
+            } else {
+                setErrorImg('Selecciona un archivo de imagen válido (JPEG, PNG, GIF).');
+                setInputValidoImg(false);
+                setImgUsuario(null); // Restablece el estado de la imagen
+                setImgPreview(''); // Restablece la vista previa de la imagen
+                event.target.value = null;
+            }
     };
 
     const handleChange = (event) => {
         const { name, value } = event.target;
+
+        if (name === 'id_usuario') {
+            // Verifica si el valor contiene solo dígitos positivos
+            const esNumeroPositivo = /^[0-9/s]+$/.test(value);
+
+            if (value.trim() === '') {
+                setErrorTelefono('El campo es obligatorio.');
+                setInputValidoTelefono(false);
+            } else if (!esNumeroPositivo) {
+                setErrorId('No se permiten caracteres especiales ni letras.');
+                setInputValidoId(false);
+            } else if (value.length < 5) {
+                setErrorId('Ingresa más de 5 dígitos.');
+                setInputValidoId(false);
+            } else if (value.length > 11) {
+                setErrorId('Ingresa un máximo de 11 dígitos.');
+                setInputValidoId(false);
+            } else {
+                setErrorId(''); // Limpia el mensaje de error
+                setInputValidoId(true);
+            }
+        }
+
+        if (name === 'nombre_usuario') {
+            // Verifica si el campo no está vacío
+            if (value.trim() === '') {
+                setErrorNombre('El campo es obligatorio.');
+                setInputValidoNombre(false);
+            }
+            // Verifica si el valor contiene caracteres especiales
+            else if (/[^a-zA-Z0-9\s]/.test(value)) {
+                setErrorNombre('No se permiten caracteres especiales.');
+                setInputValidoNombre(false);
+            }
+            // Verifica si la longitud es menor a 5 caracteres
+            else if (value.length < 5) {
+                setErrorNombre('Ingresa al menos 5 caracteres.');
+                setInputValidoNombre(false);
+            }
+            // Verifica si la longitud es mayor a 30 caracteres
+            else if (value.length > 30) {
+                setErrorNombre('Ingresa un máximo de 30 caracteres.');
+                setInputValidoNombre(false);
+            }
+            // Si todo es válido
+            else {
+                setErrorNombre(''); // Limpia el mensaje de error
+                setInputValidoNombre(true);
+            }
+        }
+
+        if (name === 'telefono_usuario') {
+            // Verifica si el campo no está vacío
+            if (value.trim() === '') {
+                setErrorTelefono('El campo es obligatorio.');
+                setInputValidoTelefono(false);
+            }
+            // Verifica si el valor contiene caracteres especiales
+            else if (/[^0-9\s]/.test(value)) {
+                setErrorTelefono('No se permiten caracteres especiales ni letras.');
+                setInputValidoTelefono(false);
+            }
+            // Verifica si la longitud es menor a 5 caracteres
+            else if (value.length < 7) {
+                setErrorTelefono('Ingresa al menos 7 caracteres.');
+                setInputValidoTelefono(false);
+            }
+            // Verifica si la longitud es mayor a 30 caracteres
+            else if (value.length > 10) {
+                setErrorTelefono('Ingresa un máximo de 10 caracteres.');
+                setInputValidoTelefono(false);
+            }
+            // Si todo es válido
+            else {
+                setErrorTelefono(''); // Limpia el mensaje de error
+                setInputValidoTelefono(true);
+            }
+        }
+
+        if (name === 'direccion_usuario') {
+            // Verifica si el campo no está vacío
+            if (value.trim() === '') {
+                setErrorDireccion('El campo es obligatorio.');
+                setInputValidoDireccion(false);
+            }
+            // Verifica si la longitud es menor a 5 caracteres
+            else if (value.length < 7) {
+                setErrorDireccion('Ingresa al menos 7 caracteres.');
+                setInputValidoDireccion(false);
+            }
+            // Verifica si la longitud es mayor a 30 caracteres
+            else if (value.length > 30) {
+                setErrorDireccion('Ingresa un máximo de 30 caracteres.');
+                setInputValidoDireccion(false);
+            }
+            // Si todo es válido
+            else {
+                setErrorDireccion(''); // Limpia el mensaje de error
+                setInputValidoDireccion(true);
+            }
+        }
+
+        if (name === 'email') {
+            // Verifica si el campo no está vacío
+            if (value.trim() === '') {
+                setErrorEmail('El campo es obligatorio.');
+                setInputValidoEmail(false);
+            }
+            // Verifica si la longitud es menor a 5 caracteres
+            else if (value.length < 5) {
+                setErrorEmail('Ingresa al menos 7 caracteres.');
+                setInputValidoEmail(false);
+            }
+            // Verifica si la longitud es mayor a 30 caracteres
+            else if (value.length > 45) {
+                setErrorEmail('Ingresa un máximo de 30 caracteres.');
+                setInputValidoEmail(false);
+            }
+            // Si todo es válido
+            else {
+                setErrorEmail(''); // Limpia el mensaje de error
+                setInputValidoEmail(true);
+            }
+        }
+
+        if (name === 'contraseña') {
+            // Verifica si el campo no está vacío
+            if (value.trim() === '') {
+                setErrorContrasena('El campo es obligatorio.');
+                setInputValidoContrasena(false);
+            }
+            // Verifica si la longitud es menor a 5 caracteres
+            else if (value.length < 8) {
+                setErrorContrasena('La contraseña de tener al menos 8 caracteres.');
+                setInputValidoContrasena(false);
+            }
+            // Verifica si la longitud es mayor a 30 caracteres
+            else if (value.length > 15) {
+                setErrorContrasena('La contraseña debe tener un máximo de 15 caracteres.');
+                setInputValidoContrasena(false);
+            }
+            // Si todo es válido
+            else {
+                setErrorContrasena(''); // Limpia el mensaje de error
+                setInputValidoContrasena(true);
+            }
+        }
+
+        if (name == 'id_rol') {
+            // Verifica si el campo no está vacío
+            if (value == 0) {
+                setErrorRol('Debes selecionar un rol.');
+                setInputValidoRol(false);
+            }
+            else {
+                setErrorRol(''); // Limpia el mensaje de error
+                setInputValidoRol(true);
+            }
+        }
+
+
         setUsuario(prevUsuario => ({
             ...prevUsuario,
             [name]: value
@@ -64,155 +257,65 @@ function AgregarUsuarios() {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        if (usuario.id_usuario.length === 0) {
+        if (!inputValidoId || !inputValidoNombre || !inputValidadoDireccion || !inputValidadoTelefono || !inputValidadoEmail || !inputValidadoContrasena || !inputValidadoRol || !inputValidadoImg) {
             Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: "El campo de identificación está vacío.",
+                text: "Verifica todos los campos.",
             });
-            return;
-        }
-        if (usuario.id_usuario.length < 5) {
+        } else if(!usuario.id_usuario || !usuario.nombre_usuario || !usuario.direccion_usuario || !usuario.telefono_usuario || !usuario.email || !usuario.contraseña || usuario.id_rol == 0){
             Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: "El campo de identificación debe tener 5 o más caracteres.",
+                text: "Hay campos vacios.",
             });
-            return;
         }
-        if (usuario.nombre_usuario.length === 0) {
-            Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: "El campo de nombre está vacío.",
-            });
-            return;
-        }
-        if (usuario.nombre_usuario.length < 5) {
-            Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: "El campo de nombre debe tener 5 o más caracteres.",
-            });
-            return;
-        }
-        if (usuario.telefono_usuario.length === 0) {
-            Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: "El campo de teléfono está vacío.",
-            });
-            return;
-        }
-        if (usuario.telefono_usuario.length < 7) {
-            Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: "El campo de teléfono debe tener 7 o más caracteres.",
-            });
-            return;
-        }
-        if (usuario.direccion_usuario.length === 0) {
-            Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: "El campo de dirección está vacío.",
-            });
-            return;
-        }
-        if (usuario.direccion_usuario.length < 7) {
-            Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: "El campo de dirección debe tener 7 o más caracteres.",
-            });
-            return;
-        }
-        if (usuario.email.length === 0) {
-            Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: "El campo de email está vacío.",
-            });
-            return;
-        }
-        if (usuario.email.length < 5) {
-            Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: "El campo de email debe tener 5 o más caracteres.",
-            });
-            return;
-        }
-        if (usuario.contraseña.length === 0) {
-            Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: "El campo de contraseña está vacío.",
-            });
-            return;
-        }
-        if (usuario.contraseña.length < 8) {
-            Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: "La contraseña debe tener 8 o más caracteres.",
-            });
-            return;
-        }
-        if (usuario.id_rol === 0) {
-            Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: "Debes seleccionar un rol.",
-            });
-            return;
-        }
+        else {
+            try {
+                const formUsuario = new FormData();
+                formUsuario.append('imgUsuario', imgUsuario); // Usar imgUsuario directamente
+                formUsuario.append('id_usuario', usuario.id_usuario);
+                formUsuario.append('nombre_usuario', usuario.nombre_usuario);
+                formUsuario.append('email', usuario.email);
+                formUsuario.append('contrasena', usuario.contraseña);
+                formUsuario.append('telefono_usuario', usuario.telefono_usuario); // Corregido el valor
+                formUsuario.append('direccion_usuario', usuario.direccion_usuario);
+                formUsuario.append('estado_usuario', '1');
+                formUsuario.append('id_rol', usuario.id_rol);
 
-        try {
-            const formUsuario = new FormData();
-            formUsuario.append('imgUsuario', imgUsuario); // Usar imgUsuario directamente
-            formUsuario.append('id_usuario', usuario.id_usuario);
-            formUsuario.append('nombre_usuario', usuario.nombre_usuario);
-            formUsuario.append('email', usuario.email);
-            formUsuario.append('contrasena', usuario.contraseña);
-            formUsuario.append('telefono_usuario', usuario.telefono_usuario); // Corregido el valor
-            formUsuario.append('direccion_usuario', usuario.direccion_usuario);
-            formUsuario.append('estado_usuario', '1');
-            formUsuario.append('id_rol', usuario.id_rol);
-
-            const response = await fetch('https://api-luchosoft-mysql.onrender.com/configuracion/usuarios', {
-                method: 'POST',
-                body: formUsuario
-            });
-
-            if (response.ok) {
-                console.log('Usuario creado exitosamente.');
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Usuario creado exitosamente',
-                    showConfirmButton: false,
-                    timer: 1500
+                const response = await fetch('https://api-luchosoft-mysql.onrender.com/configuracion/usuarios', {
+                    method: 'POST',
+                    body: formUsuario
                 });
-                setTimeout(() => {
-                    setRedirect(true);
-                }, 1000);
-            } else {
-                const errorData = await response.json(); // Parsear el cuerpo de la respuesta como JSON
-                console.error('Error al crear el usuario:', errorData);
+
+                if (response.ok) {
+                    console.log('Usuario creado exitosamente.');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Usuario creado exitosamente',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                    setTimeout(() => {
+                        setRedirect(true);
+                    }, 1000);
+                } else {
+                    const errorData = await response.json(); // Parsear el cuerpo de la respuesta como JSON
+                    console.error('Error al crear el usuario:', errorData);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error al crear el usuario',
+                        text: errorData,
+                    });
+                }
+            } catch (error) {
+                console.error('Error al crear el usuario:', error);
                 Swal.fire({
                     icon: 'error',
                     title: 'Error al crear el usuario',
-                    text: errorData,
+                    text: error.message
                 });
             }
-        } catch (error) {
-            console.error('Error al crear el usuario:', error);
-            Swal.fire({
-                icon: 'error',
-                title: 'Error al crear el usuario',
-                text: error.message
-            });
         }
     };
 
@@ -245,28 +348,28 @@ function AgregarUsuarios() {
                                     <label htmlFor="id_usuario">Identificación</label>
                                     <div className={estilos["formulario__grupo-input"]}>
                                         <input
-                                            className={estilos["input-field2"]}
-                                            type="number"
+                                            className={`${!inputValidoId ? estilos.inputInvalido : estilos['input-field2']}`}
+                                            type="text"
                                             name="id_usuario"
                                             id={estilos.id_usuario}
                                             value={usuario.id_usuario}
                                             onChange={handleChange}
                                         />
-                                        <span></span>
+                                        {!inputValidoId && <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute' }}>{errorId}</p>}
                                     </div>
                                 </div>
                                 <div className={estilos["formulario__grupo2"]}>
-                                    <label htmlFor="nombre">Nombre</label>
+                                    <label htmlFor="nombre">Nombre Completo</label>
                                     <div className={estilos["formulario__grupo-input"]}>
                                         <input
-                                            className={estilos["input-field2"]}
+                                            className={`${!inputValidoNombre ? estilos.inputInvalido : estilos['input-field2']}`}
                                             type="text"
                                             name="nombre_usuario"
                                             id={estilos.nombre}
                                             value={usuario.nombre_usuario}
                                             onChange={handleChange}
                                         />
-                                        <span></span>
+                                        {!inputValidoNombre && <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute' }}>{errorNombre}</p>}
                                     </div>
                                 </div>
                             </div>
@@ -275,28 +378,28 @@ function AgregarUsuarios() {
                                     <label htmlFor="telefono_usuario">Teléfono</label>
                                     <div className={estilos["formulario__grupo-input"]}>
                                         <input
-                                            className={estilos["input-field2"]}
+                                            className={`${!inputValidadoTelefono ? estilos.inputInvalido : estilos['input-field2']}`}
                                             type="text"
                                             name="telefono_usuario"
                                             id={estilos.telefono_usuario}
                                             value={usuario.telefono_usuario}
                                             onChange={handleChange}
                                         />
-                                        <span></span>
+                                        {!inputValidadoTelefono && <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute' }}>{errorTelefono}</p>}
                                     </div>
                                 </div>
                                 <div className={estilos["formulario__grupo2"]} id={estilos.grupo__direccion}>
                                     <label htmlFor="direccion_usuario">Dirección</label>
                                     <div className={estilos["formulario__grupo-input"]}>
                                         <input
-                                            className={estilos["input-field2"]}
+                                            className={`${!inputValidadoDireccion ? estilos.inputInvalido : estilos['input-field2']}`}
                                             type="text"
                                             name="direccion_usuario"
                                             id={estilos.direccion_usuario}
                                             value={usuario.direccion_usuario}
                                             onChange={handleChange}
                                         />
-                                        <span></span>
+                                        {!inputValidadoDireccion && <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute' }}>{errorDireccion}</p>}
                                     </div>
                                 </div>
                             </div>
@@ -305,13 +408,14 @@ function AgregarUsuarios() {
                                 <div className={estilos["eo"]}>
                                     <p>Email</p>
                                     <input
-                                        className={estilos["input-field"]}
+                                        className={`${!inputValidadoEmail ? estilos.inputInvalido2 : estilos['input-field']}`}
                                         type="email"
                                         name="email"
                                         id={estilos.email}
                                         value={usuario.email}
                                         onChange={handleChange}
                                     />
+                                    {!inputValidadoEmail && <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute' }}>{errorEmail}</p>}
                                 </div>
                             </div>
                             <div className={estilos["input-container"]}>
@@ -319,21 +423,21 @@ function AgregarUsuarios() {
                                     <label htmlFor="contraseña">Contraseña</label>
                                     <div className={estilos["formulario__grupo-input"]}>
                                         <input
-                                            className={estilos["input-field2"]}
+                                            className={`${!inputValidadoContrasena ? estilos.inputInvalido : estilos['input-field2']}`}
                                             type="password"
                                             name="contraseña"
                                             id={estilos.contraseña}
                                             value={usuario.contraseña}
                                             onChange={handleChange}
                                         />
-                                        <span></span>
+                                        {!inputValidadoContrasena && <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute' }}>{errorContrasena}</p>}
                                     </div>
                                 </div>
                                 <div className={estilos["formulario__grupo2"]} id={estilos.grupo__id_rol}>
                                     <label htmlFor="id_rol">Seleccionar Rol</label>
                                     <div className={estilos["formulario__grupo-input"]}>
                                         <select
-                                            className={estilos["input-field2"]}
+                                            className={`${!inputValidadoRol ? estilos.inputInvalido : estilos['input-field2']}`}
                                             name="id_rol" // Utiliza el mismo nombre que el campo id_rol
                                             id={estilos.id_rol} // Cambia el id para que sea único
                                             value={usuario.id_rol}
@@ -347,6 +451,7 @@ function AgregarUsuarios() {
                                                 return null;
                                             })}
                                         </select>
+                                        {!inputValidadoRol && <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute' }}>{errorRol}</p>}
                                     </div>
                                 </div>
                             </div>
@@ -362,12 +467,15 @@ function AgregarUsuarios() {
                                     <div>
                                         <input
                                             id={estilos.imagen_usuario}
-                                            className={estilos["input-field2"]}
+                                            className={`${!inputValidadoImg ? estilos.inputInvalido : estilos['input-field2']}`}
                                             type="file"
                                             placeholder="URL de la imagen"
                                             name='imagen_usuario'
                                             onChange={handleFileChange}
                                         />
+                                        {!inputValidadoImg && <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '14px'}}>{errorImg}</p>}
+                                        <br />
+                                        <br />
                                     </div>
                                 </div>
                             </center>

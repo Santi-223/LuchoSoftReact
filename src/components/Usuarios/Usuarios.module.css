@@ -282,3 +282,21 @@ label {
     border-radius: 20px;
     width: 500px;
 }
+
+.inputInvalido {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 240px;
+    border: 1px solid red;
+    /* background-color: #f5c1c1; */
+  }
+
+  .inputInvalido2 {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 500px;
+    border: 1px solid red;
+    /* background-color: #f5c1c1; */
+  }

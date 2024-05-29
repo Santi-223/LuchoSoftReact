@@ -14,6 +14,15 @@ function Roles() {
     // Obtener el token del localStorage
     const token = localStorage.getItem('token');
 
+    const [inputValidoNombre, setInputValidoNombre] = useState(true);
+    const [errorNombre, setErrorNombre] = useState('')
+    const [inputValidoDes, setInputValidoDes] = useState(true);
+    const [errorDes, setErrorDes] = useState('')
+    const [inputValidoNombre2, setInputValidoNombre2] = useState(true);
+    const [errorNombre2, setErrorNombre2] = useState('')
+    const [inputValidoDes2, setInputValidoDes2] = useState(true);
+    const [errorDes2, setErrorDes2] = useState('')
+
     const [selectedPermisos, setSelectedPermisos] = useState([]);
     const [estadoModalAgregar, cambiarEstadoModalAgregar] = useState(false);
     const [estadoModaleditar, cambiarEstadoModalEditar] = useState(false);
@@ -173,18 +182,18 @@ function Roles() {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        if (roles1.nombre_rol.length == 0) {
+        if (!inputValidoNombre || !inputValidoDes) {
             Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: "El campo de nombre esta vacío.",
-            })
-        } else if (roles1.descripcion_rol.length == 0) {
+                text: "Verifica todos los campos.",
+            });
+        } else if(!roles1.nombre_rol || !roles1.descripcion_rol){
             Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: "El campo de descripción rol esta vacío.",
-            })
+                text: "Hay campos vacios.",
+            });
         }
         else {
             try {
@@ -486,6 +495,63 @@ function Roles() {
 
     const handleChange = (event) => {
         const { name, value } = event.target;
+
+        if (name === 'nombre_rol') {
+            // Verifica si el campo no está vacío
+            if (value.trim() === '') {
+                setErrorNombre('El campo es obligatorio.');
+                setInputValidoNombre(false);
+            }
+            // Verifica si el valor contiene caracteres especiales
+            else if (/[^a-zA-Z0-9\s]/.test(value)) {
+                setErrorNombre('No se permiten caracteres especiales.');
+                setInputValidoNombre(false);
+            }
+            // Verifica si la longitud es menor a 5 caracteres
+            else if (value.length < 5) {
+                setErrorNombre('Ingresa al menos 5 caracteres.');
+                setInputValidoNombre(false);
+            }
+            // Verifica si la longitud es mayor a 30 caracteres
+            else if (value.length > 30) {
+                setErrorNombre('Ingresa un máximo de 30 caracteres.');
+                setInputValidoNombre(false);
+            }
+            // Si todo es válido
+            else {
+                setErrorNombre(''); // Limpia el mensaje de error
+                setInputValidoNombre(true);
+            }
+        }
+        if (name === 'descripcion_rol') {
+            // Verifica si el campo no está vacío
+            if (value.trim() === '') {
+                setErrorDes('El campo es obligatorio.');
+                setInputValidoDes(false);
+            }
+            // Verifica si el valor contiene caracteres especiales
+            else if (/[^a-zA-Z0-9\s]/.test(value)) {
+                setErrorDes('No se permiten caracteres especiales.');
+                setInputValidoDes(false);
+            }
+            // Verifica si la longitud es menor a 5 caracteres
+            else if (value.length < 5) {
+                setErrorDes('Ingresa al menos 5 caracteres.');
+                setInputValidoDes(false);
+            }
+            // Verifica si la longitud es mayor a 30 caracteres
+            else if (value.length > 50) {
+                setErrorDes('Ingresa un máximo de 50 caracteres.');
+                setInputValidoDes(false);
+            }
+            // Si todo es válido
+            else {
+                setErrorDes(''); // Limpia el mensaje de error
+                setInputValidoDes(true);
+            }
+        }
+
+
         setRoles1(prevroles => ({
             ...prevroles,
             [name]: value
@@ -494,6 +560,62 @@ function Roles() {
 
     const handleChangeEditar = (event) => {
         const { name, value } = event.target;
+
+        if (name === 'nombre_rol') {
+            // Verifica si el campo no está vacío
+            if (value.trim() === '') {
+                setErrorNombre2('El campo es obligatorio.');
+                setInputValidoNombre2(false);
+            }
+            // Verifica si el valor contiene caracteres especiales
+            else if (/[^a-zA-Z0-9\s]/.test(value)) {
+                setErrorNombre2('No se permiten caracteres especiales.');
+                setInputValidoNombre2(false);
+            }
+            // Verifica si la longitud es menor a 5 caracteres
+            else if (value.length < 5) {
+                setErrorNombre2('Ingresa al menos 5 caracteres.');
+                setInputValidoNombre2(false);
+            }
+            // Verifica si la longitud es mayor a 30 caracteres
+            else if (value.length > 30) {
+                setErrorNombre2('Ingresa un máximo de 30 caracteres.');
+                setInputValidoNombre2(false);
+            }
+            // Si todo es válido
+            else {
+                setErrorNombre2(''); // Limpia el mensaje de error
+                setInputValidoNombre2(true);
+            }
+        }
+        if (name === 'descripcion_rol') {
+            // Verifica si el campo no está vacío
+            if (value.trim() === '') {
+                setErrorDes2('El campo es obligatorio.');
+                setInputValidoDes2(false);
+            }
+            // Verifica si el valor contiene caracteres especiales
+            else if (/[^a-zA-Z0-9\s]/.test(value)) {
+                setErrorDes2('No se permiten caracteres especiales.');
+                setInputValidoDes2(false);
+            }
+            // Verifica si la longitud es menor a 5 caracteres
+            else if (value.length < 5) {
+                setErrorDes2('Ingresa al menos 5 caracteres.');
+                setInputValidoDes2(false);
+            }
+            // Verifica si la longitud es mayor a 30 caracteres
+            else if (value.length > 50) {
+                setErrorDes2('Ingresa un máximo de 50 caracteres.');
+                setInputValidoDes2(false);
+            }
+            // Si todo es válido
+            else {
+                setErrorDes2(''); // Limpia el mensaje de error
+                setInputValidoDes2(true);
+            }
+        }
+
         setRolesEditar(prevroles => ({
             ...prevroles,
             [name]: value
@@ -503,18 +625,18 @@ function Roles() {
     const handleSubmitEditar = async (event) => {
         event.preventDefault();
 
-        if (rolesEditar.nombre_rol.length == 0) {
+        if (!inputValidoNombre2 || !inputValidoDes2) {
             Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: "El campo de nombre esta vacío.",
-            })
-        } else if (rolesEditar.descripcion_rol.length == 0) {
+                text: "Verifica todos los campos.",
+            });
+        } else if(!rolesEditar.nombre_rol || !rolesEditar.descripcion_rol){
             Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: "El campo de descripción rol esta vacío.",
-            })
+                text: "Hay campos vacios.",
+            });
         }
         else {
             Swal.fire({
@@ -570,7 +692,7 @@ function Roles() {
             });
         }
     };
-    
+
 
     if (isLoading) {
         return <div>Cargando...</div>;
@@ -616,13 +738,14 @@ function Roles() {
                                     <div id={estilos.eo}>
                                         <p id={estilos.textito} >Nombre del rol</p>
                                         <input
-                                            className={estilos["input-field"]}
+                                            className={`${!inputValidoNombre ? estilos.inputInvalido : estilos['input-field']}`}
                                             type="text"
                                             placeholder="Insertar nombre"
                                             name='nombre_rol'
                                             value={roles1.nombre_rol}
                                             onChange={handleChange}
                                         />
+                                        {!inputValidoNombre && <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute' }}>{errorNombre}</p>}
                                     </div>
 
                                 </div>
@@ -632,13 +755,14 @@ function Roles() {
                                         <p id={estilos.textito}>Descripción del rol</p>
                                         <input
                                             id={estilos.descrol}
-                                            className={estilos["input-field"]}
+                                            className={`${!inputValidoDes ? estilos.inputInvalido : estilos['input-field']}`}
                                             type="text"
                                             placeholder="Insertar descripción"
                                             name='descripcion_rol'
                                             value={roles1.descripcion_rol}
                                             onChange={handleChange}
                                         />
+                                        {!inputValidoDes && <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute' }}>{errorDes}</p>}
                                     </div>
 
                                 </div>
@@ -682,7 +806,16 @@ function Roles() {
                             <div className={estilos["cajaBotones"]}>
                                 <button onclick="registrar()" className={estilos["azul"]} type="submit">Guardar</button>
                                 <div className={estilos["espacioEntreBotones"]}></div>
-                                <button onClick={() => cambiarEstadoModalAgregar(!estadoModalAgregar)} className={estilos["gris"]} type="button">Cancelar</button>
+                                <button onClick={() => {
+                                    cambiarEstadoModalAgregar(!estadoModalAgregar);
+                                    setInputValidoNombre(true);
+                                    setInputValidoDes(true);
+                                    setRoles1({
+                                        nombre_rol: '',
+                                        descripcion_rol: '',
+                                        estado_rol: 1
+                                    })
+                                }} className={estilos["gris"]} type="button">Cancelar</button>
                             </div>
                         </center>
                     </form>
@@ -708,25 +841,27 @@ function Roles() {
                                         <p id={estilos.textito}>ID del rol</p>
                                         <input
                                             id={estilos.idrol}
-                                            className={estilos["input2"]}
+                                            className={estilos['input2']}
                                             type="number"
-                                            placeholder="Ingrese el ID del rol"
+                                            placeholder="Id rol"
                                             name='id_rol'
                                             value={rolesEditar.id_rol}
                                             onChange={handleChangeEditar}
                                             readOnly
                                         />
+
                                     </div>
                                     <div id={estilos.nombrerol}>
                                         <p id={estilos.textito} >Nombre del rol</p>
                                         <input
-                                            className={estilos["input2"]}
+                                            className={`${!inputValidoNombre2 ? estilos.inputInvalido2 : estilos['input2']}`}
                                             type="text"
                                             placeholder="Insertar nombre"
                                             name='nombre_rol'
                                             value={rolesEditar.nombre_rol}
                                             onChange={handleChangeEditar}
                                         />
+                                        {!inputValidoNombre2 && <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute' }}>{errorNombre2}</p>}
                                     </div>
 
                                 </div>
@@ -736,13 +871,14 @@ function Roles() {
                                         <p id={estilos.textito}>Descripción del rol</p>
                                         <input
                                             id={estilos.descrol}
-                                            className={estilos["input-field"]}
+                                            className={`${!inputValidoDes2 ? estilos.inputInvalido : estilos['input-field']}`}
                                             type="text"
                                             placeholder="Insertar descripción"
                                             name='descripcion_rol'
                                             value={rolesEditar.descripcion_rol}
                                             onChange={handleChangeEditar}
                                         />
+                                        {!inputValidoDes2 && <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute' }}>{errorDes2}</p>}
                                     </div>
 
                                 </div>
@@ -799,7 +935,12 @@ function Roles() {
                             <div className={estilos["cajaBotones"]}>
                                 <button onclick="registrar()" className={estilos["azul"]} type="submit">Guardar</button>
                                 <div className={estilos["espacioEntreBotones"]}></div>
-                                <button onClick={() => cambiarEstadoModalEditar(!estadoModaleditar)} className={estilos["gris"]} type="button" onclick="window.location.href='gestionroles.html'">Cancelar</button>
+                                <button onClick={() => {
+                                    cambiarEstadoModalEditar(!estadoModaleditar);
+                                    setInputValidoNombre2(true);
+                                    setInputValidoDes2(true);
+
+                                }} className={estilos["gris"]} type="button">Cancelar</button>
                             </div>
                         </center>
                     </form>
