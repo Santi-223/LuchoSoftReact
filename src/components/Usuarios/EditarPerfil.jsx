@@ -435,6 +435,7 @@ function EditarPerfil() {
                                     <label htmlFor="id_usuario">Identificación</label>
                                     <div className={estilos["formulario__grupo-input"]}>
                                         <input
+                                            readonly
                                             className={`${!inputValidoId ? estilos.inputInvalido : estilos['input-field2']}`}
                                             type="text"
                                             name="id_usuario"
