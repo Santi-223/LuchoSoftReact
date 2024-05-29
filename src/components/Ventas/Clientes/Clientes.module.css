@@ -257,19 +257,17 @@ input {
 }
 
 .input1RCliente{
-    padding: 0px;
-    height: 50em;
-}
-
-.input1RCliente label {
-    font-size: 7em;
+    font-size: 16px;
+    margin: 10px;
 }
 
 
-.input1RCliente TextField {
+
+
+/* .input1RCliente input {
     width: 100%;
     margin: 0px;
-}
+} */
 
 
 
@@ -294,10 +292,9 @@ input {
 }
 
 .input-field {
-    height: 100px;
+    height: 10px;
     border-radius: 5px;
-    width: 350px; /* Cambia este valor para ajustar el ancho del input */
-    padding: 10px;
+    width: 300PX; /* Cambia este valor para ajustar el ancho del input */
+    padding: 20px;
     border: 1px solid #ccc;
-    font-size: 10px;
 }

@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import Swal from 'sweetalert2'
 import estilos from './Pedidos.module.css';
 import { useUserContext } from "../../UserProvider";
+import zIndex from "@mui/material/styles/zIndex";
 
 const EditarPedidos = () => {
     const [customers, setClientes] = useState([]);
@@ -133,13 +134,13 @@ const EditarPedidos = () => {
 
                     if (response.ok) {
                         console.log("Producto eliminado correctamente");
-                        Swal.fire({
-                            icon: 'success',
-                            title: '',
-                            text: 'Producto eliminado correctamente',
-                        }).then(() => {
+                        // Swal.fire({
+                        //     icon: 'success',
+                        //     title: '',
+                        //     text: 'Producto eliminado correctamente',
+                        // }).then(() => {
+                            // });
                             listarpedidosProductos();
-                        });
                     } else {
                         console.error("Error al eliminar el producto:", response.statusText);
                         Swal.fire({
@@ -383,17 +384,17 @@ const EditarPedidos = () => {
                             throw new Error("Error al enviar los datos de pedidos_productos");
                         }
                         listarpedidosProductos();
-                        Swal.fire({
-                            icon: 'success',
-                            title: '',
-                            text: 'Producto Agregado correctamente',
-                        })
+                        // Swal.fire({
+                        //     icon: 'success',
+                        //     title: '',
+                        //     text: 'Producto Agregado correctamente',
+                        // })
 
                         const productoRegistrado = await responsePedidosProductos.json();
                         console.log("Producto registrado correctamente:", productoRegistrado);
-                        
+
                         setTableRows(tableRows.slice(0, -1).concat({ id_producto: 0, precio_unitario: '', cantidad: '', cantidad_seleccionada: 0, precio_total: 0 }));
-                        
+
                     });
                     await Promise.all(pedidosProductosPromise);
 
@@ -539,6 +540,8 @@ const EditarPedidos = () => {
                 <div id={estilos["titulo2"]}>
                     <h2>Editar Pedido</h2>
                 </div>
+
+
                 <div id={estilos["contenedorcito"]}>
                     <div className={estilos["input-container"]}>
                         <div id={estilos["kaka"]}>
@@ -547,10 +550,10 @@ const EditarPedidos = () => {
                         </div>
                         <div id={estilos["kake"]}>
                             <p id="skady">Descripción del Pedido</p>
-                            <textarea name="observaciones" id="descripcion" cols="5" rows="4" style={{resize: 'none'}} className={estilos['textarea']} value={pedidosEditar.observaciones} onChange={handleChange}></textarea>
+                            <textarea name="observaciones" id="descripcion" cols="5" rows="4" style={{ resize: 'none' }} className={estilos['textarea']} value={pedidosEditar.observaciones} onChange={handleChange}></textarea>
                         </div>
                         <div className={estilos.cliente}>
-                            <p>Cliente asociado</p>                            
+                            <p>Cliente asociado</p>
                             <select name="id_cliente" id="" value={pedidosEditar.id_cliente} onChange={handleChange} className={estilos["input-field22"]}>
                                 <option>Seleccione un Cliente</option>
                                 {
@@ -571,12 +574,18 @@ const EditarPedidos = () => {
                         </div>
                     </div>
                     <div className={estilos["TablaDetallePedidos"]}>
-                        <div className={estilos["agrPedidos"]}>
-                            <p>Agregar Productos</p>
-                            <button className={`fa-solid fa-plus ${estilos.AgregarProducto}`} style={{ height: '30px'}} onClick={addTableRow}></button>
-                        </div>
-                        <div style={{ overflowY: scrollEnabled ? 'scroll' : 'auto', maxHeight: '300px' }}>
-                            <table style={{borderRadius: '90px'}}>
+                        <div style={{ overflowY: scrollEnabled ? 'scroll' : 'auto',height:'60vh'}}>
+
+                            <div className={estilos["cajaBotonesRPedidos"]} style={{ zIndex: '2', position: 'fixed', bottom: '10px', background: 'white', width: '54%', padding: '.7em' }}>
+                                <button type='submit' onClick={editarPedido} className={`${estilos["boton-azul"]} `} >Guardar</button>
+
+                                <Link to="/pedidos">
+                                    <button className={estilos["boton-gris"]} type="button">Cancelar</button>
+                                </Link>
+                            </div>
+
+
+                            <table style={{ borderRadius: '90px' }}>
                                 <thead>
                                     <tr>
                                         <th className={estilos.cabeceraTabla}>Nombre</th>
@@ -641,8 +650,8 @@ const EditarPedidos = () => {
                                                 <input type="number" value={row.cantidad} onChange={(event) => handleCantidadChange2(event, index)} />
                                             </td>
                                             <td style={{ display: "flex" }}>
-                                                <button className="btn btn-success fa-solid fa-check" style={{ height: '30px', width: '40px', fontSize: '15px', borderRadius: '30px', marginRight: '5px' }} onClick={AgregarPedidoDetalle}></button>
-                                                <button onClick={() => handleDeleteRow(index)} className="btn btn-danger fa-solid fa-trash" style={{ height: '30px', width: '40px', fontSize: '15px', borderRadius: '30px' }}></button>
+                                                <button onClick={() => handleDeleteRow(index)} className="btn btn-danger fa-solid fa-trash" style={{ height: '30px', width: '40px', fontSize: '15px', borderRadius: '30px', marginRight: '5px' }}></button>
+                                                <button className="btn btn-success fa-solid fa-plus" style={{ height: '30px', width: '40px', fontSize: '15px', borderRadius: '30px', }} onClick={AgregarPedidoDetalle}></button>
                                             </td>
 
                                         </tr>
@@ -650,16 +659,9 @@ const EditarPedidos = () => {
                                 </tbody>
                             </table>
                         </div>
-                            <span style={{ fontSize: '13px', color: '#ffc64b'}}> <i className="bi bi-info-circle"> </i>Recuerda que si desea cancelar la modificación, elimina los productos recien agregados</span>
                     </div>
                 </div>
-                <div className={estilos["cajaBotonesRPedidos"]}>
-                    <button type='submit' onClick={editarPedido} className={`${estilos["boton-azul"]} `} >Guardar</button>
 
-                    <Link to="/pedidos">
-                        <button className={estilos["boton-gris"]} type="button">Cancelar</button>
-                    </Link>
-                </div>
             </div>
         </>
     )

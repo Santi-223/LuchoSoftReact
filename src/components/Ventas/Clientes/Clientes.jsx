@@ -483,7 +483,7 @@ const Cliente = () => {
                     <div className={estilos["contFormsRCliente"]}>
                         <div className={estilos["input1RCliente"]}>
                             <label>Documento <span style={{color: 'red'}}>*</span></label>
-                            <TextField
+                            <input
                                 id="id_cliente" className={estilos["input-field"]} type="number" placeholder="10203040" name="id_cliente"
                                 value={ClienteRegistrar.id_cliente} onChange={validacion} error={errorTitulo} size="small"
                                 helperText={<span style={{ fontSize: '11px' }}>{leyenda}</span>}
@@ -491,19 +491,19 @@ const Cliente = () => {
                         </div>
                         <div className={estilos["input1RCliente"]}>
                             <label>Nombre <span style={{color: 'red'}}>*</span></label>
-                            <TextField id="nombre_cliente" className={estilos["input-field"]} type="text" placeholder="Nombre" name="nombre_cliente"
+                            <input id="nombre_cliente" className={estilos["input-field"]} type="text" placeholder="Nombre" name="nombre_cliente"
                                 value={ClienteRegistrar.nombre_cliente} onChange={validacion} size="small" />
                         </div> 
                         <br />
                         <div className={estilos["input1RCliente"]}>
-                            <label>Telefono <span style={{color: 'red'}}>*</span></label>
-                            <TextField id="telefono_cliente" className={estilos["input-field"]} type="number" placeholder="Telefono" name="telefono_cliente"
+                            <label>Teléfono <span style={{color: 'red'}}>*</span></label>
+                            <input id="telefono_cliente" className={estilos["input-field"]} type="number" placeholder="Teléfono" name="telefono_cliente"
                                 value={ClienteRegistrar.telefono_cliente} onChange={validacion}  size="small" />
                         </div>
                         <br />
                         <div className={estilos["input1RCliente"]}>
                             <label>Dirección <span style={{color: 'red'}}>*</span></label>
-                            <TextField id="direccion_cliente" className={estilos["input-field"]} type="text" placeholder="Dirección" name="direccion_cliente"
+                            <input id="direccion_cliente" className={estilos["input-field"]} type="text" placeholder="Dirección" name="direccion_cliente"
                                 value={ClienteRegistrar.direccion_cliente} onChange={validacion}  size="small" />
                         </div>
                         <br />
@@ -527,17 +527,17 @@ const Cliente = () => {
                 <Contenido>
                     <div className={estilos["contFormsRCliente"]}>
                         <div className={estilos["input1RCliente"]}>
-                            <p> Nombre del cliente</p>
+                            <p> Nombre<span style={{color: 'red'}}>*</span></p>
                             <input id="nombre_cliente" className={estilos["input-field"]} type="text" placeholder="Nombre" name="nombre_cliente" value={ClientesEditar.nombre_cliente} onChange={handleEditarChange} />
                         </div>
                         <br />
                         <div className={estilos["input1RCliente"]}>
-                            <p>Telefono del cliente</p>
-                            <input id="telefono_cliente" className={estilos["input-field"]} type="text" placeholder="Telefono" name="telefono_cliente" value={ClientesEditar.telefono_cliente} onChange={handleEditarChange} />
+                            <p>Telefono<span style={{color: 'red'}}>*</span></p>
+                            <input id="telefono_cliente" className={estilos["input-field"]} type="number" placeholder="Telefono" name="telefono_cliente" value={ClientesEditar.telefono_cliente} onChange={handleEditarChange} />
                         </div>
                         <br />
                         <div className={estilos["input1RCliente"]}>
-                            <p> Dirección del cliente</p>
+                            <p> Dirección<span style={{color: 'red'}}>*</span></p>
                             <input id="direccion_cliente" className={estilos["input-field"]} type="text" placeholder="Dirección" name="direccion_cliente" value={ClientesEditar.direccion_cliente} onChange={handleEditarChange} />
                         </div>
                         <br />
