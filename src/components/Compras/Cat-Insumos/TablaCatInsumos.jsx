@@ -128,6 +128,65 @@ function categoria_insumos() {
         }));
     };
 
+    const handleEliminarCategoria = (idcategoria_insumos) => {
+        // Mostrar un mensaje de confirmación antes de eliminar
+        Swal.fire({
+          title: "¿Estás seguro?",
+          text: "¿Deseas eliminar esta categoría?",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#d33",
+          cancelButtonColor: "#3085d6",
+          confirmButtonText: "Sí, eliminar",
+          cancelButtonText: "Cancelar",
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            try {
+              const response = await fetch(
+                `https://api-luchosoft-mysql.onrender.com/compras/categoria_insumos/${idcategoria_insumos}`,
+                {
+                  method: "DELETE",
+                  headers: {
+                    "Content-Type": "application/json",
+                    token: token,
+                  },
+                }
+              );
+    
+              if (response.ok) {
+                // Insumo eliminado exitosamente
+                Swal.fire({
+                  icon: "success",
+                  title: "Categoría eliminada",
+    
+                  showConfirmButton: false,
+                  timer: 1500,
+                });
+    
+                fetchcategoria_insumos();
+              } else {
+                console.error(
+                  "Error al eliminar el categorìa:",
+                  response.statusText
+                );
+                Swal.fire({
+                  icon: "error",
+                  title: "Error",
+                  text: "La categoría está siendo usado en alguna compra",
+                });
+              }
+            } catch (error) {
+              console.error("Error al eliminar la categoría:", error);
+              Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "Error al eliminar la categoría",
+              });
+            }
+          }
+        });
+      };
+
     const columns = [
         {
             name: "Id",
@@ -146,11 +205,14 @@ function categoria_insumos() {
             cell: (row) => (
 
                 <div className={estilos["acciones"]}>
-                    <button className={estilos.boton} onClick={() => handleEstadocategoria_insumo(row.id_categoria_insumos, row.estado_categoria_insumos)} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '25px' }}>
+                    <button className={estilos.boton} onClick={() => handleEstadocategoria_insumo(row.id_categoria_insumos, row.estado_categoria_insumos)} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '30px' }}>
                         {row.estado_categoria_insumos === 1 ? (
-                            <i className="bi bi-toggle-on" style={{ color: "#1F67B9" }}></i>
-                        ) : (
-                            <i className="bi bi-toggle-off" style={{ width: "60px", color: "black" }}></i>
+               <i className="bi bi-toggle-on" style={{ color: "#48110d" }}></i>
+            ) : (
+              <i
+                className="bi bi-toggle-off"
+                style={{ width: "60px", color: "black" }}
+              ></i>
                         )}
                     </button>
 
@@ -172,6 +234,20 @@ function categoria_insumos() {
                     }} className={estilos.boton} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}>
                         <i className={`fa-solid fa-pen-to-square ${row.estado_categoria_insumos === 1 ? 'iconosVerdes' : 'iconosGris'}`}></i>
                     </button>
+
+                    <button
+            onClick={() => handleEliminarCategoria(row.id_categoria_insumos)}
+            disabled={row.estado_categoria_insumos === 0}
+            className={estilos.boton}
+            style={{ cursor: "pointer", textAlign: "center", fontSize: "25px" }}
+          >
+            <i
+              className={`bi bi-trash ${
+                row.estado_categoria_insumos === 0 ? "basuraDesactivada" : ""
+              }`}
+              style={{ color: row.estado_categoria_insumos === 0 ? "gray" : "red" }}
+            ></i>
+          </button>
 
                 </div>
             )
@@ -213,7 +289,7 @@ function categoria_insumos() {
     const handleSubmitEditar = async (event) => {
         event.preventDefault();
 
-        if (categoria_insumos1.nombre_categoria_insumos.length < 3) {
+        if (categoria_insumosEditar.nombre_categoria_insumos.length < 3) {
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
@@ -223,7 +299,7 @@ function categoria_insumos() {
         }
 
                 // Validar que el nombre no esté vacío
-                if (categoria_insumos1.nombre_categoria_insumos.trim() === '') {
+                if (categoria_insumosEditar.nombre_categoria_insumos.trim() === '') {
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
@@ -369,20 +445,20 @@ function categoria_insumos() {
             <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
             <link href="https://cdn.datatables.net/2.0.2/css/dataTables.semanticui.css" rel="stylesheet" />
             <link href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.css" rel="stylesheet" />
-            <div>
-                <h1>Categoria de insumos</h1>
-            </div>
+            <div id={estilos["titulo"]}>
+        <h1>Categoría de Insumos</h1>
+      </div>
 
 <br />
             <div className={estilos['divFiltro']}>
                 <input type="text" placeholder=" Buscar..." value={filtro} onChange={handleFiltroChange} className={estilos["busqueda"]} />
                 <div >
-                    <button onClick={() => cambiarEstadoModalAgregar(!estadoModalAgregar)} className={`${estilos.botonAgregar}`}><i className="fa-solid fa-plus"></i> Agregar</button>
+                    <button onClick={() => cambiarEstadoModalAgregar(!estadoModalAgregar)} className={`${estilos.botonAgregar} ${estilos.rojo} bebas-neue-regular`}><i className="fa-solid fa-plus"></i> Agregar</button>
                 </div>
             </div>
 
             <div className={estilos["tabla"]}>
-                <DataTable columns={columns} data={filteredcategoria_insumos} pagination paginationPerPage={6} highlightOnHover customStyles={customStyles} defaultSortField="id_categoria_insumo" defaultSortAsc={true}></DataTable>
+                <DataTable columns={columns} data={filteredcategoria_insumos} pagination paginationPerPage={6} highlightOnHover></DataTable>
             </div>
 
             <Modal

@@ -899,24 +899,22 @@ function Proveedores() {
             </div>
 
             <center>
-              <div className={estilos["cajaBotones"]}>
+              <div className={estilos["BotonesClientes"]}>
                 <button
-                  onClick={() => registrar()}
-                  className={estilos.azulado3}
+                  onclick="registrar()"
+                  className={estilos["azulado"]}
                   type="submit"
                 >
-                  <p style={{ marginLeft: "-10px" }}> Guardar</p>{" "}
+                  <p>Aceptar</p>{" "}
                 </button>
 
-                <div className={estilos["espacioEntreBotones"]}></div>
                 <button
-                  style={{ color: "white" }}
                   onClick={() => cambiarEstadoModalEditar(!estadoModaleditar)}
-                  className={estilos.gris}
+                  className={estilos["gris"]}
                   type="button"
                 >
                   {" "}
-                  <p style={{ marginLeft: "-13px" }}> Cancelar</p>
+                  <p>Cancelar</p>
                 </button>
               </div>
             </center>

@@ -5,13 +5,14 @@
 }
 
 .botonAgregar {
-  background-color: #1F67B9;
-  color: white;
-  height: 40px;
-  width: 130px;
+  border: 1px solid #b90505;
   margin-right: 20px;
-  border: none;
+  background-color: white;
+  color: #b90505;
   border-radius: 50px;
+  height: 40px;
+  width: 120px;
+  font-size: 18px;
 }
 
 .descargar {
@@ -51,13 +52,6 @@
     box-shadow: 1px 1px 1px 1px #771d17;
 }
 
-.botonAgregar:hover {
-    background: #3c77bb;
-  }
-  
-  .botonAgregar:active {
-    box-shadow: 1px 1px 1px 1px #3c77bb;
-  }
 
 .azulado {
 
@@ -76,6 +70,15 @@
     margin-left: 20%;
     margin-bottom: 20px;
 }
+
+.rojo:hover {
+  background: #b9050517;
+}
+
+.rojo:active {
+  box-shadow: 1px 1px 1px 1px #b9050517;
+}
+
 
 .botonMorado {
     background-color: #722F37;
@@ -264,19 +267,7 @@ input {
 }
 
 
-.rojo {
-    background: #E12424;
-    color: white;
 
-}
-
-.rojo:hover {
-    background: #f33928;
-}
-
-.rojo:active {
-    box-shadow: 1px 1px 1px 1px #f33928;
-}
 
 
 .input-container {
@@ -621,21 +612,7 @@ label {
   
   
   
-  .rojo {
-    background: #E12424;
-    color: white;
-    display: flex;
-    justify-content: center;
-  
-  }
-  
-  .rojo:hover {
-    background: #f33928;
-  }
-  
-  .rojo:active {
-    box-shadow: 1px 1px 1px 1px #f33928;
-  }
+
 
   
   
@@ -664,6 +641,13 @@ label {
   #textito {
     margin-bottom: 4px;
     font-size: 13px;
+  }
+
+  #titulo {
+    font-size: 15px;
+    margin-top: 0px;
+    display: flex;
+    color: #48110d;
   }
   
   #tabla-contenedor {
