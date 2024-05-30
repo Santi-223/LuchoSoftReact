@@ -209,7 +209,7 @@ background: #154360d7;
 }
 
 .TablaDetallePedidos{
-    margin-left: 100px;
+    margin-left: 50px;
 }
 
 .tabladetalle{
@@ -251,6 +251,7 @@ background: #154360d7;
 
 .agrPedidos p{
     margin-right: 20px;
+    text-align: center;
 }
 
 .cajaBotonesRPedidos {
@@ -332,18 +333,15 @@ background: #154360d7;
 }
 
 .input-field-tabla {
-    padding: 0px;
-   
+    /* padding: 0px;    */
     border-radius: 5px;
-    width: 170px;
-    display: flex;
-  
+    /* width: 170px; */
+    /* display: flex;   */
     height: 27px;
     border: 1px solid #ccc;
-    justify-content: start;
-   
-   
-  }
+    justify-content: center; 
+    
+}
 
 .boton-eliminar{
     height: 30px;

@@ -421,48 +421,27 @@ function App() {
           <div className={estilos["TablaDetallePedidos"]}>
             <div className={estilos["agrPedidos"]}>
               <p>Agregar Productos</p>
-              <button type="button" className="btn btn-primary fa-solid fa-plus" onClick={handleAgregarProducto}>
+              <button type="button" className="fa-solid fa-plus" style={{background: '#154360', border: 'none', borderRadius:'20px', width: '40px', color:'white'}} onClick={handleAgregarProducto}>
               </button>
             </div>
-            <div style={{ overflowY: scrollEnabled ? 'scroll' : 'auto', maxHeight: '300px', width: '150%'}} >
+            <div style={{ overflowY: scrollEnabled ? 'scroll' : 'auto', maxHeight: '300px', width: '130%'}} >
               <table
                 className="tablaDT ui celled table"
                 style={{ border: 'none'}}
                 ref={tableRef}
               >
-                <thead className="rojo thead-fixed">
+                <thead>
                   <tr>
-                    <th
-                      style={{
-                        textAlign: "center",
-                        backgroundColor: "#1F67B9",
-                        color: "white",
-                      }}
-                    >Nombre Producto
+                    <th style={{background: '#154360', color: 'white', textAlign: 'center'}}>
+                      Nombre Producto
                     </th>
-                    <th
-                      style={{
-                        textAlign: "center",
-                        backgroundColor: "#1F67B9",
-                        color: "white",
-                      }}
-                    >Precio
+                    <th style={{background: '#154360', color: 'white', textAlign: 'center'}}>
+                      Precio
                     </th>
-                    <th
-                      style={{
-                        textAlign: "center",
-                        backgroundColor: "#1F67B9",
-                        color: "white",
-                      }}
-                    > Cantidad
+                    <th style={{background: '#154360', color: 'white', textAlign: 'center'}}>
+                      Cantidad
                     </th>
-                    <th
-                      style={{
-                        textAlign: "center",
-                        backgroundColor: "#1F67B9",
-                        color: "white",
-                      }}
-                    >
+                    <th style={{background: '#154360', color: 'white', textAlign: 'center'}}>
                       Acciones
                     </th>
                   </tr>
@@ -475,6 +454,7 @@ function App() {
                           className={estilos["input-field-tabla"]}
                           value={row.nombre}
                           onChange={(e) => handleSelectChange(e, index)}
+                          style={{width:'300px', display: 'flex', marginRight: '0px'}}
                         >
                           <option value="">Seleccione un producto</option>
                           {productos.map((producto) => (
@@ -490,7 +470,7 @@ function App() {
                       <td style={{ textAlign: "center" }}>
                         <input
                           className={estilos["input-field-tabla"]}
-                          style={{ width: "100px" }}
+                          style={{ width: "90px" }}
                           type="number"
                           onChange={(e) => handlePrecioChange(e, index)}
                           value={row.precio_unitario}

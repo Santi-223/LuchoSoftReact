@@ -575,7 +575,6 @@ const EditarPedidos = () => {
                     </div>
                     <div className={estilos["TablaDetallePedidos"]}>
                         <div style={{ overflowY: scrollEnabled ? 'scroll' : 'auto',height:'60vh'}}>
-
                             <div className={estilos["cajaBotonesRPedidos"]} style={{ zIndex: '2', position: 'fixed', bottom: '10px', background: 'white', width: '54%', padding: '.7em' }}>
                                 <button type='submit' onClick={editarPedido} className={`${estilos["boton-azul"]} `} >Guardar</button>
 
@@ -583,13 +582,11 @@ const EditarPedidos = () => {
                                     <button className={estilos["boton-gris"]} type="button">Cancelar</button>
                                 </Link>
                             </div>
-
-
                             <table style={{ borderRadius: '90px' }}>
                                 <thead>
                                     <tr>
                                         <th className={estilos.cabeceraTabla}>Nombre</th>
-                                        <th className={estilos.cabeceraTabla}> Precio</th>
+                                        <th className={estilos.cabeceraTabla}>Precio</th>
                                         <th className={estilos.cabeceraTabla}>Cantidad</th>
                                         <th className={estilos.cabeceraTabla}>Acciones</th>
                                     </tr>
