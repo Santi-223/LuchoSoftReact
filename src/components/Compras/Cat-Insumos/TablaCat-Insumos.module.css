@@ -15,6 +15,24 @@
   font-size: 18px;
 }
 
+.BotonesClientes {
+  display: flex;
+  justify-content: center;
+
+  margin-top: 10px;
+
+}
+
+.BotonesClientes button {
+  height: 45px;
+  width: 100px;
+  margin-right: 20px;
+  margin-left: 20px;
+  border-radius: 10px;
+  border: none;
+
+}
+
 .descargar {
     margin-left: 100px;
     height: 50px;
@@ -54,12 +72,17 @@
 
 
 .azulado {
+  background-color: #1F67B9;
+  color: #ffffff;
 
-    color: white;
-    height: 50px;
-    min-width: 130px;
-    margin-left: 100%;
-    margin-bottom: -20px;
+}
+
+.azulado:hover {
+  background: #3c77bb;
+}
+
+.azulado:active {
+  box-shadow: 1px 1px 1px 1px #3c77bb;
 }
 
 .botonRojo {
@@ -160,7 +183,7 @@
   
   
   
-  .input-field2 {
+  .inputfield2 {
 
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -213,18 +236,19 @@
     box-shadow: 1px 1px 1px 1px #3c77bb;
   }
 
-.gris {
-    background: rgb(128, 128, 128);
-    min-width: 120px;
+  .gris {
+    background: rgb(222, 222, 222);
+    color: black;
   
   }
   
+  
   .gris:hover {
-    background: rgb(146, 146, 146);
+    background: rgb(229, 229, 229);
   }
   
   .gris:active {
-    box-shadow: 1px 1px 1px 1px rgb(146, 146, 146);
+    box-shadow: 1px 1px 1px 1px rgb(233, 233, 233);
   }
 
 .parrafoGris {
@@ -321,11 +345,14 @@ input {
     outline: none;
 }
 
-.error {
-    color: #E12424;
-    display: block;
-    font-size: 12px;
+.inputInvalido {
+  border: 1px solid red;
+  /* background-color: #f5c1c1; */
+}
 
+.error {
+  display: flex;
+  position:fixed
 }
 
 label {

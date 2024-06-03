@@ -14,7 +14,9 @@ function categoria_insumos() {
     const [estadoModaleditar, cambiarEstadoModalEditar] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [estadoModalAgregar, cambiarEstadoModalAgregar] = useState(false);
-
+    const [inputValido, setInputValido] = useState(true);
+    const [inputValido2, setInputValido2] = useState(true);
+    const [inputValido3, setInputValido3] = useState(true);
     const [categoria_insumos1, setCategoria_insumos1] = useState({
         nombre_categoria_insumos: '',
         estado_categoria_insumos: 1
@@ -33,12 +35,32 @@ function categoria_insumos() {
     };
     const filteredcategoria_insumos = categoria_insumos.filter(categoria_insumos =>
         (categoria_insumos.id_categoria_insumos && categoria_insumos.id_categoria_insumos.toString().includes(filtro)) ||
-        (categoria_insumos.nombre_categoria_insumos && categoria_insumos.nombre_categoria_insumos.toString().toLowerCase().includes(filtro)) ||
+        (categoria_insumos.nombre_categoria_insumos.toLowerCase().includes(filtro.toLowerCase())) ||
         (categoria_insumos.estado_categoria_insumos && categoria_insumos.estado_categoria_insumos.toString().includes(filtro))
     );
 
     const handleChange = (event) => {
         const { name, value } = event.target;
+
+        if (name === 'nombre_categoria_insumos') {
+            if (value.length > 30) {
+              setInputValido(false);
+            } else {
+              setInputValido(true);
+            }
+          }
+
+          if (name === 'nombre_categoria_insumos') {
+            // Expresión regular que coincide con cualquier carácter que no sea una letra, un número o un guion bajo
+            const caracteresEspeciales = /^[a-zA-Z0-9\s#,;.-àèìòù]*$/; 
+          
+            // Verificar si la cadena no contiene caracteres especiales
+            if (caracteresEspeciales.test(value)) {
+              setInputValido2(true);
+            } else {
+              setInputValido2(false);
+            }
+          }
         setCategoria_insumos1(prevcategoria_insumos => ({
             ...prevcategoria_insumos,
             [name]: value
@@ -48,32 +70,57 @@ function categoria_insumos() {
     const handleSubmit = async (event) => {
         event.preventDefault();
     
-        if (categoria_insumos1.nombre_categoria_insumos.length < 3) {
+
+
+        if (!inputValido) {
             Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'El nombre de la categorìa de insumo debe tener al menos 3 letras',
+              icon: 'error',
+
+              text: 'Por favor, digite bien los datos.',
+              confirmButtonColor: '#1F67B9',
             });
             return;
-        }
+          }
+
+          if (!inputValido2) {
+            Swal.fire({
+              icon: 'error',
+
+              text: 'Por favor, digite bien los datos.',
+              confirmButtonColor: '#1F67B9',
+            });
+            return;
+          }
+
         // Validar que el nombre no esté vacío
         if (categoria_insumos1.nombre_categoria_insumos.trim() === '') {
             Swal.fire({
                 icon: 'error',
-                title: 'Error',
+
                 text: 'El nombre de la categoría de insumos no puede estar vacío',
             });
+            setInputValido3(false)
             return;
         }
-    
+
+        if (categoria_insumos1.nombre_categoria_insumos.length < 3) {
+            Swal.fire({
+                icon: 'error',
+
+                text: 'El nombre de la categorìa de insumo debe tener al menos 3 letras',
+            });
+            setInputValido3(false)
+            return;
+        }
+
         // Validar que no haya caracteres especiales en el nombre
-        const regex = /^[a-zA-Z0-9\s#,;.-]*$/; 
+        const regex = /^[a-zA-Z0-9\s#,;.-àèìòùñ]*$/; 
     
         if (!regex.test(categoria_insumos1.nombre_categoria_insumos)) {
             // Mostrar alerta con SweetAlert
             Swal.fire({
                 icon: 'error',
-                title: 'Error',
+
                 text: 'El nombre no puede contener caracteres especiales',
             });
             return;
@@ -102,17 +149,19 @@ function categoria_insumos() {
                 });
                 setTimeout(() => {
                     fetchcategoria_insumos();
+
                     setCategoria_insumos1({
                         nombre_categoria_insumos: '',
                         estado_categoria_insumos: 1
                     });
+
                     cambiarEstadoModalAgregar(false);
                 }, 2000);
             } else {
                 console.error('Error al crear la categoría de insumo:', responseCategoria_insumos.statusText);
                 Swal.fire({
                     icon: 'error',
-                    title: 'Error',
+
                     text: 'Error al crear la categoría de insumo',
                 });
             }
@@ -122,6 +171,25 @@ function categoria_insumos() {
     };
     const handleEditarChange = (event) => {
         const { name, value } = event.target;
+        if (name === 'nombre_categoria_insumos') {
+            if (value.length > 30) {
+              setInputValido(false);
+            } else {
+              setInputValido(true);
+            }
+          }
+
+          if (name === 'nombre_categoria_insumos') {
+            // Expresión regular que coincide con cualquier carácter que no sea una letra, un número o un guion bajo
+            const caracteresEspeciales = /^[a-zA-Z0-9\s#,;.-àèìòù]*$/; 
+          
+            // Verificar si la cadena no contiene caracteres especiales
+            if (caracteresEspeciales.test(value)) {
+              setInputValido2(true);
+            } else {
+              setInputValido2(false);
+            }
+          }
         setCategoria_insumosEditar(prevcategoria_insumos => ({
             ...prevcategoria_insumos,
             [name]: value
@@ -131,7 +199,7 @@ function categoria_insumos() {
     const handleEliminarCategoria = (idcategoria_insumos) => {
         // Mostrar un mensaje de confirmación antes de eliminar
         Swal.fire({
-          title: "¿Estás seguro?",
+
           text: "¿Deseas eliminar esta categoría?",
           icon: "warning",
           showCancelButton: true,
@@ -171,15 +239,15 @@ function categoria_insumos() {
                 );
                 Swal.fire({
                   icon: "error",
-                  title: "Error",
-                  text: "La categoría está siendo usado en alguna compra",
+
+                  text: "La categoría está siendo usada en algún insumo",
                 });
               }
             } catch (error) {
               console.error("Error al eliminar la categoría:", error);
               Swal.fire({
                 icon: "error",
-                title: "Error",
+
                 text: "Error al eliminar la categoría",
               });
             }
@@ -232,7 +300,7 @@ function categoria_insumos() {
                             setCategoria_insumosEditar(row);
                         }
                     }} className={estilos.boton} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}>
-                        <i className={`fa-solid fa-pen-to-square ${row.estado_categoria_insumos === 1 ? 'iconosVerdes' : 'iconosGris'}`}></i>
+                        <i className={`fa-solid fa-pen-to-square ${row.estado_categoria_insumos === 1 ? 'iconosNaranjas' : 'iconosGris'}`}></i>
                     </button>
 
                     <button
@@ -276,6 +344,9 @@ function categoria_insumos() {
                     nombre_categoria_insumos: categoria_insumos.nombre_categoria_insumos,
                     estado_categoria_insumos: categoria_insumos.estado_categoria_insumos,
                 }));
+                setInputValido(true)
+                setInputValido2(true)
+                setInputValido3(true)
                 setcategoria_insumos(categoria_insumosFiltrador);
             } else {
                 console.error('Error al obtener las categoria_insumos');
@@ -289,40 +360,60 @@ function categoria_insumos() {
     const handleSubmitEditar = async (event) => {
         event.preventDefault();
 
-        if (categoria_insumosEditar.nombre_categoria_insumos.length < 3) {
+
+
+        if (!inputValido) {
             Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'El nombre de la categorìa de insumo debe tener al menos 3 letras',
+              icon: 'error',
+              text: 'Por favor, digite bien los datos',
+              confirmButtonColor: '#1F67B9',
             });
             return;
-        }
+          }
+
+          if (!inputValido2) {
+            Swal.fire({
+              icon: 'error',
+              text: 'Por favor, digite bien los datos',
+              confirmButtonColor: '#1F67B9',
+            });
+            return;
+          }
 
                 // Validar que el nombre no esté vacío
                 if (categoria_insumosEditar.nombre_categoria_insumos.trim() === '') {
                     Swal.fire({
                         icon: 'error',
-                        title: 'Error',
+
                         text: 'El nombre de la categoría de insumos no puede estar vacío',
+                    });
+                    return;
+                }
+
+                if (categoria_insumosEditar.nombre_categoria_insumos.length < 3) {
+                    Swal.fire({
+                        icon: 'error',
+        
+                        text: 'El nombre de la categorìa de insumo debe tener al menos 3 letras',
                     });
                     return;
                 }
     
         // Validar que no haya caracteres especiales en el nombre
-        const regex = /^[a-zA-Z0-9\s#,;.-]*$/; 
+        const regex = /^[a-zA-Z0-9\s#,;.-àèìòù]*$/; 
     
         if (!regex.test(categoria_insumosEditar.nombre_categoria_insumos)) {
             // Mostrar alerta con SweetAlert
             Swal.fire({
                 icon: 'error',
-                title: 'Error',
+
                 text: 'El nombre no puede contener caracteres especiales',
             });
             return;
         }
     
         Swal.fire({
-            title: '¿Estás seguro?',
+
             text: '¿Deseas actualizar la información de la categoría de insumo?',
             icon: 'warning',
             showCancelButton: true,
@@ -359,7 +450,7 @@ function categoria_insumos() {
                         console.error('Error al actualizar la categoría de insumo:', response.statusText);
                         Swal.fire({
                             icon: 'error',
-                            title: 'Error',
+
                             text: 'Error al actualizar la categoría de insumo',
                         });
                     }
@@ -367,7 +458,7 @@ function categoria_insumos() {
                     console.error('Error al actualizar la categoría de insumo:', error);
                     Swal.fire({
                         icon: 'error',
-                        title: 'Error',
+
                         text: 'Error al actualizar la categoría de insumo',
                     });
                 }
@@ -377,7 +468,7 @@ function categoria_insumos() {
 
     const handleEstadocategoria_insumo = async (idcategoria_insumos, estadocategoria_insumos) => {
         Swal.fire({
-            title: '¿Estás seguro?',
+
             text: '¿Deseas cambiar el estado del usuario?',
             icon: 'warning',
             showCancelButton: true,
@@ -484,13 +575,31 @@ function categoria_insumos() {
                                     <p id={estilos.textito}>  Nombre</p>
                                     <input
                                         id={estilos.nombre_categoria_insumos}
-                                        className={estilos["input-field2"]}
+                                        className={`${estilos.inputfield2} ${!inputValido ? estilos.inputInvalido : ''} ${!inputValido2 ? estilos.inputInvalido : ''} ${!inputValido3 ? estilos.inputInvalido : ''}`}
                                         type="text"
                                         placeholder="Insertar nombre"
                                         name='nombre_categoria_insumos'
                                         value={categoria_insumos.nombre_categoria_insumos}
                                         onChange={handleChange}
+                                        
                                     />
+{
+  !inputValido && !inputValido2 && (
+    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>El límite es de 30 letras y no se aceptan caracteres especiales.</p>
+  )
+}
+{
+  inputValido && !inputValido2 && (
+    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>No se aceptan caracteres especiales.</p>
+  )
+}
+{
+  !inputValido && inputValido2 && (
+    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>El límite es de 30 letras.</p>
+  )
+}
+
+
                                 </div>
 
 
@@ -503,12 +612,33 @@ function categoria_insumos() {
 
                         </div>
                         <center>
-                            <div className={estilos["cajaBotones"]}>
-                                <button onclick="registrar()" className={estilos.azulado3} type="submit"><p style={{ marginLeft: "-10px" }}> Guardar</p> </button>
-                                <div className={estilos["espacioEntreBotones"]}></div>
-                                <button style={{ color: "white", }} onClick={() => cambiarEstadoModalAgregar(!estadoModalAgregar)} className={estilos.gris} type="button"> <p style={{ marginLeft: "-13px" }}> Cancelar</p></button>
-                            </div>
-                        </center>
+              <div className={estilos["BotonesClientes"]}>
+                <button
+
+                  className={estilos["azulado"]}
+                  type="submit"
+                >
+                  <p>Aceptar</p>{" "}
+                </button>
+
+                <button
+                  onClick={() => {cambiarEstadoModalAgregar(!estadoModalAgregar)
+                    setInputValido(true)
+                    setInputValido2(true)
+                    setInputValido3(true)
+                    setCategoria_insumos1({
+                        nombre_categoria_insumos: '',
+                        estado_categoria_insumos: 1
+                    });
+                  }}
+                  className={estilos["gris"]}
+                  type="button"
+                >
+                  {" "}
+                  <p>Cancelar</p>
+                </button>
+              </div>
+            </center>
                     </form>
                 </Contenido>
             </Modal>
@@ -535,13 +665,28 @@ function categoria_insumos() {
                                         <p id={estilos.textito} > Nombre</p>
                                         <input
                                             id={estilos.nombre_categoria_insumos}
-                                            className={estilos["input-field2"]}
+                                            className={`${estilos.inputfield2} ${!inputValido ? estilos.inputInvalido : ''} ${!inputValido2 ? estilos.inputInvalido : ''} ${!inputValido3 ? estilos.inputInvalido : ''}`}
                                             type="text"
                                             placeholder="Insertar nombre"
                                             name='nombre_categoria_insumos'
                                             value={categoria_insumosEditar.nombre_categoria_insumos}
                                             onChange={handleEditarChange}
                                         />
+                                        {
+  !inputValido && !inputValido2 && (
+    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>El límite es de 30 letras y no se aceptan caracteres especiales.</p>
+  )
+}
+{
+  inputValido && !inputValido2 && (
+    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>No se aceptan caracteres especiales.</p>
+  )
+}
+{
+  !inputValido && inputValido2 && (
+    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>El límite es de 30 letras.</p>
+  )
+}
                                     </div>
 
                                 </div>
@@ -553,13 +698,31 @@ function categoria_insumos() {
 
 
                         <center>
-                            <div className={estilos["cajaBotones"]}>
-                                <button onClick={() => registrar()} className={estilos.azulado3} type="submit"><p style={{ marginLeft: "-10px" }}> Guardar</p> </button>
+              <div className={estilos["BotonesClientes"]}>
+                <button
+                  className={estilos["azulado"]}
+                  type="submit"
+                >
+                  <p>Aceptar</p>{" "}
+                </button>
 
-                                <div className={estilos["espacioEntreBotones"]}></div>
-                                <button style={{ color: "white" }} onClick={() => cambiarEstadoModalEditar(!estadoModaleditar)} className={estilos.gris} type="button"> <p style={{ marginLeft: "-13px" }}> Cancelar</p></button>
-                            </div>
-                        </center>
+                <button
+                  onClick={() => {cambiarEstadoModalEditar(!estadoModaleditar)
+                    setInputValido(true)
+                    setInputValido2(true)
+                    setInputValido3(true)
+                  }
+
+                  }
+
+                  className={estilos["gris"]}
+                  type="button"
+                >
+                  {" "}
+                  <p>Cancelar</p>
+                </button>
+              </div>
+            </center>
                     </form>
                 </Contenido>
             </Modal>

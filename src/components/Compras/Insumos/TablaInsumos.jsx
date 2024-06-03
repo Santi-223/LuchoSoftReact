@@ -16,6 +16,19 @@ function Insumos() {
   const [selectedItem, setSelectedItem] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [estadoModaleditar, cambiarEstadoModalEditar] = useState(false);
+
+  const [inputNombreValido, setInputNombreValido] = useState(true);
+  const [inputNombreValido2, setInputNombreValido2] = useState(true);
+  const [inputNombreValido3, setInputNombreValido3] = useState(true);
+
+  const [inputStockValido, setInputStockValido] = useState(true);
+  const [inputStockValido2, setInputStockValido2] = useState(true);
+  const [inputStockValido3, setInputStockValido3] = useState(true);
+
+  const [inputMedidaValido, setInputMedidaValido] = useState(true);
+
+  const [inputCategoriaValido, setInputCategoriaValido] = useState(true);
+
   const [categoria_insumo, setCategoria_insumo] = useState([]);
   const [insumos1, setinsumos1] = useState({
     nombre_insumo: "",
@@ -223,6 +236,14 @@ function Insumos() {
             nombre_categoria_insumos: categoria_insumo.nombre_categoria_insumos,
             estado_categoria_insumos: categoria_insumo.estado_categoria_insumos,
           }));
+          setInputStockValido(true)
+          setInputStockValido2(true)
+          setInputNombreValido(true)
+          setInputNombreValido2(true)
+          setInputNombreValido3(true)
+          setInputStockValido3(true)
+          setInputMedidaValido(true)
+          setInputCategoriaValido(true)
           setCategoria_insumo(categoria_insumoFiltrados);
         } else {
           console.error("Error al obtener las compras");
@@ -238,7 +259,6 @@ function Insumos() {
   const handleEliminarInsumo = (idInsumo) => {
     // Mostrar un mensaje de confirmación antes de eliminar
     Swal.fire({
-      title: "¿Estás seguro?",
       text: "¿Deseas eliminar este insumo?",
       icon: "warning",
       showCancelButton: true,
@@ -275,7 +295,7 @@ function Insumos() {
             console.error("Error al eliminar el insumo:", response.statusText);
             Swal.fire({
               icon: "error",
-              title: "Error",
+               
               text: "Error al eliminar el insumo",
             });
           }
@@ -283,7 +303,7 @@ function Insumos() {
           console.error("Error al eliminar el insumo:", error);
           Swal.fire({
             icon: "error",
-            title: "Error",
+             
             text: "Error al eliminar el insumo",
           });
         }
@@ -293,6 +313,29 @@ function Insumos() {
 
   const handleEditarChange = (event) => {
     const { name, value } = event.target;
+
+    if (name === 'nombre_insumo') {
+      if (value.length > 50) {
+        setInputNombreValido(false);
+      } else {
+        setInputNombreValido(true);
+      }
+    }
+
+    if (name === 'nombre_insumo') {
+      // Expresión regular que coincide con cualquier carácter que no sea una letra, un número o un guion bajo
+      const caracteresEspeciales = /^[a-zA-Z0-9\s#,;.-àèìòù]*$/; 
+    
+      // Verificar si la cadena no contiene caracteres especiales
+      if (caracteresEspeciales.test(value)) {
+        setInputNombreValido2(true);
+      } else {
+        setInputNombreValido2(false);
+      }
+    }
+
+
+
     setInsumosEditar((previnsumos) => ({
       ...previnsumos,
       [name]: value,
@@ -302,7 +345,57 @@ function Insumos() {
   const handleSubmitEditar = async (event) => {
     event.preventDefault();
 
-    const regex = /^[a-zA-Z0-9\s#,;.()-]*$/;
+
+    if (!inputNombreValido) {
+      Swal.fire({
+        icon: 'error',
+
+        text: 'Por favor, digite bien los datos.',
+        confirmButtonColor: '#1F67B9',
+      });
+      return;
+    }
+
+
+    if (!inputNombreValido2) {
+      Swal.fire({
+        icon: 'error',
+
+        text: 'Por favor, digite bien los datos.',
+        confirmButtonColor: '#1F67B9',
+      });
+      return;
+    }
+
+    if (
+      !insumosEditar.nombre_insumo
+    ) {
+
+      setInputNombreValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor completa todos los campos vacíos",
+      });
+      
+      return;
+    }
+
+        // Validar que el nombre tenga al menos 3 letras
+        if (insumosEditar.nombre_insumo.length < 3) {
+          Swal.fire({
+            icon: "error",
+             
+            text: "El nombre del insumo debe tener al menos 3 letras",
+          });
+          setInputNombreValido3(false)
+          return;
+        }
+
+
+
+
+    const regex = /^[a-zA-Z0-9\s#,;.-áéíóúñ]*$/; 
 
     if (
       !regex.test(insumos1.nombre_insumo) ||
@@ -312,26 +405,18 @@ function Insumos() {
       // Mostrar alerta con SweetAlert
       Swal.fire({
         icon: "error",
-        title: "Error",
+         
         text: "Los campos no pueden contener caracteres especiales",
       });
       return;
     }
 
-    // Validar que se haya seleccionado una categoría de insumo
-    if (!insumosEditar.id_categoria_insumo) {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Por favor selecciona una categoría de insumo",
-      });
-      return; // Detener la ejecución si no se seleccionó una categoría
-    }
+
 
     console.log(insumos);
 
     Swal.fire({
-      title: "¿Estás seguro?",
+
       text: "¿Deseas actualizar la información del insumo?",
       icon: "warning",
       showCancelButton: true,
@@ -375,7 +460,7 @@ function Insumos() {
             );
             Swal.fire({
               icon: "error",
-              title: "Error",
+               
               text: "Error al actualizar el insumo",
             });
           }
@@ -383,7 +468,7 @@ function Insumos() {
           console.error("Error al actualizar el insumo:", error);
           Swal.fire({
             icon: "error",
-            title: "Error",
+             
             text: "Error al actualizar el insumo",
           });
         }
@@ -401,7 +486,7 @@ function Insumos() {
       // Mostrar mensaje de error si no hay categorías activas
       Swal.fire({
         icon: "error",
-        title: "Error",
+         
         text: "No hay categorías de insumos activas",
       });
     } else {
@@ -413,16 +498,319 @@ function Insumos() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+
+
+
+    if (!inputNombreValido) {
+      Swal.fire({
+        icon: 'error',
+
+        text: 'Por favor, digite bien los datos.',
+        confirmButtonColor: '#1F67B9',
+      });
+      return;
+    }
+
+    if (!inputNombreValido2) {
+      Swal.fire({
+        icon: 'error',
+
+        text: 'Por favor, digite bien los datos.',
+        confirmButtonColor: '#1F67B9',
+      });
+      return;
+    }
+
     if (
-      !insumos1.nombre_insumo ||
-      !insumos1.unidadesDeMedida_insumo ||
-      !insumos1.stock_insumo ||
-      !insumos1.id_categoria_insumo
+      !insumos1.nombre_insumo && !insumos1.stock_insumo && !insumos1.unidadesDeMedida_insumo && !insumos1.id_categoria_insumo
     ) {
+
+      setInputNombreValido3(false)
+      setInputStockValido3(false)
+      setInputMedidaValido(false)
+      setInputCategoriaValido(false)
       Swal.fire({
         icon: "error",
-        title: "Error",
-        text: "Por favor completa todos los campos obligatorios",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !insumos1.id_categoria_insumo && !insumos1.stock_insumo && !insumos1.unidadesDeMedida_insumo
+    ) {
+      setInputCategoriaValido(false)
+      setInputStockValido3(false)
+      setInputMedidaValido(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !insumos1.id_categoria_insumo && !insumos1.stock_insumo && !insumos1.nombre_insumo
+    ) {
+      setInputCategoriaValido(false)
+      setInputStockValido3(false)
+      setInputNombreValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !insumos1.stock_insumo && !insumos1.id_categoria_insumo
+    ) {
+      setInputStockValido3(false)
+      setInputCategoriaValido(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !insumos1.nombre_insumo && !insumos1.unidadesDeMedida_insumo && !insumos1.id_categoria_insumo
+    ) {
+
+      setInputNombreValido3(false)
+      setInputMedidaValido(false)
+      setInputCategoriaValido(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !insumos1.nombre_insumo && !insumos1.id_categoria_insumo
+    ) {
+
+      setInputNombreValido3(false)
+      setInputCategoriaValido(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !insumos1.unidadesDeMedida_insumo && !insumos1.id_categoria_insumo
+    ) {
+      setInputMedidaValido(false)
+      setInputCategoriaValido(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !insumos1.nombre_insumo && !insumos1.stock_insumo && !insumos1.unidadesDeMedida_insumo
+    ) {
+
+      setInputNombreValido3(false)
+      setInputStockValido3(false)
+      setInputMedidaValido(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !insumos1.stock_insumo && !insumos1.unidadesDeMedida_insumo
+    ) {
+
+      setInputStockValido3(false)
+      setInputMedidaValido(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !insumos1.nombre_insumo && !insumos1.unidadesDeMedida_insumo
+    ) {
+
+      setInputNombreValido3(false)
+      setInputMedidaValido(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !insumos1.nombre_insumo && !insumos1.stock_insumo
+    ) {
+
+      setInputNombreValido3(false)
+      setInputStockValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+
+
+    if (
+      !insumos1.nombre_insumo
+    ) {
+
+      setInputNombreValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor completa todos los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !insumos1.stock_insumo
+    ) {
+
+      setInputStockValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor completa todos los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (!insumos1.unidadesDeMedida_insumo) {
+      Swal.fire({
+        icon: "error",
+        text: "Por favor, selecciona la medida del insumo",
+      });
+      setInputMedidaValido(false)
+      return; // Detener la ejecución si no se seleccionó una categoría
+    }
+
+    // Validar que se haya seleccionado una categoría de insumo
+    if (!insumos1.id_categoria_insumo) {
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, selecciona una categoría de insumo",
+      });
+      setInputCategoriaValido(false)
+      return; // Detener la ejecución si no se seleccionó una categoría
+    }
+
+    
+
+        // Validar que el nombre tenga al menos 3 letras
+        if (insumos1.nombre_insumo.length < 3) {
+          Swal.fire({
+            icon: "error",
+             
+            text: "El nombre del insumo debe tener al menos 3 letras",
+          });
+          setInputNombreValido(false)
+          return;
+          
+        }
+
+        if (!inputStockValido) {
+          Swal.fire({
+            icon: 'error',
+    
+            text: 'Por favor, digite bien los datos.',
+            confirmButtonColor: '#1F67B9',
+          });
+          return;
+        }
+    
+        if (!inputStockValido2) {
+          Swal.fire({
+            icon: 'error',
+    
+            text: 'Por favor, digite bien los datos.',
+            confirmButtonColor: '#1F67B9',
+          });
+          return;
+        }
+        
+
+
+
+    if (
+
+      !insumos1.unidadesDeMedida_insumo
+
+    ) {
+
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor completa todos los campos vacíos",
+      });
+      return;
+    }
+
+    if (
+
+      !insumos1.stock_insumo
+    ) {
+
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor completa todos los campos vacíos",
+      });
+      return;
+    }
+
+    if (
+      !insumos1.id_categoria_insumo
+    ) {
+
+
+      Swal.fire({
+        icon: "error",
+
+        text: "Por favor completa todos los campos vacíos",
       });
       return;
     }
@@ -430,34 +818,27 @@ function Insumos() {
     if (insumos1.stock_insumo < 0) {
       Swal.fire({
         icon: "error",
-        title: "Error",
+         
         text: "El stock debe ser un número positivo",
       });
       return;
     }
 
     // Validar que el stock sea un número positivo
-    if (insumos1.stock_insumo > 5000000) {
+    if (insumos1.stock_insumo.length > 9) {
       Swal.fire({
         icon: "error",
-        title: "Error",
-        text: "El stock no puede tiene un límite de 5 millones",
+         
+        text: "El stock no puede exceder los 0 números",
       });
+      
       return;
     }
 
-    // Validar que el nombre tenga al menos 3 letras
-    if (insumos1.nombre_insumo.length < 3) {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "El nombre del insumo debe tener al menos 3 letras",
-      });
-      return;
-    }
+
 
     // Validar que no haya caracteres especiales en los campos
-    const regex = /^[a-zA-Z0-9\s#,;.()-]*$/;
+    const regex = /^[a-zA-Z0-9\s#,;.-áéíóúñ]*$/; 
 
     if (
       !regex.test(insumos1.nombre_insumo) ||
@@ -467,7 +848,7 @@ function Insumos() {
       // Mostrar alerta con SweetAlert
       Swal.fire({
         icon: "error",
-        title: "Error",
+         
         text: "Los campos no pueden contener caracteres especiales",
       });
       return;
@@ -512,7 +893,7 @@ function Insumos() {
         console.error("Error al crear el insumo:", responseInsumos.statusText);
         Swal.fire({
           icon: "error",
-          title: "Error",
+           
           text: "Error al crear el insumo",
         });
       }
@@ -523,6 +904,75 @@ function Insumos() {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
+
+
+    if (name === 'nombre_insumo') {
+      if (value.length > 50) {
+        setInputNombreValido(false);
+      } else {
+        setInputNombreValido(true);
+      }
+    }
+
+    if (name === 'nombre_insumo') {
+      if (value.length > 0) {
+        setInputNombreValido3(true);
+      } 
+    }
+
+    if (name === 'id_categoria_insumo') {
+      if (value.length > 0) {
+        setInputCategoriaValido(true);
+      } 
+    }
+
+    if (name === 'unidadesDeMedida_insumo') {
+      if (value.length > 0) {
+        setInputMedidaValido(true)
+      } 
+    }
+
+    
+    if (name === 'stock_insumo') {
+      if (value.length > 0) {
+        setInputStockValido3(true);
+      } 
+    }
+
+    if (name === 'nombre_insumo') {
+      // Expresión regular que coincide con cualquier carácter que no sea una letra, un número o un guion bajo
+      const caracteresEspeciales = /^[a-zA-Z0-9\s#,;.-àèìòù]*$/; 
+    
+      // Verificar si la cadena no contiene caracteres especiales
+      if (caracteresEspeciales.test(value)) {
+        setInputNombreValido2(true);
+      } else {
+        setInputNombreValido2(false);
+      }
+    }
+
+    if (name === 'stock_insumo') {
+      if (value.length > 9 || value.length < 0) {
+        setInputStockValido(false);
+      } else {
+        setInputStockValido(true);
+        
+      }
+    }
+
+    if (name === 'stock_insumo') {
+      // Expresión regular que coincide con cualquier carácter que no sea una letra, un número o un guion bajo
+      const caracteresEspeciales = /^[0-9.,]*$/;
+    
+      // Verificar si la cadena no contiene caracteres especiales
+      if (caracteresEspeciales.test(value)) {
+        setInputStockValido2(true);
+      } else {
+        setInputStockValido2(false);
+      }
+    }
+
+
     setinsumos1((previnsumos) => ({
       ...previnsumos,
       [name]: value,
@@ -557,7 +1007,6 @@ function Insumos() {
 
   const handleEstadoinsumo = async (idinsumo, estadoinsumo) => {
     Swal.fire({
-      title: "¿Estás seguro?",
       text: "¿Deseas cambiar el estado del usuario?",
       icon: "warning",
       showCancelButton: true,
@@ -738,26 +1187,82 @@ function Insumos() {
                     <p id={estilos.textito}> Nombre</p>
                     <input
                       id={estilos.nombreinsumo}
-                      className={estilos["inputnombre"]}
+
+                      className={`${estilos.inputnombre} ${!inputNombreValido ? estilos.inputInvalido : ''}
+                      ${!inputNombreValido2 ? estilos.inputInvalido : ''}
+                      ${!inputNombreValido3 ? estilos.inputInvalido : ''}`}
                       type="text"
                       placeholder="Insertar nombre"
                       name="nombre_insumo"
                       value={insumos1.nombre_insumo}
                       onChange={handleChange}
                     />
+
+{
+  !inputNombreValido2 && !inputNombreValido && (
+    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>No se aceptan caracteres especiales.</p>
+  )
+}
+                    {
+  !inputNombreValido && inputNombreValido2 && (
+    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>Debe de contener al menos 3 letras y máximo 50.</p>
+  )
+}
+{
+  !inputNombreValido2 && inputNombreValido &&(
+    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>No se aceptan caracteres especiales.</p>
+  )
+}
+
+{
+  !inputNombreValido3 && (
+    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>El campo no puede estar vacío</p>
+  )
+}
+
+
+
+
+
+
                   </div>
                   <div className={estilos["espacio"]}></div>
 
                   <div id={estilos.telefonoproveedor}>
                     <p id={estilos.textito}> Stock</p>
                     <input
-                      className={estilos["inputstock"]}
+                      className={`${estilos.inputstock} ${!inputStockValido ? estilos.inputInvalido : ''}
+                      ${!inputStockValido2 ? estilos.inputInvalido : ''}
+                      ${!inputStockValido3 ? estilos.inputInvalido : ''}
+                      `}
                       type="text"
                       placeholder="000"
                       name="stock_insumo"
                       value={insumos1.stock_insumo}
                       onChange={handleChange}
                     />
+                                        {
+  !inputStockValido && (
+    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>El número sobrepasa los límites.</p>
+  )
+}
+{
+  !inputStockValido2 && (
+    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>Solo se aceptan números.</p>
+  )
+}
+
+{
+  !inputStockValido3 && (
+    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>El campo no puede estar vacío</p>
+  )
+}
+
+{
+  !inputStockValido2 && !inputStockValido && (
+    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>No se aceptan caracteres especiales.</p>
+  )
+}
                   </div>
                 </div>
                 <br />
@@ -765,7 +1270,8 @@ function Insumos() {
                   <div id={estilos.documentoproveedor}>
                     <p id={estilos.textito}> Unidad de medida</p>
                     <select
-                      className={estilos["input2"]}
+                      className={`${estilos.input2} ${!inputMedidaValido ? estilos.inputInvalido : ''}
+                    `}
                       name="unidadesDeMedida_insumo"
                       id={estilos.unidadesDeMedida_insumo_input}
                       value={insumos1.unidadesDeMedida_insumo}
@@ -782,18 +1288,26 @@ function Insumos() {
                       <option value="mililitros">Mililitro</option>
                       <option value="toneladas">Tonelada</option>
                     </select>
+                    {
+  !inputMedidaValido && (
+    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>El campo no puede estar vacío</p>
+  )
+}
                   </div>
 
                   <div id={estilos.eo}>
                     <p id={estilos.textito}> Categoría insumo</p>
                     <select
-                      className={estilos["input2"]}
+                      className={`${estilos.input2} ${!inputCategoriaValido ? estilos.inputInvalido : ''}
+                      `}
                       name="id_categoria_insumo" // Utiliza el mismo nombre que el campo id_rol
                       id={estilos.id_categoria_insumos_input} // Cambia el id para que sea único
                       value={insumos1.id_categoria_insumo}
                       onChange={handleChange}
                     >
-                      <option value={0}>Seleccione una categoria</option>
+                       <option value="" disabled selected>
+                        Seleccionar una categoría
+                      </option>
                       {categoria_insumo.map((categoria) => {
                         if (categoria.estado_categoria_insumos != false) {
                           return (
@@ -804,6 +1318,11 @@ function Insumos() {
                         }
                       })}
                     </select>
+                    {
+  !inputCategoriaValido && (
+    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>El campo no puede estar vacío</p>
+  )
+}
                   </div>
                 </div>
               </div>
@@ -819,7 +1338,25 @@ function Insumos() {
               </button>
 
               <button
-                onClick={() => cambiarEstadoModalAgregar(!estadoModalAgregar)}
+                onClick={() => {cambiarEstadoModalAgregar(!estadoModalAgregar)
+                  setInputNombreValido(true)
+                  setInputNombreValido2(true)
+                  setInputNombreValido3(true)
+                  setInputCategoriaValido(true)
+                  setInputStockValido(true)
+                  setInputStockValido2(true)
+                  setInputStockValido3(true)
+                  setInputMedidaValido(true)
+                  setinsumos1({
+                    nombre_insumo: "",
+                    unidadesDeMedida_insumo: "",
+                    stock_insumo: "",
+                    estado_insumo: 1,
+                    id_categoria_insumo: "",
+                  });
+                }
+                  
+                }
                 className={estilos["gris"]}
                 type="button"
               >
@@ -853,13 +1390,39 @@ function Insumos() {
                     <p id={estilos.textito}> Nombre</p>
                     <input
                       id={estilos.nombreinsumo}
-                      className={estilos["inputnombreeditado"]}
+
+                      className={`${estilos.inputnombreeditado} ${!inputNombreValido ? estilos.inputInvalido : ''}
+                      ${!inputNombreValido2 ? estilos.inputInvalido : ''}
+                      ${!inputNombreValido3 ? estilos.inputInvalido : ''}`}
                       type="text"
                       placeholder="Insertar nombre"
                       name="nombre_insumo"
                       value={insumosEditar.nombre_insumo}
                       onChange={handleEditarChange}
                     />
+
+{
+  !inputNombreValido && (
+    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>El límite es de 50 letras.</p>
+  )
+}
+{
+  !inputNombreValido2 && (
+    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>No se aceptan caracteres especiales.</p>
+  )
+}
+
+{
+  !inputNombreValido3 && (
+    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>El campo no puede estar vacío</p>
+  )
+}
+
+{
+  !inputNombreValido2 && !inputNombreValido && (
+    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>No se aceptan caracteres especiales.</p>
+  )
+}
                   </div>
                   <div className={estilos["espacio2"]}></div>
                 </div>
@@ -868,7 +1431,8 @@ function Insumos() {
                   <div id={estilos.documentoproveedor}>
                     <p id={estilos.textito}> Unidad de medida</p>
                     <select
-                      className={estilos["input2"]}
+                       className={`${estilos.input2} ${!inputMedidaValido ? estilos.inputInvalido : ''}
+                       `}
                       name="unidadesDeMedida_insumo"
                       id={estilos.unidadesDeMedida_insumo_input}
                       value={insumosEditar.unidadesDeMedida_insumo}
@@ -885,6 +1449,11 @@ function Insumos() {
                       <option value="mililitros">Mililitro</option>
                       <option value="toneladas">Tonelada</option>
                     </select>
+                    {
+  !inputMedidaValido && (
+    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>El campo no puede estar vacío</p>
+  )
+}
                   </div>
                   <div className={estilos["espacio2"]}></div>
                   <div id={estilos.eo}>
@@ -896,7 +1465,9 @@ function Insumos() {
                       value={insumosEditar.id_categoria_insumo}
                       onChange={handleEditarChange}
                     >
-                      <option value={0}>Seleccione una categoria</option>
+                                             <option value="" disabled selected>
+                        Seleccionar una categoría
+                      </option>
                       {categoria_insumo.map((categoria) => {
                         if (categoria.estado_categoria_insumos != false) {
                           return (
@@ -925,7 +1496,16 @@ function Insumos() {
                 </button>
 
                 <button
-                  onClick={() => cambiarEstadoModalEditar(!estadoModaleditar)}
+                  onClick={() => {cambiarEstadoModalEditar(!estadoModaleditar)
+                    setInputNombreValido(true)
+                    setInputNombreValido2(true)
+                    setInputNombreValido3(true)
+                    setInputStockValido(true)
+                    setInputStockValido2(true)
+                    setInputStockValido3(true)
+                    setInputMedidaValido(true)
+                    setInputCategoriaValido(true)
+                  }}
                   className={estilos["gris"]}
                   type="button"
                 >
@@ -969,6 +1549,11 @@ const Contenido2 = styled.div`
     margin-bottom: 10px;
   }
 
+  p {
+		font-size: 18px;
+		margin-bottom: 20px;
+	}
+  
   img {
     width: 100%;
     vertical-align: top;
