@@ -55,14 +55,14 @@ function Insumos() {
   const filteredinsumos = insumos.filter(
     (insumo) =>
       insumo.id_insumo.toString().includes(filtro) ||
-      insumo.nombre_insumo.toString().toLowerCase().includes(filtro) ||
+      insumo.nombre_insumo.toString().toLowerCase().includes(filtro.toLowerCase()) ||
       insumo.unidadesDeMedida_insumo
         .toString()
         .toLowerCase()
         .includes(filtro) ||
       insumo.stock_insumo.toString().includes(filtro) ||
       insumo.id_categoria_insumo.toString().includes(filtro) ||
-      insumo.nombre_categoria.toString().toLowerCase().includes(filtro) ||
+      insumo.nombre_categoria.toString().toLowerCase().includes(filtro.toLowerCase()) ||
       insumo.estado_insumo.toString().includes(filtro)
   );
 
@@ -1242,12 +1242,12 @@ function Insumos() {
                       onChange={handleChange}
                     />
                                         {
-  !inputStockValido && (
+  !inputStockValido && inputStockValido2 && (
     <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>El número sobrepasa los límites.</p>
   )
 }
 {
-  !inputStockValido2 && (
+  !inputStockValido2 && inputStockValido && (
     <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>Solo se aceptan números.</p>
   )
 }
