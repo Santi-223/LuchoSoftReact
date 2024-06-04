@@ -925,7 +925,9 @@ function Proveedores() {
                       value={proveedores1.tipo_documento}
                       onChange={handleChange}
                     >
-                      <option value="">Selección</option>
+                                            <option value="" disabled selected>
+                        Selección
+                      </option>
                       <option value="NIT">NIT</option>
                       <option value="T.I">T.I</option>
                       <option value="C.C">C.C</option>
@@ -986,6 +988,14 @@ function Proveedores() {
                 <button
                 
                   onClick={() => {cambiarEstadoModalAgregar(!estadoModalAgregar)
+                    setProveedores1({
+                      nombre_proveedor: "",
+                      documento_proveedor: "",
+                      telefono_proveedor: "",
+                      direccion_proveedor: "",
+                      estado_proveedor: 1,
+                      tipo_documento: "",
+                    });
                     setInputNombreValido(true)
                     setInputNombreValido2(true)
                     setInputNombreValido3(true)
@@ -1144,6 +1154,14 @@ function Proveedores() {
 
                 <button
                   onClick={() => {cambiarEstadoModalEditar(!estadoModaleditar)
+                    setProveedores1({
+                      nombre_proveedor: "",
+                      documento_proveedor: "",
+                      telefono_proveedor: "",
+                      direccion_proveedor: "",
+                      estado_proveedor: 1,
+                      tipo_documento: "",
+                    });
                     setInputNombreValido(true)
                     setInputNombreValido2(true)
                     setInputNombreValido3(true)
