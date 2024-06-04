@@ -17,6 +17,10 @@ function Proveedores() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [estadoModaleditar, cambiarEstadoModalEditar] = useState(false);
 
+  const [inputNombreValido, setInputNombreValido] = useState(true);
+  const [inputNombreValido2, setInputNombreValido2] = useState(true);
+  const [inputNombreValido3, setInputNombreValido3] = useState(true);
+
   const [proveedores1, setProveedores1] = useState({
     nombre_proveedor: "",
     documento_proveedor: "",
@@ -177,7 +181,7 @@ function Proveedores() {
       name: "Documento",
       cell: (row) =>(
         <div>
-            <p>{row.tipo_documento}ㅤ{row.documento_proveedor}</p>
+            <a>{row.tipo_documento}ㅤ{row.documento_proveedor}</a>
         </div>
       ),
       sortable: true,
@@ -280,6 +284,56 @@ function Proveedores() {
 
   const handleSubmitEditar = async (event) => {
     event.preventDefault();
+    
+    if (!inputNombreValido) {
+      Swal.fire({
+        icon: 'error',
+
+        text: 'Por favor, digite bien los datos.',
+        confirmButtonColor: '#1F67B9',
+      });
+      return;
+    }
+
+
+    if (!inputNombreValido2) {
+      Swal.fire({
+        icon: 'error',
+
+        text: 'Por favor, digite bien los datos.',
+        confirmButtonColor: '#1F67B9',
+      });
+      return;
+    }
+
+    if (
+      !proveedoresEditar.nombre_proveedor
+    ) {
+
+      setInputNombreValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor completa todos los campos",
+      });
+      
+      return;
+    }
+
+        // Validar que el nombre tenga al menos 3 letras
+        if (proveedoresEditar.nombre_proveedor.length < 2) {
+          Swal.fire({
+            icon: "error",
+            text: "El nombre del insumo debe tener al menos 2 letras",
+          });
+          setInputNombreValido(false)
+          return;
+        }
+
+
+
+
+
 
     // Verificar que todos los campos estén llenos
     const {
@@ -392,6 +446,9 @@ function Proveedores() {
           direccion_proveedor: proveedor.direccion_proveedor,
           estado_proveedor: proveedor.estado_proveedor,
         }));
+        setInputNombreValido(true)
+        setInputNombreValido2(true)
+        setInputNombreValido3(true)
         setProveedores(proveedoresFiltrador);
       } else {
         console.error("Error al obtener las proveedores");
@@ -403,6 +460,32 @@ function Proveedores() {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
+
+    if (name === 'nombre_proveedor') {
+      if (value.length > 60) {
+        setInputNombreValido(false);
+      } else {
+        setInputNombreValido(true);
+      }
+    }
+
+    if (name === 'nombre_proveedor') {
+      if (value.length > 0) {
+        setInputNombreValido3(true);
+      } 
+    }
+
+    if (name === 'nombre_proveedor') {
+      // Expresión regular que coincide con cualquier carácter que no sea una letra, un número o un guion bajo
+      const caracteresEspeciales = /^[a-zA-Z0-9\s#,;.-àèìòù]*$/; 
+    
+      // Verificar si la cadena no contiene caracteres especiales
+      if (caracteresEspeciales.test(value)) {
+        setInputNombreValido2(true);
+      } else {
+        setInputNombreValido2(false);
+      }
+    }
     setProveedores1((prevproveedores) => ({
       ...prevproveedores,
       [name]: value,
@@ -411,6 +494,86 @@ function Proveedores() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+
+
+
+    if (!inputNombreValido3) {
+      Swal.fire({
+        icon: 'error',
+
+        text: 'Por favor, digite bien los datos vacíos.',
+        confirmButtonColor: '#1F67B9',
+      });
+      return;
+    }
+
+
+    if (
+      !proveedores1.nombre_proveedor
+    ) {
+
+      setInputNombreValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor completa todos los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (!inputNombreValido) {
+      Swal.fire({
+        icon: 'error',
+
+        text: 'Por favor, digite bien los datos.',
+        confirmButtonColor: '#1F67B9',
+      });
+      return;
+    }
+
+
+    if (!inputNombreValido2) {
+      Swal.fire({
+        icon: 'error',
+
+        text: 'Por favor, digite bien los datos.',
+        confirmButtonColor: '#1F67B9',
+      });
+      return;
+    }
+
+
+
+
+
+        if (
+          !proveedores1.nombre_proveedor
+        ) {
+    
+          
+          Swal.fire({
+            icon: "error",
+             
+            text: "Por favor completa todos los campos vacíos",
+          });
+          setInputNombreValido3(false)
+          return;
+        }
+
+        if (proveedores1.nombre_proveedor.length < 2) {
+          Swal.fire({
+            icon: "error",
+            text: "El nombre del insumo debe tener al menos 2 letras",
+          });
+          setInputNombreValido(false)
+          return;
+          
+        }
+
+
+
 
     // Verificar que todos los campos estén llenos
     const {
@@ -506,6 +669,28 @@ function Proveedores() {
 
   const handleEditarChange = (event) => {
     const { name, value } = event.target;
+
+
+    if (name === 'nombre_proveedor') {
+      if (value.length > 60) {
+        setInputNombreValido(false);
+      } else {
+        setInputNombreValido(true);
+      }
+    }
+
+    if (name === 'nombre_proveedor') {
+      // Expresión regular que coincide con cualquier carácter que no sea una letra, un número o un guion bajo
+      const caracteresEspeciales = /^[a-zA-Z0-9\s#,;.-àèìòù]*$/; 
+    
+      // Verificar si la cadena no contiene caracteres especiales
+      if (caracteresEspeciales.test(value)) {
+        setInputNombreValido2(true);
+      } else {
+        setInputNombreValido2(false);
+      }
+    }
+
     setProveedoresEditar((prevproveedores) => ({
       ...prevproveedores,
       [name]: value,
@@ -695,13 +880,39 @@ function Proveedores() {
                     <p id={estilos.textito}> Nombre</p>
                     <input
                       id={estilos.nombreproveedor}
-                      className={estilos["input-largo"]}
+                      className={`${estilos.inputlargo} ${!inputNombreValido ? estilos.inputInvalido : ''}
+                      ${!inputNombreValido2 ? estilos.inputInvalido : ''}
+                      ${!inputNombreValido3 ? estilos.inputInvalido : ''}`}
                       type="text"
                       placeholder="Insertar nombre"
                       name="nombre_proveedor"
                       value={proveedores.nombre_proveedor}
                       onChange={handleChange}
                     />
+
+
+{
+  !inputNombreValido3 && (
+    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>El campo no puede estar vacío</p>
+  )
+}
+{
+  !inputNombreValido2 && !inputNombreValido && (
+    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>No se aceptan caracteres especiales.</p>
+  )
+}
+                    {
+  !inputNombreValido && inputNombreValido2 && (
+    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>Debe de contener al menos 2 letras y máximo 60.</p>
+  )
+}
+{
+  !inputNombreValido2 && inputNombreValido &&(
+    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>No se aceptan caracteres especiales.</p>
+  )
+}
+
+
                   </div>
                 </div>
 
@@ -737,7 +948,7 @@ function Proveedores() {
                 <div id={estilos.telefonoproveedor}>
                   <p id={estilos.textito}> Teléfono</p>
                   <input
-                    className={estilos["input-largo"]}
+                    className={estilos["inputlargo"]}
                     type="number"
                     placeholder="Insertar teléfono"
                     name="telefono_proveedor"
@@ -751,7 +962,7 @@ function Proveedores() {
                     <p id={estilos.textito}> Dirección</p>
                     <input
                       id={estilos.direccionproveedor}
-                      className={estilos["input-largo"]}
+                      className={estilos["inputlargo"]}
                       type="text"
                       placeholder="Insertar"
                       name="direccion_proveedor"
@@ -773,7 +984,12 @@ function Proveedores() {
                 </button>
 
                 <button
-                  onClick={() => cambiarEstadoModalAgregar(!estadoModalAgregar)}
+                
+                  onClick={() => {cambiarEstadoModalAgregar(!estadoModalAgregar)
+                    setInputNombreValido(true)
+                    setInputNombreValido2(true)
+                    setInputNombreValido3(true)
+                  }}
                   className={estilos["gris"]}
                   type="button"
                 >
@@ -807,14 +1023,32 @@ function Proveedores() {
                   <div id={estilos.eo}>
                     <p id={estilos.textito}> Nombre</p>
                     <input
-                      id={estilos.nombreproveedor}
-                      className={estilos["input-largo"]}
+                      id= {estilos.nombreproveedor}
+                      className={`${estilos.inputlargo} ${!inputNombreValido ? estilos.inputInvalido : ''}
+                      ${!inputNombreValido2 ? estilos.inputInvalido : ''}
+                      ${!inputNombreValido3 ? estilos.inputInvalido : ''}`}
                       type="text"
                       placeholder="Insertar nombre"
                       name="nombre_proveedor"
                       value={proveedoresEditar.nombre_proveedor}
                       onChange={handleEditarChange}
                     />
+
+{
+  !inputNombreValido2 && !inputNombreValido && (
+    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>No se aceptan caracteres especiales.</p>
+  )
+}
+                    {
+  !inputNombreValido && inputNombreValido2 && (
+    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>Debe de contener al menos 2 letras y máximo 60.</p>
+  )
+}
+{
+  !inputNombreValido2 && inputNombreValido &&(
+    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>No se aceptan caracteres especiales.</p>
+  )
+}
                   </div>
                 </div>
 
@@ -871,7 +1105,7 @@ function Proveedores() {
                   <p id={estilos.textito}> Teléfono</p>
                   <input
                     id={estilos.telefonoproveedor}
-                    className={estilos["input-largo"]}
+                    className={estilos["inputlargo"]}
                     type="number"
                     placeholder="Insertar teléfono"
                     name="telefono_proveedor"
@@ -886,7 +1120,7 @@ function Proveedores() {
                     <p id={estilos.textito}> Dirección</p>
                     <input
                       id={estilos.direccionproveedor}
-                      className={estilos["input-largo"]}
+                      className={estilos["inputlargo"]}
                       type="text"
                       placeholder="Insertar dirección"
                       name="direccion_proveedor"
@@ -909,7 +1143,11 @@ function Proveedores() {
                 </button>
 
                 <button
-                  onClick={() => cambiarEstadoModalEditar(!estadoModaleditar)}
+                  onClick={() => {cambiarEstadoModalEditar(!estadoModaleditar)
+                    setInputNombreValido(true)
+                    setInputNombreValido2(true)
+                    setInputNombreValido3(true)
+                  }}
                   className={estilos["gris"]}
                   type="button"
                 >
