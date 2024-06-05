@@ -4,15 +4,23 @@
     padding: 50px 50px;
 }
 
+/* Estilos CSS */
+.bi.bi-eye.cerrado::before {
+    content: "\e85f"; /* Ícono de ojo cerrado */
+}
+
+
+
 .botonAgregar {
-    background-color: #1F67B9;
-    color: white;
-    height: 40px;
-    width: 130px;
+    border: 1px solid #b90505;
     margin-right: 20px;
-    border: none;
+    background-color: white;
+    color: #b90505;
     border-radius: 50px;
-  }
+    height: 40px;
+    width: 120px;
+    font-size: 18px;
+}
 
 .descargar {
     margin-left: 100px;
@@ -23,15 +31,47 @@
 
 
 
+.rojo:hover {
+    background: #b9050517;
+}
 
-.divFiltro{
+.rojo:active {
+    box-shadow: 1px 1px 1px 1px #b9050517;
+}
+
+.BotonesClientes {
+    display: flex;
+    justify-content: center;
+
+    margin-top: 10px;
+
+}
+
+.BotonesClientes button {
+    height: 45px;
+    width: 100px;
+    margin-right: 20px;
+    margin-left: 20px;
+    border-radius: 10px;
+    border: none;
+
+}
+
+.RegistrarCliente {
+    background-color: #1F67B9;
+    color: #ffffff;
+}
+
+
+
+.divFiltro {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-right: 20px;
-  }
+}
 
-  .vinotinto {
+.vinotinto {
     background: #48110d;
     color: white;
     height: 40px;
@@ -54,21 +94,12 @@
     box-shadow: 1px 1px 1px 1px #771d17;
 }
 
-.botonAgregar:hover {
-    background: #3c77bb;
-}
 
-.botonAgregar:active {
-    box-shadow: 1px 1px 1px 1px #3c77bb;
-}
 
 .azulado {
+    background-color: #1F67B9;
+    color: #ffffff;
 
-    color: white;
-    height: 50px;
-    min-width: 130px;
-    margin-left: 100%;
-    margin-bottom: -20px;
 }
 
 .botonRojo {
@@ -123,66 +154,79 @@
     align-items: center;
     margin-bottom: 15px;
     justify-content: space-between;
-  
-  }
 
-  .espacio {
+}
+
+.espacio {
     width: 40px;
-  }
+}
 
-  .espacio2 {
+.espacio2 {
     width: 1px;
-  }
-  
-  .input2 {
+}
+
+.input2 {
     padding: 15px;
     border-radius: 5px;
     width: 160px;
     padding: 10px;
     border: 1px solid #ccc;
-  }
+}
 
-  .inputstock {
+.inputstock {
     padding: 15px;
     border-radius: 5px;
     width: 100px;
     padding: 10px;
     border: 1px solid #ccc;
-  }
+}
 
-  .inputnombre{
+.inputnombre {
     padding: 15px;
     border-radius: 5px;
     width: 220px;
     padding: 10px;
     border: 1px solid #ccc;
-  }
+}
 
-  .inputnombreeditado{
+.inputnombreeditado {
     padding: 15px;
     border-radius: 5px;
     width: 360px;
     padding: 10px;
     border: 1px solid #ccc;
-  }
+}
 
-  #textito {
+#titulo {
+    font-size: 15px;
+    margin-top: 0px;
+    display: flex;
+    color: #48110d;
+}
+
+#textito {
     margin-bottom: 4px;
     font-size: 13px;
-  }
+}
 
 .gris {
-    background: rgb(128, 128, 128);
-    min-width: 120px;
+    background: rgb(222, 222, 222);
+    color: black;
 
+}
+
+#secondary{
+    display: flex;
+    justify-content: end;
+    margin-left: 400px;
 }
 
 .gris:hover {
-    background: rgb(146, 146, 146);
+    background: rgb(229, 229, 229);
 }
 
 .gris:active {
-    box-shadow: 1px 1px 1px 1px rgb(146, 146, 146);
+    box-shadow: 1px 1px 1px 1px rgb(233, 233, 233);
 }
 
 .azulado3:hover {
@@ -190,6 +234,14 @@
 }
 
 .azulado3:active {
+    box-shadow: 1px 1px 1px 1px #3c77bb;
+}
+
+.azulado:hover {
+    background: #3c77bb;
+}
+
+.azulado:active {
     box-shadow: 1px 1px 1px 1px #3c77bb;
 }
 
@@ -219,17 +271,7 @@
     /* Ajusta el ancho del espacio según tus preferencias */
 }
 
-.gris {
-    color: #6d6d6d;
-}
 
-.gris:hover {
-    background: rgb(146, 146, 146);
-}
-
-.gris:active {
-    box-shadow: 1px 1px 1px 1px rgb(146, 146, 146);
-}
 
 .parrafoGris {
     color: gray;
@@ -271,19 +313,7 @@ input {
 }
 
 
-.rojo {
-    background: #E12424;
-    color: white;
 
-}
-
-.rojo:hover {
-    background: #f33928;
-}
-
-.rojo:active {
-    box-shadow: 1px 1px 1px 1px #f33928;
-}
 
 .vinotinto {
     background: #48110d;
@@ -404,4 +434,4 @@ label {
     border-radius: 20px;
     width: 500px;
     margin-top: 5px;
-  }
+}

@@ -47,11 +47,41 @@ function categoria_insumos() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-
+    
+        if (categoria_insumos1.nombre_categoria_insumos.length < 3) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'El nombre de la categorìa de insumo debe tener al menos 3 letras',
+            });
+            return;
+        }
+        // Validar que el nombre no esté vacío
+        if (categoria_insumos1.nombre_categoria_insumos.trim() === '') {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'El nombre de la categoría de insumos no puede estar vacío',
+            });
+            return;
+        }
+    
+        // Validar que no haya caracteres especiales en el nombre
+        const regex = /^[a-zA-Z0-9\s#,;.-]*$/; 
+    
+        if (!regex.test(categoria_insumos1.nombre_categoria_insumos)) {
+            // Mostrar alerta con SweetAlert
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'El nombre no puede contener caracteres especiales',
+            });
+            return;
+        }
+    
         try {
-            console.log('categoría de insumo  a enviar: ', categoria_insumos1)
-
-
+            console.log('categoría de insumo a enviar: ', categoria_insumos1);
+    
             const responseCategoria_insumos = await fetch('https://api-luchosoft-mysql.onrender.com/compras/categoria_insumos', {
                 method: 'POST',
                 headers: {
@@ -60,10 +90,10 @@ function categoria_insumos() {
                 },
                 body: JSON.stringify(categoria_insumos1)
             });
-
+    
             if (responseCategoria_insumos.ok) {
                 console.log('categoría de insumo creada exitosamente.');
-
+    
                 Swal.fire({
                     icon: 'success',
                     title: 'Registro exitoso',
@@ -71,10 +101,13 @@ function categoria_insumos() {
                     timer: 1500
                 });
                 setTimeout(() => {
-                    window.location.href = '/#/CatInsumos';
+                    fetchcategoria_insumos();
+                    setCategoria_insumos1({
+                        nombre_categoria_insumos: '',
+                        estado_categoria_insumos: 1
+                    });
+                    cambiarEstadoModalAgregar(false);
                 }, 2000);
-
-
             } else {
                 console.error('Error al crear la categoría de insumo:', responseCategoria_insumos.statusText);
                 Swal.fire({
@@ -87,7 +120,6 @@ function categoria_insumos() {
             console.error('Error al crear la categoría de insumo:', error);
         }
     };
-
     const handleEditarChange = (event) => {
         const { name, value } = event.target;
         setCategoria_insumosEditar(prevcategoria_insumos => ({
@@ -181,8 +213,38 @@ function categoria_insumos() {
     const handleSubmitEditar = async (event) => {
         event.preventDefault();
 
-        console.log(categoria_insumos)
+        if (categoria_insumos1.nombre_categoria_insumos.length < 3) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'El nombre de la categorìa de insumo debe tener al menos 3 letras',
+            });
+            return;
+        }
 
+                // Validar que el nombre no esté vacío
+                if (categoria_insumos1.nombre_categoria_insumos.trim() === '') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'El nombre de la categoría de insumos no puede estar vacío',
+                    });
+                    return;
+                }
+    
+        // Validar que no haya caracteres especiales en el nombre
+        const regex = /^[a-zA-Z0-9\s#,;.-]*$/; 
+    
+        if (!regex.test(categoria_insumosEditar.nombre_categoria_insumos)) {
+            // Mostrar alerta con SweetAlert
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'El nombre no puede contener caracteres especiales',
+            });
+            return;
+        }
+    
         Swal.fire({
             title: '¿Estás seguro?',
             text: '¿Deseas actualizar la información de la categoría de insumo?',
@@ -203,7 +265,7 @@ function categoria_insumos() {
                         },
                         body: JSON.stringify(categoria_insumosEditar)
                     });
-
+    
                     if (response.ok) {
                         console.log('categoría de insumo actualizado exitosamente.');
                         Swal.fire({
@@ -214,8 +276,9 @@ function categoria_insumos() {
                         });
                         setTimeout(() => {
                             window.location.href = '/#/CatInsumos';
+                            fetchcategoria_insumos();
+                            cambiarEstadoModalEditar(false);
                         }, 2000);
-                        // Aquí podrías redirigir a otra página, mostrar un mensaje de éxito, etc.
                     } else {
                         console.error('Error al actualizar la categoría de insumo:', response.statusText);
                         Swal.fire({
