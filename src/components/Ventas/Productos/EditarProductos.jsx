@@ -7,6 +7,8 @@ import Swal from 'sweetalert2';
 function EditarProductos() {
     const [redirect, setRedirect] = useState(false);
     const [categorias, setCategorias] = useState([]);
+    const [inputValidadoImg, setInputValidoImg] = useState(true);
+
 
     let { id_producto } = useParams();
 
@@ -19,6 +21,30 @@ function EditarProductos() {
         precio_producto: '',
         id_categoria_producto: ''
     });
+
+    const [imgProducto, setImgProducto] = useState(null); // Cambiado a null
+    const [imgPreview, setImgPreview] = useState(''); // Nuevo estado para la URL de la imagen
+
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        setImgProducto(file);
+        setImgPreview(URL.createObjectURL(file)); // Crear una URL para la imagen seleccionada
+
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/gif']; // Tipos MIME permitidos
+
+        if (file && allowedTypes.includes(file.type)) {
+            setErrorImg(''); // Limpia el mensaje de error
+            setInputValidoImg(true);
+            setImgProducto(file); // Guarda el archivo seleccionado en el estado imgUsuario
+            setImgPreview(URL.createObjectURL(file)); // Crea una URL para mostrar la vista previa de la imagen
+        } else {
+            setErrorImg('Selecciona un archivo de imagen válido (JPEG, PNG, GIF).');
+            setInputValidoImg(false);
+            setImgProducto(null); // Restablece el estado de la imagen
+            setImgPreview(''); // Restablece la vista previa de la imagen
+            event.target.value = null;
+        }
+    };
 
     useEffect(() => {
         const fetchProducto = async () => {
@@ -84,15 +110,22 @@ function EditarProductos() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
+                    const formProducto = new FormData();
+                    formProducto.append('imgProducto', imgProducto); // Usar imgUsuario directamente
+                    formProducto.append('id_producto', producto.id_producto);
+                    formProducto.append('nombre_producto', producto.nombre_producto);
+                    formProducto.append('descripcion_producto', producto.descripcion_producto);
+                    formProducto.append('precio_producto', producto.precio_producto); // Corregido el valor
+                    formProducto.append('estado_producto', '1');
+                    formProducto.append('id_categoria_producto', producto.id_categoria_producto);
                     const response = await fetch(`https://api-luchosoft-mysql.onrender.com/ventas2/productos/${producto.id_producto}`, {
                         method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(producto)
+                        body: formProducto
                     });
 
                     if (response.ok) {
+
+                        console.log('Producto actualizado exitosamente.');
                         Swal.fire({
                             icon: 'success',
                             title: 'Producto actualizado exitosamente',
@@ -102,6 +135,7 @@ function EditarProductos() {
                         setTimeout(() => {
                             setRedirect(true);
                         }, 1000);
+
                     } else {
                         console.error('Error al actualizar el producto:', response.statusText);
                         Swal.fire({
@@ -244,22 +278,25 @@ function EditarProductos() {
                         </div>
                         <div id={estilos.cosas}>
                             <center>
-                                <div className={`${estilos.divImagen} `} >
+                            <div className={`${estilos.divImagen} `}>
                                     <p>URL Imagen</p>
                                     <img id={estilos.imagen}
-                                        src={producto.imagen_producto ? producto.imagen_producto : 'https://tse2.mm.bing.net/th?id=OIP.U8HnwxkbTkhoZ_DTf7sCSgHaHa&pid=Api&P=0&h=180'} />
+                                        src={imgPreview || producto.imagen_producto || 'https://tse2.mm.bing.net/th?id=OIP.U8HnwxkbTkhoZ_DTf7sCSgHaHa&pid=Api&P=0&h=180'}
+                                        alt="Imagen del usuario"
+                                    />
                                     <div>
                                         <input
                                             id={estilos.imagen_producto}
-                                            className={estilos["input-field2"]}
+                                            className={`${!inputValidadoImg ? estilos.inputInvalido : estilos['input-field2']}`}
                                             type="file"
                                             placeholder="URL de la imagen"
-                                            name='imagen_usuario'
-                                            value={producto.imagen_producto}
-                                            onChange={handleChange}
+                                            name='imagen_producto'
+                                            onChange={handleFileChange}
                                         />
+                                        {!inputValidadoImg && <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '14px' }}>{errorImg}</p>}
+                                        <br />
+                                        <br />
                                     </div>
-
                                 </div>
                             </center>
                         </div>
@@ -278,6 +315,4 @@ function EditarProductos() {
 }
 
 export default EditarProductos;
-
-
 
