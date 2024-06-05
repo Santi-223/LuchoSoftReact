@@ -21,6 +21,8 @@ function Proveedores() {
   const [inputNombreValido2, setInputNombreValido2] = useState(true);
   const [inputNombreValido3, setInputNombreValido3] = useState(true);
 
+  const [inputTipoValido, setInputTipoValido] = useState(true);
+
   const [proveedores1, setProveedores1] = useState({
     nombre_proveedor: "",
     documento_proveedor: "",
@@ -284,6 +286,36 @@ function Proveedores() {
 
   const handleSubmitEditar = async (event) => {
     event.preventDefault();
+
+    
+
+    if (
+      !proveedoresEditar.tipo_documento && !proveedoresEditar.nombre_proveedor
+    ) {
+      setInputTipoValido(false)
+      setInputNombreValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !proveedoresEditar.tipo_documento
+    ) {
+
+      setInputTipoValido(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor completa todos los campos vacíos",
+      });
+      
+      return;
+    }
     
     if (!inputNombreValido) {
       Swal.fire({
@@ -449,6 +481,7 @@ function Proveedores() {
         setInputNombreValido(true)
         setInputNombreValido2(true)
         setInputNombreValido3(true)
+        setInputTipoValido(true)
         setProveedores(proveedoresFiltrador);
       } else {
         console.error("Error al obtener las proveedores");
@@ -460,6 +493,13 @@ function Proveedores() {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
+
+
+    if (name === 'tipo_documento') {
+      if (value.length > 0) {
+        setInputTipoValido(true)
+      } 
+    }
 
     if (name === 'nombre_proveedor') {
       if (value.length > 60) {
@@ -495,7 +535,19 @@ function Proveedores() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-
+    if (
+      !proveedores1.tipo_documento && !proveedores1.nombre_proveedor
+    ) {
+      setInputTipoValido(false)
+      setInputNombreValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
 
 
     if (!inputNombreValido3) {
@@ -514,6 +566,20 @@ function Proveedores() {
     ) {
 
       setInputNombreValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor completa todos los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !proveedores1.tipo_documento
+    ) {
+
+      setInputTipoValido(false)
       Swal.fire({
         icon: "error",
          
@@ -670,6 +736,18 @@ function Proveedores() {
   const handleEditarChange = (event) => {
     const { name, value } = event.target;
 
+
+    if (name === 'tipo_documento') {
+      if (value.length > 0) {
+        setInputTipoValido(true)
+      } 
+    }
+
+    if (name === 'nombre_proveedor') {
+      if (value.length > 0) {
+        setInputNombreValido3(true)
+      } 
+    }
 
     if (name === 'nombre_proveedor') {
       if (value.length > 60) {
@@ -920,7 +998,8 @@ function Proveedores() {
                   <div>
                     <p id={estilos.textito}>Tipo Documento</p>
                     <select
-                      className={estilos["input-chiquito"]}
+                      className={`${estilos.inputchiquito} ${!inputTipoValido ? estilos.inputInvalido : ''}
+                      `}
                       name="tipo_documento"
                       value={proveedores1.tipo_documento}
                       onChange={handleChange}
@@ -932,6 +1011,12 @@ function Proveedores() {
                       <option value="T.I">T.I</option>
                       <option value="C.C">C.C</option>
                     </select>
+                    {
+  !inputTipoValido && (
+    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>El campo no puede estar vacío</p>
+  )
+}
+                    
                   </div>
 
                   <div id={estilos.documentoproveedor}>
@@ -999,6 +1084,7 @@ function Proveedores() {
                     setInputNombreValido(true)
                     setInputNombreValido2(true)
                     setInputNombreValido3(true)
+                    setInputTipoValido(true)
                   }}
                   className={estilos["gris"]}
                   type="button"
@@ -1043,7 +1129,11 @@ function Proveedores() {
                       value={proveedoresEditar.nombre_proveedor}
                       onChange={handleEditarChange}
                     />
-
+{
+  !inputNombreValido3 && (
+    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>El campo no puede estar vacío</p>
+  )
+}
 {
   !inputNombreValido2 && !inputNombreValido && (
     <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>No se aceptan caracteres especiales.</p>
@@ -1066,7 +1156,7 @@ function Proveedores() {
                   <div>
                     <p id={estilos.textito}>Tipo Documento</p>
                     {/* <select
-            className={estilos["input-chiquito"]}
+            className={estilos["inputchiquito"]}
             name='tipo_documento'
             value={proveedoresEditar.tipo_documento}
             onChange={handleEditarChange}
@@ -1078,7 +1168,8 @@ function Proveedores() {
 
         </select> */}
                     <select
-                      className={estilos["input-chiquito"]}
+                      className={`${estilos.inputchiquito} ${!inputTipoValido ? estilos.inputInvalido : ''}
+                      `}
                       name="tipo_documento"
                       
                       value={proveedoresEditar.tipo_documento}
@@ -1091,6 +1182,11 @@ function Proveedores() {
             <option value="T.I">T.I</option>
             <option value="C.C">C.C</option>
                     </select>
+
+                    {!inputTipoValido && (
+    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>El campo no puede estar vacío</p>
+  )
+}
                   </div>
 
                   <div className={estilos["espacio"]}> </div>
@@ -1165,6 +1261,7 @@ function Proveedores() {
                     setInputNombreValido(true)
                     setInputNombreValido2(true)
                     setInputNombreValido3(true)
+                    setInputTipoValido(true)
                   }}
                   className={estilos["gris"]}
                   type="button"
