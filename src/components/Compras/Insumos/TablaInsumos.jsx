@@ -322,6 +322,18 @@ function Insumos() {
       }
     }
 
+    if (name === 'unidadesDeMedida_insumo') {
+      if (value.length > 0) {
+        setInputMedidaValido(true)
+      } 
+    }
+
+    if (name === 'nombre_insumo') {
+      if (value.length > 0) {
+        setInputNombreValido3(true);
+      } 
+    }
+
     if (name === 'nombre_insumo') {
       // Expresión regular que coincide con cualquier carácter que no sea una letra, un número o un guion bajo
       const caracteresEspeciales = /^[a-zA-Z0-9\s#,;.-àèìòù]*$/; 
@@ -344,6 +356,175 @@ function Insumos() {
 
   const handleSubmitEditar = async (event) => {
     event.preventDefault();
+
+
+    
+    if (
+      !insumosEditar.nombre_insumo && !insumosEditar.stock_insumo && !insumosEditar.unidadesDeMedida_insumo && !insumosEditar.id_categoria_insumo
+    ) {
+
+      setInputNombreValido3(false)
+      setInputStockValido3(false)
+      setInputMedidaValido(false)
+      setInputCategoriaValido(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !insumosEditar.id_categoria_insumo && !insumosEditar.stock_insumo && !insumosEditar.unidadesDeMedida_insumo
+    ) {
+      setInputCategoriaValido(false)
+      setInputStockValido3(false)
+      setInputMedidaValido(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !insumosEditar.id_categoria_insumo && !insumosEditar.stock_insumo && !insumosEditar.nombre_insumo
+    ) {
+      setInputCategoriaValido(false)
+      setInputStockValido3(false)
+      setInputNombreValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !insumosEditar.stock_insumo && !insumosEditar.id_categoria_insumo
+    ) {
+      setInputStockValido3(false)
+      setInputCategoriaValido(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !insumosEditar.nombre_insumo && !insumosEditar.unidadesDeMedida_insumo && !insumosEditar.id_categoria_insumo
+    ) {
+
+      setInputNombreValido3(false)
+      setInputMedidaValido(false)
+      setInputCategoriaValido(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !insumosEditar.nombre_insumo && !insumosEditar.id_categoria_insumo
+    ) {
+
+      setInputNombreValido3(false)
+      setInputCategoriaValido(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !insumosEditar.unidadesDeMedida_insumo && !insumosEditar.id_categoria_insumo
+    ) {
+      setInputMedidaValido(false)
+      setInputCategoriaValido(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !insumosEditar.nombre_insumo && !insumosEditar.stock_insumo && !insumosEditar.unidadesDeMedida_insumo
+    ) {
+
+      setInputNombreValido3(false)
+      setInputStockValido3(false)
+      setInputMedidaValido(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !insumosEditar.stock_insumo && !insumosEditar.unidadesDeMedida_insumo
+    ) {
+
+      setInputStockValido3(false)
+      setInputMedidaValido(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !insumosEditar.nombre_insumo && !insumosEditar.unidadesDeMedida_insumo
+    ) {
+
+      setInputNombreValido3(false)
+      setInputMedidaValido(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !insumosEditar.nombre_insumo && !insumosEditar.stock_insumo
+    ) {
+
+      setInputNombreValido3(false)
+      setInputStockValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
 
 
     if (!inputNombreValido) {
