@@ -102,9 +102,8 @@ function AgregarProductos() {
     
         try {
             const formProducto = new FormData();
-            formProducto.append('imgProducto', imgProducto); // Usar imgProducto directamente
-            formProducto.append('id_producto', producto.id_producto);
             formProducto.append('nombre_producto', producto.nombre_producto);
+            formProducto.append('imgProducto', imgProducto); // Usar imgProducto directamente
             formProducto.append('descripcion_producto', producto.descripcion_producto);
             formProducto.append('precio_producto', producto.precio_producto);
             formProducto.append('estado_producto', '1');
@@ -124,7 +123,7 @@ function AgregarProductos() {
                     timer: 1500
                 });
                 setTimeout(() => {
-                    setRedirect(true);
+                    window.location.href = '#/productos'; // Redirigir a la página de productos
                 }, 1000);
             } else {
                 const errorData = await response.json(); // Parsear el cuerpo de la respuesta como JSON
@@ -144,9 +143,6 @@ function AgregarProductos() {
             });
         }
     };
-    
-
-
 
     const handleCancelar = () => {
         history.push('/productos');
