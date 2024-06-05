@@ -94,7 +94,21 @@
     box-shadow: 1px 1px 1px 1px #771d17;
 }
 
+.invalid {
+    border: 1px solid #E12424;
+    box-shadow: 0 0 1px red;
+    outline: none;
+}
 
+.inputInvalido {
+  border: 1px solid red;
+  /* background-color: #f5c1c1; */
+}
+
+p {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
 
 .azulado {
     background-color: #1F67B9;
@@ -170,7 +184,7 @@
     border-radius: 5px;
     width: 160px;
     padding: 10px;
-    border: 1px solid #ccc;
+
 }
 
 .inputstock {
@@ -178,7 +192,6 @@
     border-radius: 5px;
     width: 100px;
     padding: 10px;
-    border: 1px solid #ccc;
 }
 
 .inputnombre {
@@ -186,7 +199,7 @@
     border-radius: 5px;
     width: 220px;
     padding: 10px;
-    border: 1px solid #ccc;
+
 }
 
 .inputnombreeditado {
@@ -194,7 +207,6 @@
     border-radius: 5px;
     width: 360px;
     padding: 10px;
-    border: 1px solid #ccc;
 }
 
 #titulo {
