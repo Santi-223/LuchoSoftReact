@@ -199,12 +199,21 @@ const Cliente = () => {
                 fetchVenta();
                 console.log('Cliente creado exitosamente.');
 
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Registro exitoso',
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
                     showConfirmButton: false,
-                    timer: 1500
+                    timer: 2000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.onmouseenter = Swal.stopTimer;
+                        toast.onmouseleave = Swal.resumeTimer;
+                    }
                 });
+                Toast.fire({
+                    icon: "success",
+                    title: "Registro exitoso"
+                }); 
 
                 setClienteRegistrar(
                     {
@@ -219,7 +228,7 @@ const Cliente = () => {
 
                 setTimeout(() => {
                     cambiarEstadoModal1(false)
-                }, 2000);
+                }, 1000);
 
 
             } else {
@@ -398,12 +407,21 @@ const Cliente = () => {
 
                     if (response.ok) {
                         console.log('Cliente actualizado exitosamente.');
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Cliente actualizado exitosamente',
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: "top-end",
                             showConfirmButton: false,
-                            timer: 1500
-                        });
+                            timer: 2000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                              toast.onmouseenter = Swal.stopTimer;
+                              toast.onmouseleave = Swal.resumeTimer;
+                            }
+                          });
+                          Toast.fire({
+                            icon: "success",
+                            title: "Actualización exitosa"
+                          });
                         setTimeout(() => {
                             cambiarEstadoModal2(false)
                         }, 1000);
@@ -432,11 +450,11 @@ const Cliente = () => {
     const [errorTitulo, setErrorTitulo] = React.useState(false);
     const validacion = (event) => {
         setCedula(event.target.value);
-        
+
         // Realizar la validación en función del estado actualizado 'cedula'
-        if (event.target.value.length <=9) {
+        if (event.target.value.length <= 9) {
             setErrorTitulo(true);
-            setLeyenda("El dígito no puede ser menor de 10");            
+            setLeyenda("El dígito no puede ser menor de 10");
         } else if (event.target.value.length === 10) {
             setErrorTitulo(false);
             setLeyenda("");
@@ -446,7 +464,7 @@ const Cliente = () => {
         }
         handleChange(event);
     }
-    
+
 
     if (isLoading) {
         return <div>Cargando...</div>;
@@ -482,35 +500,34 @@ const Cliente = () => {
                 <Contenido>
                     <div className={estilos["contFormsRCliente"]}>
                         <div className={estilos["input1RCliente"]}>
-                            <label>Documento <span style={{color: 'red'}}>*</span></label>
+                            <label>Documento <span style={{ color: 'red' }}>*</span></label>
                             <input
                                 id="id_cliente" className={estilos["input-field"]} type="number" placeholder="10203040" name="id_cliente"
-                                value={ClienteRegistrar.id_cliente} onChange={validacion} error={errorTitulo} size="small"
-                                helperText={<span style={{ fontSize: '11px' }}>{leyenda}</span>}
+                                value={ClienteRegistrar.id_cliente} onChange={handleChange}
                             />
                         </div>
                         <div className={estilos["input1RCliente"]}>
-                            <label>Nombre <span style={{color: 'red'}}>*</span></label>
+                            <label>Nombre <span style={{ color: 'red' }}>*</span></label>
                             <input id="nombre_cliente" className={estilos["input-field"]} type="text" placeholder="Nombre" name="nombre_cliente"
-                                value={ClienteRegistrar.nombre_cliente} onChange={validacion} size="small" />
-                        </div> 
-                        <br />
-                        <div className={estilos["input1RCliente"]}>
-                            <label>Teléfono <span style={{color: 'red'}}>*</span></label>
-                            <input id="telefono_cliente" className={estilos["input-field"]} type="number" placeholder="Teléfono" name="telefono_cliente"
-                                value={ClienteRegistrar.telefono_cliente} onChange={validacion}  size="small" />
+                                value={ClienteRegistrar.nombre_cliente} onChange={handleChange} size="small" />
                         </div>
                         <br />
                         <div className={estilos["input1RCliente"]}>
-                            <label>Dirección <span style={{color: 'red'}}>*</span></label>
+                            <label>Teléfono <span style={{ color: 'red' }}>*</span></label>
+                            <input id="telefono_cliente" className={estilos["input-field"]} type="number" placeholder="Teléfono" name="telefono_cliente"
+                                value={ClienteRegistrar.telefono_cliente} onChange={handleChange} size="small" />
+                        </div>
+                        <br />
+                        <div className={estilos["input1RCliente"]}>
+                            <label>Dirección <span style={{ color: 'red' }}>*</span></label>
                             <input id="direccion_cliente" className={estilos["input-field"]} type="text" placeholder="Dirección" name="direccion_cliente"
-                                value={ClienteRegistrar.direccion_cliente} onChange={validacion}  size="small" />
+                                value={ClienteRegistrar.direccion_cliente} onChange={handleChange} size="small" />
                         </div>
                         <br />
                     </div>
                     <div className={estilos["BotonesClientes"]}>
                         <button type='submit' onClick={RegistrarCliente} className={estilos['RegistrarCliente']}>Aceptar</button>
-                        <button onClick={() => cambiarEstadoModal1(!estadoModal1, setErrorTitulo(false),setCedula(""))}>Cancelar</button>
+                        <button onClick={() => cambiarEstadoModal1(!estadoModal1, setErrorTitulo(false), setCedula(""))}>Cancelar</button>
                     </div>
                 </Contenido>
             </Modal>
@@ -527,17 +544,17 @@ const Cliente = () => {
                 <Contenido>
                     <div className={estilos["contFormsRCliente"]}>
                         <div className={estilos["input1RCliente"]}>
-                            <p> Nombre<span style={{color: 'red'}}>*</span></p>
+                            <p> Nombre<span style={{ color: 'red' }}>*</span></p>
                             <input id="nombre_cliente" className={estilos["input-field"]} type="text" placeholder="Nombre" name="nombre_cliente" value={ClientesEditar.nombre_cliente} onChange={handleEditarChange} />
                         </div>
                         <br />
                         <div className={estilos["input1RCliente"]}>
-                            <p>Telefono<span style={{color: 'red'}}>*</span></p>
+                            <p>Telefono<span style={{ color: 'red' }}>*</span></p>
                             <input id="telefono_cliente" className={estilos["input-field"]} type="number" placeholder="Telefono" name="telefono_cliente" value={ClientesEditar.telefono_cliente} onChange={handleEditarChange} />
                         </div>
                         <br />
                         <div className={estilos["input1RCliente"]}>
-                            <p> Dirección<span style={{color: 'red'}}>*</span></p>
+                            <p> Dirección<span style={{ color: 'red' }}>*</span></p>
                             <input id="direccion_cliente" className={estilos["input-field"]} type="text" placeholder="Dirección" name="direccion_cliente" value={ClientesEditar.direccion_cliente} onChange={handleEditarChange} />
                         </div>
                         <br />

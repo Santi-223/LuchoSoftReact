@@ -240,11 +240,20 @@ function App() {
       );
       if (responsePedido.ok) {
         console.log('Pedido creado exitosamente.');
-        Swal.fire({
-          icon: 'success',
-          title: 'Registro exitoso',
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
           showConfirmButton: false,
-          timer: 1500
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
+        });
+        Toast.fire({
+          icon: "success",
+          title: "Registro exitoso"
         });
       }
 
@@ -364,20 +373,26 @@ function App() {
                 type="text"
                 placeholder="Observaciones"
                 cols="5" rows="4"
-                style={{resize: 'none'}}
-                className={estilos['textarea']} 
+                style={{ resize: 'none' }}
+                className={estilos['textarea']}
               />
             </div>
             <div className={estilos["cliente"]}>
-              <p>
-                Cliente asociado
-              </p>
+              <div className="clienteasosciado" style={{ display: 'flex', textAlign:'center' }}>
+                <p>
+                  Cliente asociado
+                </p>
+                <button type="button" className="fa-solid fa-plus" style={{ background: '#154360', border: 'none', borderRadius: '20px', width: '40px', color: 'white', marginLeft:'40px', marginTop:'-10px', marginBottom:'10px'}} >
+                </button>
+                {/* <button style={{background: '#154360', color: 'white',height: '30px', fontSize:'12px', marginLeft: '10px', border: 'none', borderRadius: '15px', width:'70px'}}>Agregar</button> */}
+              </div>
               <select
                 id="cliente"
                 name="id_cliente"
                 className={estilos["input-field22"]}
                 value={pedido.id_cliente}
                 onChange={handleInputChange}
+                style={{marginTop:'10px'}}
               >
                 <option value="">Seleccione un cliente</option>
                 {clientes.map((cliente) => (
@@ -421,27 +436,27 @@ function App() {
           <div className={estilos["TablaDetallePedidos"]}>
             <div className={estilos["agrPedidos"]}>
               <p>Agregar Productos</p>
-              <button type="button" className="fa-solid fa-plus" style={{background: '#154360', border: 'none', borderRadius:'20px', width: '40px', color:'white'}} onClick={handleAgregarProducto}>
+              <button type="button" className="fa-solid fa-plus" style={{ background: '#154360', border: 'none', borderRadius: '20px', width: '40px', color: 'white' }} onClick={handleAgregarProducto}>
               </button>
             </div>
-            <div style={{ overflowY: scrollEnabled ? 'scroll' : 'auto', maxHeight: '300px', width: '130%'}} >
+            <div style={{ overflowY: scrollEnabled ? 'scroll' : 'auto', height: '60vh', width: '130%' }} >
               <table
                 className="tablaDT ui celled table"
-                style={{ border: 'none'}}
+                style={{ border: 'none' }}
                 ref={tableRef}
               >
                 <thead>
                   <tr>
-                    <th style={{background: '#154360', color: 'white', textAlign: 'center'}}>
+                    <th style={{ background: '#154360', color: 'white', textAlign: 'center' }}>
                       Nombre Producto
                     </th>
-                    <th style={{background: '#154360', color: 'white', textAlign: 'center'}}>
+                    <th style={{ background: '#154360', color: 'white', textAlign: 'center' }}>
                       Precio
                     </th>
-                    <th style={{background: '#154360', color: 'white', textAlign: 'center'}}>
+                    <th style={{ background: '#154360', color: 'white', textAlign: 'center' }}>
                       Cantidad
                     </th>
-                    <th style={{background: '#154360', color: 'white', textAlign: 'center'}}>
+                    <th style={{ background: '#154360', color: 'white', textAlign: 'center' }}>
                       Acciones
                     </th>
                   </tr>
@@ -449,12 +464,12 @@ function App() {
                 <tbody>
                   {tableRows.map((row, index) => (
                     <tr key={index} className={estilos.tabladetalle}>
-                      <td style={{ textAlign: "center"}}>
+                      <td style={{ textAlign: "center" }}>
                         <select
                           className={estilos["input-field-tabla"]}
                           value={row.nombre}
                           onChange={(e) => handleSelectChange(e, index)}
-                          style={{width:'300px', display: 'flex', marginRight: '0px'}}
+                          style={{ width: '300px', display: 'flex', marginRight: '0px' }}
                         >
                           <option value="">Seleccione un producto</option>
                           {productos.map((producto) => (
@@ -505,15 +520,9 @@ function App() {
             </div>
           </div>
         </div>
-        <div className={estilos["cajaBotonesRPedidos"]}>
-          <button
-            type="submit"
-            id="can"
-            className={`${estilos["boton-azul"]} bebas-neue-regular`}
-            disabled={!formChanged}
-            onClick={handleSubmitPedido}
-          >
-            <center>Guardar</center>
+        <div className={estilos["cajaBotonesRPedidos"]} style={{ zIndex: '2', position: 'fixed', bottom: '10px', background: 'white', width: '80%', padding: '.7em' }}>
+          <button type="submit" id="can" className={`${estilos["boton-azul"]}`} disabled={!formChanged} onClick={handleSubmitPedido}>
+            Guardar
           </button>
           <Link to="/pedidos">
             <button className={estilos["boton-gris"]} type="button">Cancelar</button>
