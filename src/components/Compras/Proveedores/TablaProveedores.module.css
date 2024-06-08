@@ -548,7 +548,7 @@ td {
   border-radius: 5px;
   width: 220px;
   padding: 10px;
-  border: 1px solid #ccc;
+
 }
 
 .inputlargo {
@@ -556,7 +556,7 @@ td {
   border-radius: 5px;
   width: 360px;
   padding: 10px;
-  border: 1px solid #ccc;
+
 }
 
 .inputchiquito {
@@ -564,7 +564,18 @@ td {
   border-radius: 5px;
   width: 100px;
   padding: 10px;
-  border: 1px solid #ccc;
+
+}
+
+.invalid {
+  border: 1px solid #E12424;
+  box-shadow: 0 0 1px red;
+  outline: none;
+}
+
+.inputInvalido {
+border: 1px solid red;
+/* background-color: #f5c1c1; */
 }
 
 #seleccionarpermisos {
