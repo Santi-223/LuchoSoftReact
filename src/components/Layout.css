@@ -187,6 +187,10 @@ a {
   color: #E12424;
 }
 
+.iconosGrises {
+  color: gray;
+}
+
 .iconosVerdes {
   color: #21d424;
 }
@@ -212,4 +216,11 @@ a {
 .tablaDT td {
   padding: 8px;
   border-bottom: 1px solid #ddd;
+}
+
+.text-wrap {
+  overflow-wrap: break-word;  /* Permite romper palabras largas */
+  word-break: break-word;     /* Rompe las palabras largas si es necesario */
+  white-space: normal;        /* Mantiene el comportamiento estándar de los espacios en blanco */
+  hyphens: auto;              /* Inserta guiones automáticamente cuando sea posible */
 }

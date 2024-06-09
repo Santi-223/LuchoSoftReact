@@ -60,17 +60,35 @@ function Roles() {
         {
             name: "Id",
             selector: (row) => row.id_rol,
-            sortable: true
+            sortable: true,
+            maxWidth: "150px",
+            cell: (row) => (
+                <div className="text-wrap">
+                    {row.id_rol}
+                </div>
+            )
         },
         {
             name: "Nombre",
             selector: (row) => row.nombre_rol,
-            sortable: true
+            sortable: true,
+            maxWidth: "300px",
+            cell: (row) => (
+                <div className="text-wrap">
+                    {row.nombre_rol}
+                </div>
+            )
         },
         {
             name: "Descripción",
             selector: (row) => row.descripcion_rol,
-            sortable: true
+            sortable: true,
+            maxWidth: "300px",
+            cell: (row) => (
+                <div className="text-wrap">
+                    {row.descripcion_rol}
+                </div>
+            )
         },
         {
             name: "Permisos",
@@ -92,24 +110,34 @@ function Roles() {
             sortable: true,
         },
         {
+            name: "Estado",
+            sortable: true,
+            maxWidth: "100px",
+            cell: (row) => (
+                <button className={estilos.boton} onClick={() => handleEstadoRol(row.id_rol, row.estado_rol)} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '25px' }}>
+                {row.estado_rol === 1 ? (
+                        <i className="bi bi-toggle-on" style={{ color: "#48110d" }}></i>
+                    ) : (
+                        <i
+                            className="bi bi-toggle-off"
+                            style={{ width: "60px", color: "black" }}
+                        ></i>
+                    )}
+            </button>
+            )
+        },
+        {
             name: "Acciones",
             cell: (row) => (
                 <div className={estilos["acciones"]}>
-                    <button className={estilos.boton} onClick={() => handleEstadoRol(row.id_rol, row.estado_rol)} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}>
-                        {row.estado_rol === 1 ? (
-                            <i className="bi bi-toggle-on" style={{ color: "#1F67B9" }}></i>
-                        ) : (
-                            <i className="bi bi-toggle-off" style={{ color: "black" }}></i>
-                        )}
-                    </button>
-                    <button onClick={() => {
+                    <button disabled={row.estado_rol === 0} onClick={() => {
                         cambiarEstadoModalEditar(!estadoModaleditar),
                             setRolesEditar(row)
-                    }} className={estilos.boton} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}>
-                        <i class="fa-solid fa-pen-to-square iconosNaranjas"></i>
+                    }} className={estilos.boton} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '22px' }}>
+                        <i className={`fa-solid fa-pen-to-square ${row.estado_rol === 1 ? 'iconosNaranjas' : 'iconosGrises'}`}></i>
                     </button>
-                    <button className={estilos.boton} onClick={() => handleDeleteRoles(row.id_rol)} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}>
-                        <i className="fas fa-trash iconosRojos"></i>
+                    <button disabled={row.estado_rol === 0} className={estilos.boton} onClick={() => handleDeleteRoles(row.id_rol)} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '22px' }}>
+                        <i className={`bi bi-trash ${row.estado_rol === 1 ? 'iconosRojos' : 'iconosGrises'}`}></i>
                     </button>
                 </div>
             )
@@ -503,7 +531,7 @@ function Roles() {
                 setInputValidoNombre(false);
             }
             // Verifica si el valor contiene caracteres especiales
-            else if (/[^a-zA-Z0-9\s]/.test(value)) {
+            else if (/[^a-zA-Z0-9\sÁÉÍÓÚáéíóúÑñÜü]/.test(value)) {
                 setErrorNombre('No se permiten caracteres especiales.');
                 setInputValidoNombre(false);
             }
@@ -530,7 +558,7 @@ function Roles() {
                 setInputValidoDes(false);
             }
             // Verifica si el valor contiene caracteres especiales
-            else if (/[^a-zA-Z0-9\s]/.test(value)) {
+            else if (/[^a-zA-Z0-9\sÁÉÍÓÚáéíóúÑñÜü]/.test(value)) {
                 setErrorDes('No se permiten caracteres especiales.');
                 setInputValidoDes(false);
             }
@@ -540,8 +568,8 @@ function Roles() {
                 setInputValidoDes(false);
             }
             // Verifica si la longitud es mayor a 30 caracteres
-            else if (value.length > 50) {
-                setErrorDes('Ingresa un máximo de 50 caracteres.');
+            else if (value.length > 150) {
+                setErrorDes('Ingresa un máximo de 150 caracteres.');
                 setInputValidoDes(false);
             }
             // Si todo es válido
@@ -568,7 +596,7 @@ function Roles() {
                 setInputValidoNombre2(false);
             }
             // Verifica si el valor contiene caracteres especiales
-            else if (/[^a-zA-Z0-9\s]/.test(value)) {
+            else if (/[^a-zA-Z0-9\sÁÉÍÓÚáéíóúÑñÜü]/.test(value)) {
                 setErrorNombre2('No se permiten caracteres especiales.');
                 setInputValidoNombre2(false);
             }
@@ -595,7 +623,7 @@ function Roles() {
                 setInputValidoDes2(false);
             }
             // Verifica si el valor contiene caracteres especiales
-            else if (/[^a-zA-Z0-9\s]/.test(value)) {
+            else if (/[^a-zA-Z0-9\sÁÉÍÓÚáéíóúÑñÜü]/.test(value)) {
                 setErrorDes2('No se permiten caracteres especiales.');
                 setInputValidoDes2(false);
             }
@@ -605,8 +633,8 @@ function Roles() {
                 setInputValidoDes2(false);
             }
             // Verifica si la longitud es mayor a 30 caracteres
-            else if (value.length > 50) {
-                setErrorDes2('Ingresa un máximo de 50 caracteres.');
+            else if (value.length > 150) {
+                setErrorDes2('Ingresa un máximo de 150 caracteres.');
                 setInputValidoDes2(false);
             }
             // Si todo es válido
@@ -693,6 +721,15 @@ function Roles() {
         }
     };
 
+    const customStyles = {
+        headCells: {
+            style: {
+                textAlign: 'center',
+                fontWeight: 'bold',
+                fontSize: '16px'
+            },
+        }
+    };
 
     if (isLoading) {
         return <div>Cargando...</div>;
@@ -717,7 +754,7 @@ function Roles() {
                 </div>
             </div>
             <div className={estilos["tabla"]}>
-                <DataTable columns={columns} data={filteredRoles} pagination paginationPerPage={6} highlightOnHover></DataTable>
+                <DataTable customStyles={customStyles} columns={columns} data={filteredRoles} pagination paginationPerPage={6} highlightOnHover></DataTable>
             </div>
             <Modal
                 estado={estadoModalAgregar}

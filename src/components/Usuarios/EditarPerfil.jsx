@@ -131,7 +131,7 @@ function EditarPerfil() {
                 setInputValidoNombre(false);
             }
             // Verifica si el valor contiene caracteres especiales
-            else if (/[^a-zA-Z0-9\s]/.test(value)) {
+            else if (/[^a-zA-Z0-9\sÁÉÍÓÚáéíóúÑñÜü]/.test(value)) {
                 setErrorNombre('No se permiten caracteres especiales.');
                 setInputValidoNombre(false);
             }

@@ -7,11 +7,27 @@ import estilos from '../Usuarios/Usuarios.module.css'
 import Swal from 'sweetalert2';
 import DataTable from "react-data-table-component";
 import { useUserContext } from "../UserProvider";
+import Modal from '../Modal';
+import styled from 'styled-components';
 
 function Usuarios() {
 
-    const { usuarioLogueado  } = useUserContext();
-    
+    const { usuarioLogueado } = useUserContext();
+    const [estadoModalDetalles, cambiarEstadoModalDetalles] = useState(false);
+
+    const [usuarioDetalle, setUsuarioDetalle] = useState({
+        id_usuario: '',
+        imagen_usuario: '',
+        nombre_usuario: '',
+        email: '',
+        contraseña: '',
+        telefono_usuario: '',
+        direccion_usuario: '',
+        estado_usuario: '',
+        id_rol: ''
+    });
+
+
     // Obtener el token del localStorage
     const token = localStorage.getItem('token');
 
@@ -39,7 +55,8 @@ function Usuarios() {
         {
             name: "Cedula",
             selector: (row) => row.id_usuario,
-            sortable: true
+            sortable: true,
+            maxWidth: "140px",
         },
         {
             name: "Imagen",
@@ -48,27 +65,26 @@ function Usuarios() {
                     src={row.imagen_usuario ? row.imagen_usuario : 'https://tse2.mm.bing.net/th?id=OIP.U8HnwxkbTkhoZ_DTf7sCSgHaHa&pid=Api&P=0&h=180'}
                     width="40px" />
             ),
-            sortable: true
+            sortable: true,
+            maxWidth: "140px",
         },
         {
             name: "Nombre",
             selector: (row) => row.nombre_usuario,
-            sortable: true
-        },
-        {
-            name: "Dirección",
-            selector: (row) => row.direccion_usuario,
-            sortable: true
+            sortable: true,
+            maxWidth: "140px",
         },
         {
             name: "telefono",
             selector: (row) => row.telefono_usuario,
             sortable: true,
+            maxWidth: "140px",
         },
         {
             name: "email",
             selector: (row) => row.email,
             sortable: true,
+            maxWidth: "140px",
         },
         {
             name: "rol",
@@ -82,25 +98,48 @@ function Usuarios() {
                 })
             ),
             sortable: true,
+            maxWidth: "10px",
+        },
+        {
+            name: "estado",
+            cell: (row) => (
+                <button className={estilos.boton} onClick={() => handleEstadoUsuario(row.id_usuario, row.estado_usuario)} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '25px' }}>
+                    {row.estado_usuario === 1 ? (
+                        <i className="bi bi-toggle-on" style={{ color: "#48110d" }}></i>
+                    ) : (
+                        <i
+                            className="bi bi-toggle-off"
+                            style={{ width: "60px", color: "black" }}
+                        ></i>
+                    )}
+                </button>
+            ),
+            sortable: true,
+            maxWidth: "100px",
         },
         {
             name: "Acciones",
             cell: (row) => (
                 <div className={estilos["acciones"]}>
-                    <button className={estilos.boton} onClick={() => handleEstadoUsuario(row.id_usuario, row.estado_usuario)} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}>
-                        {row.estado_usuario === 1 ? (
-                            <i className="bi bi-toggle-on" style={{ color: "#1F67B9" }}></i>
-                        ) : (
-                            <i className="bi bi-toggle-off" style={{ color: "black" }}></i>
-                        )}
+                    <button disabled={row.estado_usuario === 0} className={estilos.boton} onClick={() => {
+                        setUsuarioDetalle(row)
+                        cambiarEstadoModalDetalles(true)
+                    }} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '22px' }}>
+                        <i className={row.estado_usuario === 0 ? "bi-eye-slash iconosGrises" : "bi-eye iconosGrises"} style={{
+                                color: row.estado_usuario === 0 ? "gray" : "#1A008E",
+                            }}></i>
                     </button>
                     <Link to={`/editarUsuarios/${row.id_usuario}`}>
-                        <button className={estilos.boton} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}>
-                            <i class="fa-solid fa-pen-to-square iconosNaranjas"></i>
+                        <button className={estilos.boton} disabled={row.estado_usuario === 0} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '22px' }}>
+                            <i className={`fa-solid fa-pen-to-square ${row.estado_usuario === 1 ? 'iconosNaranjas' : 'iconosGrises'}`}></i >
                         </button>
                     </Link>
-                    <button className={estilos.boton} onClick={() => handleDeleteUsuario(row.id_usuario)} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}>
-                        <i className="fas fa-trash iconosRojos"></i>
+                    <button disabled={row.estado_usuario === 0} className={estilos.boton} onClick={() => {
+                        if (row.estado_usuario === 1) {
+                            handleDeleteUsuario(row.id_usuario)
+                        }
+                    }} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '22px' }}>
+                        <i className={`bi bi-trash ${row.estado_usuario === 1 ? 'iconosRojos' : 'iconosGrises'}`}></i>
                     </button>
                 </div>
             )
@@ -264,7 +303,6 @@ function Usuarios() {
             style: {
                 textAlign: 'center',
                 fontWeight: 'bold',
-                padding: '10px',
                 fontSize: '16px'
             },
         }
@@ -290,7 +328,7 @@ function Usuarios() {
             <br />
             <div className={estilos['divFiltro']}>
                 <input type="text" placeholder=" Buscar..." value={filtro} onChange={handleFiltroChange} className={estilos["busqueda"]} />
-                
+
                 <Link to="/agregarUsuarios">
 
 
@@ -300,8 +338,50 @@ function Usuarios() {
             <div className={estilos["tabla"]}>
                 <DataTable customStyles={customStyles} columns={columns} data={filteredUsuarioSinEspecifico} pagination paginationPerPage={6} highlightOnHover></DataTable>
             </div>
+            <Modal
+                estado={estadoModalDetalles}
+                cambiarEstado={cambiarEstadoModalDetalles}
+                titulo="Detalles Usuario"
+                mostrarHeader={true}
+                mostrarOverlay={true}
+                posicionModal={'center'}
+                width={'500px'}
+                padding={'20px'}
+            >
+                <Contenido>
+                    <div>
+                        <div className={estilos.divDet}><h3>Cedula:</h3><p className='text-wrap'>{usuarioDetalle && usuarioDetalle.id_usuario}</p></div>
+                        <div className={estilos.divDet}><h3>Nombre:</h3><p className='text-wrap'>{usuarioDetalle && usuarioDetalle.nombre_usuario}</p></div>
+                        <div className={estilos.divDet}><h3>Dirección:</h3><p className='text-wrap'>{usuarioDetalle && usuarioDetalle.direccion_usuario}</p></div>
+                        <div className={estilos.divDet}><h3>Telefono:</h3><p className='text-wrap'>{usuarioDetalle && usuarioDetalle.telefono_usuario}</p></div>
+                        <div className={estilos.divDet}><h3>Correo:</h3><p className='text-wrap'>{usuarioDetalle && usuarioDetalle.email}</p></div>
+                    </div>
+                </Contenido>
+            </Modal>
         </div>
     );
 }
+
+const Contenido = styled.div`
+	display: flex;
+	flex-direction: column;
+
+	h1 {
+		font-size: 42px;
+		font-weight: 700;
+		margin-bottom: 10px;
+	}
+
+	p {
+		font-size: 18px;
+		margin-bottom: 20px;
+	}
+
+	img {
+		width: 100%;
+		vertical-align: top;
+		border-radius: 3px;
+	}
+`;
 
 export default Usuarios;

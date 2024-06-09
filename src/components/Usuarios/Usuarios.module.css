@@ -129,10 +129,8 @@
 
 .contenido2 {
     border-radius: 3px;
-    border: 1px solid #b9b9b9;
     margin-left: 50px;
     margin-right: 50px;
-    background-color: #f8f8f8;
 }
 
 #_id {
@@ -300,3 +298,11 @@ label {
     border: 1px solid red;
     /* background-color: #f5c1c1; */
   }
+
+.divDet{
+    display: flex;
+}
+
+.divDet p{
+    margin-left: 10px;
+}
