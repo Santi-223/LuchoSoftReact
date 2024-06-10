@@ -10,6 +10,7 @@ import Productos from './Productos';
 
 
 function AgregarProductos() {
+    
     const [categorias, setCategorias] = useState([]);
     const [producto, setProducto] = useState({
         imagen_producto: "",
@@ -46,7 +47,8 @@ function AgregarProductos() {
                 const response = await fetch('https://api-luchosoft-mysql.onrender.com/ventas2/categoria_productos');
                 if (response.ok) {
                     const data = await response.json();
-                    const categoriasFiltradas = data.map(categoria => ({
+                    const categoriasConEstado1 = data.filter(categoria => categoria.estado_categoria_productos === 1);
+                    const categoriasFiltradas = categoriasConEstado1.map(categoria => ({
                         id_categoria_productos: categoria.id_categoria_productos,
                         nombre_categoria_productos: categoria.nombre_categoria_productos
                     }));
@@ -65,7 +67,7 @@ function AgregarProductos() {
 
     const handleSubmit = async () => {
         console.log("Productos:", producto[0]);
-    
+
         if (!producto.nombre_producto || !producto.descripcion_producto || !producto.precio_producto || !producto.id_categoria_producto) {
             Swal.fire({
                 icon: 'error',
@@ -75,10 +77,10 @@ function AgregarProductos() {
             });
             return; // Detener la ejecución si hay campos vacíos
         }
-    
+
         // Validar caracteres especiales
         const regex = /^[a-zA-Z0-9.,?!¡¿\s]+$/; // Expresión regular para permitir letras, números y algunos caracteres especiales
-    
+
         if (!regex.test(producto.nombre_producto) || !regex.test(producto.descripcion_producto)) {
             Swal.fire({
                 icon: 'error',
@@ -88,7 +90,7 @@ function AgregarProductos() {
             });
             return; // Detener la ejecución si hay caracteres especiales en campos de texto
         }
-    
+
         // Validar el campo de precio
         if (isNaN(producto.precio_producto) || parseFloat(producto.precio_producto) < 50) {
             Swal.fire({
@@ -99,7 +101,7 @@ function AgregarProductos() {
             });
             return; // Detener la ejecución si el precio no es válido
         }
-    
+
         try {
             const formProducto = new FormData();
             formProducto.append('nombre_producto', producto.nombre_producto);
@@ -108,23 +110,29 @@ function AgregarProductos() {
             formProducto.append('precio_producto', producto.precio_producto);
             formProducto.append('estado_producto', '1');
             formProducto.append('id_categoria_producto', producto.id_categoria_producto);
-    
+
             const response = await fetch('https://api-luchosoft-mysql.onrender.com/ventas2/productos', {
                 method: 'POST',
                 body: formProducto
             });
-    
+
             if (response.ok) {
                 console.log('Producto creado exitosamente.');
+
                 Swal.fire({
-                    icon: 'success',
-                    title: 'Producto creado exitosamente',
+                    toast: true,
+                    position: "top-end",
                     showConfirmButton: false,
-                    timer: 1500
+                    timer: 1500,
+                    timerProgressBar: true,
+                    icon: "success",
+                    title: "Producto creado exitosamente"
                 });
                 setTimeout(() => {
                     window.location.href = '#/productos'; // Redirigir a la página de productos
-                }, 1000);
+                }, 1500);        
+
+
             } else {
                 const errorData = await response.json(); // Parsear el cuerpo de la respuesta como JSON
                 console.error('Error al crear el producto:', errorData);
