@@ -5,6 +5,7 @@ import estilos from './Productos.module.css'
 import "./../../Layout.css";
 import Swal from 'sweetalert2';
 import DataTable from "react-data-table-component";
+import { Modal, Button } from 'react-bootstrap';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 const imagen = "https://www.bing.com/images/search?view=detailV2&ccid=1mJgu55%2f&id=C5DB30A04093DFACC3C38D88CA89A6C8104CC71F&thid=OIP.1mJgu55_hbMwEz0WksTa4AHaHa&mediaurl=https%3a%2f%2fcdn.icon-icons.com%2ficons2%2f2568%2fPNG%2f512%2fimages_picture_icon_153719.png&cdnurl=https%3a%2f%2fth.bing.com%2fth%2fid%2fR.d66260bb9e7f85b330133d1692c4dae0%3frik%3dH8dMEMimicqIjQ%26pid%3dImgRaw%26r%3d0&exph=512&expw=512&q=icnoo+d+imagen&simid=607996730800216546&FORM=IRPRST&ck=E29C5C26BA4A2B86E80160EC0EFCD8FD&selectedIndex=3&itb=1"
@@ -13,6 +14,8 @@ const imagen = "https://www.bing.com/images/search?view=detailV2&ccid=1mJgu55%2f
 function Productos() {
     const [productos, setproductos] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [showDetalleModal, setShowDetalleModal] = useState(false);
+    const [detalleProducto, setDetalleProducto] = useState(null);
     const tableRef = useRef(null);
     const [filtro, setFiltro] = useState('');
 
@@ -47,8 +50,8 @@ function Productos() {
 
         // Filtrar los datos de las compras para incluir solo las columnas deseadas
         const datosInforme = filteredproductos.map(producto => {
-            const { id_producto, nombre_producto, descripcion_producto, precio_producto, id_categoria_producto } = producto;
-            return [id_producto, nombre_producto, descripcion_producto, precio_producto, id_categoria_producto];
+            const { id_producto, nombre_producto, descripcion_producto, precio_producto, nombre_categoria_producto } = producto;
+            return [id_producto, nombre_producto, descripcion_producto, precio_producto, nombre_categoria_producto];
         });
 
         // Agregar la tabla al documento PDF
@@ -61,6 +64,16 @@ function Productos() {
         // Guardar el PDF
         doc.save("reporte_productos.pdf");
     };
+
+    const handleMostrarDetalle = (producto) => {
+        setDetalleProducto(producto); // Establece los datos de la fila seleccionada
+        setShowDetalleModal(true); // Muestra el modal
+    };
+
+    const formatearDinero = (cantidad) => {
+        return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(cantidad);
+    };
+    
 
 
     const columns = [
@@ -85,7 +98,7 @@ function Productos() {
 
         {
             name: "Precio",
-            selector: (row) => row.precio_producto,
+            selector: (row) => formatearDinero(row.precio_producto),
             sortable: true
         },
         {
@@ -98,9 +111,10 @@ function Productos() {
             cell: (row) => (
 
                 <div className={estilos["acciones"]}>
+
                     <button className={estilos.boton} onClick={() => handleEstadoproducto(row.id_producto, row.estado_producto)} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '25px' }}>
                         {row.estado_producto === 1 ? (
-                            <i className="bi bi-toggle-on" style={{ color: "#1F67B9" }}></i>
+                            <i className="bi bi-toggle-on" style={{ color: "#48110d" }}></i>
                         ) : (
                             <i className="bi bi-toggle-off" style={{ width: "60px", color: "black" }}></i>
                         )}
@@ -115,11 +129,22 @@ function Productos() {
             cell: (row) => (
 
                 <div className={estilos["acciones"]}>
-                    <Link to={`/editarProductos/${row.id_producto}`}>
-                        <button className={estilos.boton} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}>
-                            <i className="fa-solid fa-pen-to-square iconosNaranjas"></i>
-                        </button>
-                    </Link>
+
+                    <button onClick={() => {
+                        if (row.estado_producto === 1) { // Solo abre el modal si el estado es activo
+                            handleMostrarDetalle(row)
+                        }
+                    }} className={estilos.boton} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '25px' }}>
+                        <i className={`bi ${row.estado_producto === 0 ? 'bi-eye-slash cerrado' : 'bi-eye'}`} style={{ color: row.estado_producto === 0 ? "gray" : "#1A008E", pointerEvents: row.estado_producto === 0 ? "none" : "auto" }}></i>
+                    </button>
+
+                    <button onClick={() => {
+                        if (row.estado_producto === 1) { // Verifica si el estado es activo
+                            window.location.href = `/#/editarProductos/${row.id_producto}`;
+                        }
+                    }} className={estilos.boton} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}>
+                        <i className={`fa-solid fa-pen-to-square ${row.estado_producto === 1 ? 'iconosVerdes' : 'iconosGris'}`}></i>
+                    </button>
 
                 </div>
 
@@ -143,13 +168,13 @@ function Productos() {
                 fetch('https://api-luchosoft-mysql.onrender.com/ventas2/productos'),
                 fetch('https://api-luchosoft-mysql.onrender.com/ventas2/categoria_productos') // Suponiendo que esta es la ruta para obtener las categorías
             ]);
-    
+
             if (productosResponse.ok && categoriasResponse.ok) {
                 const [productosData, categoriasData] = await Promise.all([
                     productosResponse.json(),
                     categoriasResponse.json()
                 ]);
-    
+
                 const productosFiltrador = productosData.map(producto => {
                     const categoria = categoriasData.find(cat => cat.id_categoria_productos === producto.id_categoria_producto);
                     return {
@@ -157,7 +182,7 @@ function Productos() {
                         nombre_categoria_producto: categoria ? categoria.nombre_categoria_productos : 'Sin categoría'
                     };
                 });
-    
+
                 setproductos(productosFiltrador);
             } else {
                 console.error('Error al obtener los productos o las categorías');
@@ -166,7 +191,7 @@ function Productos() {
             console.error('Error al obtener los productos o las categorías:', error);
         }
     };
-    
+
 
 
 
@@ -260,11 +285,13 @@ function Productos() {
                 <input type="text" placeholder=" Buscar..." value={filtro} onChange={handleFiltroChange} className={estilos["busqueda"]} />
                 <div>
                     <Link to="/agregarProductos">
-                        <button className={` ${estilos.botonAgregar}`}><i className="fa-solid fa-plus"></i> Agregar</button>
+                        <button className={` ${estilos.botonAgregar} ${estilos.rojo} bebas-neue-regular`}><i className="fa-solid fa-plus"></i> Agregar</button>
+
                     </Link>
+
                     <button
                         style={{ color: "white" }}
-                        className={`boton ${estilos.vinotinto}`}
+                        className={` ${estilos.vinotinto}`}
                         onClick={generarPDF}
                     >
                         <i className="fa-solid fa-download"></i>
@@ -276,6 +303,35 @@ function Productos() {
             <div className={estilos["tabla"]} style={{ maxWidth: '100%', overflowX: 'auto' }}> {/* Aplicar estilos CSS al contenedor de la tabla */}
                 <DataTable columns={columns} data={filteredproductos} pagination paginationPerPage={5} highlightOnHover customStyles={customStyles} defaultSortField="id_producto" defaultSortAsc={true}></DataTable>
             </div>
+
+            <Modal
+                className={estilos["modal"]}
+                show={showDetalleModal}
+                onHide={() => setShowDetalleModal(false)}
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Datos del producto</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {/* Muestra los datos de la fila seleccionada */}
+                    {detalleProducto && (
+                        <div>
+                            <p>ID del producto: {detalleProducto.id_producto}</p>
+                            <p>Nombre del producto: {detalleProducto.nombre_producto}</p>
+                            <p>Descripción del producto: {detalleProducto.descripcion_producto}</p>
+                            <p>
+                                Precio del producto: {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(detalleProducto.precio_producto)}
+                            </p>
+                            <p>Categoría del producto: {detalleProducto.nombre_categoria_producto}</p>
+                            {/* Muestra más detalles si es necesario */}
+                        </div>
+                    )}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowDetalleModal(false)}>Cerrar</Button>
+                </Modal.Footer>
+            </Modal>
+
         </div>
     );
 
