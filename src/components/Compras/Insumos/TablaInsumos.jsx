@@ -1461,13 +1461,13 @@ function Insumos() {
                       <option value="" disabled selected>
                         Seleccionar unidad de medida
                       </option>
-                      <option value="kilogramos">Kilogramo</option>
-                      <option value="litros">Litro</option>
-                      <option value="piezas">Pieza</option>
-                      <option value="gramos">Gramos</option>
+                      <option value="unidades">Unidades</option>
                       <option value="miligramos">Miligramos</option>
-                      <option value="mililitros">Mililitro</option>
-                      <option value="toneladas">Tonelada</option>
+                      <option value="gramos">Gramos</option>
+                      <option value="libras">Libras</option>
+                      <option value="kilogramos">Kilogramos</option>
+                      <option value="mililitros">Mililitros</option>
+                      <option value="litros">Litros</option>
                     </select>
                     {
   !inputMedidaValido && (
