@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, useNavigate } from "react-router-dom";
 import $ from 'jquery';
 import "./../Layout.css";
 import estilos from './Ordenes.module.css'
@@ -9,15 +9,20 @@ import { Modal, Button } from 'react-bootstrap';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 
+
+
 function OrdenesProduccion() {
     const [showModal, setShowModal] = useState(false);
+    const [showDetalleModal, setShowDetalleModal] = useState(false);
     const [ordenSeleccionada, setOrdenSeleccionada] = useState(null);
+    const [detalleOrden, setDetalleOrden] = useState(null);
     const [insumos, setInsumos] = useState([]);
     const [usuarios, setUsuarios] = useState([]);
     const token = localStorage.getItem('token');
     const [ordenes, setOrdenes] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const tableRef = useRef(null);
+    const navigate = useNavigate();
     const [filtro, setFiltro] = useState('');
 
     const handleFiltroChange = (e) => {
@@ -53,13 +58,28 @@ function OrdenesProduccion() {
             console.error('Error al obtener los insumos:', error);
         }
     };
-    
+
 
     const getNombreInsumoById = (idInsumo) => {
         const insumo = insumos.find(insumo => insumo.id_insumo === idInsumo);
         return insumo ? insumo.nombre_insumo : 'Insumo no encontrado';
     };
-    
+
+    const handleAgregarOrden = () => {
+        const insumosConEstado1 = insumos.filter(insumo => insumo.estado_insumo === 1);
+        if (insumosConEstado1.length === 0) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'No hay insumos disponibles para agregar una orden',
+                confirmButtonColor: '#1F67B9',
+            });
+
+        } else {
+            navigate('/agregarOrdenes');
+        }
+    };
+
 
 
     const generarPDF = () => {
@@ -78,8 +98,8 @@ function OrdenesProduccion() {
 
         // Filtrar los datos de las compras para incluir solo las columnas deseadas
         const datosInforme = filteredOrdenes.map(orden => {
-            const { id_orden_de_produccion, descripcion_orden, fecha_orden, id_usuario } = orden;
-            return [id_orden_de_produccion, descripcion_orden, fecha_orden, id_usuario];
+            const { id_orden_de_produccion, descripcion_orden, fecha_orden, nombre_usuario } = orden;
+            return [id_orden_de_produccion, descripcion_orden, fecha_orden, nombre_usuario];
         });
 
         // Agregar la tabla al documento PDF
@@ -92,6 +112,14 @@ function OrdenesProduccion() {
         // Guardar el PDF
         doc.save("reporte_ordenes.pdf");
     };
+
+
+    const handleMostrarDetalle = (orden) => {
+        setDetalleOrden(orden); // Establece los datos de la fila seleccionada
+        setShowDetalleModal(true); // Muestra el modal
+    };
+
+
     const handleMostrarDetalles = async (idOrden) => {
         try {
             const response = await fetch('https://api-luchosoft-mysql.onrender.com/orden/orden_insumo/');
@@ -138,6 +166,14 @@ function OrdenesProduccion() {
             name: "Acciones",
             cell: (row) => (
                 <div className={estilos["acciones"]}>
+                    <button
+                        className={estilos.boton}
+                        onClick={() => handleMostrarDetalle(row)} // Llama a la función handleMostrarDetalle y pasa la fila como argumento
+                        style={{ cursor: 'pointer', textAlign: 'center', fontSize: '25px' }}
+                    >
+                        <i className="bi bi-eye" style={{ color: "#5F597A" }}></i>
+                    </button>
+
                     <button className={estilos.boton} onClick={() => handleMostrarDetalles(row.id_orden_de_produccion)} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '25px' }}>
                         <i className="bi bi-info-circle" style={{ color: "#FFA200" }}></i>
                     </button>
@@ -245,22 +281,48 @@ function OrdenesProduccion() {
             <div className={estilos['divFiltro']}>
                 <input type="text" placeholder=" Buscar..." value={filtro} onChange={handleFiltroChange} className={estilos["busqueda"]} />
                 <div>
-                    <Link to="/agregarOrdenes">
-                        <button className={` ${estilos.botonAgregar}`}><i className="fa-solid fa-plus"></i> Agregar</button>
-                    </Link>
+                    <button onClick={handleAgregarOrden} className={` ${estilos.botonAgregar} ${estilos.rojo} bebas-neue-regular`}><i className="fa-solid fa-plus"></i> Agregar</button>
+
                     <button
                         style={{ color: "white" }}
-                        className={`boton ${estilos.vinotinto}`}
+                        className={` ${estilos.vinotinto}`}
                         onClick={generarPDF}
                     >
                         <i className="fa-solid fa-download"></i>
                     </button>
+
                 </div>
             </div>
 
             <div className={estilos["tabla"]}>
                 <DataTable columns={columns} data={filteredOrdenes} pagination paginationPerPage={6} highlightOnHover customStyles={customStyles} defaultSortField="id_orden_de_produccion" defaultSortAsc={true}></DataTable>
             </div>
+            <Modal
+                className={estilos["modal"]}
+                show={showDetalleModal}
+                onHide={() => setShowDetalleModal(false)}
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Datos de la orden de producción</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {/* Muestra los datos de la fila seleccionada */}
+                    {detalleOrden && (
+                        <div>
+                            <p>ID de la orden: {detalleOrden.id_orden_de_produccion}</p>
+                            <p>Descripción de la orden: {detalleOrden.descripcion_orden}</p>
+                            <p>Fecha de la orden: {detalleOrden.fecha_orden}</p>
+                            <p>Usuario de la orden: {detalleOrden.nombre_usuario}</p>
+                            {/* Muestra más detalles si es necesario */}
+                        </div>
+                    )}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowDetalleModal(false)}>Cerrar</Button>
+                </Modal.Footer>
+            </Modal>
+
+
             <Modal className={estilos["modal"]} show={showModal} onHide={() => setShowModal(false)}>
 
                 <Modal.Header closeButton>
