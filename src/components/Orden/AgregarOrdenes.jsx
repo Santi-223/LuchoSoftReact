@@ -16,6 +16,9 @@ function AgregarOrdenes() {
     const [isLoading, setIsLoading] = useState(true);
     const [precio, setPrecio] = useState(0);
     const [searchTerm, setSearchTerm] = useState('');
+    const [inputValidoDescripcion, setInputValidoDescripcion] = useState(true);
+    const [errorDescripcion, setErrorDescripcion] = useState('')
+
 
     const [orden, setOrden] = useState({
         id_orden_de_produccion: '',
@@ -32,6 +35,7 @@ function AgregarOrdenes() {
     const [scrollEnabled, setScrollEnabled] = useState(false);
     const [selectedInsumos, setSelectedInsumos] = useState(new Set());
     const [formChanged, setFormChanged] = useState(false);
+    const [inputValido2, setInputValido2] = useState(Array(tableRows.length).fill(true));
 
     useEffect(() => {
         fetchInsumos();
@@ -62,7 +66,8 @@ function AgregarOrdenes() {
             const response = await fetch('https://api-luchosoft-mysql.onrender.com/compras/insumos');
             if (response.ok) {
                 const data = await response.json();
-                const insumosConSeleccion = data.map(insumo => ({ ...insumo, seleccionado: false, cantidad: 0, precio_unitario: 0 }));
+                const insumosConEstado1 = data.filter(insumo => insumo.estado_insumo === 1);
+                const insumosConSeleccion = insumosConEstado1.map(insumo => ({ ...insumo, seleccionado: false, cantidad: 0, precio_unitario: 0 }));
                 setInsumos(insumosConSeleccion);
             } else {
                 console.error('Error al obtener los insumos');
@@ -95,9 +100,11 @@ function AgregarOrdenes() {
             setFormChanged(true);
         }
     };
+
     const filteredInsumos = insumos.filter(insumo =>
         insumo.nombre_insumo.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
     const handleSelectChange = (event, index) => {
         const { value } = event.target;
         if (selectedInsumos.has(value)) {
@@ -124,30 +131,37 @@ function AgregarOrdenes() {
     };
 
     const handleCantidadChange = (event, index) => {
-        const { value } = event.target;
-        // Verificar si el valor ingresado es negativo
-        if (parseFloat(value) <= 0) {
-            // Mostrar un mensaje de error
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'La cantidad no puede ser negativa o igual a cero',
-                confirmButtonColor: '#1F67B9',
+        let { value } = event.target;
+
+        value = parseFloat(value) >= 0 ? parseFloat(value) : 0;
+
+        // Validar el formato del número
+        const isValidFormat = /^\d*\.?\d*$/.test(value.toString());
+
+        if (!isValidFormat) {
+            setInputValido2(prevState => {
+                const newState = [...prevState];
+                newState[index] = false;
+                return newState;
             });
-            return; // Salir de la función sin hacer cambios
+        } else {
+            setInputValido2(prevState => {
+                const newState = [...prevState];
+                newState[index] = true;
+                return newState;
+            });
+            const updatedRows = tableRows.map((row, rowIndex) => {
+                if (rowIndex === index) {
+                    const cantidad = parseFloat(value) || 0;
+                    return { ...row, cantidad: value, cantidad_seleccionada: cantidad };
+                }
+                return row;
+            });
+
+            setTableRows(updatedRows);
+            setFormChanged(true);
         }
-        const updatedRows = tableRows.map((row, rowIndex) => {
-            if (rowIndex === index) {
-                const cantidad = parseFloat(value) || 0;
-                return { ...row, cantidad: value, cantidad_seleccionada: cantidad };
-            }
-            return row;
-        });
-        setTableRows(updatedRows);
-    
-        setFormChanged(true);
     };
-    
 
     const handleSubmitOrden = async (event) => {
         event.preventDefault();
@@ -179,8 +193,6 @@ function AgregarOrdenes() {
             return;
         }
 
-
-
         if (!orden.fecha_orden || tableRows.some(row => !row.nombre || !row.cantidad)) {
             Swal.fire({
                 icon: 'error',
@@ -190,15 +202,16 @@ function AgregarOrdenes() {
             });
             return;
         }
-
-
+      
         Swal.fire({
-            icon: 'success',
-            title: '',
-            text: 'Orden registrada',
+            toast: true,
+            position: "top-end",
             showConfirmButton: false,
-            timer: 2000,
-        }).then(async () => {
+            timer: 1500,
+            timerProgressBar: true,
+            icon: "success",
+            title: "Orden registrada exitosamente"
+        })    .then(async () => {
             try {
                 // Primero, creamos la orden de producción
                 const responseOrden = await fetch('https://api-luchosoft-mysql.onrender.com/orden/orden_produccion', {
@@ -309,59 +322,60 @@ function AgregarOrdenes() {
                             <h1 id="titulo">Órdenes de producción</h1>
                         </div><br />
 
-                            <div className='inputs-up'>
-                                <div className='contenedor-input' >
-                                    <label style={{ marginLeft: "-130px" }} htmlFor="fechaCompra"> Fecha</label>
-                                    <p>Fecha</p>
-                                    <input
-                                        id="fechaCompra"
-                                        name="fecha_orden"
-                                        className="input-field"
-                                        value={orden.fecha_orden}
-                                        onChange={handleInputChange}
-                                        type="date"
-                                        style={{ width: "270px", height: "40px" }}
-
-                                    />
-                                </div>
-
-
-                            </div><br /><br />
+                        <div className='inputs-up'>
                             <div className='contenedor-input' >
-                                <label style={{ marginLeft: "-130px" }} htmlFor="fechaCompra"> Descripción</label>
-                                <p>Descripción</p>
-                                <textarea
+                                <label style={{ marginLeft: "-130px" }} htmlFor="fechaCompra"> Fecha</label>
+                                <p>Fecha</p>
+                                <input
                                     id="fechaCompra"
-                                    name="descripcion_orden"
-                                    className=""
-                                    value={orden.descripcion_orden}
+                                    name="fecha_orden"
+                                    className="input-field"
+                                    value={orden.fecha_orden}
                                     onChange={handleInputChange}
-                                    cols="33" rows="4"
-                                    type="text"
-                                    style={{ resize: 'none' }}
-                                />
-                            </div><br />
-                            <div id="kaka">
-                                <p>Usuario</p>
-                                <select
-                                    id="proveedor"
-                                    name="id_usuario"
-                                    className="input-field2"
+                                    type="date"
                                     style={{ width: "270px", height: "40px" }}
-                                    value={orden.id_usuario}
-                                    readOnly={true}
-                                    onChange={handleInputChange}>
-                                    <option value="">{usuario.nombre_usuario}</option>
 
-                                </select>
+                                />
                             </div>
-                            <br /><br />
-                            <div className='inputs-up'>
-                                <div className='contenedor-input'>
-                                    <button className='boton azulado2' type="button" onClick={addTableRow}><center>+ Insumo</center></button>
-                                </div>
+
+
+                        </div><br /><br />
+                        <div className='contenedor-input' >
+                            <label style={{ marginLeft: "-130px" }} htmlFor="fechaCompra"> Descripción</label>
+                            <p>Descripción</p>
+                            <textarea
+                                id="fechaCompra"
+                                name="descripcion_orden"
+                                className=""
+                                value={orden.descripcion_orden}
+                                onChange={handleInputChange}
+             
+                                cols="33" rows="4"
+                                type="text"
+                                style={{ resize: 'none' }}
+                            />
+                        </div><br />
+                        <div id="kaka">
+                            <p>Usuario</p>
+                            <select
+                                id="proveedor"
+                                name="id_usuario"
+                                className="input-field2"
+                                style={{ width: "270px", height: "40px" }}
+                                value={orden.id_usuario}
+                                readOnly={true}
+                                onChange={handleInputChange}>
+                                <option value="">{usuario.nombre_usuario}</option>
+
+                            </select>
+                        </div>
+                        <br /><br />
+                        <div className='inputs-up'>
+                            <div className='contenedor-input'>
+                                <button className='boton azulado2' type="button" onClick={addTableRow}><center>+ Insumo</center></button>
                             </div>
                         </div>
+                    </div>
 
 
 
@@ -389,6 +403,7 @@ function AgregarOrdenes() {
                                                 ))}
                                             </select>
                                         </td>
+                                        
                                         <td style={{ textAlign: "center" }}><input className="input-field-tabla" style={{ width: "100px" }} type="number" onChange={(e) => handleCantidadChange(e, index)} /></td>
                                         {index !== 0 && (
                                             <td style={{ textAlign: "center" }}>
@@ -399,6 +414,9 @@ function AgregarOrdenes() {
                                     </tr>
                                 ))}
                             </tbody>
+
+
+
                         </table>
                     </div>
                 </div>
