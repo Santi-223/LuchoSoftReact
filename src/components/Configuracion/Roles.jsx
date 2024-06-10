@@ -115,7 +115,7 @@ function Roles() {
             maxWidth: "100px",
             cell: (row) => (
                 <button className={estilos.boton} onClick={() => handleEstadoRol(row.id_rol, row.estado_rol)} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '25px' }}>
-                {row.estado_rol === 1 ? (
+                    {row.estado_rol === 1 ? (
                         <i className="bi bi-toggle-on" style={{ color: "#48110d" }}></i>
                     ) : (
                         <i
@@ -123,7 +123,7 @@ function Roles() {
                             style={{ width: "60px", color: "black" }}
                         ></i>
                     )}
-            </button>
+                </button>
             )
         },
         {
@@ -169,8 +169,15 @@ function Roles() {
 
     const crearRolPer = async (id_rol, id_permiso) => {
         console.log('permiso selecionado: ', id_permiso, 'rol: ', id_rol)
+
+        const fechaActual = new Date();
+        const año = fechaActual.getFullYear();
+        const mes = String(fechaActual.getMonth() + 1).padStart(2, '0'); // Los meses en JavaScript son de 0-11
+        const día = String(fechaActual.getDate()).padStart(2, '0');
+        const fechaFormateada = `${año}-${mes}-${día}`;
+
         const detallePayload = {
-            fecha_roles_permisos: '2023-09-22',
+            fecha_roles_permisos: fechaFormateada,
             id_rol: id_rol,
             id_permiso: id_permiso
         };
@@ -216,7 +223,7 @@ function Roles() {
                 title: "Error",
                 text: "Verifica todos los campos.",
             });
-        } else if(!roles1.nombre_rol || !roles1.descripcion_rol){
+        } else if (!roles1.nombre_rol || !roles1.descripcion_rol) {
             Swal.fire({
                 icon: "error",
                 title: "Error",
@@ -246,12 +253,18 @@ function Roles() {
                     selectedPermisos.forEach(async (id_permiso) => {
 
                         console.log('permiso selecionado: ', id_permiso, 'rol: ', id_rol)
+
+                        const fechaActual = new Date();
+                        const año = fechaActual.getFullYear();
+                        const mes = String(fechaActual.getMonth() + 1).padStart(2, '0'); // Los meses en JavaScript son de 0-11
+                        const día = String(fechaActual.getDate()).padStart(2, '0');
+                        const fechaFormateada = `${año}-${mes}-${día}`;
+
                         const detallePayload = {
-                            fecha_roles_permisos: '2023-09-22',
+                            fecha_roles_permisos: fechaFormateada,
                             id_rol: id_rol,
                             id_permiso: id_permiso
                         };
-
                         try {
                             const responseDetalle = await fetch('https://api-luchosoft-mysql.onrender.com/configuracion/roles_permisos', {
                                 method: 'POST',
@@ -277,8 +290,8 @@ function Roles() {
                         showConfirmButton: false,
                         timer: 1500
                     });
-                    fetchRoles();
                     fetchRolesPermisos();
+                    fetchRoles();
                     setSelectedPermisos([]);
                     setRoles1({
                         nombre_rol: '',
@@ -659,7 +672,7 @@ function Roles() {
                 title: "Error",
                 text: "Verifica todos los campos.",
             });
-        } else if(!rolesEditar.nombre_rol || !rolesEditar.descripcion_rol){
+        } else if (!rolesEditar.nombre_rol || !rolesEditar.descripcion_rol) {
             Swal.fire({
                 icon: "error",
                 title: "Error",

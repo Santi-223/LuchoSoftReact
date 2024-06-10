@@ -8,9 +8,11 @@ import { useUserContext } from "../UserProvider";
 
 
 function AgregarOrdenes() {
-    const { usuario } = useUserContext();
+    const { usuarioLogueado } = useUserContext();
 
-    const usuarioLO = usuario;
+    const usuario = usuarioLogueado;
+
+    const usuarioLO = usuarioLogueado;
 
     const [insumos, setInsumos] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
