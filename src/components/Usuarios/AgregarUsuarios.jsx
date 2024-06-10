@@ -331,7 +331,6 @@ function AgregarUsuarios() {
             <link href="https://cdn.datatables.net/2.0.2/css/dataTables.semanticui.css" rel="stylesheet" />
             <link href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.css" rel="stylesheet" />
             <div className={estilos["contenido2"]}>
-                <br />
                 <center>
                     <div id={estilos.titulo}>
                         <h1>Registrar Usuario</h1>

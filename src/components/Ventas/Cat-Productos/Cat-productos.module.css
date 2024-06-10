@@ -5,16 +5,21 @@
 }
 
 .botonAgregar {
-    background: #1F67B9;
-    text-align: center;
+    background-color: #1F67B9;
     color: white;
     height: 40px;
     width: 130px;
-    margin-left: 7%;
-    margin-top: 7%;
+    margin-right: -5px;
+    border: none;
+    border-radius: 50px;
+  }
 
-
-}
+.divFiltro{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: 20px;
+  }
 
 .descargar {
     margin-left: 100px;
@@ -302,7 +307,7 @@ label {
     border-collapse: collapse;
     border: 1px solid gray;
     border-radius: 10px;
-    margin-top: 120px;
+    margin-top: 30px;
     margin-right: 20px;
 }
 

@@ -1,31 +1,19 @@
 import React from "react";
-import DataTable from "react-data-table-component";
 import { Link, useParams } from "react-router-dom";
-import Modal from '../Clientes/modal';
 import styled from "styled-components";
 import { useState, useEffect } from "react";
-import { event } from "jquery";
-import moment from "moment";
 import Swal from 'sweetalert2'
 import estilos from './Pedidos.module.css';
-import { height } from "@fortawesome/free-regular-svg-icons/faAddressBook";
-
+import { useUserContext } from "../../UserProvider";
+import zIndex from "@mui/material/styles/zIndex";
 
 const EditarPedidos = () => {
-    // const [estadoModal1, cambiarEstadoModal1] = useState(false);
-    // const [clientes, setclientes] = useState([]);
-    // const [filtro, setFiltro] = useState('');
-    // const [cliente, setCliente] = useState(null);
     const [customers, setClientes] = useState([]);
-    // const [selectedCliente, setselectedCliente] = useState(null);
-    // const [ventanaClienteDetalle, VentanaClienteDetalle] = useState(false);
-    // const [tablaClienteDetalle, TablaClienteDetalle] = useState(true);
     const [listarProductos1, setlistarProductos] = useState([])
     const [tableRows, setTableRows] = useState([{ id_producto: 0, precio_unitario: 0, cantidad: '', cantidad_seleccionada: 0, precio_total: 0 }]);
-    // const [formChanged, setFormChanged] = useState(false);
     const [scrollEnabled, setScrollEnabled] = useState(false);
     const [pedidoProductos1, setPedidoProductos] = useState([]);
-
+    const { usuarioLogueado } = useUserContext();
     //editar pedidos
 
     const { id_pedido } = useParams();
@@ -38,7 +26,7 @@ const EditarPedidos = () => {
         total_pedido: 0,
         total_venta: 0,
         id_cliente: 0,
-        id_usuario: 1
+        id_usuario: usuarioLogueado.id_usuario
     })
 
     const [clienteEditar, setClienteEditar] = useState([])
@@ -146,14 +134,13 @@ const EditarPedidos = () => {
 
                     if (response.ok) {
                         console.log("Producto eliminado correctamente");
-                        Swal.fire({
-                            icon: 'success',
-                            title: '',
-                            text: 'Producto eliminado correctamente',
-                        }).then(() => {
-                            // Después de que el usuario haga clic en "OK", recargamos la página
-                            setPedidoProductos(pedidoProductos1.filter(producto => producto.id_pedidos_productos !== id_pedidos_productos));
-                        });
+                        // Swal.fire({
+                        //     icon: 'success',
+                        //     title: '',
+                        //     text: 'Producto eliminado correctamente',
+                        // }).then(() => {
+                            // });
+                            listarpedidosProductos();
                     } else {
                         console.error("Error al eliminar el producto:", response.statusText);
                         Swal.fire({
@@ -314,12 +301,21 @@ const EditarPedidos = () => {
 
                     if (response.ok) {
                         console.log('Pedido actualizado exitosamente.');
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Pedido actualizado exitosamente',
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: "top-end",
                             showConfirmButton: false,
-                            timer: 1500
-                        });
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                              toast.onmouseenter = Swal.stopTimer;
+                              toast.onmouseleave = Swal.resumeTimer;
+                            }
+                          });
+                          Toast.fire({
+                            icon: "success",
+                            title: "Actualización exitosa"
+                          });
                         setTimeout(() => {
                             window.location.href = '/#/pedidos';
                         }, 2000);
@@ -396,17 +392,18 @@ const EditarPedidos = () => {
                             );
                             throw new Error("Error al enviar los datos de pedidos_productos");
                         }
-                        Swal.fire({
-                            icon: 'success',
-                            title: '',
-                            text: 'Producto Agregado correctamente',
-                        })
+                        listarpedidosProductos();
+                        // Swal.fire({
+                        //     icon: 'success',
+                        //     title: '',
+                        //     text: 'Producto Agregado correctamente',
+                        // })
 
                         const productoRegistrado = await responsePedidosProductos.json();
                         console.log("Producto registrado correctamente:", productoRegistrado);
-                        
+
                         setTableRows(tableRows.slice(0, -1).concat({ id_producto: 0, precio_unitario: '', cantidad: '', cantidad_seleccionada: 0, precio_total: 0 }));
-                        
+
                     });
                     await Promise.all(pedidosProductosPromise);
 
@@ -424,22 +421,23 @@ const EditarPedidos = () => {
 
 
     useEffect(() => {
-        const listarpedidosProductos = async () => {
-            try {
-                const response = await fetch(`https://api-luchosoft-mysql.onrender.com/ventas/pedidos_productos/pedidos/${id_pedido}`);
-                if (response.ok) {
-                    const data = await response.json();
-                    console.log(data);
-                    setPedidoProductos(data)
-                } else {
-                    console.error('Error al obtener pedidos_productos');
-                }
-            } catch (error) {
-                console.error('Error al obtener pedidos_productos:', error);
-            }
-        }
         listarpedidosProductos();
     }, []);
+
+    const listarpedidosProductos = async () => {
+        try {
+            const response = await fetch(`https://api-luchosoft-mysql.onrender.com/ventas/pedidos_productos/pedidos/${id_pedido}`);
+            if (response.ok) {
+                const data = await response.json();
+                console.log(data);
+                setPedidoProductos(data)
+            } else {
+                console.error('Error al obtener pedidos_productos');
+            }
+        } catch (error) {
+            console.error('Error al obtener pedidos_productos:', error);
+        }
+    }
 
     const handleFiltroChange = (e) => {
         setFiltro(e.target.value);
@@ -542,38 +540,31 @@ const EditarPedidos = () => {
         setpedidostEditar({ ...pedidosEditar, total_pedido: totalPedido });
     }, [tableRows, pedidoProductos1]);
 
-
-
     return (
         <>
-            <link
-                rel="stylesheet"
-                href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-            />
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" />
             <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
-
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-            <div classNameName={estilos["contenido2"]}>
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+            <div className={estilos["contenido"]}>
                 <div id={estilos["titulo2"]}>
                     <h2>Editar Pedido</h2>
                 </div>
+
+
                 <div id={estilos["contenedorcito"]}>
                     <div className={estilos["input-container"]}>
-
                         <div id={estilos["kaka"]}>
                             <p id="skad">Fecha del Pedido</p>
                             <input id="fecha_pedido" className={estilos["input-field"]} name="fecha_pedido" type="date" value={pedidosEditar.fecha_pedido.slice(0, 10)} onChange={handleChange} />
                         </div>
                         <div id={estilos["kake"]}>
                             <p id="skady">Descripción del Pedido</p>
-                            <textarea name="observaciones" id="descripcion" cols="5" rows="4" value={pedidosEditar.observaciones} onChange={handleChange}></textarea>
-                            {/* <input id="descripcion" className={estilos["input-field2"]} type="text" value={pedidosEditar.observaciones} onChange={handleChange} /> */}
+                            <textarea name="observaciones" id="descripcion" cols="5" rows="4" style={{ resize: 'none' }} className={estilos['textarea']} value={pedidosEditar.observaciones} onChange={handleChange}></textarea>
                         </div>
-                        <div id={estilos["cliente"]}>
+                        <div className={estilos.cliente}>
                             <p>Cliente asociado</p>
-                            <select name="id_cliente" id=""
-                                value={pedidosEditar.id_cliente} onChange={handleChange}>
-                                <option>Seleccione un rol</option>
+                            <select name="id_cliente" id="" value={pedidosEditar.id_cliente} onChange={handleChange} className={estilos["input-field22"]}>
+                                <option>Seleccione un Cliente</option>
                                 {
                                     clienteEditar.map(cliente => {
                                         return <option value={cliente.id_cliente}>{cliente.nombre_cliente}-{cliente.id_cliente}</option>
@@ -592,35 +583,21 @@ const EditarPedidos = () => {
                         </div>
                     </div>
                     <div className={estilos["TablaDetallePedidos"]}>
-                        <div className={estilos["agrPedidos"]}>
-                            <p>Agregar Productos</p>
-                            <button className="btn btn-primary fa-solid fa-plus" style={{ height: '30px' }} onClick={addTableRow}></button>
-                        </div>
-                        <div style={{ overflowY: scrollEnabled ? 'scroll' : 'auto', maxHeight: '300px' }}>
-                            <table>
+                        <div style={{ overflowY: scrollEnabled ? 'scroll' : 'auto',height:'60vh'}}>
+                            <div className={estilos["cajaBotonesRPedidos"]} style={{ zIndex: '2', position: 'fixed', bottom: '10px', background: 'white', width: '54%', padding: '.7em' }}>
+                                <button type='submit' onClick={editarPedido} className={`${estilos["boton-azul"]} `} >Guardar</button>
+
+                                <Link to="/pedidos">
+                                    <button className={estilos["boton-gris"]} type="button">Cancelar</button>
+                                </Link>
+                            </div>
+                            <table style={{ borderRadius: '90px' }}>
                                 <thead>
                                     <tr>
-                                        <th style={{
-                                            textAlign: "center",
-                                            backgroundColor: "#1F67B9",
-                                            color: "white",
-                                        }}>Nombre</th>
-                                        <th style={{
-                                            textAlign: "center",
-                                            backgroundColor: "#1F67B9",
-                                            color: "white",
-                                        }}> Precio</th>
-                                        <th style={{
-                                            textAlign: "center",
-                                            backgroundColor: "#1F67B9",
-                                            color: "white",
-
-                                        }}>Cantidad</th>
-                                        <th style={{
-                                            textAlign: "center",
-                                            backgroundColor: "#1F67B9",
-                                            color: "white",
-                                        }}>Acciones</th>
+                                        <th className={estilos.cabeceraTabla}>Nombre</th>
+                                        <th className={estilos.cabeceraTabla}>Precio</th>
+                                        <th className={estilos.cabeceraTabla}>Cantidad</th>
+                                        <th className={estilos.cabeceraTabla}>Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -679,8 +656,8 @@ const EditarPedidos = () => {
                                                 <input type="number" value={row.cantidad} onChange={(event) => handleCantidadChange2(event, index)} />
                                             </td>
                                             <td style={{ display: "flex" }}>
-                                                <button className="btn btn-success fa-solid fa-check" style={{ height: '30px', width: '40px', fontSize: '15px', borderRadius: '30px', marginRight: '5px' }} onClick={AgregarPedidoDetalle}></button>
-                                                <button onClick={() => handleDeleteRow(index)} className="btn btn-danger fa-solid fa-trash" style={{ height: '30px', width: '40px', fontSize: '15px', borderRadius: '30px' }}></button>
+                                                <button onClick={() => handleDeleteRow(index)} className="btn btn-danger fa-solid fa-trash" style={{ height: '30px', width: '40px', fontSize: '15px', borderRadius: '30px', marginRight: '5px' }}></button>
+                                                <button className="btn btn-success fa-solid fa-plus" style={{ height: '30px', width: '40px', fontSize: '15px', borderRadius: '30px', }} onClick={AgregarPedidoDetalle}></button>
                                             </td>
 
                                         </tr>
@@ -690,13 +667,7 @@ const EditarPedidos = () => {
                         </div>
                     </div>
                 </div>
-                <div className={estilos["cajaBotonesRPedidos"]}>
-                    <button type='submit' onClick={editarPedido} className={estilos["boton-azul"]} >Guardar</button>
 
-                    <Link to="/pedidos">
-                        <button className={estilos["boton-gris"]} type="button">Cancelar</button>
-                    </Link>
-                </div>
             </div>
         </>
     )

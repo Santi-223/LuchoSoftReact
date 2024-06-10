@@ -4,9 +4,11 @@ import Swal from "sweetalert2";
 import styled from "styled-components";
 import estilos from './Pedidos.module.css';
 import { Link } from "react-router-dom";
+import { useUserContext } from "../../UserProvider";
 function App() {
   const token = localStorage.getItem("token");
   const [productos, setProductos] = useState([]);
+  const { usuarioLogueado } = useUserContext();
   const [isLoading, setIsLoading] = useState(true);
   const [pedido, setPedido] = useState({
     observaciones: "",
@@ -16,7 +18,7 @@ function App() {
     total_venta: 0,
     total_pedido: 0,
     id_cliente: 0,
-    id_usuario: 1,
+    id_usuario: usuarioLogueado.id_usuario,
   });
   const [clientes, setClientes] = useState([]);
   const tableRef = useRef(null);
@@ -56,12 +58,10 @@ function App() {
     const updatedRows = [...tableRows];
     updatedRows.splice(index, 1);
     setTableRows(updatedRows);
-
     const total = updatedRows.reduce((accumulator, currentValue) => {
       return accumulator + (parseFloat(currentValue.precio_total) || 0);
     }, 0);
     setPrecioTotal(total);
-
     setFormChanged(true);
   };
 
@@ -240,15 +240,21 @@ function App() {
       );
       if (responsePedido.ok) {
         console.log('Pedido creado exitosamente.');
-        Swal.fire({
-          icon: 'success',
-          title: 'Registro exitoso',
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
           showConfirmButton: false,
-          timer: 1500
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
         });
-        setTimeout(() => {
-          window.location.href = '/#/pedidos';
-        }, 3000);
+        Toast.fire({
+          icon: "success",
+          title: "Registro exitoso"
+        });
       }
 
       if (!responsePedido.ok) {
@@ -290,7 +296,7 @@ function App() {
       await Promise.all(pedidosProductosPromises);
 
       // Redirigir después de completar el proceso
-      window.location.href = "/pedidos";
+      window.location.href = "/#/pedidos";
     } catch (error) {
       console.error("Error al enviar los datos del pedido:", error);
     }
@@ -323,10 +329,7 @@ function App() {
 
   return (
     <>
-      <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-      />
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
       <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
       <div className={estilos["contenido"]}>
@@ -370,18 +373,26 @@ function App() {
                 type="text"
                 placeholder="Observaciones"
                 cols="5" rows="4"
+                style={{ resize: 'none' }}
+                className={estilos['textarea']}
               />
             </div>
-            <div id={estilos["cliente"]}>
-              <p>
-                Cliente asociado
-              </p>
+            <div className={estilos["cliente"]}>
+              <div className="clienteasosciado" style={{ display: 'flex', textAlign:'center' }}>
+                <p>
+                  Cliente asociado
+                </p>
+                <button type="button" className="fa-solid fa-plus" style={{ background: '#154360', border: 'none', borderRadius: '20px', width: '40px', color: 'white', marginLeft:'40px', marginTop:'-10px', marginBottom:'10px'}} >
+                </button>
+                {/* <button style={{background: '#154360', color: 'white',height: '30px', fontSize:'12px', marginLeft: '10px', border: 'none', borderRadius: '15px', width:'70px'}}>Agregar</button> */}
+              </div>
               <select
                 id="cliente"
                 name="id_cliente"
                 className={estilos["input-field22"]}
                 value={pedido.id_cliente}
                 onChange={handleInputChange}
+                style={{marginTop:'10px'}}
               >
                 <option value="">Seleccione un cliente</option>
                 {clientes.map((cliente) => (
@@ -425,60 +436,40 @@ function App() {
           <div className={estilos["TablaDetallePedidos"]}>
             <div className={estilos["agrPedidos"]}>
               <p>Agregar Productos</p>
-              <button type="button" className="btn btn-primary fa-solid fa-plus" onClick={handleAgregarProducto}>
+              <button type="button" className="fa-solid fa-plus" style={{ background: '#154360', border: 'none', borderRadius: '20px', width: '40px', color: 'white' }} onClick={handleAgregarProducto}>
               </button>
             </div>
-            <div style={{ overflowY: scrollEnabled ? 'scroll' : 'auto', maxHeight: '300px' }}>
+            <div style={{ overflowY: scrollEnabled ? 'scroll' : 'auto', height: '60vh', width: '130%' }} >
               <table
                 className="tablaDT ui celled table"
-                style={{ width: "50%" }}
+                style={{ border: 'none' }}
                 ref={tableRef}
               >
-                <thead className="rojo thead-fixed">
+                <thead>
                   <tr>
-                    <th
-                      style={{
-                        textAlign: "center",
-                        backgroundColor: "#1F67B9",
-                        color: "white",
-                      }}
-                    >Nombre Producto
+                    <th style={{ background: '#154360', color: 'white', textAlign: 'center' }}>
+                      Nombre Producto
                     </th>
-                    <th
-                      style={{
-                        textAlign: "center",
-                        backgroundColor: "#1F67B9",
-                        color: "white",
-                      }}
-                    >Precio
+                    <th style={{ background: '#154360', color: 'white', textAlign: 'center' }}>
+                      Precio
                     </th>
-                    <th
-                      style={{
-                        textAlign: "center",
-                        backgroundColor: "#1F67B9",
-                        color: "white",
-                      }}
-                    > Cantidad
+                    <th style={{ background: '#154360', color: 'white', textAlign: 'center' }}>
+                      Cantidad
                     </th>
-                    <th
-                      style={{
-                        textAlign: "center",
-                        backgroundColor: "#1F67B9",
-                        color: "white",
-                      }}
-                    >
+                    <th style={{ background: '#154360', color: 'white', textAlign: 'center' }}>
                       Acciones
                     </th>
                   </tr>
                 </thead>
                 <tbody>
                   {tableRows.map((row, index) => (
-                    <tr key={index}>
+                    <tr key={index} className={estilos.tabladetalle}>
                       <td style={{ textAlign: "center" }}>
                         <select
                           className={estilos["input-field-tabla"]}
                           value={row.nombre}
                           onChange={(e) => handleSelectChange(e, index)}
+                          style={{ width: '300px', display: 'flex', marginRight: '0px' }}
                         >
                           <option value="">Seleccione un producto</option>
                           {productos.map((producto) => (
@@ -494,7 +485,7 @@ function App() {
                       <td style={{ textAlign: "center" }}>
                         <input
                           className={estilos["input-field-tabla"]}
-                          style={{ width: "100px" }}
+                          style={{ width: "90px" }}
                           type="number"
                           onChange={(e) => handlePrecioChange(e, index)}
                           value={row.precio_unitario}
@@ -529,15 +520,9 @@ function App() {
             </div>
           </div>
         </div>
-        <div className={estilos["cajaBotonesRPedidos"]}>
-          <button
-            type="submit"
-            id="can"
-            className={estilos["boton-azul"]}
-            disabled={!formChanged}
-            onClick={handleSubmitPedido}
-          >
-            <center>Guardar</center>
+        <div className={estilos["cajaBotonesRPedidos"]} style={{ zIndex: '2', position: 'fixed', bottom: '10px', background: 'white', width: '80%', padding: '.7em' }}>
+          <button type="submit" id="can" className={`${estilos["boton-azul"]}`} disabled={!formChanged} onClick={handleSubmitPedido}>
+            Guardar
           </button>
           <Link to="/pedidos">
             <button className={estilos["boton-gris"]} type="button">Cancelar</button>

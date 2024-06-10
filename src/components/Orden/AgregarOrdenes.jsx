@@ -3,18 +3,28 @@ import './registroOrdenes.css';
 import { Outlet, Link } from "react-router-dom";
 import { Table, Pagination } from 'react-bootstrap';
 import Swal from 'sweetalert2';
+import { useUserContext } from "../UserProvider";
+
+
 
 function AgregarOrdenes() {
+    const { usuario } = useUserContext();
+
+    const usuarioLO = usuario;
+
     const [insumos, setInsumos] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [precio, setPrecio] = useState(0);
     const [searchTerm, setSearchTerm] = useState('');
+    const [inputValidoDescripcion, setInputValidoDescripcion] = useState(true);
+    const [errorDescripcion, setErrorDescripcion] = useState('')
+
 
     const [orden, setOrden] = useState({
         id_orden_de_produccion: '',
         descripcion_orden: '',
         fecha_orden: '',
-        id_usuario: ''
+        id_usuario: usuarioLO.id_usuario
     });
     const [usuarios, setUsuarios] = useState([]);
     const tableRef = useRef(null);
@@ -25,6 +35,7 @@ function AgregarOrdenes() {
     const [scrollEnabled, setScrollEnabled] = useState(false);
     const [selectedInsumos, setSelectedInsumos] = useState(new Set());
     const [formChanged, setFormChanged] = useState(false);
+    const [inputValido2, setInputValido2] = useState(Array(tableRows.length).fill(true));
 
     useEffect(() => {
         fetchInsumos();
@@ -55,7 +66,8 @@ function AgregarOrdenes() {
             const response = await fetch('https://api-luchosoft-mysql.onrender.com/compras/insumos');
             if (response.ok) {
                 const data = await response.json();
-                const insumosConSeleccion = data.map(insumo => ({ ...insumo, seleccionado: false, cantidad: 0, precio_unitario: 0 }));
+                const insumosConEstado1 = data.filter(insumo => insumo.estado_insumo === 1);
+                const insumosConSeleccion = insumosConEstado1.map(insumo => ({ ...insumo, seleccionado: false, cantidad: 0, precio_unitario: 0 }));
                 setInsumos(insumosConSeleccion);
             } else {
                 console.error('Error al obtener los insumos');
@@ -88,9 +100,11 @@ function AgregarOrdenes() {
             setFormChanged(true);
         }
     };
+
     const filteredInsumos = insumos.filter(insumo =>
         insumo.nombre_insumo.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
     const handleSelectChange = (event, index) => {
         const { value } = event.target;
         if (selectedInsumos.has(value)) {
@@ -117,17 +131,36 @@ function AgregarOrdenes() {
     };
 
     const handleCantidadChange = (event, index) => {
-        const { value } = event.target;
-        const updatedRows = tableRows.map((row, rowIndex) => {
-            if (rowIndex === index) {
-                const cantidad = parseFloat(value) || 0;
-                return { ...row, cantidad: value, cantidad_seleccionada: cantidad };
-            }
-            return row;
-        });
-        setTableRows(updatedRows);
+        let { value } = event.target;
 
-        setFormChanged(true);
+        value = parseFloat(value) >= 0 ? parseFloat(value) : 0;
+
+        // Validar el formato del número
+        const isValidFormat = /^\d*\.?\d*$/.test(value.toString());
+
+        if (!isValidFormat) {
+            setInputValido2(prevState => {
+                const newState = [...prevState];
+                newState[index] = false;
+                return newState;
+            });
+        } else {
+            setInputValido2(prevState => {
+                const newState = [...prevState];
+                newState[index] = true;
+                return newState;
+            });
+            const updatedRows = tableRows.map((row, rowIndex) => {
+                if (rowIndex === index) {
+                    const cantidad = parseFloat(value) || 0;
+                    return { ...row, cantidad: value, cantidad_seleccionada: cantidad };
+                }
+                return row;
+            });
+
+            setTableRows(updatedRows);
+            setFormChanged(true);
+        }
     };
 
     const handleSubmitOrden = async (event) => {
@@ -135,11 +168,11 @@ function AgregarOrdenes() {
         const regex = /^[a-zA-Z0-9.,?!¡¿\s]+$/; // Expresión regular para permitir letras, números y algunos caracteres especiales
 
         // Verificar caracteres especiales en el campo de fecha y usuario
-        if (!regex.test(orden.descripcion_orden) ) {
+        if (!regex.test(orden.descripcion_orden)) {
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: 'Evita caracteres especiales en el campos de descrpción.',
+                text: 'Evita caracteres especiales en el campo de descripción.',
                 confirmButtonColor: '#1F67B9',
             });
             return;
@@ -149,7 +182,7 @@ function AgregarOrdenes() {
             const insumo = insumos.find(i => i.nombre_insumo === row.nombre);
             return insumo && parseFloat(row.cantidad) > insumo.stock_insumo;
         });
-    
+
         if (invalidInsumos.length > 0) {
             Swal.fire({
                 icon: 'error',
@@ -159,10 +192,8 @@ function AgregarOrdenes() {
             });
             return;
         }
-       
-       
 
-        if (!orden.fecha_orden || !orden.id_usuario || tableRows.some(row => !row.nombre || !row.cantidad)) {
+        if (!orden.fecha_orden || tableRows.some(row => !row.nombre || !row.cantidad)) {
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
@@ -172,14 +203,15 @@ function AgregarOrdenes() {
             return;
         }
       
-
         Swal.fire({
-            icon: 'success',
-            title: '',
-            text: 'Orden registrada',
+            toast: true,
+            position: "top-end",
             showConfirmButton: false,
-            timer: 2000,
-        }).then(async () => {
+            timer: 1500,
+            timerProgressBar: true,
+            icon: "success",
+            title: "Orden registrada exitosamente"
+        })    .then(async () => {
             try {
                 // Primero, creamos la orden de producción
                 const responseOrden = await fetch('https://api-luchosoft-mysql.onrender.com/orden/orden_produccion', {
@@ -262,7 +294,7 @@ function AgregarOrdenes() {
     };
 
     if (isLoading) {
-        return <div>Cargando,por favor espere...</div>;
+        return <div>Cargando, por favor espere...</div>;
     }
 
     const indexOfLastInsumo = currentPage * insumosPerPage;
@@ -287,8 +319,9 @@ function AgregarOrdenes() {
                 <div className='contenido-' >
                     <div className='formulario'>
                         <div>
-                            <h1 id="titulo">Ordenes de producción</h1>
-                        </div>
+                            <h1 id="titulo">Órdenes de producción</h1>
+                        </div><br />
+
                         <div className='inputs-up'>
                             <div className='contenedor-input' >
                                 <label style={{ marginLeft: "-130px" }} htmlFor="fechaCompra"> Fecha</label>
@@ -306,24 +339,23 @@ function AgregarOrdenes() {
                             </div>
 
 
-                        </div>
+                        </div><br /><br />
                         <div className='contenedor-input' >
                             <label style={{ marginLeft: "-130px" }} htmlFor="fechaCompra"> Descripción</label>
                             <p>Descripción</p>
-                            <input
+                            <textarea
                                 id="fechaCompra"
                                 name="descripcion_orden"
-                                className="input-field"
+                                className=""
                                 value={orden.descripcion_orden}
                                 onChange={handleInputChange}
+             
+                                cols="33" rows="4"
                                 type="text"
-                                style={{ width: "270px", height: "40px" }}
-
-
+                                style={{ resize: 'none' }}
                             />
-                        </div>
+                        </div><br />
                         <div id="kaka">
-                            <label style={{ marginLeft: "-230px" }} htmlFor="proveedor"><i className="fa-solid fa-users iconosRojos select"></i> Usuario </label>
                             <p>Usuario</p>
                             <select
                                 id="proveedor"
@@ -331,29 +363,31 @@ function AgregarOrdenes() {
                                 className="input-field2"
                                 style={{ width: "270px", height: "40px" }}
                                 value={orden.id_usuario}
+                                readOnly={true}
                                 onChange={handleInputChange}>
-                                <option value="">Seleccione un usuario</option>
-                                {usuarios.map((usuario) => (
-                                    <option key={usuario.id_usuario} value={usuario.id_usuario}>
-                                        {usuario.nombre_usuario}
-                                    </option>
-                                ))}
+                                <option value="">{usuario.nombre_usuario}</option>
 
                             </select>
                         </div>
+                        <br /><br />
                         <div className='inputs-up'>
                             <div className='contenedor-input'>
                                 <button className='boton azulado2' type="button" onClick={addTableRow}><center>+ Insumo</center></button>
                             </div>
                         </div>
                     </div>
+
+
+
                     <hr style={{ margin: '10px 0', border: 'none', borderTop: '1px solid black' }} />
-                    <div className='tabla-detalle' style={{ overflowY: scrollEnabled ? 'scroll' : 'auto', maxHeight: '500px' }}>
+                    <div className='tabla-detalle' style={{ overflowY: scrollEnabled ? 'scroll' : 'auto', maxHeight: '400px' }}>
                         <table className="tablaDT ui celled table" style={{ width: "70%", marginTop: "10%" }} ref={tableRef}>
                             <thead className="rojo thead-fixed">
                                 <tr>
-                                    <th style={{ textAlign: "left", backgroundColor: '#1F67B9', color: "white" }}><i className="fa-solid fa-font "></i > Nombre Insumo</th>
-                                    <th style={{ textAlign: "left", backgroundColor: '#1F67B9', color: "white" }}><i className="fa-solid fa-coins "></i> Cantidad</th>
+                                    <th style={{ textAlign: "left", backgroundColor: '#1F67B9', color: "white" }}> Nombre Insumo</th>
+                                    <th style={{ textAlign: "left", backgroundColor: '#1F67B9', color: "white" }}> Cantidad</th>
+                                    <th style={{ textAlign: "left", backgroundColor: '#1F67B9', color: "white" }}></th>
+
                                 </tr>
                             </thead>
                             <tbody>
@@ -369,6 +403,7 @@ function AgregarOrdenes() {
                                                 ))}
                                             </select>
                                         </td>
+                                        
                                         <td style={{ textAlign: "center" }}><input className="input-field-tabla" style={{ width: "100px" }} type="number" onChange={(e) => handleCantidadChange(e, index)} /></td>
                                         {index !== 0 && (
                                             <td style={{ textAlign: "center" }}>
@@ -379,6 +414,9 @@ function AgregarOrdenes() {
                                     </tr>
                                 ))}
                             </tbody>
+
+
+
                         </table>
                     </div>
                 </div>

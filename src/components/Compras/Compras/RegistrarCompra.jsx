@@ -441,6 +441,8 @@ function App() {
               </select>
             </div>
             <br />
+            <br />
+            <br />
             <div className={estilos.inputsup}>
               <div className='contenedor-input' >
                 <label htmlFor="precioCompra"> Total </label>

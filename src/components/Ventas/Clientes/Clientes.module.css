@@ -246,19 +246,30 @@ input {
 }
 
 .contFormsRCliente {
-    display: inline-block;
+    /* display: inline-block; */
     /* Alinea los formularios horizontalmente */
     text-align: left;
     /* Alinea el contenido de los formularios a la izquierda */
     margin: 0;
     /* Centra los formularios horizontalmente */
     font-size: 2px;
+    /* width: 90%; */
 }
 
-.input1RCliente input {
-    width: 300px;
-    height: 20px;
+.input1RCliente{
+    font-size: 16px;
+    margin: 10px;
 }
+
+
+
+
+/* .input1RCliente input {
+    width: 100%;
+    margin: 0px;
+} */
+
+
 
 .BotonesClientes{
     display: flex;
@@ -278,4 +289,12 @@ input {
 .RegistrarCliente{
     background-color: #1F67B9;
     color: #ffffff;
+}
+
+.input-field {
+    height: 10px;
+    border-radius: 5px;
+    width: 300PX; /* Cambia este valor para ajustar el ancho del input */
+    padding: 20px;
+    border: 1px solid #ccc;
 }

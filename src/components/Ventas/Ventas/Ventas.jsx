@@ -9,30 +9,7 @@ import Swal from 'sweetalert2';
 const Ventas = () => {
     const [ventas, setVentas] = useState([]);
     const [filtro, setFiltro] = useState('');
-    // const data = [
-    //     {
-    //         id: 1,
-    //         descripcion: "Esta venta..",
-    //         venta: 50.000,
-    //         fecha: "21/07/2003",
-    //         pedido: 3
-
-    //     },
-    //     {
-    //         id: 2,
-    //         descripcion: "Esta venta..",
-    //         venta: 50.000,
-    //         fecha: "22/07/2003",
-    //         pedido: 4
-    //     },
-    //     {
-    //         id: 3,
-    //         descripcion: "Esta venta..",
-    //         venta: 50.000,
-    //         fecha: "23/07/2003",
-    //         pedido: 5
-    //     },
-    // ]
+    const [isLoading, setIsLoading] = useState(true);
     const fetchVenta = async () => {
         try {
             const response = await fetch('https://api-luchosoft-mysql.onrender.com/ventas/pedidos');
@@ -63,6 +40,11 @@ const Ventas = () => {
     const handleFiltroChange = (e) => {
         setFiltro(e.target.value);
     };
+    useEffect(() => {
+        if (ventas.length > 0) {
+            setIsLoading(false);
+        }
+    }, [ventas]);
 
     const filteredVentas = ventas.filter(venta =>
         venta.id_pedido.toString().includes(filtro) ||
@@ -159,6 +141,9 @@ const Ventas = () => {
                 }
             }
         });
+    }
+    if (isLoading) {
+        return <div>Cargando...</div>;
     }
     return (
         <>

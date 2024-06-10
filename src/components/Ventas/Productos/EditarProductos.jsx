@@ -97,6 +97,7 @@ function EditarProductos() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        
 
         Swal.fire({
             title: '¿Estás seguro?',
@@ -124,17 +125,20 @@ function EditarProductos() {
                     });
 
                     if (response.ok) {
-
                         console.log('Producto actualizado exitosamente.');
+                                            
                         Swal.fire({
-                            icon: 'success',
-                            title: 'Producto actualizado exitosamente',
+                            toast: true,
+                            position: "top-end",
                             showConfirmButton: false,
-                            timer: 1500
+                            timer: 1500,
+                            timerProgressBar: true,
+                            icon: "success",
+                            title: "Producto actualizado exitosamente"
                         });
                         setTimeout(() => {
                             setRedirect(true);
-                        }, 1000);
+                        }, 1500);
 
                     } else {
                         console.error('Error al actualizar el producto:', response.statusText);

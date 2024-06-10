@@ -1,14 +1,18 @@
 .contenido {
     text-align: center;
+    margin-top: -14px;
 }
 
 
-
-#titulo{
-    font-size: 20px;
-    margin-top: -15px;
+.titulo{
+    font-size: 35px;
     display: flex;
+    color: #48110d;
 }
+.titulo h1{
+    font-size: 35px;
+}
+
 
 #titulo2{
     font-size: 20px;
@@ -21,6 +25,10 @@
 }
 
 
+input::placeholder {
+    padding-left: 20px;
+}
+
 input {
     border-radius: 3px;
     border: 1px solid #6d6d6d;
@@ -30,32 +38,43 @@ input {
     background: #E12424;
     color: white;
 
-  }
-  
-  .rojo:hover{
-    background: #3e7fc9;
-  }
-  
-  .rojo:active{
-    box-shadow: 1px 1px 1px 1px #3e7fc9;
-  }
+}
 
-  .boton-azul{
-    background: #1F67B9;
+.rojo:hover{
+background: #3e7fc9;
+}
+
+.rojo:active{
+box-shadow: 1px 1px 1px 1px #3e7fc9;
+}
+
+.boton-azul{
+background-color: #3e7fc9;
     color: white;
-  }
-  
-  .boton-azul:hover{
-    background: #3d7dc7;
-    
-  }
-  
-  .boton-azul:active{
-    box-shadow: 1px 1px 1px 1px #5388c4;
-  }
+}
+
+.boton-azul:hover{
+background: #154360d7;
+
+}
 
 /*------------------*/
 
+.AgregarProducto:hover{
+    background: #b90505a1;
+    color: white;
+    border: none;
+
+}
+
+.AgregarProducto{
+    width: 40px;
+    background-color: white;
+    height: 20px;
+    border-radius: 10px;
+    color: #b90505;
+    border: 1px solid #b90505;
+}
 
 
 .iconosRojos {
@@ -69,19 +88,19 @@ input {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-top: 19px;
 }
 
 
 .botonAgregar {
-    border: none;
+    border: 1px solid #b90505;
     margin-right: 20px;
-    background-color: #1F67B9;
-    color: white;
+    background-color: white;
+    color: #b90505;
     border-radius: 50px;
     height: 40px;
-    width: 150px;
-    font-size: 15px;
-    margin-left: -250px;
+    width: 120px;
+    font-size: 18px;
 }
 
 .boton-generar {
@@ -180,23 +199,27 @@ input {
     color: #818080;
 }
 
-#cliente{
-    display:block;
+.cliente{
+    display: flex;
     margin-top: 20px;
-    align-items: center;
+    flex-direction: column; 
 }
-
-#cliente p{
-    margin-right: 20px;
-}
-
-#cliente label{
-    margin-right: 20px;
+.cliente p{
+    display: flex;
 }
 
 .TablaDetallePedidos{
-    margin-left: 100px;
+    margin-left: 50px;
 }
+
+.tabladetalle{
+    border: 1px solid rgb(228, 228, 228);
+  border-top: 0; /* Esto oculta el borde superior */
+  border-left: 0; /* Esto oculta el borde izquierdo */
+  border-right: 0; /* Esto oculta el borde derecho */
+  width: 600px;
+}
+
 
 .input-container {
     display: block;
@@ -228,6 +251,7 @@ input {
 
 .agrPedidos p{
     margin-right: 20px;
+    text-align: center;
 }
 
 .cajaBotonesRPedidos {
@@ -238,7 +262,7 @@ input {
 .cajaBotonesRPedidos button {
   
     /* Ajusta el padding para hacer los botones más largos */
-    border: none;
+    border: 1px solid ;
     border-radius: 5px;
     cursor: pointer;
     /* Ajusta el ancho de los botones */
@@ -268,8 +292,7 @@ input {
     display: flex;
     flex-direction: column;
     text-align: left;
-    margin-top: 20px;
-    margin-left: 10px;
+    margin-top: 10px;
 }
 
 .input-field2 {
@@ -310,19 +333,15 @@ input {
 }
 
 .input-field-tabla {
-    padding: 0px;
-   
+    /* padding: 0px;    */
     border-radius: 5px;
-    width: 150px;
-    display: flex;
-  
+    /* width: 170px; */
+    /* display: flex;   */
     height: 27px;
     border: 1px solid #ccc;
-    justify-content: start;
-    margin-left: 0px;
-   
-   
-  }
+    justify-content: center; 
+    
+}
 
 .boton-eliminar{
     height: 30px;
@@ -330,10 +349,13 @@ input {
 }
 
 .boton-gris{
-    background-color: #b3b1b1;
+    background-color: #B3B6B7;
     color: white;
 }
 
+.boton-gris:hover{
+    background-color: #b3b6b7b3;
+}
 .icono_negro{
     color: #b3b1b1;
 }
@@ -342,3 +364,14 @@ input {
     color: #b3b1b1 ;
 }
 
+.textarea{
+    width: 200px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.cabeceraTabla{
+    text-align: center;
+    background-color: #154360;
+    color: white;
+}
