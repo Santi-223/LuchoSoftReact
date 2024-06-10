@@ -23,6 +23,16 @@ function Proveedores() {
 
   const [inputTipoValido, setInputTipoValido] = useState(true);
 
+  const [inputDocValido, setInputDocValido] = useState(true);
+  const [inputDocValido3, setInputDocValido3] = useState(true);
+
+  const [inputTelValido, setInputTelValido] = useState(true);
+  const [inputTelValido3, setInputTelValido3] = useState(true);
+
+  const [inputDirecValido, setInputDirecValido] = useState(true);
+  const [inputDirecValido2, setInputDirecValido2] = useState(true);
+  const [inputDirecValido3, setInputDirecValido3] = useState(true);
+
   const [proveedores1, setProveedores1] = useState({
     nombre_proveedor: "",
     documento_proveedor: "",
@@ -287,7 +297,329 @@ function Proveedores() {
   const handleSubmitEditar = async (event) => {
     event.preventDefault();
 
-    
+    if (
+      !proveedoresEditar.documento_proveedor && !proveedoresEditar.nombre_proveedor && !proveedoresEditar.tipo_documento && !proveedoresEditar.telefono_proveedor && !proveedoresEditar.direccion_proveedor
+    ) {
+      setInputTelValido3(false)
+      setInputDocValido3(false)
+      setInputTipoValido(false)
+      setInputNombreValido3(false)
+      setInputDirecValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !proveedoresEditar.documento_proveedor && !proveedoresEditar.nombre_proveedor && !proveedoresEditar.tipo_documento && !proveedoresEditar.direccion_proveedor
+    ) {
+      setInputDocValido3(false)
+      setInputTipoValido(false)
+      setInputNombreValido3(false)
+      setInputDirecValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !proveedoresEditar.documento_proveedor && !proveedoresEditar.nombre_proveedor && !proveedoresEditar.telefono_proveedor && !proveedoresEditar.direccion_proveedor
+    ) {
+      setInputTelValido3(false)
+      setInputDocValido3(false)
+      setInputNombreValido3(false)
+      setInputDirecValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !proveedoresEditar.documento_proveedor && !proveedoresEditar.tipo_documento && !proveedoresEditar.telefono_proveedor && !proveedoresEditar.direccion_proveedor
+    ) {
+      setInputTelValido3(false)
+      setInputDocValido3(false)
+      setInputTipoValido(false)
+      setInputDirecValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !proveedoresEditar.nombre_proveedor && !proveedoresEditar.tipo_documento && !proveedoresEditar.telefono_proveedor && !proveedoresEditar.direccion_proveedor
+    ) {
+      setInputTelValido3(false)
+      setInputTipoValido(false)
+      setInputNombreValido3(false)
+      setInputDirecValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !proveedoresEditar.documento_proveedor && !proveedoresEditar.nombre_proveedor && !proveedoresEditar.direccion_proveedor
+    ) {
+
+      setInputDocValido3(false)
+
+      setInputNombreValido3(false)
+      setInputDirecValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !proveedoresEditar.documento_proveedor && !proveedoresEditar.tipo_documento && !proveedoresEditar.direccion_proveedor
+    ) {
+
+      setInputDocValido3(false)
+      setInputTipoValido(false)
+
+      setInputDirecValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !proveedoresEditar.nombre_proveedor && !proveedoresEditar.tipo_documento && !proveedoresEditar.direccion_proveedor
+    ) {
+      setInputTipoValido(false)
+      setInputNombreValido3(false)
+      setInputDirecValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !proveedoresEditar.documento_proveedor && !proveedoresEditar.telefono_proveedor && !proveedoresEditar.direccion_proveedor
+    ) {
+      setInputTelValido3(false)
+      setInputDocValido3(false)
+      setInputDirecValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !proveedoresEditar.nombre_proveedor && !proveedoresEditar.telefono_proveedor && !proveedoresEditar.direccion_proveedor
+    ) {
+      setInputTelValido3(false)
+      setInputNombreValido3(false)
+      setInputDirecValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !proveedoresEditar.tipo_documento && !proveedoresEditar.telefono_proveedor && !proveedoresEditar.direccion_proveedor
+    ) {
+      setInputTelValido3(false)
+      setInputTipoValido(false)
+      setInputDirecValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !proveedoresEditar.documento_proveedor && !proveedoresEditar.nombre_proveedor && !proveedoresEditar.tipo_documento && !proveedoresEditar.telefono_proveedor
+    ) {
+      setInputTelValido3(false)
+      setInputDocValido3(false)
+      setInputTipoValido(false)
+      setInputNombreValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !proveedoresEditar.documento_proveedor && !proveedoresEditar.nombre_proveedor && !proveedoresEditar.telefono_proveedor
+    ) {
+      setInputTelValido3(false)
+      setInputDocValido3(false)
+      setInputNombreValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !proveedoresEditar.documento_proveedor && !proveedoresEditar.tipo_documento && !proveedoresEditar.telefono_proveedor
+    ) {
+      setInputTelValido3(false)
+      setInputDocValido3(false)
+      setInputTipoValido(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+       !proveedoresEditar.nombre_proveedor && !proveedoresEditar.tipo_documento && !proveedoresEditar.telefono_proveedor
+    ) {
+      setInputTelValido3(false)
+      setInputTipoValido(false)
+      setInputNombreValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !proveedoresEditar.documento_proveedor && !proveedoresEditar.nombre_proveedor && !proveedoresEditar.tipo_documento
+    ) {
+      setInputDocValido3(false)
+      setInputTipoValido(false)
+      setInputNombreValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !proveedoresEditar.tipo_documento && !proveedoresEditar.telefono_proveedor
+    ) {
+      setInputTelValido3(false)
+      setInputTipoValido(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !proveedoresEditar.documento_proveedor && !proveedoresEditar.telefono_proveedor
+    ) {
+      setInputTelValido3(false)
+      setInputDocValido3(false)
+
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !proveedoresEditar.nombre_proveedor && !proveedoresEditar.telefono_proveedor
+    ) {
+      setInputTelValido3(false)
+      setInputNombreValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+
+
+    if (
+      !proveedoresEditar.documento_proveedor && !proveedoresEditar.nombre_proveedor
+    ) {
+      setInputDocValido3(false)
+      setInputNombreValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !proveedoresEditar.documento_proveedor && !proveedoresEditar.tipo_documento
+    ) {
+      setInputDocValido3(false)
+      setInputTipoValido(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
 
     if (
       !proveedoresEditar.tipo_documento && !proveedoresEditar.nombre_proveedor
@@ -314,6 +646,48 @@ function Proveedores() {
         text: "Por favor completa todos los campos vacíos",
       });
       
+      return;
+    }
+
+    if (!inputTelValido) {
+      Swal.fire({
+        icon: 'error',
+
+        text: 'Por favor, digite bien los datos.',
+        confirmButtonColor: '#1F67B9',
+      });
+      return;
+    }
+
+    
+    if (!inputTelValido3) {
+      Swal.fire({
+        icon: 'error',
+
+        text: 'Por favor, digite bien los datos.',
+        confirmButtonColor: '#1F67B9',
+      });
+      return;
+    }
+
+    if (!inputDocValido) {
+      Swal.fire({
+        icon: 'error',
+
+        text: 'Por favor, digite bien los datos.',
+        confirmButtonColor: '#1F67B9',
+      });
+      return;
+    }
+
+    
+    if (!inputDocValido3) {
+      Swal.fire({
+        icon: 'error',
+
+        text: 'Por favor, digite bien los datos.',
+        confirmButtonColor: '#1F67B9',
+      });
       return;
     }
     
@@ -356,14 +730,64 @@ function Proveedores() {
         if (proveedoresEditar.nombre_proveedor.length < 2) {
           Swal.fire({
             icon: "error",
-            text: "El nombre del insumo debe tener al menos 2 letras",
+            text: "El nombre del proveedor debe tener al menos 2 letras",
           });
           setInputNombreValido(false)
           return;
         }
 
+        if (
+          !proveedoresEditar.telefono_proveedor
+        ) {
+    
+          setInputTelValido3(false)
+          Swal.fire({
+            icon: "error",
+             
+            text: "Por favor completa todos los campos",
+          });
+          
+          return;
+        }
+    
 
 
+        if (
+          !proveedoresEditar.documento_proveedor
+        ) {
+    
+          setInputDocValido3(false)
+          Swal.fire({
+            icon: "error",
+             
+            text: "Por favor completa todos los campos",
+          });
+          
+          return;
+        }
+    
+            // Validar que el nombre tenga al menos 3 letras
+            if (proveedoresEditar.documento_proveedor.length < 7) {
+              setInputDocValido(false)
+              Swal.fire({
+                icon: "error",
+                text: "El documento del proveedor debe tener al menos 7 dígitos",
+              });
+              
+              return;
+            }
+
+
+            // Validar que el nombre tenga al menos 3 letras
+            if (proveedoresEditar.telefono_proveedor.length < 7) {
+              setInputTelValido(false)
+              Swal.fire({
+                icon: "error",
+                text: "El teléfono del proveedor debe tener al menos 7 dígitos",
+              });
+              
+              return;
+            }
 
 
 
@@ -452,88 +876,344 @@ function Proveedores() {
     }
   };
 
-  useEffect(() => {
-    fetchproveedores();
-  }, []);
-
-  useEffect(() => {
-    if (proveedores.length > 0) {
-      setIsLoading(false);
-    }
-  }, [proveedores]);
-
-  const fetchproveedores = async () => {
-    try {
-      const response = await fetch(
-        "https://api-luchosoft-mysql.onrender.com/compras/proveedores/"
-      );
-      if (response.ok) {
-        const data = await response.json();
-        const proveedoresFiltrador = data.map((proveedor) => ({
-          id_proveedor: proveedor.id_proveedor,
-          nombre_proveedor: proveedor.nombre_proveedor,
-          tipo_documento: proveedor.tipo_documento,
-          documento_proveedor: proveedor.documento_proveedor,
-          telefono_proveedor: proveedor.telefono_proveedor,
-          direccion_proveedor: proveedor.direccion_proveedor,
-          estado_proveedor: proveedor.estado_proveedor,
-        }));
-        setInputNombreValido(true)
-        setInputNombreValido2(true)
-        setInputNombreValido3(true)
-        setInputTipoValido(true)
-        setProveedores(proveedoresFiltrador);
-      } else {
-        console.error("Error al obtener las proveedores");
-      }
-    } catch (error) {
-      console.error("Error al obtener las proveedores:", error);
-    }
-  };
-
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-
-
-    if (name === 'tipo_documento') {
-      if (value.length > 0) {
-        setInputTipoValido(true)
-      } 
-    }
-
-    if (name === 'nombre_proveedor') {
-      if (value.length > 60) {
-        setInputNombreValido(false);
-      } else {
-        setInputNombreValido(true);
-      }
-    }
-
-    if (name === 'nombre_proveedor') {
-      if (value.length > 0) {
-        setInputNombreValido3(true);
-      } 
-    }
-
-    if (name === 'nombre_proveedor') {
-      // Expresión regular que coincide con cualquier carácter que no sea una letra, un número o un guion bajo
-      const caracteresEspeciales = /^[a-zA-Z0-9\s#,;.-àèìòù]*$/; 
-    
-      // Verificar si la cadena no contiene caracteres especiales
-      if (caracteresEspeciales.test(value)) {
-        setInputNombreValido2(true);
-      } else {
-        setInputNombreValido2(false);
-      }
-    }
-    setProveedores1((prevproveedores) => ({
-      ...prevproveedores,
-      [name]: value,
-    }));
-  };
-
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (
+      !proveedores1.documento_proveedor && !proveedores1.nombre_proveedor && !proveedores1.tipo_documento && !proveedores1.telefono_proveedor && !proveedores1.direccion_proveedor
+    ) {
+      setInputTelValido3(false)
+      setInputDocValido3(false)
+      setInputTipoValido(false)
+      setInputNombreValido3(false)
+      setInputDirecValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !proveedores1.documento_proveedor && !proveedores1.nombre_proveedor && !proveedores1.tipo_documento && !proveedores1.direccion_proveedor
+    ) {
+      setInputDocValido3(false)
+      setInputTipoValido(false)
+      setInputNombreValido3(false)
+      setInputDirecValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !proveedores1.documento_proveedor && !proveedores1.nombre_proveedor && !proveedores1.telefono_proveedor && !proveedores1.direccion_proveedor
+    ) {
+      setInputTelValido3(false)
+      setInputDocValido3(false)
+      setInputNombreValido3(false)
+      setInputDirecValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !proveedores1.documento_proveedor && !proveedores1.tipo_documento && !proveedores1.telefono_proveedor && !proveedores1.direccion_proveedor
+    ) {
+      setInputTelValido3(false)
+      setInputDocValido3(false)
+      setInputTipoValido(false)
+      setInputDirecValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !proveedores1.nombre_proveedor && !proveedores1.tipo_documento && !proveedores1.telefono_proveedor && !proveedores1.direccion_proveedor
+    ) {
+      setInputTelValido3(false)
+      setInputTipoValido(false)
+      setInputNombreValido3(false)
+      setInputDirecValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !proveedores1.documento_proveedor && !proveedores1.nombre_proveedor && !proveedores1.direccion_proveedor
+    ) {
+
+      setInputDocValido3(false)
+
+      setInputNombreValido3(false)
+      setInputDirecValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !proveedores1.documento_proveedor && !proveedores1.tipo_documento && !proveedores1.direccion_proveedor
+    ) {
+
+      setInputDocValido3(false)
+      setInputTipoValido(false)
+
+      setInputDirecValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !proveedores1.nombre_proveedor && !proveedores1.tipo_documento && !proveedores1.direccion_proveedor
+    ) {
+      setInputTipoValido(false)
+      setInputNombreValido3(false)
+      setInputDirecValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !proveedores1.documento_proveedor && !proveedores1.telefono_proveedor && !proveedores1.direccion_proveedor
+    ) {
+      setInputTelValido3(false)
+      setInputDocValido3(false)
+      setInputDirecValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !proveedores1.nombre_proveedor && !proveedores1.telefono_proveedor && !proveedores1.direccion_proveedor
+    ) {
+      setInputTelValido3(false)
+      setInputNombreValido3(false)
+      setInputDirecValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !proveedores1.tipo_documento && !proveedores1.telefono_proveedor && !proveedores1.direccion_proveedor
+    ) {
+      setInputTelValido3(false)
+      setInputTipoValido(false)
+      setInputDirecValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+    
+    if (
+      !proveedores1.documento_proveedor && !proveedores1.nombre_proveedor && !proveedores1.tipo_documento && !proveedores1.telefono_proveedor
+    ) {
+      setInputTelValido3(false)
+      setInputDocValido3(false)
+      setInputTipoValido(false)
+      setInputNombreValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !proveedores1.documento_proveedor && !proveedores1.nombre_proveedor && !proveedores1.telefono_proveedor
+    ) {
+      setInputTelValido3(false)
+      setInputDocValido3(false)
+      setInputNombreValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !proveedores1.documento_proveedor && !proveedores1.tipo_documento && !proveedores1.telefono_proveedor
+    ) {
+      setInputTelValido3(false)
+      setInputDocValido3(false)
+      setInputTipoValido(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+       !proveedores1.nombre_proveedor && !proveedores1.tipo_documento && !proveedores1.telefono_proveedor
+    ) {
+      setInputTelValido3(false)
+      setInputTipoValido(false)
+      setInputNombreValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !proveedores1.documento_proveedor && !proveedores1.nombre_proveedor && !proveedores1.tipo_documento
+    ) {
+      setInputDocValido3(false)
+      setInputTipoValido(false)
+      setInputNombreValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !proveedores1.tipo_documento && !proveedores1.telefono_proveedor
+    ) {
+      setInputTelValido3(false)
+      setInputTipoValido(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !proveedores1.documento_proveedor && !proveedores1.telefono_proveedor
+    ) {
+      setInputTelValido3(false)
+      setInputDocValido3(false)
+
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !proveedores1.nombre_proveedor && !proveedores1.telefono_proveedor
+    ) {
+      setInputTelValido3(false)
+      setInputNombreValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+    
+    if (
+      !proveedores1.documento_proveedor && !proveedores1.nombre_proveedor && !proveedores1.tipo_documento
+    ) {
+      setInputDocValido3(false)
+      setInputTipoValido(false)
+      setInputNombreValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !proveedores1.documento_proveedor && !proveedores1.nombre_proveedor
+    ) {
+      setInputDocValido3(false)
+      setInputNombreValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !proveedores1.documento_proveedor && !proveedores1.tipo_documento
+    ) {
+      setInputDocValido3(false)
+      setInputTipoValido(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
 
     if (
       !proveedores1.tipo_documento && !proveedores1.nombre_proveedor
@@ -549,8 +1229,42 @@ function Proveedores() {
       return;
     }
 
+  
+
 
     if (!inputNombreValido3) {
+      Swal.fire({
+        icon: 'error',
+
+        text: 'Por favor, digite bien los datos vacíos.',
+        confirmButtonColor: '#1F67B9',
+      });
+      return;
+    }
+
+    if (!inputDirecValido) {
+      Swal.fire({
+        icon: 'error',
+
+        text: 'Por favor, digite bien los datos.',
+        confirmButtonColor: '#1F67B9',
+      });
+      return;
+    }
+
+
+    if (!inputDirecValido2) {
+      Swal.fire({
+        icon: 'error',
+
+        text: 'Por favor, digite bien los datos.',
+        confirmButtonColor: '#1F67B9',
+      });
+      return;
+    }
+
+
+    if (!inputDirecValido3) {
       Swal.fire({
         icon: 'error',
 
@@ -574,6 +1288,65 @@ function Proveedores() {
       
       return;
     }
+
+    if (!inputTelValido) {
+      Swal.fire({
+        icon: 'error',
+
+        text: 'Por favor, digite bien los datos.',
+        confirmButtonColor: '#1F67B9',
+      });
+      return;
+    }
+
+    
+    if (!inputTelValido3) {
+      Swal.fire({
+        icon: 'error',
+
+        text: 'Por favor, digite bien los datos.',
+        confirmButtonColor: '#1F67B9',
+      });
+      return;
+    }
+
+    if (!inputDocValido) {
+      Swal.fire({
+        icon: 'error',
+
+        text: 'Por favor, digite bien los datos.',
+        confirmButtonColor: '#1F67B9',
+      });
+      return;
+    }
+
+    
+    if (!inputDocValido3) {
+      Swal.fire({
+        icon: 'error',
+
+        text: 'Por favor, digite bien los datos.',
+        confirmButtonColor: '#1F67B9',
+      });
+      return;
+    }
+
+    if (
+      !proveedores1.documento_proveedor
+    ) {
+
+      setInputDocValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor completa todos los campos",
+      });
+      
+      return;
+    }
+
+
+
 
     if (
       !proveedores1.tipo_documento
@@ -628,6 +1401,22 @@ function Proveedores() {
           return;
         }
 
+        if (
+          !proveedores1.telefono_proveedor
+        ) {
+    
+          setInputTelValido3(false)
+          Swal.fire({
+            icon: "error",
+             
+            text: "Por favor completa todos los campos",
+          });
+          
+          return;
+        }
+    
+
+
         if (proveedores1.nombre_proveedor.length < 2) {
           Swal.fire({
             icon: "error",
@@ -638,7 +1427,50 @@ function Proveedores() {
           
         }
 
+                // Validar que el nombre tenga al menos 3 letras
+                if (proveedores1.documento_proveedor.length < 7) {
+                  Swal.fire({
+                    icon: "error",
+                    text: "El documento del proveedor debe tener al menos 7 dígitos",
+                  });
+                  setInputDocValido(false)
+                  return;
+                }
 
+            // Validar que el nombre tenga al menos 3 letras
+            if (proveedores1.telefono_proveedor.length < 7) {
+              setInputTelValido(false)
+              Swal.fire({
+                icon: "error",
+                text: "El teléfono del proveedor debe tener al menos 7 dígitos",
+              });
+              
+              return;
+            }
+
+            if (
+              !proveedores1.direccion_proveedor
+            ) {
+        
+              setInputDirecValido3(false)
+              Swal.fire({
+                icon: "error",
+                 
+                text: "Por favor completa todos los campos",
+              });
+              
+              return;
+            }
+        
+                // Validar que el nombre tenga al menos 3 letras
+                if (proveedores1.direccion_proveedor.length < 4) {
+                  Swal.fire({
+                    icon: "error",
+                    text: "La dirección del proveedor debe tener al menos 4 letras",
+                  });
+                  setInputDirecValido(false)
+                  return;
+                }
 
 
     // Verificar que todos los campos estén llenos
@@ -733,6 +1565,149 @@ function Proveedores() {
     }
   };
 
+  useEffect(() => {
+    fetchproveedores();
+  }, []);
+
+  useEffect(() => {
+    if (proveedores.length > 0) {
+      setIsLoading(false);
+    }
+  }, [proveedores]);
+
+  const fetchproveedores = async () => {
+    try {
+      const response = await fetch(
+        "https://api-luchosoft-mysql.onrender.com/compras/proveedores/"
+      );
+      if (response.ok) {
+        const data = await response.json();
+        const proveedoresFiltrador = data.map((proveedor) => ({
+          id_proveedor: proveedor.id_proveedor,
+          nombre_proveedor: proveedor.nombre_proveedor,
+          tipo_documento: proveedor.tipo_documento,
+          documento_proveedor: proveedor.documento_proveedor,
+          telefono_proveedor: proveedor.telefono_proveedor,
+          direccion_proveedor: proveedor.direccion_proveedor,
+          estado_proveedor: proveedor.estado_proveedor,
+        }));
+        setInputNombreValido(true)
+        setInputNombreValido2(true)
+        setInputNombreValido3(true)
+        setInputDirecValido(true)
+        setInputDirecValido2(true)
+        setInputDirecValido3(true)
+        setInputDocValido(true)
+        setInputDocValido3(true)
+        setInputTelValido(true)
+        setInputTelValido3(true)
+        setInputTipoValido(true)
+        setProveedores(proveedoresFiltrador);
+      } else {
+        console.error("Error al obtener las proveedores");
+      }
+    } catch (error) {
+      console.error("Error al obtener las proveedores:", error);
+    }
+  };
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+
+
+    if (name === 'tipo_documento') {
+      if (value.length > 0) {
+        setInputTipoValido(true)
+      } 
+    }
+
+    if (name === 'nombre_proveedor') {
+      if (value.length > 60) {
+        setInputNombreValido(false);
+      } else {
+        setInputNombreValido(true);
+      }
+    }
+
+    if (name === 'nombre_proveedor') {
+      if (value.length > 0) {
+        setInputNombreValido3(true);
+      } 
+    }
+
+    if (name === 'direccion_proveedor') {
+      if (value.length > 60) {
+        setInputDireceValido(false);
+      } else {
+        setInputDirecValido(true);
+      }
+    }
+
+    if (name === 'direccion_proveedor') {
+      if (value.length > 0) {
+        setInputDirecValido3(true);
+      } 
+    }
+
+    if (name === 'documento_proveedor') {
+      if (value.length > 15) {
+        setInputDocValido(false);
+      } else {
+        setInputDocValido(true);
+      }
+    }
+
+    if (name === 'documento_proveedor') {
+      if (value.length > 0) {
+        setInputDocValido3(true);
+      } 
+    }
+
+    if (name === 'telefono_proveedor') {
+      if (value.length > 13) {
+        setInputTelValido(false);
+      } else {
+        setInputTelValido(true);
+      }
+    }
+
+    if (name === 'telefono_proveedor') {
+      if (value.length > 0) {
+        setInputTelValido3(true);
+      } 
+    }
+
+    if (name === 'nombre_proveedor') {
+      // Expresión regular que coincide con cualquier carácter que no sea una letra, un número o un guion bajo
+      const caracteresEspeciales = /^[a-zA-Z0-9\s#,;.-àèìòù]*$/; 
+    
+      // Verificar si la cadena no contiene caracteres especiales
+      if (caracteresEspeciales.test(value)) {
+        setInputNombreValido2(true);
+      } else {
+        setInputNombreValido2(false);
+      }
+    }
+
+    if (name === 'direccion_proveedor') {
+      // Expresión regular que coincide con cualquier carácter que no sea una letra, un número o un guion bajo
+      const caracteresEspeciales = /^[a-zA-Z0-9\s#,;.-]*$/;
+    
+      // Verificar si la cadena no contiene caracteres especiales
+      if (caracteresEspeciales.test(value)) {
+        setInputDirecValido2(true);
+      } else {
+        setInputDirecValido2(false);
+      }
+    }
+    setProveedores1((prevproveedores) => ({
+      ...prevproveedores,
+      [name]: value,
+    }));
+  };
+
+
+
   const handleEditarChange = (event) => {
     const { name, value } = event.target;
 
@@ -749,12 +1724,55 @@ function Proveedores() {
       } 
     }
 
+    if (name === 'direccion_proveedor') {
+      if (value.length > 60) {
+        setInputDireceValido(false);
+      } else {
+        setInputDirecValido(true);
+      }
+    }
+
+    if (name === 'direccion_proveedor') {
+      if (value.length > 0) {
+        setInputDirecValido3(true);
+      } 
+    }
+    
+
     if (name === 'nombre_proveedor') {
       if (value.length > 60) {
         setInputNombreValido(false);
       } else {
         setInputNombreValido(true);
       }
+    }
+
+    if (name === 'documento_proveedor') {
+      if (value.length > 15) {
+        setInputDocValido(false);
+      } else {
+        setInputDocValido(true);
+      }
+    }
+
+    if (name === 'documento_proveedor') {
+      if (value.length > 0) {
+        setInputDocValido3(true);
+      } 
+    }
+
+    if (name === 'telefono_proveedor') {
+      if (value.length > 13) {
+        setInputTelValido(false);
+      } else {
+        setInputTelValido(true);
+      }
+    }
+
+    if (name === 'telefono_proveedor') {
+      if (value.length > 0) {
+        setInputTelValido3(true);
+      } 
     }
 
     if (name === 'nombre_proveedor') {
@@ -766,6 +1784,18 @@ function Proveedores() {
         setInputNombreValido2(true);
       } else {
         setInputNombreValido2(false);
+      }
+    }
+
+    if (name === 'direccion_proveedor') {
+      // Expresión regular que coincide con cualquier carácter que no sea una letra, un número o un guion bajo
+      const caracteresEspeciales = /^[a-zA-Z0-9\s#,;.-]*$/;
+    
+      // Verificar si la cadena no contiene caracteres especiales
+      if (caracteresEspeciales.test(value)) {
+        setInputDirecValido2(true);
+      } else {
+        setInputDirecValido2(false);
       }
     }
 
@@ -962,7 +1992,7 @@ function Proveedores() {
                       ${!inputNombreValido2 ? estilos.inputInvalido : ''}
                       ${!inputNombreValido3 ? estilos.inputInvalido : ''}`}
                       type="text"
-                      placeholder="Insertar nombre"
+                      placeholder="Insertar"
                       name="nombre_proveedor"
                       value={proveedores.nombre_proveedor}
                       onChange={handleChange}
@@ -1022,26 +2052,49 @@ function Proveedores() {
                   <div id={estilos.documentoproveedor}>
                     <p id={estilos.textito}> Documento</p>
                     <input
-                      className={estilos["input2"]}
+                      className={`${estilos.input2} ${!inputDocValido ? estilos.inputInvalido : ''}
+                      ${!inputDocValido3 ? estilos.inputInvalido : ''}`}
                       type="number"
-                      placeholder="Insertar documento"
+                      placeholder="Insertar"
                       name="documento_proveedor"
                       value={proveedores1.documento_proveedor}
                       onChange={handleChange}
                     />
+                    {
+  !inputDocValido3 && (
+    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '85px' }}>El campo no puede estar vacío</p>
+  )
+}
+{
+  !inputDocValido && (
+    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>Debe de contener al menos 7 dígitos y máximo 15.</p>
+  )
+}
+
                   </div>
                 </div>
 
                 <div id={estilos.telefonoproveedor}>
                   <p id={estilos.textito}> Teléfono</p>
                   <input
-                    className={estilos["inputlargo"]}
+                      className={`${estilos.inputlargo} ${!inputTelValido ? estilos.inputInvalido : ''}
+                      ${!inputTelValido3 ? estilos.inputInvalido : ''}`}
                     type="number"
-                    placeholder="Insertar teléfono"
+                    placeholder="Insertar"
                     name="telefono_proveedor"
                     value={proveedores1.telefono_proveedor}
                     onChange={handleChange}
                   />
+                                      {
+  !inputTelValido3 && (
+    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>El campo no puede estar vacío</p>
+  )
+}
+{
+  !inputTelValido && (
+    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>Debe de contener al menos 7 dígitos y máximo 13.</p>
+  )
+}
                 </div>
                 <br />
                 <div className={estilos["inputIdNombre"]}>
@@ -1049,13 +2102,35 @@ function Proveedores() {
                     <p id={estilos.textito}> Dirección</p>
                     <input
                       id={estilos.direccionproveedor}
-                      className={estilos["inputlargo"]}
+                      className={`${estilos.inputlargo} ${!inputDirecValido ? estilos.inputInvalido : ''}
+                      ${!inputDirecValido2 ? estilos.inputInvalido : ''}
+                      ${!inputDirecValido3 ? estilos.inputInvalido : ''}`}
                       type="text"
                       placeholder="Insertar"
                       name="direccion_proveedor"
                       value={proveedores1.direccion_proveedor}
                       onChange={handleChange}
                     />
+                    {
+  !inputDirecValido3 && (
+    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>El campo no puede estar vacío</p>
+  )
+}
+{
+  !inputDirecValido2 && !inputDirecValido && (
+    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>No se aceptan caracteres especiales.</p>
+  )
+}
+                    {
+  !inputDirecValido && inputDirecValido2 && (
+    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>Debe de contener al menos 2 letras y máximo 60.</p>
+  )
+}
+{
+  !inputDirecValido2 && inputDirecValido &&(
+    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>No se aceptan caracteres especiales.</p>
+  )
+}
                   </div>
                 </div>
               </div>
@@ -1084,6 +2159,13 @@ function Proveedores() {
                     setInputNombreValido(true)
                     setInputNombreValido2(true)
                     setInputNombreValido3(true)
+                    setInputDirecValido(true)
+                    setInputDirecValido2(true)
+                    setInputDirecValido3(true)
+                    setInputDocValido(true)
+                    setInputDocValido3(true)
+                    setInputTelValido(true)
+                    setInputTelValido3(true)
                     setInputTipoValido(true)
                   }}
                   className={estilos["gris"]}
@@ -1124,7 +2206,7 @@ function Proveedores() {
                       ${!inputNombreValido2 ? estilos.inputInvalido : ''}
                       ${!inputNombreValido3 ? estilos.inputInvalido : ''}`}
                       type="text"
-                      placeholder="Insertar nombre"
+                      placeholder="Insertar"
                       name="nombre_proveedor"
                       value={proveedoresEditar.nombre_proveedor}
                       onChange={handleEditarChange}
@@ -1197,13 +2279,23 @@ function Proveedores() {
 
                     <input
                       id={estilos.docmentoproveedor}
-                      className={estilos["input2"]}
+                      className={`${estilos.input2} ${!inputDocValido ? estilos.inputInvalido : ''}
+                      ${!inputDocValido3 ? estilos.inputInvalido : ''}`}
                       type="number"
-                      placeholder="Insertar documento"
+                      placeholder="Insertar"
                       name="documento_proveedor"
                       value={proveedoresEditar.documento_proveedor}
                       onChange={handleEditarChange}
                     />
+                  {    !inputDocValido3 && (
+    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '85px' }}>El campo no puede estar vacío</p>
+  )
+}
+{
+  !inputDocValido && (
+    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>Debe de contener al menos 7 dígitos y máximo 15.</p>
+  )
+}
                   </div>
                 </div>
 
@@ -1211,13 +2303,23 @@ function Proveedores() {
                   <p id={estilos.textito}> Teléfono</p>
                   <input
                     id={estilos.telefonoproveedor}
-                    className={estilos["inputlargo"]}
+                    className={`${estilos.inputlargo} ${!inputTelValido ? estilos.inputInvalido : ''}
+                    ${!inputTelValido3 ? estilos.inputInvalido : ''}`}
                     type="number"
-                    placeholder="Insertar teléfono"
+                    placeholder="Insertar"
                     name="telefono_proveedor"
                     value={proveedoresEditar.telefono_proveedor}
                     onChange={handleEditarChange}
                   />
+                                    {    !inputTelValido3 && (
+    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>El campo no puede estar vacío</p>
+  )
+}
+{
+  !inputTelValido && (
+    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>Debe de contener al menos 7 dígitos y máximo 13.</p>
+  )
+}
                 </div>
                 <br />
 
@@ -1226,13 +2328,35 @@ function Proveedores() {
                     <p id={estilos.textito}> Dirección</p>
                     <input
                       id={estilos.direccionproveedor}
-                      className={estilos["inputlargo"]}
+                      className={`${estilos.inputlargo} ${!inputDirecValido ? estilos.inputInvalido : ''}
+                      ${!inputDirecValido2 ? estilos.inputInvalido : ''}
+                      ${!inputDirecValido3 ? estilos.inputInvalido : ''}`}
                       type="text"
-                      placeholder="Insertar dirección"
+                      placeholder="Insertar"
                       name="direccion_proveedor"
                       value={proveedoresEditar.direccion_proveedor}
                       onChange={handleEditarChange}
                     />
+                                        {
+  !inputDirecValido3 && (
+    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>El campo no puede estar vacío</p>
+  )
+}
+{
+  !inputDirecValido2 && !inputDirecValido && (
+    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>No se aceptan caracteres especiales.</p>
+  )
+}
+                    {
+  !inputDirecValido && inputDirecValido2 && (
+    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>Debe de contener al menos 2 letras y máximo 60.</p>
+  )
+}
+{
+  !inputDirecValido2 && inputDirecValido &&(
+    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>No se aceptan caracteres especiales.</p>
+  )
+}
                   </div>
                 </div>
               </div>
@@ -1261,6 +2385,13 @@ function Proveedores() {
                     setInputNombreValido(true)
                     setInputNombreValido2(true)
                     setInputNombreValido3(true)
+                    setInputDirecValido(true)
+                    setInputDirecValido2(true)
+                    setInputDirecValido3(true)
+                    setInputDocValido(true)
+                    setInputDocValido3(true)
+                    setInputTelValido(true)
+                    setInputTelValido3(true)
                     setInputTipoValido(true)
                   }}
                   className={estilos["gris"]}
