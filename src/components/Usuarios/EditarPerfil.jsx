@@ -364,7 +364,7 @@ function EditarPerfil() {
                                     actualizarUsuarioLogueado(usuario);
 
                                     setTimeout(() => {
-                                        window.location.href = '/#/dashboard',
+                                        window.location.href = '/#/Perfil',
                                             window.location.reload();
                                     }, 500);
 
@@ -570,7 +570,7 @@ function EditarPerfil() {
                     </div>
                     <div className={estilos["botonsito"]}>
                         <button className={`boton ${estilos.azul}`} type='submit'><p className={estilos.textoBoton}>Guardar</p></button>
-                        <Link className={`boton ${estilos.gris}`} to='/usuarios'><p>Cancelar</p></Link>
+                        <Link className={`boton ${estilos.gris}`} to='/Perfil'><p>Cancelar</p></Link>
                     </div>
                 </form>
             </div>

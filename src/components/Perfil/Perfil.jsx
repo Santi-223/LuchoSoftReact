@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Link, Navigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import estilos from '../Dashboard/Dashboard.module.css';
+import estilos from '../Perfil/Perfil.module.css';
 import Modal from '../Modal';
 import styled from 'styled-components';
 import { useUserContext } from "../UserProvider";
 
-const Dashboard = () => {
+const Perfil = () => {
 
   const [cerrarSesion, setCerrarSesion] = useState(false);
 
@@ -14,9 +14,12 @@ const Dashboard = () => {
 
   const usuarioLS = usuarioLogueado;
 
+  const [usuarioL2, setUsuarioL2] = useState({});
+
   const [roles, setRoles] = useState([]);
 
   useEffect(() => {
+    fetchUsuario();
     fetchRoles();
   }, []);
 
@@ -34,12 +37,31 @@ const Dashboard = () => {
     }));
   };
 
+  const fetchUsuario = async () => {
+    try {
+        const response = await fetch(`https://api-luchosoft-mysql.onrender.com/configuracion/usuarios/${usuarioLS.id_usuario}`);
+        if (response.ok) {
+            const data = await response.json();
+            const usuarioFiltrado = data[0];
+            setUsuarioL2(usuarioFiltrado);
+            console.log(usuarioFiltrado)
+        } else {
+            console.error('Error al obtener el usuario');
+        }
+    } catch (error) {
+        console.error('Error al obtener el usuario:', error);
+    }
+};
+
   const handleSubmit = async (event) => {
+
     event.preventDefault();
 
     console.log(usuario2)
 
     console.log('longitud contraseña: ', usuario2.contraseña.length)
+
+    console.log("usuario logueado: ", usuarioL2)
 
     if (usuario2.contraseña.length < 8) {
       Swal.fire({
@@ -49,7 +71,7 @@ const Dashboard = () => {
         timer: 1500
       });
     }
-    else if (usuario2.contraseñaAntigua != usuarioLS.contraseña) {
+    else if (usuario2.contraseñaAntigua != usuarioL2.contraseña) {
       Swal.fire({
         icon: 'error',
         title: 'Contraseña incorrecta',
@@ -319,4 +341,4 @@ const Contenido = styled.div`
 	}
 `;
 
-export default Dashboard;
+export default Perfil;

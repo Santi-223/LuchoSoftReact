@@ -72,7 +72,7 @@ const PrivateRoute = ({ publ, prot, children }) => {
     }else if (publ && auth && cont){
         return <Navigate to="/default"/>
     }else if (!publ && auth){
-        return cont ? children : <Navigate to="/dashboard" />
+        return cont ? children : <Navigate to="/Perfil" />
     }else{
         return <Navigate to="/login"/>
     }

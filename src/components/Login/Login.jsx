@@ -62,10 +62,10 @@ function Acceso() {
         }
     };
 
-    // Si el usuario está autenticado, redirige al dashboard
+    // Si el usuario está autenticado, redirige al Perfil
     if (usuarioAutenticado) {
         return <CSSTransition in={true} timeout={500} classNames="pagina">
-            <Navigate to="/dashboard" />
+            <Navigate to="/Perfil" />
         </CSSTransition>
     }
 

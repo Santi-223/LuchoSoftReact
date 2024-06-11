@@ -3,7 +3,7 @@ import './App.css'
 import { Routes, Route, HashRouter } from 'react-router-dom';
 import Layout from './components/Layout';
 import Default from './components/Default';
-import Dashboard from './components/Dashboard/Dashboard';
+import Perfil from './components/Perfil/Perfil';
 import Usuarios from './components/Usuarios/Usuarios';
 import Roles from './components/Configuracion/Roles';
 import AgregarUsuarios from './components/Usuarios/AgregarUsuarios';
@@ -66,9 +66,9 @@ function App() {
               </PrivateRoute>
             </UserProvider>
           }>
-            <Route exact path="/dashboard" element={
+            <Route exact path="/Perfil" element={
               <PrivateRoute prot={0}>
-                <Dashboard />
+                <Perfil />
               </PrivateRoute>}
             />
             <Route path="/usuarios" element={
@@ -171,12 +171,41 @@ function App() {
               </PrivateRoute>}
             />
 
-            <Route path="/agregarCliente" element={<RegistrarCliente />} />
-            <Route path="/ventas" element={<Ventas />} />
-            <Route path="/agregarPedidos" element={<RegistrarPedido />} />
-            <Route path="/pedidos" element={<Pedidos />} />
-            <Route path="/clientes" element={<Cliente />} />
-            <Route path="/editarpedidos/:id_pedido" element={<EditarPedidos />} />
+            <Route path="/clientes" element={
+              <PrivateRoute prot={10}>
+                <Cliente />
+              </PrivateRoute>}
+            />
+
+            <Route path="/agregarCliente" element={
+              <PrivateRoute prot={10}>
+                <RegistrarCliente />
+              </PrivateRoute>}
+            />
+
+            <Route path="/pedidos" element={
+              <PrivateRoute prot={11}>
+                <Pedidos />
+              </PrivateRoute>}
+            />
+
+            <Route path="/agregarPedidos" element={
+              <PrivateRoute prot={11}>
+                <RegistrarPedido />
+              </PrivateRoute>}
+            />
+
+            <Route path="/editarpedidos/:id_pedido" element={
+              <PrivateRoute prot={11}>
+                <EditarPedidos />
+              </PrivateRoute>}
+            />
+
+            <Route path="/ventas" element={
+              <PrivateRoute prot={12}>
+                <Ventas />
+              </PrivateRoute>}
+            />
 
           </Route>
         </Routes>
