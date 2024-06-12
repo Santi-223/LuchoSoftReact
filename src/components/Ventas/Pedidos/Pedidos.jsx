@@ -127,7 +127,7 @@ const Pedidos = () => {
                             <button name="estado_pedido" id={estilos.estado_pedido_negro}><i className={`fa-solid fa-shuffle ${estilos.estado_pedido_negro}`}></i></button>
                             <button><i className={`fa-solid fa-pen-to-square ${estilos.icono_negro}`} ></i></button>
                             <abbr title="Ver detalle">
-                                <button onClick={()=>cambiarEstadoModal2(!estadoModal2)}><i className={`fa-regular fa-eye ${estilos.icono_negro}`}></i></button>
+                                <button onClick={()=>{cambiarEstadoModal2(!estadoModal2)}}><i className={`fa-regular fa-eye ${estilos.icono_negro}`}></i></button>
                             </abbr>
                         </div>
                     ) }
@@ -168,14 +168,24 @@ const Pedidos = () => {
                     });
                     if (response.ok) {
                         console.log('Pedido actualizado exitosamente.');
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Pedido actualizado exitosamente',
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: "top-end",
                             showConfirmButton: false,
-                            timer: 1500
-                        });
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                              toast.onmouseenter = Swal.stopTimer;
+                              toast.onmouseleave = Swal.resumeTimer;
+                            }
+                          });
+                          Toast.fire({
+                            icon: "success",
+                            title: "Registro exitoso"
+                          });
                         setTimeout(() => {
                             window.location.href = '/#/pedidos';
+                            cambiarEstadoModal1(false)
                         }, 1000);
                         fetchPedido()
                     } else {
@@ -205,7 +215,7 @@ const Pedidos = () => {
                     <Link to="/agregarPedidos">
                         <button className={`${estilos["botonAgregar"]} bebas-neue-regular`} ><i class="fa-solid fa-plus"></i> Agregar</button>
                     </Link>
-                    <button class={`${estilos["boton-generar"]}`}><i class="fa-solid fa-download"></i></button>
+                    <button style={{backgroundColor:'white', border:'1px solid #c9c6c675', borderRadius:'50px', marginTop: '-20px'}}> <img src="src\assets\excel-logo.png" height={'40px'}/> </button>
                 </div>
             </div>
             <div className={estilos["tabla"]}>
@@ -227,15 +237,15 @@ const Pedidos = () => {
                     <div>
                         <div className={estilos.estado}>
                             <p>Pendiente</p>
-                            <button type='button' value={1} onClick={(event) => { handleEstadoPedidos(selectedRowId, selectedRow, event) }}>Select</button>
+                            <button type='button' value={1} onClick={(event) => { handleEstadoPedidos(selectedRowId, selectedRow, event) }}>Seleccionar</button>
                         </div>
                         <div className={estilos.estado}>
                             <p>Cancelado</p>
-                            <button type='submit' value={2} onClick={(event) => { handleEstadoPedidos(selectedRowId, selectedRow, event) }}>Select</button>
+                            <button type='submit' value={2} onClick={(event) => { handleEstadoPedidos(selectedRowId, selectedRow, event) }}>Seleccionar</button>
                         </div>
                         <div className={estilos.estado}>
                             <p>Vendido</p>
-                            <button type='submit' value={3} onClick={(event) => { handleEstadoPedidos(selectedRowId, selectedRow, event) }}>Select</button>
+                            <button type='submit' value={3} onClick={(event) => { handleEstadoPedidos(selectedRowId, selectedRow, event) }}>Seleccionar</button>
                         </div>
                     </div>
                 </Contenido>
