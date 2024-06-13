@@ -7,8 +7,6 @@ import estilos from '../Clientes/Clientes.module.css';
 import Modal from './modal';
 import styled from 'styled-components';
 import Swal from 'sweetalert2';
-import TextField from '@mui/material/TextField';
-import { event } from "jquery";
 
 const Cliente = () => {
     const [clientes, setclientes] = useState([]);
@@ -465,22 +463,49 @@ const Cliente = () => {
         handleChange(event);
     }
 
+    const exportExcel = (customFileName) => {
+        import('xlsx').then((xlsx) => {
+            const worksheet = xlsx.utils.json_to_sheet(clientes);
+            const workbook = { Sheets: { data: worksheet }, SheetNames: ['data'] };
+            const excelBuffer = xlsx.write(workbook, {
+                bookType: 'xlsx',
+                type: 'array'
+            });
+
+            saveAsExcelFile(excelBuffer, customFileName || 'clientes');
+        });
+    };
+    const saveAsExcelFile = (buffer, fileName) => {
+        import('file-saver').then((module) => {
+            if (module && module.default) {
+                let EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+                let EXCEL_EXTENSION = '.xlsx';
+                const data = new Blob([buffer], {
+                    type: EXCEL_TYPE
+                });
+                module.default.saveAs(data, fileName + EXCEL_EXTENSION);
+            }
+        });
+    };
+
 
     if (isLoading) {
         return <div>Cargando...</div>;
     }
     return (
         <div>
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
             <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-            <div id={estilos["tituloCliente"]}>
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.css" rel="stylesheet" />
+            <div className={estilos["tituloCliente"]}>
                 <h1>Clientes</h1>
             </div>
             <div className={estilos['botones']}>
                 <input type="text" placeholder="Buscar..." value={filtro} onChange={handleFiltroChange} className={estilos["busqueda"]} />
-                <div>
+                <div className={estilos['boton2']}>
                     <button onClick={() => cambiarEstadoModal1(!estadoModal1)} className={`${estilos.botonAgregar} ${estilos.rojo} bebas-neue-regular`}><i className="fa-solid fa-plus"></i> Agregar</button>
-                    <button className={`${estilos["boton-generar"]} ${estilos.vinotinto}`}><i className="fa-solid fa-download"></i></button>
+                    <button style={{backgroundColor:'white', border:'1px solid #c9c6c675', borderRadius:'50px', marginTop:'-2px', height:'45px', cursor:'pointer'}} onClick={() => exportExcel('Cliente_informacion')}><img src="src\assets\excel-logo.png" height={'40px'}/></button>
                 </div>
 
             </div>
@@ -495,7 +520,7 @@ const Cliente = () => {
                 mostrarOverlay={true}
                 posicionModal={'center'}
                 width={'500px'}
-                padding={'10px'}
+                padding={'20px'}
             >
                 <Contenido>
                     <div className={estilos["contFormsRCliente"]}>
@@ -511,13 +536,11 @@ const Cliente = () => {
                             <input id="nombre_cliente" className={estilos["input-field"]} type="text" placeholder="Nombre" name="nombre_cliente"
                                 value={ClienteRegistrar.nombre_cliente} onChange={handleChange} size="small" />
                         </div>
-                        <br />
                         <div className={estilos["input1RCliente"]}>
                             <label>Teléfono <span style={{ color: 'red' }}>*</span></label>
                             <input id="telefono_cliente" className={estilos["input-field"]} type="number" placeholder="Teléfono" name="telefono_cliente"
                                 value={ClienteRegistrar.telefono_cliente} onChange={handleChange} size="small" />
                         </div>
-                        <br />
                         <div className={estilos["input1RCliente"]}>
                             <label>Dirección <span style={{ color: 'red' }}>*</span></label>
                             <input id="direccion_cliente" className={estilos["input-field"]} type="text" placeholder="Dirección" name="direccion_cliente"

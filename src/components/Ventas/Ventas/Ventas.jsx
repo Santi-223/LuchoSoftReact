@@ -142,6 +142,32 @@ const Ventas = () => {
             }
         });
     }
+
+    const exportExcel = (customFileName) => {
+        import('xlsx').then((xlsx) => {
+            const worksheet = xlsx.utils.json_to_sheet(ventas);
+            const workbook = { Sheets: { data: worksheet }, SheetNames: ['data'] };
+            const excelBuffer = xlsx.write(workbook, {
+                bookType: 'xlsx',
+                type: 'array'
+            });
+
+            saveAsExcelFile(excelBuffer, customFileName || 'Ventas');
+        });
+    };
+    const saveAsExcelFile = (buffer, fileName) => {
+        import('file-saver').then((module) => {
+            if (module && module.default) {
+                let EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+                let EXCEL_EXTENSION = '.xlsx';
+                const data = new Blob([buffer], {
+                    type: EXCEL_TYPE
+                });
+                module.default.saveAs(data, fileName + EXCEL_EXTENSION);
+            }
+        });
+    };
+
     if (isLoading) {
         return <div>Cargando...</div>;
     }
@@ -157,7 +183,7 @@ const Ventas = () => {
             <div className={estilos["botones"]}>
                 <input type="text" placeholder="Buscar..." value={filtro} onChange={handleFiltroChange} className={estilos["busqueda"]} />
                 <div>
-                    <button className={`${estilos["boton-generar"]} ${estilos['vinotinto']}`} onclick="imprimirTabla()"><i className="fa-solid fa-download"></i></button>
+                <button style={{backgroundColor:'white', border:'1px solid #c9c6c675', borderRadius:'50px', marginTop: '-10px', cursor:'pointer'}} onClick={() => exportExcel('Reporte_Ventas')}> <img src="src\assets\excel-logo.png" height={'40px'}/> </button>
                 </div>
             </div>
             <div className={estilos['tabla']}>

@@ -70,7 +70,6 @@ const EncabezadoModal = styled.div`
 	margin-bottom: 10px;
 	padding-bottom: 10px;
 	border-bottom: 1px solid #E8E8E8;
-
 	h3 {
 		font-weight: 500;
 		font-size: 16px;

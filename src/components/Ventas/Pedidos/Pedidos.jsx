@@ -197,6 +197,30 @@ const Pedidos = () => {
             }
         });
     };
+    const exportExcel = (customFileName) => {
+        import('xlsx').then((xlsx) => {
+            const worksheet = xlsx.utils.json_to_sheet(Pedidos);
+            const workbook = { Sheets: { data: worksheet }, SheetNames: ['data'] };
+            const excelBuffer = xlsx.write(workbook, {
+                bookType: 'xlsx',
+                type: 'array'
+            });
+
+            saveAsExcelFile(excelBuffer, customFileName || 'Pedidos');
+        });
+    };
+    const saveAsExcelFile = (buffer, fileName) => {
+        import('file-saver').then((module) => {
+            if (module && module.default) {
+                let EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+                let EXCEL_EXTENSION = '.xlsx';
+                const data = new Blob([buffer], {
+                    type: EXCEL_TYPE
+                });
+                module.default.saveAs(data, fileName + EXCEL_EXTENSION);
+            }
+        });
+    };
     if (isLoading) {
         return <div>Cargando...</div>;
     }
@@ -215,7 +239,7 @@ const Pedidos = () => {
                     <Link to="/agregarPedidos">
                         <button className={`${estilos["botonAgregar"]} bebas-neue-regular`} ><i class="fa-solid fa-plus"></i> Agregar</button>
                     </Link>
-                    <button style={{backgroundColor:'white', border:'1px solid #c9c6c675', borderRadius:'50px', marginTop: '-20px'}}> <img src="src\assets\excel-logo.png" height={'40px'}/> </button>
+                    <button style={{backgroundColor:'white', border:'1px solid #c9c6c675', borderRadius:'50px', marginTop: '-20px'}} onClick={() => exportExcel('Reporte_Pedidos')}> <img src="src\assets\excel-logo.png" height={'40px'}/> </button>
                 </div>
             </div>
             <div className={estilos["tabla"]}>
