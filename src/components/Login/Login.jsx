@@ -4,6 +4,15 @@ import estilos from '../Login/Login.module.css';
 import '../Layout.css';
 import Swal from 'sweetalert2';
 import { CSSTransition } from 'react-transition-group';
+import {
+    MDBBtn,
+    MDBContainer,
+    MDBRow,
+    MDBCol,
+    MDBIcon,
+    MDBInput
+}
+    from 'mdb-react-ui-kit';
 
 function Acceso() {
 
@@ -71,8 +80,60 @@ function Acceso() {
 
     // Si el usuario no está autenticado, muestra la página de acceso
     return (
-        <div>
-            <div className={estilos["contenido"]}>
+        <div className={estilos.contenido} style={{ objectFit: 'cover', objectPosition: 'left', margin: 'auto', marginTop: '65px' }} >
+
+            <link rel="stylesheet" href="https://mdbcdn.b-cdn.net/wp-content/themes/mdbootstrap4/docs-app/css/dist/mdb5/react/core.min.css" />
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+            <MDBContainer fluid>
+                <MDBRow>
+
+                    <MDBCol sm='6'>
+                        <br />
+                        <br />
+                        <center>
+                            <div>
+                                <img src="/archivos/imagenes/logo.png"
+                                    alt="Login image" style={{
+                                        objectFit: 'cover', objectPosition: 'left', width: '60vh', marginLeft: '13vh'
+                                    }} />
+                            </div>
+                        </center>
+                        <br />
+                        <div style={{ maxWidth: '75vh', maxHeight: '75vh', objectFit: 'cover', objectPosition: 'left', margin: 'auto', marginTop: '' }}>
+
+                            <h3 className="fw-normal mb-3 ps-5 pb-3" style={{ letterSpacing: '1px', marginLeft: '30vh' }}>Log in</h3>
+                            <form onSubmit={handleSubmit}>
+                                <MDBInput wrapperClass='mb-4 mx-5 w-100' label='Usuario' id='formControlLg' type='email' size="lg"
+                                    required
+                                    name="email"
+                                    value={usuario.email}
+                                    onChange={handleChange} />
+                                <MDBInput wrapperClass='mb-4 mx-5 w-100' label='Contraseña' id='formControlLg' type='password' size="lg"
+                                    name="contraseña"
+                                    value={usuario.contraseña}
+                                    onChange={handleChange} />
+
+                                <MDBBtn type="submit" className="mb-4 px-5 mx-5 w-100" color='info' size='lg'>Login</MDBBtn>
+                                <Link to={'/recuperarContrasena'}>
+                                <p className="small mb-5 pb-lg-3 ms-5"><a class="text-muted" href="#!">¿Olvidaste tu contraseña?</a></p>
+                                </Link>
+
+                            </form>
+                        </div>
+
+                    </MDBCol>
+
+                    <MDBCol sm='6' className='d-none d-sm-block px-0' style={{ textAlign: 'center' }}>
+                        <img src="http://res.cloudinary.com/donirviw7/image/upload/v1718288651/jktiobyufc8ol7kgggt4.jpg"
+                            alt="Login image" className="w-100" style={{ maxWidth: '80vh', maxHeight: '80vh', objectFit: 'cover', objectPosition: 'left', margin: 'auto', marginTop: '' }} />
+                    </MDBCol>
+
+
+
+                </MDBRow>
+
+            </MDBContainer>
+            {/* <div className={estilos["contenido"]}>
                 <center>
 
                     <div id={estilos.titulo}><img src="/archivos/imagenes/logo.png" width="600px"></img></div>
@@ -112,12 +173,8 @@ function Acceso() {
                         </div>
                     </form>
                 </div>
-            </div>
+            </div> */}
         </div>
-        /**<div>
-            <h1>Página de Acceso</h1>
-            <button onClick={handleLogin}>Iniciar Sesión</button>
-        </div>**/
     );
 }
 

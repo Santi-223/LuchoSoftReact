@@ -127,6 +127,7 @@
 }
 
 .cajaBotonesRegistro {
+  margin-left: 10vh;
   margin-top: 20px;
   display: flex;
   justify-content: center;
@@ -138,7 +139,7 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  width: 200px;
+  width: 300px;
   /* Ajusta el ancho de los botones */
 }
 
