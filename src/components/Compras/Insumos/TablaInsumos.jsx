@@ -7,8 +7,6 @@ import Swal from "sweetalert2";
 import DataTable from "react-data-table-component";
 import Modal from "./modal";
 import styled from "styled-components";
-import jsPDF from "jspdf";
-import "jspdf-autotable";
 
 function Insumos() {
   const token = localStorage.getItem("token");
@@ -66,43 +64,7 @@ function Insumos() {
       insumo.estado_insumo.toString().includes(filtro)
   );
 
-  const generarPDF = () => {
-    const doc = new jsPDF();
 
-    // Encabezado del PDF
-    doc.text("Reporte de Insumos", 20, 10);
-
-    // Definir las columnas que se mostrarán en el informe
-    const columnasInforme = ["Id", "Nombre", "Medida", "Stock", "Categoría"];
-
-    // Filtrar los datos de los insumos para incluir solo las columnas deseadas
-    const datosInforme = filteredinsumos.map((insumo) => {
-      const {
-        id_insumo,
-        nombre_insumo,
-        unidadesDeMedida_insumo,
-        stock_insumo,
-        nombre_categoria,
-      } = insumo;
-      return [
-        id_insumo,
-        nombre_insumo,
-        unidadesDeMedida_insumo,
-        stock_insumo,
-        nombre_categoria,
-      ];
-    });
-
-    // Agregar la tabla al documento PDF
-    doc.autoTable({
-      startY: 20,
-      head: [columnasInforme],
-      body: datosInforme,
-    });
-
-    // Guardar el PDF
-    doc.save("reporte_insumos.pdf");
-  };
 
   const columns = [
     {
@@ -338,7 +300,7 @@ function Insumos() {
 
     if (name === 'nombre_insumo') {
       // Expresión regular que coincide con cualquier carácter que no sea una letra, un número o un guion bajo
-      const caracteresEspeciales = /^[a-zA-Z0-9\s#,;.-àèìòù]*$/; 
+      const caracteresEspeciales = /^[a-zA-Z0-9\sÁÉÍÓÚáéíóúÑñÜü]*$/;
     
       // Verificar si la cadena no contiene caracteres especiales
       if (caracteresEspeciales.test(value)) {
@@ -578,7 +540,7 @@ function Insumos() {
 
 
 
-    const regex = /^[a-zA-Z0-9\s#,;.-áéíóúñ]*$/; 
+    const regex = /^[a-zA-Z0-9\sÁÉÍÓÚáéíóúÑñÜü]*$/;
 
     if (
       !regex.test(insumos1.nombre_insumo) ||
@@ -1021,7 +983,7 @@ function Insumos() {
 
 
     // Validar que no haya caracteres especiales en los campos
-    const regex = /^[a-zA-Z0-9\s#,;.-áéíóúñ]*$/; 
+    const regex = /^[a-zA-Z0-9\sÁÉÍÓÚáéíóúÑñÜü]*$/;
 
     if (
       !regex.test(insumos1.nombre_insumo) ||
@@ -1124,7 +1086,7 @@ function Insumos() {
 
     if (name === 'nombre_insumo') {
       // Expresión regular que coincide con cualquier carácter que no sea una letra, un número o un guion bajo
-      const caracteresEspeciales = /^[a-zA-Z0-9\s#,;.-àèìòù]*$/; 
+      const caracteresEspeciales = /^[a-zA-Z0-9\sÁÉÍÓÚáéíóúÑñÜü]*$/;
     
       // Verificar si la cadena no contiene caracteres especiales
       if (caracteresEspeciales.test(value)) {
