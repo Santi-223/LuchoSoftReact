@@ -14,6 +14,8 @@ const PrivateRoute = ({ publ, prot, children }) => {
 
     let cont = false;
 
+    let admin = false;
+
     const token = localStorage.getItem('token');
 
     const validarToken = async () => {
@@ -24,6 +26,8 @@ const PrivateRoute = ({ publ, prot, children }) => {
                 }
             });
             if (!response.ok) {
+                window.location.href = '/#/login';
+
                 Swal.fire({
                     icon: "warning",
                     title: "Advertencia",
@@ -37,10 +41,6 @@ const PrivateRoute = ({ publ, prot, children }) => {
 
                 // Eliminar permisos del localStorage
                 localStorage.removeItem('permisos');
-
-                setTimeout(() => {
-                    window.location.href = '/#/login';
-                  }, 1500);
 
             }
         } catch (error) {
@@ -63,14 +63,27 @@ const PrivateRoute = ({ publ, prot, children }) => {
         permiso = true;
     }
 
+    if(auth){
+        if(usuarioLogueado.id_rol === 1){
+            admin = true;
+        }
+    }
+
     if (auth && permiso) {
         cont = true
     }
 
+
+    if(prot === 111 && admin === true){
+        cont = true;
+    }
+
+    console.log("admin? ", admin)
+
     if(publ && !auth){
         return children;
     }else if (publ && auth && cont){
-        return <Navigate to="/default"/>
+        return <Navigate to="/Perfil"/>
     }else if (!publ && auth){
         return cont ? children : <Navigate to="/Perfil" />
     }else{
