@@ -269,7 +269,9 @@ function Proveedores() {
           >
             <i
               className={`fa-solid fa-pen-to-square ${
-                row.estado_proveedor === 1 ? "iconosNaranjas" : "iconosGris"
+                row.estado_proveedor === 1
+                  ? "iconosNaranjas"
+                  : "iconosGrises"
               }`}
             ></i>
           </button>
@@ -804,7 +806,7 @@ function Proveedores() {
       direccion_proveedor.trim() !== ""
     ) {
       // Validar que los campos no contengan caracteres especiales
-      const regex = /^[a-zA-Z0-9\s#,;.-]*$/; // Expresión regular que permite letras, números, espacios, '#' y '-'
+      const regex = /^[a-zA-Z0-9\sÁÉÍÓÚáéíóúÑñÜü]*$/; // Expresión regular que permite letras, números, espacios, '#' y '-'
       if (
         regex.test(nombre_proveedor) &&
         regex.test(telefono_proveedor) &&
@@ -1489,7 +1491,7 @@ function Proveedores() {
       tipo_documento.trim() !== ""
     ) {
       // Validar que los campos no contengan caracteres especiales
-      const regex = /^[a-zA-Z0-9\s#,;.-]*$/; // Expresión regular que permite letras, números, espacios, '#' y '-'
+      const regex = /^[a-zA-Z0-9\sÁÉÍÓÚáéíóúÑñÜü]*$/; // Expresión regular que permite letras, números, espacios, '#' y '-'
       if (
         regex.test(nombre_proveedor) &&
         regex.test(documento_proveedor) &&
@@ -1679,7 +1681,7 @@ function Proveedores() {
 
     if (name === 'nombre_proveedor') {
       // Expresión regular que coincide con cualquier carácter que no sea una letra, un número o un guion bajo
-      const caracteresEspeciales = /^[a-zA-Z0-9\s#,;.-àèìòù]*$/; 
+      const caracteresEspeciales = /^[a-zA-Z0-9\sÁÉÍÓÚáéíóúÑñÜü]*$/;
     
       // Verificar si la cadena no contiene caracteres especiales
       if (caracteresEspeciales.test(value)) {
@@ -1691,7 +1693,7 @@ function Proveedores() {
 
     if (name === 'direccion_proveedor') {
       // Expresión regular que coincide con cualquier carácter que no sea una letra, un número o un guion bajo
-      const caracteresEspeciales = /^[a-zA-Z0-9\s#,;.-]*$/;
+      const caracteresEspeciales = /^[a-zA-Z0-9\sÁÉÍÓÚáéíóúÑñÜü#,;.-]*$/;
     
       // Verificar si la cadena no contiene caracteres especiales
       if (caracteresEspeciales.test(value)) {
@@ -1777,7 +1779,7 @@ function Proveedores() {
 
     if (name === 'nombre_proveedor') {
       // Expresión regular que coincide con cualquier carácter que no sea una letra, un número o un guion bajo
-      const caracteresEspeciales = /^[a-zA-Z0-9\s#,;.-àèìòù]*$/; 
+      const caracteresEspeciales = /^[a-zA-Z0-9\sÁÉÍÓÚáéíóúÑñÜü]*$/;
     
       // Verificar si la cadena no contiene caracteres especiales
       if (caracteresEspeciales.test(value)) {
@@ -1789,7 +1791,7 @@ function Proveedores() {
 
     if (name === 'direccion_proveedor') {
       // Expresión regular que coincide con cualquier carácter que no sea una letra, un número o un guion bajo
-      const caracteresEspeciales = /^[a-zA-Z0-9\s#,;.-]*$/;
+      const caracteresEspeciales = /^[a-zA-Z0-9\sÁÉÍÓÚáéíóúÑñÜü#,;.-]*$/;
     
       // Verificar si la cadena no contiene caracteres especiales
       if (caracteresEspeciales.test(value)) {
@@ -1855,6 +1857,7 @@ function Proveedores() {
         fontWeight: "bold",
         padding: "10px",
         fontSize: "16px",
+        
       },
     },
     cells: {
@@ -1930,6 +1933,7 @@ function Proveedores() {
           data={filteredproveedores}
           pagination
           paginationPerPage={6}
+          customStyles={customStyles} defaultSortField="id_categoria_productos" defaultSortAsc={true}
         ></DataTable>
       </div>
 
