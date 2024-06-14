@@ -168,14 +168,35 @@ const Ventas = () => {
         });
     };
 
+    const customStyles = {
+        headCells: {
+            style: {
+                textAlign: 'center',
+                backgroundColor: '#f2f2f2',
+                fontWeight: 'bold',
+                padding: '10px',
+                fontSize: '16px'
+            },
+        },
+        cells: {
+            style: {
+                textAlign: 'center',
+
+                fontSize: '13px'
+            },
+        },
+    };
+
     if (isLoading) {
         return <div>Cargando...</div>;
     }
     return (
         <>
         
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
             <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.css" rel="stylesheet" />  
 
             <div id={estilos["titulo"]}>
                 <h1>Ventas</h1>
@@ -187,7 +208,7 @@ const Ventas = () => {
                 </div>
             </div>
             <div className={estilos['tabla']}>
-                <DataTable columns={columns} data={filteredVentas} pagination highlightOnHover />
+                <DataTable columns={columns} data={filteredVentas} pagination highlightOnHover customStyles={customStyles} defaultSortField="id_producto" defaultSortAsc={true}/>
             </div>
 
         </>

@@ -119,6 +119,9 @@ const Cliente = () => {
                         <span className={`${row.estado_cliente == 1 && estilos['slider2']} ${row.estado_cliente !== 1 && estilos['slider']}`}></span>
                     </label>
                     <button onClick={() => { cambiarEstadoModal2(!estadoModal2), setClientesEditar(row) }}><i className={`fa-solid fa-pen-to-square iconosNaranjas`}></i></button>
+                    <abbr title="Ver detalle">
+                        <button onClick={() => { cambiarEstadoModal2(!estadoModal2) }}><i className={`fa-regular fa-eye iconosAzules`}></i></button>
+                    </abbr>
                 </div>
             )
         },
@@ -211,7 +214,7 @@ const Cliente = () => {
                 Toast.fire({
                     icon: "success",
                     title: "Registro exitoso"
-                }); 
+                });
 
                 setClienteRegistrar(
                     {
@@ -412,14 +415,14 @@ const Cliente = () => {
                             timer: 2000,
                             timerProgressBar: true,
                             didOpen: (toast) => {
-                              toast.onmouseenter = Swal.stopTimer;
-                              toast.onmouseleave = Swal.resumeTimer;
+                                toast.onmouseenter = Swal.stopTimer;
+                                toast.onmouseleave = Swal.resumeTimer;
                             }
-                          });
-                          Toast.fire({
+                        });
+                        Toast.fire({
                             icon: "success",
                             title: "Actualización exitosa"
-                          });
+                        });
                         setTimeout(() => {
                             cambiarEstadoModal2(false)
                         }, 1000);
@@ -488,6 +491,24 @@ const Cliente = () => {
         });
     };
 
+    const customStyles = {
+        headCells: {
+            style: {
+                textAlign: 'center',
+                backgroundColor: '#f2f2f2',
+                fontWeight: 'bold',
+                padding: '10px',
+                fontSize: '16px'
+            },
+        },
+        cells: {
+            style: {
+                textAlign: 'center',
+
+                fontSize: '13px'
+            },
+        },
+    };
 
     if (isLoading) {
         return <div>Cargando...</div>;
@@ -505,12 +526,12 @@ const Cliente = () => {
                 <input type="text" placeholder="Buscar..." value={filtro} onChange={handleFiltroChange} className={estilos["busqueda"]} />
                 <div className={estilos['boton2']}>
                     <button onClick={() => cambiarEstadoModal1(!estadoModal1)} className={`${estilos.botonAgregar} ${estilos.rojo} bebas-neue-regular`}><i className="fa-solid fa-plus"></i> Agregar</button>
-                    <button style={{backgroundColor:'white', border:'1px solid #c9c6c675', borderRadius:'50px', marginTop:'-2px', height:'45px', cursor:'pointer'}} onClick={() => exportExcel('Cliente_informacion')}><img src="src\assets\excel-logo.png" height={'40px'}/></button>
+                    <button style={{ backgroundColor: 'white', border: '1px solid #c9c6c675', borderRadius: '50px', marginTop: '-2px', height: '45px', cursor: 'pointer' }} onClick={() => exportExcel('Cliente_informacion')}><img src="src\assets\excel-logo.png" height={'40px'} /></button>
                 </div>
 
             </div>
             <div className={estilos["tabla"]}>
-                <DataTable columns={columns} data={filteredClientes} pagination paginationPerPage={6} highlightOnHover></DataTable>
+                <DataTable columns={columns} data={filteredClientes} pagination paginationPerPage={6} highlightOnHover customStyles={customStyles} defaultSortField="id_producto" defaultSortAsc={true}></DataTable>
             </div>
             <Modal
                 estado={estadoModal1}

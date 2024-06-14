@@ -221,6 +221,26 @@ const Pedidos = () => {
             }
         });
     };
+
+    //función para el estilo del header de la tabla
+    const customStyles = {
+        headCells: {
+            style: {
+                textAlign: 'center',
+                backgroundColor: '#f2f2f2',
+                fontWeight: 'bold',
+                padding: '10px',
+                fontSize: '16px'
+            },
+        },
+        cells: {
+            style: {
+                textAlign: 'center',
+
+                fontSize: '13px'
+            },
+        },
+    };
     if (isLoading) {
         return <div>Cargando...</div>;
     }
@@ -243,7 +263,7 @@ const Pedidos = () => {
                 </div>
             </div>
             <div className={estilos["tabla"]}>
-                <DataTable columns={columns} data={filteredPedidos} pagination paginationPerPage={5} highlightOnHover></DataTable>
+                <DataTable columns={columns} data={filteredPedidos} pagination paginationPerPage={5} highlightOnHover customStyles={customStyles} defaultSortField="id_producto" defaultSortAsc={true}></DataTable>
             </div>
             <Modal
                 estado={estadoModal1}
