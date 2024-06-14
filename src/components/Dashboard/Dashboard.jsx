@@ -72,8 +72,11 @@ export default function Dashboard() {
       <Grid item md={8} sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} />
 
       {/* row 2 */}
-      <Grid item xs={12} md={7} lg={8}>
+      {/* <Grid item xs={12} md={7} lg={8}>
         <UniqueVisitorCard />
+      </Grid> */}
+      <Grid item xs={12} md={7} lg={8}>
+        <SaleReportCard />
       </Grid>
       <Grid item xs={12} md={5} lg={4}>
         <Grid container alignItems="center" justifyContent="space-between">
@@ -134,10 +137,10 @@ export default function Dashboard() {
       </Grid>
 
       {/* row 4 */}
-      <Grid item xs={12} md={7} lg={8}>
+      {/* <Grid item xs={12} md={7} lg={8}>
         <SaleReportCard />
-      </Grid>
-      <Grid item xs={12} md={5} lg={4}>
+      </Grid> */}
+      {/* <Grid item xs={12} md={5} lg={4}>
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid item>
             <Typography variant="h5">Transaction History</Typography>
@@ -240,7 +243,7 @@ export default function Dashboard() {
             </Button>
           </Stack>
         </MainCard>
-      </Grid>
+      </Grid> */}
     </Grid>
   );
 }
