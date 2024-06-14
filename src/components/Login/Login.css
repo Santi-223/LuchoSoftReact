@@ -1,0 +1,56 @@
+
+
+.cajaBotonesLogin {
+  margin-left: 13vh;
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.cajaBotonesLogin button {
+  padding: 10px 0px;
+  /* Ajusta el padding para hacer los botones más largos */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 200px;
+  /* Ajusta el ancho de los botones */
+}
+
+
+a .grisLLogin{
+  text-decoration: none;
+  /* Elimina el subrayado del texto */
+  width: 175px;
+  justify-content: center;
+}
+
+
+.rojoLogin {
+  color: white;
+  width: 200px;
+  margin-right: 20px;
+}
+
+.rojoLogin:hover {
+  background: #3c77bb;
+}
+
+.rojoLogin:active {
+  box-shadow: 1px 1px 1px 1px #3c77bb;
+}
+
+.grisLLogin {
+  background: #a7a7a7;
+  color: white;
+  display: flex;
+}
+
+.grisLLogin:hover {
+  background: #adadad;
+
+}
+
+.grisL:active {
+  box-shadow: 1px 1px 1px 1px #adadad;
+}

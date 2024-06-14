@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Navigate, Link } from "react-router-dom";
-import estilos from '../Login/Login.module.css';
+import '../Login/Login.css';
 import '../Layout.css';
 import Swal from 'sweetalert2';
 import { CSSTransition } from 'react-transition-group';
@@ -80,7 +80,7 @@ function Acceso() {
 
     // Si el usuario no está autenticado, muestra la página de acceso
     return (
-        <div className={estilos.contenido} style={{ objectFit: 'cover', objectPosition: 'left', margin: 'auto', marginTop: '65px' }} >
+        <div style={{ objectFit: 'cover', objectPosition: 'left', margin: 'auto', marginTop: '65px' }} >
 
             <link rel="stylesheet" href="https://mdbcdn.b-cdn.net/wp-content/themes/mdbootstrap4/docs-app/css/dist/mdb5/react/core.min.css" />
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
@@ -109,13 +109,14 @@ function Acceso() {
                                     value={usuario.email}
                                     onChange={handleChange} />
                                 <MDBInput wrapperClass='mb-4 mx-5 w-100' label='Contraseña' id='formControlLg' type='password' size="lg"
+                                    required
                                     name="contraseña"
                                     value={usuario.contraseña}
                                     onChange={handleChange} />
 
                                 <MDBBtn type="submit" className="mb-4 px-5 mx-5 w-100" color='info' size='lg'>Login</MDBBtn>
                                 <Link to={'/recuperarContrasena'}>
-                                <p className="small mb-5 pb-lg-3 ms-5"><a class="text-muted" href="#!">¿Olvidaste tu contraseña?</a></p>
+                                    <p className="small mb-5 pb-lg-3 ms-5"><a class="text-muted" href="#!">¿Olvidaste tu contraseña?</a></p>
                                 </Link>
 
                             </form>
@@ -133,47 +134,6 @@ function Acceso() {
                 </MDBRow>
 
             </MDBContainer>
-            {/* <div className={estilos["contenido"]}>
-                <center>
-
-                    <div id={estilos.titulo}><img src="/archivos/imagenes/logo.png" width="600px"></img></div>
-                </center>
-                <div className={estilos["divActualizarContraseña"]}>
-                    <form onSubmit={handleSubmit}>
-                        <div className={estilos["input-group"]}>
-                            <label for="contrasenaAntigua">Ingrese correo</label>
-                            <input
-                                type="email"
-                                id={estilos.correoacceso}
-                                required
-                                name="email"
-                                value={usuario.email}
-                                onChange={handleChange}
-                            />
-                        </div>
-
-                        <div className={estilos["input-group"]}>
-                            <label for="password">Ingrese contraseña</label>
-                            <input
-                                type="password"
-                                id={estilos.contrasenaacceso}
-                                required
-                                name="contraseña"
-                                value={usuario.contraseña}
-                                onChange={handleChange}
-                            />
-                        </div>
-                        <div>
-                            <Link to={'/recuperarContrasena'}>
-                                <label className={["yellow-underline"]}>Recuperar contraseña</label>
-                            </Link>
-                        </div>
-                        <div className={estilos["cajaBotonesRegistro"]}>
-                            <button className={estilos["rojo"]} type="submit">Acceder</button>
-                        </div>
-                    </form>
-                </div>
-            </div> */}
         </div>
     );
 }

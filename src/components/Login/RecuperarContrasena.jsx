@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Navigate, Link } from "react-router-dom";
-import estilos from '../Login/Login.module.css';
+import '../Login/Login.css';
 import '../Layout.css';
 import Swal from 'sweetalert2';
 import {
@@ -76,7 +76,7 @@ function RecuperarContrasena() {
 
     // Si el usuario no está autenticado, muestra la página de acceso
     return (
-        <div className={estilos.contenido} style={{ objectFit: 'cover', objectPosition: 'left', margin: 'auto', marginTop: '65px' }} >
+        <div style={{ objectFit: 'cover', objectPosition: 'left', margin: 'auto', marginTop: '65px' }} >
 
             <link rel="stylesheet" href="https://mdbcdn.b-cdn.net/wp-content/themes/mdbootstrap4/docs-app/css/dist/mdb5/react/core.min.css" />
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
@@ -105,10 +105,10 @@ function RecuperarContrasena() {
                                     value={usuario.email}
                                     onChange={handleChange}
                                 />
-                                <div className={estilos["cajaBotonesRegistro"]}>
-                                    <button className={estilos["rojo"]} type="submit">Enviar</button>
+                                <div className="cajaBotonesLogin" style={{ maxWidth: '75vh', maxHeight: '75vh', marginLeft: '15vh'}}>
+                                    <button className="text-white bg-info rojoLogin" type="submit">Enviar</button>
                                     <Link to='acceso'>
-                                        <button className={estilos["grisL"]} type="submit">Cancelar</button>
+                                        <button className="grisLLogin" type="button">Cancelar</button>
                                     </Link>
                                 </div>
                             </form>
@@ -126,33 +126,6 @@ function RecuperarContrasena() {
                 </MDBRow>
 
             </MDBContainer>
-            {/* <div className={estilos["contenido"]}>
-                <center>
-
-                    <div id={estilos.titulo}><img src="/archivos/imagenes/logo.png" width="600px"></img></div>
-                </center>
-                <div className={estilos["divActualizarContraseña"]}>
-                    <form onSubmit={handleSubmit}>
-                        <div className={estilos["input-group"]}>
-                            <label for="contrasenaAntigua">Ingrese el correo electronico de recuperación</label>
-                            <input
-                                type="email"
-                                id={estilos.correoacceso}
-                                required
-                                name="email"
-                                value={usuario.email}
-                                onChange={handleChange}
-                            />
-                        </div>
-                        <div className={estilos["cajaBotonesRegistro"]}>
-                            <button className={estilos["rojo"]} type="submit">Enviar</button>
-                            <Link to='acceso'>
-                            <button className={estilos["grisL"]} type="submit">Cancelar</button>
-                            </Link>
-                        </div>
-                    </form>
-                </div>
-            </div> */}
         </div>
 
     );

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Navigate, Link, useParams } from "react-router-dom";
-import estilos from '../Login/Login.module.css';
+import '../Login/Login.css';
 import '../Layout.css';
 import Swal from 'sweetalert2';
 import {
@@ -99,7 +99,7 @@ function RecuperarContrasena2() {
 
     // Si el usuario no está autenticado, muestra la página de acceso
     return (
-        <div className={estilos.contenido} style={{ objectFit: 'cover', objectPosition: 'left', margin: 'auto', marginTop: '65px' }} >
+        <div style={{ objectFit: 'cover', objectPosition: 'left', margin: 'auto', marginTop: '65px' }} >
 
             <link rel="stylesheet" href="https://mdbcdn.b-cdn.net/wp-content/themes/mdbootstrap4/docs-app/css/dist/mdb5/react/core.min.css" />
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
@@ -134,10 +134,10 @@ function RecuperarContrasena2() {
                                     value={usuario.confirmacionContraseña}
                                     onChange={handleChange}
                                 />
-                                <div>
-                                    <MDBBtn type="submit" className="mb-4 px-5 mx-5 w-100" color='info' size='lg'>Enviar</MDBBtn>
+                                <div className="cajaBotonesLogin" style={{ maxWidth: '75vh', maxHeight: '75vh', marginLeft: '15vh'}}>
+                                    <button className="text-white bg-info rojoLogin" type="submit">Enviar</button>
                                     <Link to='acceso'>
-                                        <MDBBtn type="button" className="mb-4 px-5 mx-5 w-100" color='secondary' size='lg'>Cancelar</MDBBtn>
+                                        <button className="grisLLogin" type="button">Cancelar</button>
                                     </Link>
                                 </div>
                             </form>
@@ -156,44 +156,6 @@ function RecuperarContrasena2() {
 
             </MDBContainer>
         </div>
-        // <div>
-        //     <div className={estilos["contenido"]}>
-        //         <center>
-
-        //             <div id={estilos.titulo}><img src="/archivos/imagenes/logo.png" width="600px"></img></div>
-        //         </center>
-        //         <div className={estilos["divActualizarContraseña"]}>
-        //             <form onSubmit={handleSubmit}>
-        //                 <div className={estilos["input-group"]}>
-        //                     <label for="contrasenaAntigua">Ingrese la nueva contraseña</label>
-        //                     <input
-        //                         type="password"
-        //                         id={estilos.correoacceso}
-        //                         required
-        //                         name="nuevaContraseña"
-        //                         value={usuario.nuevaContraseña}
-        //                         onChange={handleChange}
-        //                     />
-        //                 </div>
-        //                 <div className={estilos["input-group"]}>
-        //                     <label for="contrasenaAntigua">Confirme la nueva contraseña</label>
-        //                     <input
-        //                         type="password"
-        //                         id={estilos.correoacceso}
-        //                         required
-        //                         name="confirmacionContraseña"
-        //                         value={usuario.confirmacionContraseña}
-        //                         onChange={handleChange}
-        //                     />
-        //                 </div>
-        //                 <div className={estilos["cajaBotonesRegistro"]}>
-        //                     <button className={estilos["rojo"]} type="submit">Enviar</button>
-        //                 </div>
-        //             </form>
-        //         </div>
-        //     </div>
-        //</div>
-
     );
 }
 
