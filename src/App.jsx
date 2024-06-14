@@ -36,6 +36,7 @@ import EditarPedidos from './components/Ventas/Pedidos/EditarPedidos';
 
 import { UserProvider } from './components/UserProvider';
 import EditarPerfil from "./components/Usuarios/EditarPerfil";
+import Dashboard from "./components/Dashboard/Dashboard";
 
 function App() {
 
@@ -66,6 +67,11 @@ function App() {
               </PrivateRoute>
             </UserProvider>
           }>
+            <Route exact path="/Dashboard" element={
+              <PrivateRoute prot={11}>
+                <Dashboard />
+              </PrivateRoute>}
+            />
             <Route exact path="/Perfil" element={
               <PrivateRoute prot={0}>
                 <Perfil />

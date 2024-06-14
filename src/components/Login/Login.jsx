@@ -51,22 +51,40 @@ function Acceso() {
                 // Almacenar en el localStorage
                 localStorage.setItem('token', data.token);
 
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 1800,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                      toast.onmouseenter = Swal.stopTimer;
+                      toast.onmouseleave = Swal.resumeTimer;
+                    }
+                  });
+                  Toast.fire({
+                    icon: "success",
+                    title: "¡Acceso exitoso!"
+                  });
+
                 setUsuarioAutenticado(true);
                 // Aquí podrías redirigir a otra página, mostrar un mensaje de éxito, etc.
             } else {
                 console.error('Error al accceder:', response.statusText);
                 Swal.fire({
+                    showConfirmButton: false,
                     icon: 'error',
-                    title: 'Error',
-                    text: 'Usuario o contraseña incorrecto',
+                    text: 'Credenciales incorrectas, Inténtalo de nuevo.',
+                    timer: 2000
                 });
             }
         } catch (error) {
             console.error('Error al acceder:', error);
             Swal.fire({
+                showConfirmButton: false,
                 icon: 'error',
-                title: 'Error',
-                text: 'Error al acceder',
+                text: 'Error al acceder.',
+                timer: 2000
             });
         }
     };
@@ -74,7 +92,7 @@ function Acceso() {
     // Si el usuario está autenticado, redirige al Perfil
     if (usuarioAutenticado) {
         return <CSSTransition in={true} timeout={500} classNames="pagina">
-            <Navigate to="/Perfil" />
+            <Navigate to="/Dashboard" />
         </CSSTransition>
     }
 
