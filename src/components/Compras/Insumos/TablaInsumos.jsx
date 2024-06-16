@@ -154,7 +154,7 @@ function Insumos() {
               className={`fa-solid fa-pen-to-square ${
                 row.estado_insumo === 1
                   ? "iconosNaranjas"
-                  : "iconosGrises"
+                  : "iconosGris"
               }`}
             ></i>
           </button>
@@ -540,7 +540,7 @@ function Insumos() {
 
 
 
-    const regex = /^[a-zA-Z0-9\sÁÉÍÓÚáéíóúÑñÜü]*$/;
+    const regex = /^[a-zA-Z0-9\sÁÉÍÓÚáéíóúÑñÜü.,]*$/;
 
     if (
       !regex.test(insumos1.nombre_insumo) ||
@@ -983,7 +983,7 @@ function Insumos() {
 
 
     // Validar que no haya caracteres especiales en los campos
-    const regex = /^[a-zA-Z0-9\sÁÉÍÓÚáéíóúÑñÜü]*$/;
+    const regex = /^[a-zA-Z0-9\sÁÉÍÓÚáéíóúÑñÜü.,]*$/;
 
     if (
       !regex.test(insumos1.nombre_insumo) ||

@@ -330,7 +330,7 @@ function categoria_insumos() {
               className={`fa-solid fa-pen-to-square ${
                 row.estado_categoria_insumos === 1
                   ? "iconosNaranjas"
-                  : "iconosGrises"
+                  : "iconosGris"
               }`}
             ></i>
           </button>
@@ -875,7 +875,7 @@ const Contenido = styled.div`
   }
 
   p {
-    font-size: 18px;
+
     margin-bottom: 20px;
   }
 

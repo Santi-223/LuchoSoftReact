@@ -6,8 +6,7 @@ import estilos from './tablaCompras.module.css'
 import Swal from 'sweetalert2';
 import DataTable from "react-data-table-component";
 import { Modal, Button } from 'react-bootstrap';
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+
 
 function Compras() {
     const [showModal, setShowModal] = useState(false);
@@ -37,7 +36,7 @@ function Compras() {
         compra.numero_compra.toString().includes(filtro) ||
         compra.fecha_compra.toString().includes(filtro) ||
         compra.total_compra.toString().includes(filtro) ||
-        compra.nombre_proveedor.toString().toLowerCase().includes(filtro) ||
+        compra.nombre_proveedor.toString().toLowerCase().includes(filtro.toLowerCase()) ||
         compra.estado_compra.toString().includes(filtro)
     );
     useEffect(() => {
@@ -133,42 +132,6 @@ function Compras() {
         } catch (error) {
             console.error('Error al obtener la compra:', error);
         }
-    };
-
-
-
-
-    const generarPDF = () => {
-        const doc = new jsPDF();
-
-        // Encabezado del PDF
-        doc.text("Reporte de Compras", 20, 10);
-
-        // Definir las columnas que se mostrarán en el informe (excluyendo "Estado")
-        const columnasInforme = [
-            "Id",
-            "Número",
-            "Fecha",
-            "Total compra",
-            "Proveedor"
-        ];
-
-        // Filtrar los datos de las compras para incluir solo las columnas deseadas
-        const datosInforme = filteredCompras.map(compra => {
-            const { id_compra, numero_compra, fecha_compra, total_compra, nombre_proveedor } = compra;
-            return [id_compra, numero_compra, fecha_compra, total_compra, nombre_proveedor];
-        });
-
-
-        // Agregar la tabla al documento PDF
-        doc.autoTable({
-            startY: 20,
-            head: [columnasInforme],
-            body: datosInforme
-        });
-
-        // Guardar el PDF
-        doc.save("reporte_compras.pdf");
     };
 
 
@@ -375,6 +338,30 @@ function Compras() {
         },
     };
 
+    const exportExcel = (customFileName) => {
+        import('xlsx').then((xlsx) => {
+            const worksheet = xlsx.utils.json_to_sheet(compras);
+            const workbook = { Sheets: { data: worksheet }, SheetNames: ['data'] };
+            const excelBuffer = xlsx.write(workbook, {
+                bookType: 'xlsx',
+                type: 'array'
+            });
+    
+            saveAsExcelFile(excelBuffer, customFileName || 'compras');
+        });
+    };
+    const saveAsExcelFile = (buffer, fileName) => {
+        import('file-saver').then((module) => {
+            if (module && module.default) {
+                let EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+                let EXCEL_EXTENSION = '.xlsx';
+                const data = new Blob([buffer], {
+                    type: EXCEL_TYPE
+                });
+                module.default.saveAs(data, fileName + EXCEL_EXTENSION);
+            }
+        });
+      }
 
     if (isLoading) {
         return <div>Cargando...</div>;
@@ -397,13 +384,7 @@ function Compras() {
                 <div>
 
                 <button onClick={handleAgregarCompra} className={` ${estilos.botonAgregar} ${estilos.rojo} bebas-neue-regular`}><i className="fa-solid fa-plus"></i> Agregar</button>
-                    <button
-                        style={{ color: "white" }}
-                        className={` ${estilos.vinotinto}`}
-                        onClick={generarPDF}
-                    >
-                        <i className="fa-solid fa-download"></i>
-                    </button>
+                <button style={{backgroundColor:'white', border:'1px solid #c9c6c675', borderRadius:'50px', marginTop: '-10px', cursor:'pointer'}} onClick={() => exportExcel('Reporte_Compras')}> <img src="src\assets\excel-logo.png" height={'40px'}/> </button>
                 </div>
             </div>
 

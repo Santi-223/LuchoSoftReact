@@ -455,7 +455,8 @@ function App() {
                   readOnly={true}
                   style={{
                     backgroundColor: '#E4E4E4',
-                    color: '#999'
+                    color: '#999',
+                    borderRadius: '15px'
                   }}
                 />
               </div>
