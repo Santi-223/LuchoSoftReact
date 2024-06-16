@@ -209,12 +209,23 @@ function App() {
       return;
     }
 
-    if (!compra.fecha_compra || !compra.numero_compra || !compra.id_proveedor || tableRows.some(row => !row.nombre || !row.precio)) {
+    if (!compra.fecha_compra || !compra.numero_compra || !compra.id_proveedor || tableRows.some(row => !row.nombre)) {
       // Verifica si el input es válido o si hay campos vacíos
       Swal.fire({
         icon: 'error',
         title: 'Error',
-        text: 'Hay campos vacíos',
+        text: 'Por favor, complete los campos vacíos.',
+        confirmButtonColor: '#1F67B9',
+      });
+      return;
+    }
+
+    if (tableRows.some(row => !row.precio)) {
+      // Verifica si el input es válido o si hay campos vacíos
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Digite correctamente el precio.',
         confirmButtonColor: '#1F67B9',
       });
       return;
@@ -482,7 +493,7 @@ function App() {
                   <tr key={index}>
                     <td style={{ textAlign: "center" }}>
                       <select className={estilos.inputfieldtabla} value={row.nombre} onChange={(e) => handleSelectChange(e, index)}>
-                        <option value="">Seleccione un insumo</option>
+                      <option value="" disabled selected>Seleccione un insumo</option>
                         {filteredInsumos.map((insumo) => (
                           <option key={insumo.id_insumo} value={insumo.nombre_insumo}>
                             {insumo.nombre_insumo}
