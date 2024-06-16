@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Table, Pagination } from "react-bootstrap";
 import Swal from "sweetalert2";
 import styled from "styled-components";
 import estilos from './Pedidos.module.css';
 import { Link } from "react-router-dom";
 import { useUserContext } from "../../UserProvider";
+import { AutoComplete } from 'primereact/autocomplete';
+        
 function App() {
   const token = localStorage.getItem("token");
   const [productos, setProductos] = useState([]);
@@ -20,6 +21,9 @@ function App() {
     id_cliente: 0,
     id_usuario: usuario.id_usuario,
   });
+  const [pedidoCliente, setPedidoCliente]=useState({
+    id_cliente:0
+  })
   const [clientes, setClientes] = useState([]);
   const tableRef = useRef(null);
   const [scrollEnabled, setScrollEnabled] = useState(false);
@@ -34,7 +38,8 @@ function App() {
   ]);
   const [precioTotal, setPrecioTotal] = useState(0);
   const [formChanged, setFormChanged] = useState(false);
-
+  const [filteredClientes, setFilteredClientes] = useState([]);
+  const [selectedCliente, setSelectedCliente] = useState(null);
   useEffect(() => {
     fetchProductos();
     fetchClientes();
@@ -199,7 +204,7 @@ function App() {
     if (
       !pedido.fecha_pedido ||
       !pedido.observaciones ||
-      !pedido.id_cliente ||
+      !pedidoCliente.id_cliente ||
       tableRows.some((row) => !row.nombre || !row.cantidad)
     ) {
       Swal.fire({
@@ -233,6 +238,7 @@ function App() {
           },
           body: JSON.stringify({
             ...pedido,
+            id_cliente: pedidoCliente.id_cliente, 
             total_pedido: totalPedido,
             total_venta: totalPedido,
           }),
@@ -323,6 +329,35 @@ function App() {
     setFormChanged(true);
   };
 
+  const searchClientes = (event) => {
+    setTimeout(() => {
+      let filtered;
+      if (!event.query.trim().length) {
+        filtered = [...clientes];
+      } else {
+        filtered = clientes.filter((cliente) => {
+          return cliente.nombre_cliente
+            .toLowerCase()
+            .includes(event.query.toLowerCase())
+            ;
+        });
+      }
+
+      setFilteredClientes(filtered);
+    }, 250);
+  };
+
+  const handleClienteChange = (e) => {
+    if (e.value) {
+      setSelectedCliente(e.value);
+      setPedidoCliente((prevPedido) => ({
+        ...prevPedido,
+        id_cliente: e.value.id_cliente, // Para mostrar el nombre en el campo
+      }));
+    } 
+    setFormChanged(true);
+  };
+
   if (isLoading) {
     return <div>Cargando la API, espere por favor...</div>;
   }
@@ -386,7 +421,25 @@ function App() {
                 </button>
                 {/* <button style={{background: '#154360', color: 'white',height: '30px', fontSize:'12px', marginLeft: '10px', border: 'none', borderRadius: '15px', width:'70px'}}>Agregar</button> */}
               </div>
-              <select
+              <div  className={estilos['buscar-Cliente']}>
+
+                <AutoComplete
+                  value={selectedCliente}
+                  suggestions={filteredClientes}
+                  completeMethod={searchClientes}
+                  field="id_cliente"
+                  name="id_cliente"
+                  // dropdown
+                  forceSelection
+                  itemTemplate={(item) => (
+                  <div>{item.id_cliente}  {item.nombre_cliente}</div>
+                  )}
+                  onChange={handleClienteChange}
+                  placeholder="Buscar cliente"
+                  // aria-label="Clientes"
+                />
+              </div>
+              {/* <select
                 id="cliente"
                 name="id_cliente"
                 className={estilos["input-field22"]}
@@ -400,7 +453,7 @@ function App() {
                     {cliente.nombre_cliente}
                   </option>
                 ))}
-              </select>
+              </select> */}
             </div>
             <div className="BotonesPedidos">
               <div id={estilos["totalpedidos"]}>
@@ -441,7 +494,7 @@ function App() {
             </div>
             <div style={{ overflowY: scrollEnabled ? 'scroll' : 'auto', height: '60vh', width: '130%' }} >
               <table
-                className="tablaDT ui celled table"
+                className="ui celled table"
                 style={{ border: 'none' }}
                 ref={tableRef}
               >
@@ -534,6 +587,8 @@ function App() {
 }
 
 export default App;
+
+
 
 const ContenedorBotones = styled.div`
   padding: 40px;

@@ -24,11 +24,6 @@
     color: #E12424;
 }
 
-
-input::placeholder {
-    padding-left: 20px;
-}
-
 input {
     border-radius: 3px;
     border: 1px solid #6d6d6d;
@@ -374,4 +369,9 @@ background: #154360d7;
     text-align: center;
     background-color: #154360;
     color: white;
+}
+
+.buscar-Cliente{
+    border: 1px solid #B3B6B7;
+    border-radius: 5px
 }

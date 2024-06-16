@@ -73,13 +73,13 @@ const EncabezadoModal = styled.div`
 	h3 {
 		font-weight: 500;
 		font-size: 16px;
-		color: #000000;
+		color: #48110d;
 	}
 `;
 
 const BotonCerrar = styled.button`
 	position: absolute;
-	top: 25px;
+	top: 15px;
 	right: 20px;
 
 	width: 40px;

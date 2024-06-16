@@ -8,12 +8,14 @@ import Modal from './modal';
 import styled from 'styled-components';
 import Swal from 'sweetalert2';
 
+
 const Cliente = () => {
     const [clientes, setclientes] = useState([]);
     const [filtro, setFiltro] = useState('');
     const [isLoading, setIsLoading] = useState(true);
     const [estadoModal1, cambiarEstadoModal1] = useState(false);
     const [estadoModal2, cambiarEstadoModal2] = useState(false);
+    const [estadoModal3, cambiarEstadoModal3] = useState(false);
     const [ClienteRegistrar, setClienteRegistrar] = useState({
         id_cliente: '',
         nombre_cliente: '',
@@ -24,10 +26,26 @@ const Cliente = () => {
     });
 
     const [ClientesEditar, setClientesEditar] = useState({
+        id_cliente:'',
         nombre_cliente: '',
         telefono_cliente: '',
         direccion_cliente: ''
     });
+
+    const [inputValidoId, setInputValidoId] = useState(true);
+    const [errorId, setErrorId] = useState('')
+    const [inputValidoNombre, setInputValidoNombre] = useState(true);
+    const [errorNombre, setErrorNombre] = useState('')
+    const [inputValidoTelefono, setInputValidoTelefono] = useState(true);
+    const [errorTelefono, setErrorTelefono] = useState('')
+    const [inputValidoDireccion, setInputValidoDireccion] = useState(true);
+    const [errorDireccion, setErrorDireccion] = useState('')
+    const [inputValidoNombreEditar, setInputValidoNombreEditar] = useState(true);
+    const [errorNombreEditar, setErrorNombreEditar] = useState('')
+    const [inputValidoTelefonoEditar, setInputValidoTelefonoEditar] = useState(true);
+    const [errorTelefonoEditar, setErrorTelefonoEditar] = useState('')
+    const [inputValidoDireccionEditar, setInputValidoDireccionEditar] = useState(true);
+    const [errorDireccionEditar, setErrorDireccionEditar] = useState('')
 
     const fetchVenta = async () => {
         try {
@@ -120,7 +138,7 @@ const Cliente = () => {
                     </label>
                     <button onClick={() => { cambiarEstadoModal2(!estadoModal2), setClientesEditar(row) }}><i className={`fa-solid fa-pen-to-square iconosNaranjas`}></i></button>
                     <abbr title="Ver detalle">
-                        <button onClick={() => { cambiarEstadoModal2(!estadoModal2) }}><i className={`fa-regular fa-eye iconosAzules`}></i></button>
+                        <button onClick={() => { cambiarEstadoModal3(!estadoModal3),setClientesEditar(row) }}><i className={`fa-regular fa-eye iconosAzules`}></i></button>
                     </abbr>
                 </div>
             )
@@ -130,6 +148,92 @@ const Cliente = () => {
 
     const handleChange = (event) => {
         const { name, value } = event.target;
+        if (name === 'id_cliente') {
+            // Verifica si el valor contiene solo dígitos positivos
+            const esNumeroPositivo = /^[0-9/s]+$/.test(value);
+
+            if (value.trim() === '') {
+                setErrorId('El campo es obligatorio.');
+                setInputValidoId(false);
+            } else if (!esNumeroPositivo) {
+                setErrorId('No se permiten caracteres especiales ni letras.');
+                setInputValidoId(false);
+            } else if (value.length < 10) {
+                setErrorId('Ingresa 10 dígitos.');
+                setInputValidoId(false);
+            } else if (value.length > 10) {
+                setErrorId('Ingresa un máximo de 10 dígitos.');
+                setInputValidoId(false);
+            } else {
+                setErrorId(''); // Limpia el mensaje de error
+                setInputValidoId(true);
+            }
+        }
+        if (name === 'nombre_cliente') {
+            if (value.trim() === '') {
+                setErrorNombre('El campo es obligatorio.');
+                setInputValidoNombre(false);
+            }
+            else if (/[^a-zA-Z0-9\sÁÉÍÓÚáéíóúÑñÜü]/.test(value)) {
+                setErrorNombre('No se permiten caracteres especiales.');
+                setInputValidoNombre(false);
+            }
+            else if (value.length < 5) {
+                setErrorNombre('Ingresa al menos 5 caracteres.');
+                setInputValidoNombre(false);
+            }
+            else if (value.length > 30) {
+                setErrorNombre('Ingresa un máximo de 30 caracteres.');
+                setInputValidoNombre(false);
+            }
+            // Si todo es válido
+            else {
+                setErrorNombre(''); // Limpia el mensaje de error
+                setInputValidoNombre(true);
+            }
+        }
+        if (name === 'telefono_cliente') {
+            // Verifica si el campo no está vacío
+            if (value.trim() === '') {
+                setErrorTelefono('El campo es obligatorio.');
+                setInputValidoTelefono(false);
+            }
+            else if (/[^0-9\s]/.test(value)) {
+                setErrorTelefono('No se permiten caracteres especiales ni letras.');
+                setInputValidoTelefono(false);
+            }
+            else if (value.length < 7) {
+                setErrorTelefono('Ingresa al menos 7 caracteres.');
+                setInputValidoTelefono(false);
+            }
+            else if (value.length > 10) {
+                setErrorTelefono('Ingresa un máximo de 10 caracteres.');
+                setInputValidoTelefono(false);
+            }
+            else {
+                setErrorTelefono(''); // Limpia el mensaje de error
+                setInputValidoTelefono(true);
+            }
+        }
+        if (name === 'direccion_cliente') {
+            if (value.trim() === '') {
+                setErrorDireccion('El campo es obligatorio.');
+                setInputValidoDireccion(false);
+            }
+            else if (value.length < 10) {
+                setErrorDireccion('Ingresa al menos 10 caracteres.');
+                setInputValidoDireccion(false);
+            }
+            else if (value.length > 30) {
+                setErrorDireccion('Ingresa un máximo de 30 caracteres.');
+                setInputValidoDireccion(false);
+            }
+            else {
+                setErrorDireccion(''); // Limpia el mensaje de error
+                setInputValidoDireccion(true);
+            }
+        }
+
         setClienteRegistrar(reclientes => ({
             ...reclientes,
             [name]: value
@@ -138,6 +242,71 @@ const Cliente = () => {
 
     const handleEditarChange = (event) => {
         const { name, value } = event.target;
+        if (name === 'nombre_cliente') {
+            if (value.trim() === '') {
+                setErrorNombreEditar('El campo es obligatorio.');
+                setInputValidoNombreEditar(false);
+            }
+            else if (/[^a-zA-Z0-9\sÁÉÍÓÚáéíóúÑñÜü]/.test(value)) {
+                setErrorNombreEditar('No se permiten caracteres especiales.');
+                setInputValidoNombreEditar(false);
+            }
+            else if (value.length < 5) {
+                setErrorNombreEditar('Ingresa al menos 5 caracteres.');
+                setInputValidoNombreEditar(false);
+            }
+            else if (value.length > 30) {
+                setErrorNombreEditar('Ingresa un máximo de 30 caracteres.');
+                setInputValidoNombreEditar(false);
+            }
+            // Si todo es válido
+            else {
+                setErrorNombreEditar(''); // Limpia el mensaje de error
+                setInputValidoNombreEditar(true);
+            }
+        }
+        if (name === 'telefono_cliente') {
+            // Verifica si el campo no está vacío
+            if (value.trim() === '') {
+                setErrorTelefonoEditar('El campo es obligatorio.');
+                setInputValidoTelefonoEditar(false);
+            }
+            else if (/[^0-9\s]/.test(value)) {
+                setErrorTelefonoEditar('No se permiten caracteres especiales ni letras.');
+                setInputValidoTelefonoEditar(false);
+            }
+            else if (value.length < 7) {
+                setErrorTelefonoEditar('Ingresa al menos 7 caracteres.');
+                setInputValidoTelefonoEditar(false);
+            }
+            else if (value.length > 10) {
+                setErrorTelefonoEditar('Ingresa un máximo de 10 caracteres.');
+                setInputValidoTelefonoEditar(false);
+            }
+            else {
+                setErrorTelefonoEditar(''); // Limpia el mensaje de error
+                setInputValidoTelefonoEditar(true);
+            }
+        }
+        if (name === 'direccion_cliente') {
+            if (value.trim() === '') {
+                setErrorDireccionEditar('El campo es obligatorio.');
+                setInputValidoDireccionEditar(false);
+            }
+            else if (value.length < 10) {
+                setErrorDireccionEditar('Ingresa al menos 10 caracteres.');
+                setInputValidoDireccionEditar(false);
+            }
+            else if (value.length > 30) {
+                setErrorDireccionEditar('Ingresa un máximo de 30 caracteres.');
+                setInputValidoDireccionEditar(false);
+            }
+            else {
+                setErrorDireccionEditar(''); // Limpia el mensaje de error
+                setInputValidoDireccionEditar(true);
+            }
+        }
+
         setClientesEditar(reclientes => ({
             ...reclientes,
             [name]: value
@@ -149,7 +318,6 @@ const Cliente = () => {
         if (ClienteRegistrar.id_cliente === '' && ClienteRegistrar.nombre_cliente === '' && ClienteRegistrar.telefono_cliente === '' && ClienteRegistrar.direccion_cliente === '') {
             Swal.fire({
                 icon: 'error',
-                title: 'Error',
                 text: 'Los campos se encuentran vacíos',
                 confirmButtonColor: '#1F67B9',
             });
@@ -183,6 +351,14 @@ const Cliente = () => {
                 icon: 'error',
                 title: 'Error',
                 text: 'El campo de la dirección está vacío',
+                confirmButtonColor: '#1F67B9',
+            });
+            return;
+        }
+        if (ClienteRegistrar.id_cliente < 10 || ClienteRegistrar.id_cliente > 10) {
+            Swal.fire({
+                icon: 'error',
+                text: 'El documento no cuenta con la longitud establecida',
                 confirmButtonColor: '#1F67B9',
             });
             return;
@@ -446,25 +622,6 @@ const Cliente = () => {
             }
         });
     };
-    const [cedula, setCedula] = React.useState("");
-    const [leyenda, setLeyenda] = React.useState("");
-    const [errorTitulo, setErrorTitulo] = React.useState(false);
-    const validacion = (event) => {
-        setCedula(event.target.value);
-
-        // Realizar la validación en función del estado actualizado 'cedula'
-        if (event.target.value.length <= 9) {
-            setErrorTitulo(true);
-            setLeyenda("El dígito no puede ser menor de 10");
-        } else if (event.target.value.length === 10) {
-            setErrorTitulo(false);
-            setLeyenda("");
-        } else if (event.target.value.length >= 10) {
-            setErrorTitulo(true);
-            setLeyenda("El número de cédula no puede ser mayor de 10");
-        }
-        handleChange(event);
-    }
 
     const exportExcel = (customFileName) => {
         import('xlsx').then((xlsx) => {
@@ -540,7 +697,7 @@ const Cliente = () => {
                 mostrarHeader={true}
                 mostrarOverlay={true}
                 posicionModal={'center'}
-                width={'500px'}
+                width={'600px'}
                 padding={'20px'}
             >
                 <Contenido>
@@ -548,30 +705,42 @@ const Cliente = () => {
                         <div className={estilos["input1RCliente"]}>
                             <label>Documento <span style={{ color: 'red' }}>*</span></label>
                             <input
-                                id="id_cliente" className={estilos["input-field"]} type="number" placeholder="10203040" name="id_cliente"
+                                id={estilos["id_cliente"]} className={`${!inputValidoId ? estilos['input-field2'] : estilos['input-field']}`} type="number" placeholder="10203040" name="id_cliente"
                                 value={ClienteRegistrar.id_cliente} onChange={handleChange}
                             />
+                            {!inputValidoId && <p className='error' style={{ color: 'red', fontSize: '10px', position: 'relative' }}>{errorId}</p>}
                         </div>
                         <div className={estilos["input1RCliente"]}>
                             <label>Nombre <span style={{ color: 'red' }}>*</span></label>
-                            <input id="nombre_cliente" className={estilos["input-field"]} type="text" placeholder="Nombre" name="nombre_cliente"
+                            <input id={estilos["nombre_cliente"]} className={`${!inputValidoNombre ? estilos['input-field2'] : estilos['input-field']}`} type="text" placeholder="Nombre" name="nombre_cliente"
                                 value={ClienteRegistrar.nombre_cliente} onChange={handleChange} size="small" />
+                            {!inputValidoNombre && <p className='error' style={{ color: 'red', fontSize: '10px', position: 'relative' }}>{errorNombre}</p>}
                         </div>
+                    </div>
+                    <div style={{ display: 'flex' }} >
                         <div className={estilos["input1RCliente"]}>
                             <label>Teléfono <span style={{ color: 'red' }}>*</span></label>
-                            <input id="telefono_cliente" className={estilos["input-field"]} type="number" placeholder="Teléfono" name="telefono_cliente"
+                            <input id={estilos["telefono_cliente"]} className={`${!inputValidoTelefono ? estilos['input-field2'] : estilos['input-field']}`} type="number" placeholder="Teléfono" name="telefono_cliente"
                                 value={ClienteRegistrar.telefono_cliente} onChange={handleChange} size="small" />
+                            {!inputValidoTelefono && <p className='error' style={{ color: 'red', fontSize: '10px', position: 'relative' }}>{errorTelefono}</p>}
                         </div>
                         <div className={estilos["input1RCliente"]}>
                             <label>Dirección <span style={{ color: 'red' }}>*</span></label>
-                            <input id="direccion_cliente" className={estilos["input-field"]} type="text" placeholder="Dirección" name="direccion_cliente"
+                            <input id="direccion_cliente" className={`${!inputValidoDireccion ? estilos['input-field2'] : estilos['input-field']}`} type="text" placeholder="Dirección" name="direccion_cliente"
                                 value={ClienteRegistrar.direccion_cliente} onChange={handleChange} size="small" />
+                            {!inputValidoDireccion && <p className='error' style={{ color: 'red', fontSize: '10px', position: 'relative' }}>{errorDireccion}</p>}
                         </div>
-                        <br />
                     </div>
                     <div className={estilos["BotonesClientes"]}>
                         <button type='submit' onClick={RegistrarCliente} className={estilos['RegistrarCliente']}>Aceptar</button>
-                        <button onClick={() => cambiarEstadoModal1(!estadoModal1, setErrorTitulo(false), setCedula(""))}>Cancelar</button>
+                        <button onClick={() => cambiarEstadoModal1(!estadoModal1, setClienteRegistrar({
+                            id_cliente: '',
+                            nombre_cliente: '',
+                            telefono_cliente: '',
+                            direccion_cliente: '',
+                            cliente_frecuente: 1,
+                            estado_cliente: 1
+                        }), setInputValidoId(true), setInputValidoNombre(true), setInputValidoTelefono(true), setInputValidoDireccion(true))} className={estilos['boton-cancelar']}>Cancelar</button>
                     </div>
                 </Contenido>
             </Modal>
@@ -582,31 +751,65 @@ const Cliente = () => {
                 mostrarHeader={true}
                 mostrarOverlay={true}
                 posicionModal={'center'}
-                width={'500px'}
+                width={'600px'}
                 padding={'20px'}
             >
                 <Contenido>
                     <div className={estilos["contFormsRCliente"]}>
                         <div className={estilos["input1RCliente"]}>
                             <p> Nombre<span style={{ color: 'red' }}>*</span></p>
-                            <input id="nombre_cliente" className={estilos["input-field"]} type="text" placeholder="Nombre" name="nombre_cliente" value={ClientesEditar.nombre_cliente} onChange={handleEditarChange} />
+                            <input id={estilos["nombre_cliente"]} className={`${!inputValidoNombreEditar ? estilos['input-field2'] : estilos['input-field']}`} type="text" placeholder="Nombre" name="nombre_cliente" value={ClientesEditar.nombre_cliente} onChange={handleEditarChange} />
+                            {!inputValidoNombreEditar && <p className='error' style={{ color: 'red', fontSize: '10px', position: 'relative' }}>{errorNombreEditar}</p>}
                         </div>
-                        <br />
                         <div className={estilos["input1RCliente"]}>
                             <p>Telefono<span style={{ color: 'red' }}>*</span></p>
-                            <input id="telefono_cliente" className={estilos["input-field"]} type="number" placeholder="Telefono" name="telefono_cliente" value={ClientesEditar.telefono_cliente} onChange={handleEditarChange} />
+                            <input id={estilos["telefono_cliente"]} className={`${!inputValidoTelefonoEditar ? estilos['input-field2'] : estilos['input-field']}`} type="number" placeholder="Telefono" name="telefono_cliente" value={ClientesEditar.telefono_cliente} onChange={handleEditarChange} />
+                            {!inputValidoTelefonoEditar && <p className='error' style={{ color: 'red', fontSize: '10px', position: 'relative' }}>{errorTelefonoEditar}</p>}
                         </div>
                         <br />
+                    </div>
+                    <div className={estilos["BotonesClientes2"]}>
                         <div className={estilos["input1RCliente"]}>
                             <p> Dirección<span style={{ color: 'red' }}>*</span></p>
-                            <input id="direccion_cliente" className={estilos["input-field"]} type="text" placeholder="Dirección" name="direccion_cliente" value={ClientesEditar.direccion_cliente} onChange={handleEditarChange} />
+                            <input id="direccion_cliente" className={`${!inputValidoDireccionEditar ? estilos['input-field2'] : estilos['input-field']}`} type="text" placeholder="Dirección" name="direccion_cliente" value={ClientesEditar.direccion_cliente} onChange={handleEditarChange} />
+                            {!inputValidoDireccionEditar && <p className='error' style={{ color: 'red', fontSize: '10px', position: 'relative' }}>{errorDireccionEditar}</p>}
                         </div>
-                        <br />
-                    </div>
-                    <div className={estilos["BotonesClientes"]}>
                         <button type='submit' onClick={EditarCliente} className={estilos['RegistrarCliente']}>Aceptar</button>
-                        <button onClick={() => cambiarEstadoModal2(!estadoModal2)}>Cancelar</button>
+                        <button onClick={() => cambiarEstadoModal2(!estadoModal2, setClientesEditar({
+                            nombre_cliente: '',
+                            telefono_cliente: '',
+                            direccion_cliente: '',
+                        }), setInputValidoDireccionEditar(true), setInputValidoNombreEditar(true), setInputValidoTelefonoEditar(true))}>Cancelar</button>
                     </div>
+                </Contenido>
+            </Modal>
+            <Modal
+                estado={estadoModal3}
+                cambiarEstado={cambiarEstadoModal3}
+                titulo="Detalle"
+                mostrarHeader={true}
+                mostrarOverlay={true}
+                posicionModal={'center'}
+                width={'400px'}
+                padding={'20px'}
+            >
+                <Contenido>
+                    <div className={estilos["input1RCliente"]}>
+                        <label htmlFor="" ><i className="fa-solid fa-user" style={{color:'#b90505'}}></i>{'   '} Nombre: {ClientesEditar.nombre_cliente} </label>
+                        <br />
+                        <label htmlFor=""><i className="fa-regular fa-address-card" style={{color:'#b90505'}}></i>{'   '}  Documento: {ClientesEditar.id_cliente}</label>
+                        <br />
+                        <label htmlFor=""><i className="fa-solid fa-phone" style={{color:'#b90505'}}></i>{'   '}Teléfono: {ClientesEditar.telefono_cliente}</label>
+                        <br />
+                        <label htmlFor=""><i className="fa-solid fa-map-location-dot" style={{color:'#b90505'}}></i>{'   '}Dirección: {ClientesEditar.direccion_cliente}</label>
+                        
+                       
+                    </div>
+                    <div className={estilos["boton-cerrar"]}>
+                        <button onClick={()=>cambiarEstadoModal3(!estadoModal3)}>Cerrar</button>
+                    </div>
+
+
                 </Contenido>
             </Modal>
         </div>
