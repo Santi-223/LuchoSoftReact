@@ -24,7 +24,13 @@ const Pedidos = () => {
         total_pedido: '',
         id_cliente: '',
         id_usuario: ''
-    })
+    });
+    const [pedidoProductos1, setPedidoProductos] = useState([]);
+    const [listarProductos1, setlistarProductos] = useState([]);
+    const [idproducto, setIdproducto] = useState({});
+
+
+
     //Función para mapear la api de pedidos
     const fetchPedido = async () => {
         try {
@@ -34,14 +40,13 @@ const Pedidos = () => {
                 const pedidoData = data.filter(pedido => pedido.estado_pedido !== 3 && pedido.estado_pedido !== 4).map(pedido => ({
                     id_pedido: pedido.id_pedido,
                     observaciones: pedido.observaciones,
-                    fecha_venta: (pedido.fecha_venta),
-                    fecha_pedido: (pedido.fecha_pedido),
+                    fecha_venta: pedido.fecha_venta,
+                    fecha_pedido: pedido.fecha_pedido,
                     estado_pedido: pedido.estado_pedido,
                     total_venta: pedido.total_venta,
                     total_pedido: pedido.total_pedido,
                     id_cliente: pedido.id_cliente,
                     id_usuario: pedido.id_usuario
-
                 }));
                 setPedidos(pedidoData);
             } else {
@@ -106,11 +111,11 @@ const Pedidos = () => {
                 <button className={`${row.estado_pedido === 1 && estilos['estado1-button']} ${row.estado_pedido === 2 && estilos['estado2-button']} ${row.estado_pedido === 3 && estilos['estado3-button']}`}>{estadoMapping[row.estado_pedido]}</button>
             )
         },
-        {            
+        {
             name: 'Acciones',
             cell: (row) => (
                 <div>
-                    {row.estado_pedido ==1 ? (
+                    {row.estado_pedido == 1 ? (
                         <div className={estilos['acciones']}>
                             <abbr title="Cambiar Estado">
                                 <button name="estado_pedido" id={estilos.estado_pedido} onClick={() => { setSelectedRowId(row.id_pedido); setSelectedRow(row); cambiarEstadoModal1(!estadoModal1) }}><i className={`fa-solid fa-shuffle ${estilos.cambiarestado}`}></i></button>
@@ -119,7 +124,9 @@ const Pedidos = () => {
                                 <button><i className={`fa-solid fa-pen-to-square iconosNaranjas`} ></i></button>
                             </Link>
                             <abbr title="Ver detalle">
-                                <button onClick={()=>cambiarEstadoModal2(!estadoModal2)}><i className={`fa-regular fa-eye ${estilos.icono_negro}`}></i></button>
+                                <button onClick={() => { cambiarEstadoModal2(!estadoModal2); setIdproducto({ id_producto: row.id_pedido }); listarpedidosProductos(row.id_pedido); }}>
+                                    <i className={`fa-regular fa-eye ${estilos.icono_negro}`}></i>
+                                </button>
                             </abbr>
                         </div>
                     ) : (
@@ -127,14 +134,14 @@ const Pedidos = () => {
                             <button name="estado_pedido" id={estilos.estado_pedido_negro}><i className={`fa-solid fa-shuffle ${estilos.estado_pedido_negro}`}></i></button>
                             <button><i className={`fa-solid fa-pen-to-square ${estilos.icono_negro}`} ></i></button>
                             <abbr title="Ver detalle">
-                                <button onClick={()=>{cambiarEstadoModal2(!estadoModal2)}}><i className={`fa-regular fa-eye ${estilos.icono_negro}`}></i></button>
+                                <button onClick={() => { cambiarEstadoModal2(!estadoModal2, listarpedidosProductos(row.id_pedido)) }}><i className={`fa-regular fa-eye ${estilos.icono_negro}`}></i></button>
                             </abbr>
                         </div>
-                    ) }
-                </div>                
+                    )}
+                </div>
             )
         }
-    ]      
+    ]
     //Función para cambiar el estado
     const handleEstadoPedidos = async (selectedRowId, selectedRow, event) => {
         event.preventDefault();
@@ -175,14 +182,14 @@ const Pedidos = () => {
                             timer: 3000,
                             timerProgressBar: true,
                             didOpen: (toast) => {
-                              toast.onmouseenter = Swal.stopTimer;
-                              toast.onmouseleave = Swal.resumeTimer;
+                                toast.onmouseenter = Swal.stopTimer;
+                                toast.onmouseleave = Swal.resumeTimer;
                             }
-                          });
-                          Toast.fire({
+                        });
+                        Toast.fire({
                             icon: "success",
                             title: "Registro exitoso"
-                          });
+                        });
                         setTimeout(() => {
                             window.location.href = '/#/pedidos';
                             cambiarEstadoModal1(false)
@@ -197,6 +204,80 @@ const Pedidos = () => {
             }
         });
     };
+
+    useEffect(() => {
+        const listarProductos = async () => {
+            try {
+                const response = await fetch(`https://api-luchosoft-mysql.onrender.com/ventas2/productos`);
+                if (response.ok) {
+                    const data = await response.json();
+                    const productosData = data.map(productos => ({
+                        id_producto: productos.id_producto,
+                        nombre_producto: productos.nombre_producto,
+                        descripcion_producto: productos.descripcion_producto,
+                        estado_producto: productos.estado_producto,
+                        precio_producto: productos.precio_producto,
+                        id_categoria_producto: productos.id_categoria_producto
+                    }));
+                    setlistarProductos(productosData);
+                    console.log('El cliente es', listarProductos1);
+                } else {
+                    console.error('Error al obtener cliente');
+                }
+            } catch (error) {
+                console.error('Error al obtener cliente:', error);
+            }
+        }
+        listarProductos();
+    }, []);
+
+    const handleSelectChange = (event, index) => {
+        const { value } = event.target;
+
+        const selectedProducto = listarProductos1.find(
+            (producto) => producto.id_producto.toString() === value
+        );
+
+        if (!selectedProducto) {
+            return;
+        }
+
+        const updatedDetallesPedido = pedidoProductos1.map((detalle, rowIndex) => {
+            if (rowIndex === index) {
+                return {
+                    ...detalle,
+                    id_producto: selectedProducto.id_producto,
+                    nombre_producto: selectedProducto.nombre_producto,
+                    precio_unitario: selectedProducto.precio_producto, // Actualiza el precio del producto seleccionado
+                };
+            }
+            return detalle;
+        });
+
+        setPedidoProductos(updatedDetallesPedido);
+        // setFormChanged(true);
+    };
+    useEffect(() => {
+        listarpedidosProductos();
+    }, []);
+
+    const listarpedidosProductos = async (id_pedido) => {
+        console.log('El id del pedido es', id_pedido);
+        try {
+            const response = await fetch(`https://api-luchosoft-mysql.onrender.com/ventas/pedidos_productos/pedidos/${id_pedido}`);
+            if (response.ok) {
+                const data = await response.json();
+                console.log(data);
+                setPedidoProductos(data)
+                console.log('Los productos del pedido es', pedidoProductos1);
+            } else {
+                console.error('Error al obtener pedidos_productos');
+            }
+        } catch (error) {
+            console.error('Error al obtener pedidos_productos:', error);
+        }
+    }
+
     const exportExcel = (customFileName) => {
         import('xlsx').then((xlsx) => {
             const worksheet = xlsx.utils.json_to_sheet(Pedidos);
@@ -241,11 +322,13 @@ const Pedidos = () => {
             },
         },
     };
+
+
     if (isLoading) {
         return <div>Cargando...</div>;
     }
     return (
-        <>        
+        <>
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
             <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
             <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
@@ -259,7 +342,7 @@ const Pedidos = () => {
                     <Link to="/agregarPedidos">
                         <button className={`${estilos["botonAgregar"]} bebas-neue-regular`} ><i class="fa-solid fa-plus"></i> Agregar</button>
                     </Link>
-                    <button style={{backgroundColor:'white', border:'1px solid #c9c6c675', borderRadius:'50px', marginTop: '-20px'}} onClick={() => exportExcel('Reporte_Pedidos')}> <img src="src\assets\excel-logo.png" height={'40px'}/> </button>
+                    <button style={{ backgroundColor: 'white', border: '1px solid #c9c6c675', borderRadius: '50px', marginTop: '-20px' }} onClick={() => exportExcel('Reporte_Pedidos')}> <img src="src\assets\excel-logo.png" height={'40px'} /> </button>
                 </div>
             </div>
             <div className={estilos["tabla"]}>
@@ -305,13 +388,34 @@ const Pedidos = () => {
                 padding={'10px'}
             >
                 <Contenido>
-                    <div>
-                        <div>
-                            <p>Cliente:</p>
-                            
-                        </div>
+                    <div className="contenido">
+                        <h3>Productos del Pedido</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Productos</th>
+                                    <th>Cantidad</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {pedidoProductos1.map(producto => {
+                                    const productoInfo = listarProductos1.find(p => p.id_producto === producto.id_producto);
+                                    return (
+                                        <tr key={producto.id_pedidoProducto}>
+                                            <td>{productoInfo ? productoInfo.nombre_producto : 'Producto no encontrado'}</td>
+                                            <td>{producto.cantidad_producto}</td>
+                                            <td>${producto.subtotal}</td>
+                                        </tr>
+                                    );
+                                })}
+                                
+                            </tbody>
+                        </table>
+
+
+
                     </div>
-                    
                 </Contenido>
             </Modal>
         </>
