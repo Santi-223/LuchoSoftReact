@@ -1,3 +1,22 @@
+.card {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* Aplica una sombra suave */
+  transition: box-shadow 0.3s ease; /* Agrega una transición suave */
+}
+
+.card:hover {
+  box-shadow: 0 12px 18px rgba(0, 0, 0, 0.2); /* Aumenta la sombra al pasar el ratón */
+}
+
+.bgcustom {
+  background-color: #1F67B9 /* Cambia #ff0000 por el color que desees */
+}
+
+.div1{
+  margin-top: 16vh;
+  margin-left: 15vh;
+  margin-right: 15vh;
+}
+
 #iconoEditar {
   margin-left: 10px;
   font-size: 20px;
@@ -17,6 +36,17 @@
   border-radius: 50%; 
   width: 130px; 
 }
+
+.bottomRightButtons {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
+
+.button {
+  font-size: 14px;
+}
+
 
 #perfil {
   margin-top: 4vh;

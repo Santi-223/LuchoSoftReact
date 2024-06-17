@@ -5,6 +5,7 @@ import estilos from '../Perfil/Perfil.module.css';
 import Modal from '../Modal';
 import styled from 'styled-components';
 import { useUserContext } from "../UserProvider";
+import { MDBCol, MDBContainer, MDBRow, MDBCard, MDBCardText, MDBCardBody, MDBCardImage, MDBTypography, MDBIcon } from 'mdb-react-ui-kit';
 
 const Perfil = () => {
 
@@ -39,19 +40,19 @@ const Perfil = () => {
 
   const fetchUsuario = async () => {
     try {
-        const response = await fetch(`https://api-luchosoft-mysql.onrender.com/configuracion/usuarios/${usuarioLS.id_usuario}`);
-        if (response.ok) {
-            const data = await response.json();
-            const usuarioFiltrado = data[0];
-            setUsuarioL2(usuarioFiltrado);
-            console.log(usuarioFiltrado)
-        } else {
-            console.error('Error al obtener el usuario');
-        }
+      const response = await fetch(`https://api-luchosoft-mysql.onrender.com/configuracion/usuarios/${usuarioLS.id_usuario}`);
+      if (response.ok) {
+        const data = await response.json();
+        const usuarioFiltrado = data[0];
+        setUsuarioL2(usuarioFiltrado);
+        console.log(usuarioFiltrado)
+      } else {
+        console.error('Error al obtener el usuario');
+      }
     } catch (error) {
-        console.error('Error al obtener el usuario:', error);
+      console.error('Error al obtener el usuario:', error);
     }
-};
+  };
 
   const handleSubmit = async (event) => {
 
@@ -208,47 +209,62 @@ const Perfil = () => {
   }
 
   return (
-    <div>
-      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" />
-      <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
-      <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
-      <link href="https://cdn.datatables.net/2.0.2/css/dataTables.semanticui.css" rel="stylesheet" />
-      <link href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.css" rel="stylesheet" />
-
-      <div className={estilos["contenido"]}>
-        <center>
-          <div id={estilos.titulo}><h1>Inicio</h1></div>
-          <div id={estilos.perfil}>
-            <div id={estilos.imgPerfil}><img src={usuarioLS && usuarioLS.imagen_usuario} height="120vh" length="120vh" alt="Perfil" /></div>
-            <div id={estilos.divEd}>
-              <div id={estilos.usuario2Registrado}><p>{
-                roles.map(rol => {
-                  if (rol.id_rol === usuarioLS.id_rol) {
-                    return rol.nombre_rol;
-                  } else {
-                    return null;
-                  }
-                })}</p></div><div id={estilos.iconoEditar}><Link to={`/editarPerfil/${usuarioLS && usuarioLS.id_usuario}`}><i className="fa-solid fa-pen-to-square"></i></Link></div>
-            </div>
-          </div>
-        </center>
-
-        <div id={estilos.datos}>
-          <div id={estilos.tituloDatos}><h4>Datos:</h4></div>
-          <div id={estilos.contenidoDatos}>
-            <h6>Cedula: {usuarioLS && usuarioLS.id_usuario}</h6>
-            <h6>Nombre: {usuarioLS && usuarioLS.nombre_usuario}</h6>
-            <h6>Dirección: {usuarioLS && usuarioLS.direccion_usuario}</h6>
-            <h6>Telefono: {usuarioLS && usuarioLS.telefono_usuario}</h6>
-            <h6>Correo: {usuarioLS && usuarioLS.email}</h6>
-          </div>
-          <div id={estilos.botones}>
-            <button onClick={() => cambiarEstadoModalActContraseña(!estadoModalActContraseña)} className={`${estilos["btn-azul-claro"]}`}>Actualizar contraseña</button>
-            <button onClick={alertaCerrarSesion} className={`${estilos["btn-rojo"]}`}>Cerrar Sesión</button>
-          </div>
-        </div>
-
-      </div>
+    <div className={estilos.div1}>
+      <MDBCard className={`mb-3 ${estilos.card}`} style={{ borderRadius: '.5rem' }}>
+        <MDBRow className="g-0">
+          <MDBCol md="4" className={`gradient-custom text-center text-white ${estilos.bgcustom}`}
+            style={{ borderTopLeftRadius: '.5rem', borderBottomLeftRadius: '.5rem', heigh: '400px' }}>
+            <MDBCardImage src={usuarioLS && usuarioLS.imagen_usuario}
+              alt="Avatar" className="my-4" style={{ borderRadius: '50%', width: '80px' }} fluid />
+            <MDBTypography tag="h5">{usuarioLS && usuarioLS.nombre_usuario}</MDBTypography>
+            <MDBCardText>{
+              roles.map(rol => {
+                if (rol.id_rol === usuarioLS.id_rol) {
+                  return rol.nombre_rol;
+                } else {
+                  return null;
+                }
+              })}</MDBCardText>
+            <Link to={`/editarPerfil/${usuarioLS && usuarioLS.id_usuario}`}>
+              <MDBIcon far icon="edit mb-5" style={{ fontSize: '1.5em', color: '#ffbd2f' }} />
+            </Link>
+          </MDBCol>
+          <MDBCol md="8">
+            <MDBCardBody className="p-4">
+              <MDBTypography tag="h6">Información</MDBTypography>
+              <hr className="mt-0 mb-4" />
+              <MDBRow className="pt-1">
+                <MDBCol size="6" className="mb-3">
+                  <MDBTypography tag="h6">Nombre</MDBTypography>
+                  <MDBCardText className="text-muted">{usuarioLS && usuarioLS.nombre_usuario}</MDBCardText>
+                </MDBCol>
+                <MDBCol size="6" className="mb-3">
+                  <MDBTypography tag="h6">Email</MDBTypography>
+                  <MDBCardText className="text-muted">{usuarioLS && usuarioLS.email}</MDBCardText>
+                </MDBCol>
+                <MDBCol size="6" className="mb-3">
+                  <MDBTypography tag="h6">Teléfono</MDBTypography>
+                  <MDBCardText className="text-muted">{usuarioLS && usuarioLS.telefono_usuario}</MDBCardText>
+                </MDBCol>
+                <MDBCol size="6" className="mb-3">
+                  <MDBTypography tag="h6">Dirección</MDBTypography>
+                  <MDBCardText className="text-muted">{usuarioLS && usuarioLS.direccion_usuario}</MDBCardText>
+                </MDBCol>
+              </MDBRow>
+              <div className={estilos.bottomRightButtons}>
+                <button onClick={() => cambiarEstadoModalActContraseña(!estadoModalActContraseña)} className={`btn btn-primary me-2 ${estilos.button}`}>Reestablecer contraseña</button>
+                <button className={`btn btn-danger ${estilos.button}`} onClick={alertaCerrarSesion}><i className="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
+              </div>
+              {/* 
+              <div className="d-flex justify-content-start">
+                <a href="#!"><MDBIcon fab icon="facebook me-3" size="lg" /></a>
+                <a href="#!"><MDBIcon fab icon="twitter me-3" size="lg" /></a>
+                <a href="#!"><MDBIcon fab icon="instagram me-3" size="lg" /></a>
+              </div> */}
+            </MDBCardBody>
+          </MDBCol>
+        </MDBRow>
+      </MDBCard>
       <Modal
         estado={estadoModalActContraseña}
         cambiarEstado={cambiarEstadoModalActContraseña}
@@ -315,6 +331,48 @@ const Perfil = () => {
         </Contenido>
       </Modal>
     </div>
+    // <div>
+    //   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    //   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+    //   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+    //   <link href="https://cdn.datatables.net/2.0.2/css/dataTables.semanticui.css" rel="stylesheet" />
+    //   <link href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.css" rel="stylesheet" />
+
+    //   <div className={estilos["contenido"]}>
+    //     <center>
+    //       <div id={estilos.titulo}><h1>Perfil</h1></div>
+    //       <div id={estilos.perfil}>
+    //         <div id={estilos.imgPerfil}><img src={usuarioLS && usuarioLS.imagen_usuario} height="120vh" length="120vh" alt="Perfil" /></div>
+    //         <div id={estilos.divEd}>
+    //           <div id={estilos.usuario2Registrado}><p>{
+    //             roles.map(rol => {
+    //               if (rol.id_rol === usuarioLS.id_rol) {
+    //                 return rol.nombre_rol;
+    //               } else {
+    //                 return null;
+    //               }
+    //             })}</p></div><div id={estilos.iconoEditar}><Link to={`/editarPerfil/${usuarioLS && usuarioLS.id_usuario}`}><i className="fa-solid fa-pen-to-square"></i></Link></div>
+    //         </div>
+    //       </div>
+    //     </center>
+
+    //     <div id={estilos.datos}>
+    //       <div id={estilos.tituloDatos}><h4>Datos:</h4></div>
+    //       <div id={estilos.contenidoDatos}>
+    //         <h6>Cedula: {usuarioLS && usuarioLS.id_usuario}</h6>
+    //         <h6>Nombre: {usuarioLS && usuarioLS.nombre_usuario}</h6>
+    //         <h6>Dirección: {usuarioLS && usuarioLS.direccion_usuario}</h6>
+    //         <h6>Telefono: {usuarioLS && usuarioLS.telefono_usuario}</h6>
+    //         <h6>Correo: {usuarioLS && usuarioLS.email}</h6>
+    //       </div>
+    //       <div id={estilos.botones}>
+    //         <button onClick={() => cambiarEstadoModalActContraseña(!estadoModalActContraseña)} className={`${estilos["btn-azul-claro"]}`}>Actualizar contraseña</button>
+    //         <button onClick={alertaCerrarSesion} className={`${estilos["btn-rojo"]}`}><i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión</button>
+    //       </div>
+    //     </div>
+
+    //   </div>
+    // </div>
   );
 }
 
