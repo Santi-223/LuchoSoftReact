@@ -8,9 +8,11 @@ import { useUserContext } from "../UserProvider";
 
 
 function AgregarOrdenes() {
-    const { usuario } = useUserContext();
+    const { usuarioLogueado } = useUserContext();
 
-    const usuarioLO = usuario;
+    const usuario = usuarioLogueado;
+
+    const usuarioLO = usuarioLogueado;
 
     const [insumos, setInsumos] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -101,6 +103,9 @@ function AgregarOrdenes() {
         }
     };
 
+    const today = new Date().toISOString().split('T')[0];
+
+
     const filteredInsumos = insumos.filter(insumo =>
         insumo.nombre_insumo.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -166,8 +171,8 @@ function AgregarOrdenes() {
     const handleSubmitOrden = async (event) => {
         event.preventDefault();
         const regex = /^[a-zA-Z0-9.,?!¡¿\s]+$/; // Expresión regular para permitir letras, números y algunos caracteres especiales
-
-        // Verificar caracteres especiales en el campo de fecha y usuario
+    
+        // Verificar caracteres especiales en el campo de descripción de la orden
         if (!regex.test(orden.descripcion_orden)) {
             Swal.fire({
                 icon: 'error',
@@ -177,12 +182,13 @@ function AgregarOrdenes() {
             });
             return;
         }
-
+    
+        // Verificar insumos con cantidad mayor al stock disponible
         const invalidInsumos = tableRows.filter(row => {
             const insumo = insumos.find(i => i.nombre_insumo === row.nombre);
             return insumo && parseFloat(row.cantidad) > insumo.stock_insumo;
         });
-
+    
         if (invalidInsumos.length > 0) {
             Swal.fire({
                 icon: 'error',
@@ -192,7 +198,8 @@ function AgregarOrdenes() {
             });
             return;
         }
-
+    
+        // Verificar campos vacíos en fecha de la orden y en los insumos
         if (!orden.fecha_orden || tableRows.some(row => !row.nombre || !row.cantidad)) {
             Swal.fire({
                 icon: 'error',
@@ -202,7 +209,8 @@ function AgregarOrdenes() {
             });
             return;
         }
-      
+    
+        // Si todas las validaciones pasan, proceder con el registro de la orden
         Swal.fire({
             toast: true,
             position: "top-end",
@@ -211,9 +219,9 @@ function AgregarOrdenes() {
             timerProgressBar: true,
             icon: "success",
             title: "Orden registrada exitosamente"
-        })    .then(async () => {
+        }).then(async () => {
             try {
-                // Primero, creamos la orden de producción
+                // Enviar los datos de la orden de producción
                 const responseOrden = await fetch('https://api-luchosoft-mysql.onrender.com/orden/orden_produccion', {
                     method: 'POST',
                     headers: {
@@ -221,27 +229,27 @@ function AgregarOrdenes() {
                     },
                     body: JSON.stringify({ ...orden })
                 });
-
+    
                 if (!responseOrden.ok) {
                     console.error('Error al enviar los datos de la orden');
                     return;
                 }
-
+    
                 const ordenData = await responseOrden.json();
                 const idOrden = ordenData.id_orden_de_produccion;
-
+    
                 console.log('Orden registrada correctamente:', ordenData, "id_orden_de_produccion: ", idOrden);
-
-                // Luego, insertamos los detalles de la orden (insumos)
+    
+                // Enviar los detalles de los insumos
                 const ordenesInsumosPromises = tableRows.filter(row => row.nombre !== '').map(async (row) => {
                     const insumoId = insumos.find(insumo => insumo.nombre_insumo === row.nombre).id_insumo;
                     const ordenesInsumosData = {
                         id_orden_de_produccion: idOrden,
                         id_insumo: insumoId,
                         cantidad_insumo_orden_insumos: parseFloat(row.cantidad) || 0,
-                        descripcion_orden_insumos: orden.descripcion_orden // Usamos la descripción de la orden como descripción del insumo en la tabla orden_insumos
+                        descripcion_orden_insumos: orden.descripcion_orden
                     };
-
+    
                     try {
                         const responseOrdenesInsumos = await fetch('https://api-luchosoft-mysql.onrender.com/orden/orden_insumo', {
                             method: 'POST',
@@ -250,7 +258,7 @@ function AgregarOrdenes() {
                             },
                             body: JSON.stringify(ordenesInsumosData)
                         });
-
+    
                         if (!responseOrdenesInsumos.ok) {
                             console.error('Error al enviar los datos de orden_insumo:', responseOrdenesInsumos.statusText);
                         } else {
@@ -260,16 +268,17 @@ function AgregarOrdenes() {
                         console.error('Error al enviar los datos de orden_insumo:', error);
                     }
                 });
-
+    
                 await Promise.all(ordenesInsumosPromises);
-
-                // Una vez que se han registrado todos los detalles de la orden, redireccionamos a la página de órdenes de producción
+    
+                // Redireccionar a la página de órdenes de producción
                 window.location.href = '/#/ordenes_produccion';
             } catch (error) {
                 console.error('Error al enviar los datos:', error);
             }
         });
     };
+    
 
 
     const handleCancel = () => {
@@ -334,9 +343,12 @@ function AgregarOrdenes() {
                                     onChange={handleInputChange}
                                     type="date"
                                     style={{ width: "270px", height: "40px" }}
+                                    max={today} // Establecer la fecha máxima permitida como la fecha actual
+
 
                                 />
                             </div>
+                        
 
 
                         </div><br /><br />
@@ -349,7 +361,7 @@ function AgregarOrdenes() {
                                 className=""
                                 value={orden.descripcion_orden}
                                 onChange={handleInputChange}
-             
+
                                 cols="33" rows="4"
                                 type="text"
                                 style={{ resize: 'none' }}
@@ -403,7 +415,7 @@ function AgregarOrdenes() {
                                                 ))}
                                             </select>
                                         </td>
-                                        
+
                                         <td style={{ textAlign: "center" }}><input className="input-field-tabla" style={{ width: "100px" }} type="number" onChange={(e) => handleCantidadChange(e, index)} /></td>
                                         {index !== 0 && (
                                             <td style={{ textAlign: "center" }}>
