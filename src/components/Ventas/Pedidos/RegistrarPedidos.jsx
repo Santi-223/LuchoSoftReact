@@ -127,6 +127,7 @@ function App() {
       }));
     }
   };
+  const today = new Date().toISOString().split('T')[0];
 
   const handleSelectChange = (event, index) => {
     const { value } = event.target;
@@ -137,6 +138,9 @@ function App() {
     if (!selectedProducto) {
       return;
     }
+
+    //función para la fecha
+    
 
     const updatedRows = tableRows.map((row, rowIndex) => {
       if (rowIndex === index) {
@@ -382,6 +386,7 @@ function App() {
                 value={pedido.fecha_pedido}
                 onChange={handleInputChange}
                 type="date"
+                max={today}
               />
             </div>
             <div id={estilos["kaka"]}>

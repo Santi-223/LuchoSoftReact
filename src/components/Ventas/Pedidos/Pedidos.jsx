@@ -388,7 +388,7 @@ const Pedidos = () => {
                 padding={'10px'}
             >
                 <Contenido>
-                    <div className="contenido">
+                    <div className="">
                         <h3>Productos del Pedido</h3>
                         <table>
                             <thead>

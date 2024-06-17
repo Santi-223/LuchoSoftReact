@@ -355,7 +355,7 @@ const Cliente = () => {
             });
             return;
         }
-        if (ClienteRegistrar.id_cliente < 10 || ClienteRegistrar.id_cliente > 10) {
+        if (ClienteRegistrar.id_cliente <=9) {
             Swal.fire({
                 icon: 'error',
                 text: 'El documento no cuenta con la longitud establecida',
