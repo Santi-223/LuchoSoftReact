@@ -1,280 +1,146 @@
-import React, { useState } from "react";
-import { Link, Navigate } from "react-router-dom";
-import Swal from "sweetalert2";
-import estilos from '../Dashboard/Dashboard.module.css';
-import Modal from '../Modal';
-import styled from 'styled-components';
-import { useUserContext } from "../UserProvider";
+// material-ui
+import Avatar from '@mui/material/Avatar';
+import AvatarGroup from '@mui/material/AvatarGroup';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import List from '@mui/material/List';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+import ListItemText from '@mui/material/ListItemText';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 
-const Dashboard = () => {
-
-  const [cerrarSesion, setCerrarSesion] = useState(false);
-
-  const { usuario } = useUserContext();
-
-  const usuarioLS = usuario;
-
-  const [usuario2, setUsuario2] = useState({
-    contraseñaAntigua: '',
-    contraseña: '',
-    confirmacionContraseña: ''
-  });
-
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setUsuario2(prevUsuario2 => ({
-      ...prevUsuario2,
-      [name]: value
-    }));
-  };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    console.log(usuario2)
-
-    console.log('longitud contraseña: ', usuario2.contraseña.length)
-
-    if (usuario2.contraseña.length < 8) {
-      Swal.fire({
-        icon: 'error',
-        title: 'La contraseña debe tener mínimo 8 caracteres.',
-        showConfirmButton: false,
-        timer: 1500
-      });
-    }
-    else if (usuario2.contraseñaAntigua != usuarioLS.contraseña) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Contraseña incorrecta',
-        showConfirmButton: false,
-        timer: 1500
-      });
-    }
-    else if (usuario2.contraseña != usuario2.confirmacionContraseña) {
-      Swal.fire({
-        icon: 'error',
-        title: 'La confirmación de contraseña es incorrecta',
-        showConfirmButton: false,
-        timer: 1500
-      });
-    }
-    else {
-      Swal.fire({
-        title: '¿Estás seguro?',
-        text: '¿Deseas actualizar la contraseña?',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Sí, actualizar',
-        cancelButtonText: 'Cancelar'
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          try {
-            const response = await fetch(`https://api-luchosoft-mysql.onrender.com/configuracion/contrasenaUsuarios/${usuarioLS.id_usuario}`, {
-              method: 'PUT',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(usuario2)
-            });
-
-            if (response.ok) {
-              console.log('Contraseña actualizada exitosamente.');
-              Swal.fire({
-                icon: 'success',
-                title: 'Contraseña actualizada exitosamente',
-                showConfirmButton: false,
-                timer: 1500
-              });
-              cambiarEstadoModalActContraseña(false)
-              // Aquí podrías redirigir a otra página, mostrar un mensaje de éxito, etc.
-            } else {
-              console.error('Error al actualizar la contraseña:', response.statusText);
-              Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Error al actualizar la contraseña',
-              });
-            }
-          } catch (error) {
-            console.error('Error al actualizar la contraseña:', error);
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: 'Error al actualizar la contraseña',
-            });
-          }
-        }
-      });
-    }
+// project import
+import MainCard from '../MainCard';
+import AnalyticEcommerce from './AnalyticEcommerce';
+import MonthlyBarChart from './MonthlyBarChart';
+import ReportAreaChart from './ReportAreaChart';
+import UniqueVisitorCard from './UniqueVisitorCard';
+import SaleReportCard from './SaleReportCard';
+import OrdersTable from './OrdersTable';
+import TotalCompras from './TotalCompra';
+import TotalVentas from './TotalVentas';
 
 
+// assets
+import GiftOutlined from '@ant-design/icons/GiftOutlined';
+import MessageOutlined from '@ant-design/icons/MessageOutlined';
+import SettingOutlined from '@ant-design/icons/SettingOutlined';
+import avatar1 from '../../assets/images/users/avatar-1.png';
+import avatar2 from '../../assets/images/users/avatar-2.png';
+import avatar3 from '../../assets/images/users/avatar-3.png';
+import avatar4 from '../../assets/images/users/avatar-4.png';
 
-  };
+// avatar style
+const avatarSX = {
+  width: 36,
+  height: 36,
+  fontSize: '1rem'
+};
 
-  const alertaCerrarSesion = () => {
-    // Mostrar una alerta de confirmación
-    Swal.fire({
-      title: '¿Estás seguro?',
-      text: "Estás a punto de cerrar sesión.",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Sí, cerrar sesión'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // Aquí puedes agregar la lógica para cerrar la sesión
-        // Por ejemplo, redirigir a la página de inicio de sesión
-        // Eliminar token del localStorage
-        localStorage.removeItem('token');
+// action style
+const actionSX = {
+  mt: 0.75,
+  ml: 1,
+  top: 'auto',
+  right: 'auto',
+  alignSelf: 'flex-start',
+  transform: 'none'
+};
 
-        // Eliminar usuario2 del localStorage
-        localStorage.removeItem('usuario2');
+// ==============================|| DASHBOARD - DEFAULT ||============================== //
 
-        // Eliminar permisos del localStorage
-        localStorage.removeItem('permisos');
-
-        setCerrarSesion(true);
-
-      }
-    });
-  };
-
-  const [estadoModalActContraseña, cambiarEstadoModalActContraseña] = useState(false);
-
-  if (cerrarSesion) {
-    return <Navigate to="/login" />;
-}
-
+export default function Dashboard() {
   return (
-    <div>
-      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" />
-      <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
-      <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
-      <link href="https://cdn.datatables.net/2.0.2/css/dataTables.semanticui.css" rel="stylesheet" />
-      <link href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.css" rel="stylesheet" />
+    <Grid container rowSpacing={4.5} columnSpacing={2.75}>
+      {/* row 1 */}
+      <Grid item xs={12} sx={{ mb: -2.25 }}>
+        <Typography variant="h5">Dashboard</Typography>
+      </Grid>
 
-      <div className={estilos["contenido"]}>
-        <center>
-          <div id={estilos.titulo}><h1>Inicio</h1></div>
-          <div id={estilos.perfil}>
-            <div id={estilos.imgPerfil}><img src={usuarioLS && usuarioLS.imagen_usuario} height="120vh" length="120vh" alt="Perfil" /></div>
+      <TotalCompras />
 
-            <div id={estilos.iconoEditar}><Link to={`/editarUsuarios/${usuarioLS && usuarioLS.id_usuario}`}><i className="fa-solid fa-pen-to-square"></i></Link></div>
+      <TotalVentas />
 
-            <div id={estilos.usuario2Registrado}><h6>Administrador</h6></div>
-          </div>
-        </center>
 
-        <div id={estilos.datos}>
-          <div id={estilos.tituloDatos}><h4>Datos:</h4></div>
-          <div id={estilos.contenidoDatos}>
-            <h6>Cedula: {usuarioLS && usuarioLS.id_usuario}</h6>
-            <h6>Nombre: {usuarioLS && usuarioLS.nombre_usuario}</h6>
-            <h6>Dirección: {usuarioLS && usuarioLS.direccion_usuario}</h6>
-            <h6>Telefono: {usuarioLS && usuarioLS.telefono_usuario}</h6>
-            <h6>Correo: {usuarioLS && usuarioLS.email}</h6>
-          </div>
-          <div id={estilos.botones}>
-            <button onClick={() => cambiarEstadoModalActContraseña(!estadoModalActContraseña)} className={`${estilos["btn-azul-claro"]}`}>Actualizar contraseña</button>
-            <button onClick={alertaCerrarSesion} className={`${estilos["btn-rojo"]}`}>Cerrar Sesión</button>
-          </div>
-        </div>
+      <Grid item xs={12} sm={6} md={4} lg={3}>
+        <AnalyticEcommerce title="Balance" count="18,800" percentage={27.4} isLoss color="warning" extra="1,943" />
+      </Grid>
 
-      </div>
-      <Modal
-        estado={estadoModalActContraseña}
-        cambiarEstado={cambiarEstadoModalActContraseña}
-        titulo="Actualizar Contraseña"
-        mostrarHeader={true}
-        mostrarOverlay={true}
-        posicionModal={'center'}
-        width={'500px'}
-        padding={'20px'}
-      >
-        <Contenido>
-          <div>
-            <form onSubmit={handleSubmit}>
-              <div className={estilos["input-group"]}>
-                <label for="contrasenaAntigua">Contraseña antigua</label>
-                <input
-                  className={estilos["inputs"]}
-                  required
-                  type="password"
-                  id={estilos.contrasenaAntigua}
-                  name="contraseñaAntigua"
-                  value={usuario2 ? usuario2.contraseñaAntigua : ''}
-                  onChange={handleChange} />
-              </div>
-              <div className={estilos["input-group"]}>
-                <br />
-                <label for="contrasenaNueva">Contraseña nueva</label>
-                <input
-                  className={estilos["inputs"]}
-                  required
-                  type="password"
-                  id={estilos.contrasenaNueva}
-                  name="contraseña"
-                  value={usuario2 ? usuario2.contraseña : ''}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className={estilos["input-group"]}>
-                <br />
-                <label for="confirmarContrasena">Confirmar contraseña nueva</label>
-                <input
-                  className={estilos["inputs"]}
-                  type="password"
-                  id={estilos.confirmarContrasena}
-                  required
-                  name="confirmacionContraseña"
-                  value={usuario2 ? usuario2.confirmacionContraseña : ''}
-                  onChange={handleChange}
-                />
-              </div>
-              <br />
-              <div className={estilos["cajaBotones"]}>
-                <button className={estilos["azul"]} type="submit">Guardar</button>
-                <button className={estilos["gris"]} type="button" onClick={() => {
-                  cambiarEstadoModalActContraseña(!estadoModalActContraseña), setUsuario2({
-                    contraseñaAntigua: '',
-                    contraseña: '',
-                    confirmacionContraseña: ''
-                  })
-                }}>Cancelar</button>
-              </div>
-            </form>
-          </div>
-        </Contenido>
-      </Modal>
-    </div>
+      <Grid item md={8} sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} />
+
+
+
+
+
+      {/* row 2 */}
+      <Grid item xs={12} md={7} lg={8}>
+        <SaleReportCard />
+      </Grid>
+
+
+
+
+
+      <Grid item xs={12} md={5} lg={4}>
+        <Grid container alignItems="center" justifyContent="space-between">
+          <Grid item>
+            <Typography variant="h5">Income Overview</Typography>
+          </Grid>
+          <Grid item />
+        </Grid>
+        <MainCard sx={{ mt: 2 }} content={false}>
+          <Box sx={{ p: 3, pb: 0 }}>
+            <Stack spacing={2}>
+              <Typography variant="h6" color="text.secondary">
+                This Week Statistics
+              </Typography>
+              <Typography variant="h3">$7,650</Typography>
+            </Stack>
+          </Box>
+          <MonthlyBarChart />
+        </MainCard>
+      </Grid>
+
+      {/* row 3 */}
+      <Grid item xs={12} md={7} lg={8}>
+        <Grid container alignItems="center" justifyContent="space-between">
+          <Grid item>
+            <Typography variant="h5">Clientes frecuentes</Typography>
+          </Grid>
+          <Grid item />
+        </Grid>
+        <MainCard sx={{ mt: 2 }} content={false}>
+          <OrdersTable />
+        </MainCard>
+      </Grid>
+      <Grid item xs={12} md={5} lg={4}>
+        <Grid container alignItems="center" justifyContent="space-between">
+          <Grid item>
+            <Typography variant="h5">Analytics Report</Typography>
+          </Grid>
+          <Grid item />
+        </Grid>
+        <MainCard sx={{ mt: 2 }} content={false}>
+          <List sx={{ p: 0, '& .MuiListItemButton-root': { py: 2 } }}>
+            <ListItemButton divider>
+              <ListItemText primary="Company Finance Growth" />
+              <Typography variant="h5">+45.14%</Typography>
+            </ListItemButton>
+            <ListItemButton divider>
+              <ListItemText primary="Company Expenses Ratio" />
+              <Typography variant="h5">0.58%</Typography>
+            </ListItemButton>
+            <ListItemButton>
+              <ListItemText primary="Business Risk Cases" />
+              <Typography variant="h5">Low</Typography>
+            </ListItemButton>
+          </List>
+          <ReportAreaChart />
+        </MainCard>
+      </Grid>
+    </Grid>
   );
 }
-
-const Contenido = styled.div`
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-
-	h1 {
-		font-size: 42px;
-		font-weight: 700;
-		margin-bottom: 10px;
-	}
-
-	p {
-		font-size: 18px;
-		margin-bottom: 20px;
-	}
-
-	img {
-		width: 100%;
-		vertical-align: top;
-		border-radius: 3px;
-	}
-`;
-
-export default Dashboard;
