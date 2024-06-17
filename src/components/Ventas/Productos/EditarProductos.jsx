@@ -184,7 +184,7 @@ function EditarProductos() {
                     </div>
                 </center>
                 <form onSubmit={handleSubmit}>
-                    <div style={{ marginTop: '-44px', marginLeft: '100px' }} id={estilos.contenedorsitos}>
+                    <div style={{justifyContent: 'space-between', marginTop: '-50px'}} id={estilos.contenedorsitos}>
                         <div style={{ marginTop: '-20px' }} id={estilos.contenedorsito}>
                             <div className={estilos["input-container"]}>
                                 <div className={estilos["formulario__grupo"]} id={estilos.grupo__id_producto}>
@@ -219,6 +219,22 @@ function EditarProductos() {
                                 </div>
 
                             </div>
+                            <div style={{ marginLeft: "-30px" }} className={estilos["formulario__grupo2"]} id={estilos.grupo__descripcion}>
+                                <label style={{ marginTop: "-90px", marginLeft: "30px" }} htmlFor="descripcion_producto">Descripción</label>
+                                <div className={estilos["formulario__grupo-input"]}>
+                                    <textarea cols="33" rows="4"
+                                        className={estilos["input-field2"]}
+                                        type="text"
+                                        name="descripcion_producto"
+                                        id={estilos.descripcion_producto}
+                                        value={producto.descripcion_producto}
+                                        onChange={handleChange}
+                                        style={{ marginLeft: "30px",  resize: 'none', width: '350px' }}
+
+                                    />
+                                    <span></span>
+                                </div>
+                            </div>
                             <div style={{ marginLeft: "-20px" }} className={estilos["input-container"]}>
                                 <div className={estilos["formulario__grupo"]} id={estilos.grupo__precio}>
                                     <label style={{ marginTop: "-90px", marginLeft: "20px" }} htmlFor="precio_producto">Precio</label>
@@ -236,22 +252,7 @@ function EditarProductos() {
                                     </div>
                                 </div>
                             </div>
-                            <div style={{ marginLeft: "-30px" }} className={estilos["formulario__grupo2"]} id={estilos.grupo__descripcion}>
-                                <label style={{ marginTop: "-90px", marginLeft: "30px" }} htmlFor="descripcion_producto">Descripción</label>
-                                <div className={estilos["formulario__grupo-input"]}>
-                                    <input
-                                        className={estilos["input-field2"]}
-                                        type="text"
-                                        name="descripcion_producto"
-                                        id={estilos.descripcion_producto}
-                                        value={producto.descripcion_producto}
-                                        onChange={handleChange}
-                                        style={{ marginLeft: "30px", width: '350px' }}
-
-                                    />
-                                    <span></span>
-                                </div>
-                            </div>
+                            
 
 
                             <div className={estilos["input-container"]}>
