@@ -8,11 +8,28 @@ import Modal from '../Modal';
 import styled from 'styled-components';
 import DataTable from "react-data-table-component";
 import { error } from 'jquery';
+import { useUserContext } from "../UserProvider";
 
 function Roles() {
 
+    const [usuario, setUsuario] = useState({
+        id_usuario: '',
+        imagen_usuario: '',
+        nombre_usuario: '',
+        email: '',
+        contraseña: '',
+        telefono_usuario: '',
+        direccion_usuario: '',
+        estado_usuario: '',
+        id_rol: ''
+    });
+
+    const { usuarioLogueado, actualizarUsuarioLogueado } = useUserContext();
+
     // Obtener el token del localStorage
     const token = localStorage.getItem('token');
+
+    const [refrescarToken, setRefrescarToken] = useState(false);
 
     const [inputValidoNombre, setInputValidoNombre] = useState(true);
     const [errorNombre, setErrorNombre] = useState('')
@@ -162,7 +179,7 @@ function Roles() {
             crearRolPer(idRol, idPermiso)
         } else {
             console.log("Ya esta check", idRolP)
-            handleDeleteRolesPermisos(idRolP)
+            handleDeleteRolesPermisos(idRolP, idRol)
         }
         console.log(selectedPermisos)
     };
@@ -190,6 +207,10 @@ function Roles() {
                 },
                 body: JSON.stringify(detallePayload)
             });
+
+            if (detallePayload.id_rol == usuarioLogueado.id_rol) {
+                setRefrescarToken(true);
+            }
 
             if (!responseDetalle.ok) {
                 console.error('Error al enviar el detalle del permiso:', responseDetalle.statusText);
@@ -278,27 +299,26 @@ function Roles() {
                                 console.error('Error al enviar el detalle del permiso:', responseDetalle.statusText);
                             } else {
                                 console.log('Detalle enviado con exito')
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Registro exitoso',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                });
+                                fetchRolesPermisos();
+                                fetchRoles();
+                                setSelectedPermisos([]);
+                                setRoles1({
+                                    nombre_rol: '',
+                                    descripcion_rol: '',
+                                    estado_rol: 1
+                                });
+                                cambiarEstadoModalAgregar(false);
                             }
                         } catch (error) {
                             console.error('Error al enviar el detalle del permiso:', error);
                         }
                     });
-
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Registro exitoso',
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
-                    fetchRolesPermisos();
-                    fetchRoles();
-                    setSelectedPermisos([]);
-                    setRoles1({
-                        nombre_rol: '',
-                        descripcion_rol: '',
-                        estado_rol: 1
-                    });
-                    cambiarEstadoModalAgregar(false);
 
                     // Resto del código si es necesario
                 } else {
@@ -315,17 +335,39 @@ function Roles() {
         }
     };
 
+
     useEffect(() => {
         fetchRoles();
         fetchRolesPermisos();
         fetchPermisos();
+        fetchUsuario();
     }, []);
 
     useEffect(() => {
         if (roles.length > 0) {
             setIsLoading(false);
         }
+
     }, [roles]);
+
+    const fetchUsuario = async () => {
+        try {
+            const response = await fetch(`https://api-luchosoft-mysql.onrender.com/configuracion/usuarios/${usuarioLogueado.id_usuario}`);
+            if (response.ok) {
+                const data = await response.json();
+                const usuarioFiltrado = data[0];
+                setUsuario(usuarioFiltrado);
+                console.log(usuarioFiltrado)
+                setIsLoading(false)
+            } else {
+                console.error('Error al obtener el usuario');
+            }
+        } catch (error) {
+            console.error('Error al obtener el usuario:', error);
+        }
+    };
+
+    fetchUsuario();
 
     const fetchRoles = async () => {
         try {
@@ -400,7 +442,7 @@ function Roles() {
         });
     };
 
-    const handleDeleteRolesPermisos = async (idRolP) => {
+    const handleDeleteRolesPermisos = async (idRolP, idRol) => {
         Swal.fire({
             title: '¿Estás seguro?',
             text: '¿Estás seguro de que quieres eliminar esta asignación de permiso?',
@@ -419,6 +461,10 @@ function Roles() {
                             'token': token
                         }
                     });
+
+                    if (idRol == usuarioLogueado.id_rol) {
+                        setRefrescarToken(true);
+                    }
 
                     if (response.ok) {
                         console.log('Eliminación exitosa')
@@ -663,6 +709,67 @@ function Roles() {
         }));
     };
 
+    const validarRefresh = async (perm) => {
+        try {
+            const response = await fetch('https://api-luchosoft-mysql.onrender.com/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(usuario)
+            });
+
+            if (response.ok) {
+                const data = await response.json(); // Convertir la respuesta a JSON
+
+                // Almacenar en el localStorage
+                localStorage.setItem('token', data.token);
+
+                if(perm){
+                    Swal.fire({
+                        icon: 'success',
+                        title: `El rol ha sido actualizado.`,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                }
+
+                actualizarUsuarioLogueado(usuario);
+
+                setTimeout(() => {
+                    window.location.reload();
+                    cambiarEstadoModalEditar(false);
+                }, 2000);
+
+            } else {
+                console.error('Error al refrescar, debes volver a iniciar sesión:', response.statusText);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Error al refrescar, debes volver a iniciar sesión.',
+                });
+                localStorage.removeItem('token');
+
+                // Eliminar usuario del localStorage
+                localStorage.removeItem('usuario');
+
+                // Eliminar permisos del localStorage
+                localStorage.removeItem('permisos');
+
+                setTimeout(() => {
+                    window.location.href = '/#/login';
+                }, 1800);
+            }
+        } catch (error) {
+            console.error('Error al acceder:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Error al acceder',
+            });
+        }
+    }
+
     const handleSubmitEditar = async (event) => {
         event.preventDefault();
 
@@ -700,14 +807,21 @@ function Roles() {
                             body: JSON.stringify(rolesEditar)
                         });
 
+
                         if (response.ok) {
-                            console.log('rol actualizado exitosamente.');
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'rol actualizado exitosamente',
-                                showConfirmButton: false,
-                                timer: 1500
-                            });
+
+                            if (rolesEditar.id_rol == usuarioLogueado.id_rol) {
+                                validarRefresh(true)
+                            }else{
+                                console.log('rol actualizado exitosamente.');
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'rol actualizado exitosamente',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                });
+                            }
+
                             setTimeout(() => {
                                 fetchRoles();
                                 cambiarEstadoModalEditar(false);
@@ -923,7 +1037,7 @@ function Roles() {
                                             className={`${!inputValidoDes ? estilos.inputInvalido : estilos['input-field']}`}
                                             placeholder="Insertar descripción"
                                             name='descripcion_rol'
-                                            value={roles1.descripcion_rol}
+                                            value={rolesEditar.descripcion_rol}
                                             onChange={handleChange}
                                         />
                                         {!inputValidoDes && <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute' }}>{errorDes}</p>}
@@ -983,6 +1097,9 @@ function Roles() {
                                 <button onclick="registrar()" className={estilos["azul"]} type="submit">Guardar</button>
                                 <div className={estilos["espacioEntreBotones"]}></div>
                                 <button onClick={() => {
+                                    if (refrescarToken) {
+                                        validarRefresh(false);
+                                    }
                                     cambiarEstadoModalEditar(!estadoModaleditar);
                                     setInputValidoNombre2(true);
                                     setInputValidoDes2(true);
