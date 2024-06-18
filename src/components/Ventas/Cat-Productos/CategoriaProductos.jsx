@@ -12,6 +12,9 @@ import { useNavigate } from "react-router-dom"; // Agrega esta línea
 
 function CategoriasProductos() {
     const token = localStorage.getItem("token");
+    const [inputValido, setInputValido] = useState(true);
+    const [inputValido2, setInputValido2] = useState(true);
+    const [inputValido3, setInputValido3] = useState(true);
     const navigate = useNavigate(); // Agrega esta línea
     const [categorias, setcategoria] = useState([]);
     const [estadoModaleditar, cambiarEstadoModalEditar] = useState(false);
@@ -73,7 +76,7 @@ function CategoriasProductos() {
                     <button onClick={() => {
                         if (row.estado_categoria_productos === 1) { // Verifica si el estado es activo
                             cambiarEstadoModalEditar(!estadoModaleditar),
-                            setCategoriasEditar(row)
+                                setCategoriasEditar(row)
                         }
                     }} className={estilos.boton} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}>
                         <i className={`fa-solid fa-pen-to-square ${row.estado_categoria_productos === 1 ? 'iconosVerdes' : 'iconosGris'}`}></i>
@@ -98,29 +101,58 @@ function CategoriasProductos() {
     ]
     const handleSubmitEditar = async (event) => {
         event.preventDefault();
-    
-        // Validación del nombre de la categoría
-        if (!categoriasEditar.nombre_categoria_productos) {
-            await Swal.fire({
+
+        if (!inputValido) {
+            Swal.fire({
                 icon: 'error',
-                title: 'Error',
-                text: 'Por favor completa el nombre de la categoría.',
-                confirmButtonText: 'Aceptar'
+                text: 'Por favor, digite bien los datos',
+                confirmButtonColor: '#1F67B9',
             });
             return;
         }
-    
-        const regex = /^[a-zA-Z0-9.,?!¡¿\s]+$/;
+
+        if (!inputValido2) {
+            Swal.fire({
+                icon: 'error',
+                text: 'Por favor, digite bien los datos',
+                confirmButtonColor: '#1F67B9',
+            });
+            return;
+        }
+
+        if (categoriasEditar.nombre_categoria_productos.trim() === '') {
+            Swal.fire({
+                icon: 'error',
+
+                text: 'El nombre de la categoría de productos no puede estar vacío',
+            });
+            setInputValido3(false)
+            return;
+        }
+
+        if (categoriasEditar.nombre_categoria_productos.length < 3) {
+            Swal.fire({
+                icon: 'error',
+
+                text: 'El nombre de la categorìa de productos debe tener al menos 3 letras',
+            });
+            setInputValido(false)
+            return;
+        }
+
+
+        const regex = /^[a-zA-Z0-9\s#,;.-àèìòù]*$/;
+
         if (!regex.test(categoriasEditar.nombre_categoria_productos)) {
-            await Swal.fire({
+            // Mostrar alerta con SweetAlert
+            Swal.fire({
                 icon: 'error',
-                title: 'Error',
-                text: 'Evita caracteres especiales en el nombre de la categoría.',
-                confirmButtonText: 'Aceptar'
+
+                text: 'El nombre no puede contener caracteres especiales',
             });
             return;
         }
-    
+
         // Confirmación de actualización
         const { isConfirmed } = await Swal.fire({
             title: '¿Estás seguro?',
@@ -132,9 +164,9 @@ function CategoriasProductos() {
             confirmButtonText: 'Sí',
             cancelButtonText: 'Cancelar'
         });
-    
+
         if (!isConfirmed) return;
-    
+
         // Intentar actualizar la categoría
         try {
             const response = await fetch(`https://api-luchosoft-mysql.onrender.com/ventas2/categoria_productos/${categoriasEditar.id_categoria_productos}`, {
@@ -144,7 +176,7 @@ function CategoriasProductos() {
                 },
                 body: JSON.stringify(categoriasEditar),
             });
-    
+
             if (response.ok) {
                 console.log('Categoría de producto actualizada exitosamente.');
                 await Swal.fire({
@@ -156,7 +188,7 @@ function CategoriasProductos() {
                     icon: 'success',
                     title: 'Actualización exitosa'
                 });
-    
+
                 cambiarEstadoModalEditar(false); // Cierra el modal de edición
                 navigate('/categoria_productos');
                 window.location.reload(); // Recarga la página
@@ -178,8 +210,8 @@ function CategoriasProductos() {
             });
         }
     };
-    
-    
+
+
 
     useEffect(() => {
         fetchcategorias();
@@ -212,7 +244,7 @@ function CategoriasProductos() {
 
     const handleEliminarCategoria = async (idCategoria) => {
         console.log("Intentando eliminar la categoría con ID:", idCategoria);
-    
+
         try {
             // Obtener todos los productos y filtrar por la categoría
             const productosResponse = await fetch('https://api-luchosoft-mysql.onrender.com/ventas2/productos/', {
@@ -221,25 +253,25 @@ function CategoriasProductos() {
                     token: token,
                 },
             });
-    
+
             if (!productosResponse.ok) {
                 throw new Error('Error al verificar los productos de la categoría.');
             }
-    
+
             const productos = await productosResponse.json();
-    
+
             // Filtrar productos que pertenecen a la categoría
             const productosEnCategoria = productos.filter(producto => producto.id_categoria_producto === idCategoria);
-    
+
             if (productosEnCategoria.length > 0) {
                 await Swal.fire({
-                    icon: "error",
+                    icon: "warning",
                     title: "No se puede eliminar",
                     text: "La categoría tiene productos asociados. Elimínelos primero.",
                 });
                 return;
             }
-    
+
             // Mostrar mensaje de confirmación
             const { isConfirmed } = await Swal.fire({
                 text: "¿Deseas eliminar esta categoría?",
@@ -250,12 +282,12 @@ function CategoriasProductos() {
                 confirmButtonText: "Sí, eliminar",
                 cancelButtonText: "Cancelar",
             });
-    
+
             if (!isConfirmed) return;
-    
+
             console.log("Confirmación recibida para eliminar la categoría.");
             console.log("Token utilizado:", token);
-    
+
             // Solicitud DELETE
             const response = await fetch(`https://api-luchosoft-mysql.onrender.com/ventas2/categoria_productos/${idCategoria}`, {
                 method: "DELETE",
@@ -264,7 +296,7 @@ function CategoriasProductos() {
                     token: token,
                 },
             });
-    
+
             // Manejo de la respuesta
             if (response.ok) {
                 console.log("Categoría eliminada exitosamente.");
@@ -294,11 +326,37 @@ function CategoriasProductos() {
             });
         }
     };
-    
-    
+
+
 
     const handleChange = (event) => {
         const { name, value } = event.target;
+
+        if (name === 'nombre_categoria_productos') {
+            if (value.length > 30) {
+                setInputValido(false);
+            } else {
+                setInputValido(true);
+            }
+        }
+        if (name === 'nombre_categoria_productos') {
+            if (value.length > 0) {
+                setInputValido3(true)
+            }
+        }
+
+        if (name === 'nombre_categoria_productos') {
+            // Expresión regular que coincide con cualquier carácter que no sea una letra, un número o un guion bajo
+            const caracteresEspeciales = /^[a-zA-Z0-9\s#,;.-àèìòù]*$/;
+
+            // Verificar si la cadena no contiene caracteres especiales
+            if (caracteresEspeciales.test(value)) {
+                setInputValido2(true);
+            } else {
+                setInputValido2(false);
+            }
+        }
+
         setCategorias1(prevcategorias => ({
             ...prevcategorias,
             [name]: value
@@ -307,33 +365,65 @@ function CategoriasProductos() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-    
-        if (!categorias1.nombre_categoria_productos) {
+
+        if (!inputValido) {
             Swal.fire({
                 icon: 'error',
-                title: 'Error',
-                text: 'Por favor completa el nombre de la categoría.',
-                confirmButtonText: 'Aceptar'
+
+                text: 'Por favor, digite bien los datos.',
+                confirmButtonColor: '#1F67B9',
             });
             return;
         }
-    
-        const regex = /^[a-zA-Z0-9.,?!¡¿\s]+$/;
-    
+
+        if (!inputValido2) {
+            Swal.fire({
+                icon: 'error',
+
+                text: 'Por favor, digite bien los datos.',
+                confirmButtonColor: '#1F67B9',
+            });
+            return;
+        }
+
+        if (categorias1.nombre_categoria_productos.trim() === '') {
+            Swal.fire({
+                icon: 'error',
+
+                text: 'El nombre de la categoría de productos no puede estar vacío',
+            });
+            setInputValido3(false)
+            return;
+        }
+
+        if (categorias1.nombre_categoria_productos.length < 3) {
+            Swal.fire({
+                icon: 'error',
+
+                text: 'El nombre de la categorìa de productos debe tener al menos 3 letras',
+            });
+            setInputValido(false)
+            return;
+        }
+
+
+        const regex = /^[a-zA-Z0-9\s#,;.-àèìòùñ]*$/;
+
         if (!regex.test(categorias1.nombre_categoria_productos)) {
+            // Mostrar alerta con SweetAlert
             Swal.fire({
                 icon: 'error',
-                title: 'Error',
-                text: 'Evita caracteres especiales en el nombre de la categoría.',
-                confirmButtonText: 'Aceptar'
+
+                text: 'El nombre no puede contener caracteres especiales',
             });
             return;
         }
-    
+
+
         try {
 
             console.log('Categoría de producto a enviar: ', categorias1);
-    
+
             const responseCategorias = await fetch('https://api-luchosoft-mysql.onrender.com/ventas2/categoria_productos', {
                 method: 'POST',
                 headers: {
@@ -341,10 +431,10 @@ function CategoriasProductos() {
                 },
                 body: JSON.stringify(categorias1)
             });
-    
+
             if (responseCategorias.ok) {
                 console.log('Categoría de producto creada exitosamente.');
-    
+
                 Swal.fire({
                     toast: true,
                     position: "top-end",
@@ -370,10 +460,36 @@ function CategoriasProductos() {
             console.error('Error al crear la categoría de producto:', error);
         }
     };
-    
+
 
     const handleEditarChange = (event) => {
         const { name, value } = event.target;
+
+        if (name === 'nombre_categoria_productos') {
+            if (value.length > 30) {
+                setInputValido(false);
+            } else {
+                setInputValido(true);
+            }
+        }
+        if (name === 'nombre_categoria_productos') {
+            if (value.length > 0) {
+                setInputValido3(true)
+            }
+        }
+
+        if (name === 'nombre_categoria_productos') {
+            // Expresión regular que coincide con cualquier carácter que no sea una letra, un número o un guion bajo
+            const caracteresEspeciales = /^[a-zA-Z0-9\s#,;.-àèìòù]*$/;
+
+            // Verificar si la cadena no contiene caracteres especiales
+            if (caracteresEspeciales.test(value)) {
+                setInputValido2(true);
+            } else {
+                setInputValido2(false);
+            }
+        }
+
         setCategoriasEditar(prevcategorias => ({
             ...prevcategorias,
             [name]: value
@@ -456,7 +572,7 @@ function CategoriasProductos() {
 
             <div className={estilos['divFiltro']}>
                 <input type="text" placeholder=" Buscar..." value={filtro} onChange={handleFiltroChange} className={estilos["busqueda"]} />
-                <div>                
+                <div>
 
                     <button onClick={() => cambiarEstadoModalAgregar(!estadoModalAgregar)} className={` ${estilos.botonAgregar} ${estilos.rojo} bebas-neue-regular`}><i className="fa-solid fa-plus"></i> Agregar</button>
 
@@ -464,116 +580,157 @@ function CategoriasProductos() {
 
             </div>
 
-                
-                <div className={estilos["tabla"]}>
-                    <DataTable columns={columns} data={filteredcategorias} pagination paginationPerPage={6} highlightOnHover customStyles={customStyles} defaultSortField="id_categoria_productos" defaultSortAsc={true}></DataTable>
-                </div>
-                <Modal
-                    estado={estadoModalAgregar}
-                    cambiarEstado={cambiarEstadoModalAgregar}
-                    titulo="Registar"
-                    mostrarHeader={true}
-                    mostrarOverlay={true}
-                    posicionModal={'center'}
-                    width={'500px'}
-                    padding={'20px'}
-                >
-                    <Contenido>
 
-                        <form onSubmit={handleSubmit}>
-                            <div id={estilos.contenedorsito}>
-                                <div id={estilos.contInput}>
-                                    <br />
-                                    <br />
-                                    <div className={estilos["inputIdNombre"]}>
-
-                                        <div>
-                                            <p id={estilos.textito}>  Nombre</p>
-                                            <input
-                                                id={estilos.nombreproveedor}
-                                                className={estilos["input2"]}
-                                                type="text"
-                                                placeholder="Insertar nombre"
-                                                name='nombre_categoria_productos'
-                                                value={categorias.nombre_categoria_productos}
-                                                onChange={handleChange}
-                                                style={{ width: "250px", height: "40px" }}
-                                            />
-                                        </div>
-
-                                    </div>
-                                    <br />
-                                </div>
-
-                            </div>
-                            <center>
-                                <div className={estilos["cajaBotones"]}>
-                                    <button onclick="registrar()" className={estilos.azulado3} type="submit"><p style={{ marginLeft: "-10px" }}> Guardar</p> </button>
-                                    <div className={estilos["espacioEntreBotones"]}></div>
-                                    <button style={{ color: "white", }} onClick={() => cambiarEstadoModalAgregar(!estadoModalAgregar)} className={estilos.gris} type="button"> <p style={{ marginLeft: "-13px" }}> Cancelar</p></button>
-                                </div>
-                            </center>
-                        </form>
-                    </Contenido>
-                </Modal>
-
-                <Modal
-                    estado={estadoModaleditar}
-                    cambiarEstado={cambiarEstadoModalEditar}
-                    titulo="Actualizar"
-                    mostrarHeader={true}
-                    mostrarOverlay={true}
-                    posicionModal={'center'}
-                    width={'500px'}
-                    padding={'20px'}
-                >
-                    <Contenido>
-
-                        <form onSubmit={handleSubmitEditar}>
-                            <div id={estilos.contenedorsito}>
-                                <div id={estilos.contInput}>
-                                    <br />
-                                    <br />
-                                    <div className={estilos["input-container"]}>
-                                        <div style={{marginLeft:"-50px" }} id={estilos.eo}>
-                                            <p id={estilos.textito} > Nombre</p>
-                                            <input
-                                                id={estilos.nombreproveedor}
-                                                className={estilos["input2"]}
-                                                type="text"
-                                                placeholder="Insertar nombre"
-                                                name='nombre_categoria_productos'
-                                                value={categoriasEditar.nombre_categoria_productos}
-                                                onChange={handleEditarChange}
-                                                style={{ width: "250px", height: "40px"}}
-                                                
-
-                                            />
-                                        </div>
-
-                                    </div>
-                                    <br />
-
-                                    <br />
-                                </div>
-                            </div>
-                            <br />
-                            <center>
-                                <div  style={{marginTop:"-5px" }}  className={estilos["cajaBotones"]}>
-                                    <button onClick={() => registrar()} className={estilos.azulado3} type="submit"><p style={{ marginLeft: "-10px" }}> Guardar</p> </button>
-
-                                    <div className={estilos["espacioEntreBotones"]}></div>
-                                    <button style={{ color: "white" }} onClick={() => cambiarEstadoModalEditar(!estadoModaleditar)} className={estilos.gris} type="button"> <p style={{ marginLeft: "-13px" }}> Cancelar</p></button>
-                                </div>
-                            </center>
-                        </form>
-                    </Contenido>
-                </Modal>
+            <div className={estilos["tabla"]}>
+                <DataTable columns={columns} data={filteredcategorias} pagination paginationPerPage={6} highlightOnHover customStyles={customStyles} defaultSortField="id_categoria_productos" defaultSortAsc={true}></DataTable>
             </div>
-            );
+            <Modal
+                estado={estadoModalAgregar}
+                cambiarEstado={cambiarEstadoModalAgregar}
+                titulo="Registar"
+                mostrarHeader={true}
+                mostrarOverlay={true}
+                posicionModal={'center'}
+                width={'500px'}
+                padding={'20px'}
+            >
+                <Contenido>
+
+                    <form onSubmit={handleSubmit}>
+                        <div id={estilos.contenedorsito}>
+                            <div id={estilos.contInput}>
+                                <br />
+                                <br />
+                                <div className={estilos["inputIdNombre"]}>
+
+                                    <div>
+                                        <p id={estilos.textito}>  Nombre</p>
+                                        <input
+                                            id={estilos.nombreproveedor}
+                                            className={`${estilos.inputfield2} ${!inputValido ? estilos.inputInvalido : ''} ${!inputValido2 ? estilos.inputInvalido : ''} ${!inputValido3 ? estilos.inputInvalido : ''}`}
+                                            type="text"
+                                            placeholder="Insertar nombre"
+                                            name='nombre_categoria_productos'
+                                            value={categorias.nombre_categoria_productos}
+                                            onChange={handleChange}
+                                            style={{ width: "250px", height: "40px" }}
+                                        />
+                                        {
+                                            !inputValido3 && (
+                                                <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>El campo no puede estar vacío</p>
+                                            )
+                                        }
+                                        {
+                                            !inputValido2 && !inputValido && (
+                                                <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>No se aceptan caracteres especiales.</p>
+                                            )
+                                        }
+                                        {
+                                            !inputValido && inputValido2 && (
+                                                <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>Debe de contener al menos 3 letras y máximo 30.</p>
+                                            )
+                                        }
+                                        {
+                                            !inputValido2 && inputValido && (
+                                                <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>No se aceptan caracteres especiales.</p>
+                                            )
+                                        }
+                                    </div>
+
+                                </div>
+                                <br />
+                            </div>
+
+                        </div>
+                        <center>
+                            <div className={estilos["cajaBotones"]}>
+                                <button onclick="registrar()" className={estilos.azulado3} type="submit"><p style={{ marginLeft: "-10px" }}> Guardar</p> </button>
+                                <div className={estilos["espacioEntreBotones"]}></div>
+                                <button style={{ color: "white", }} onClick={() => cambiarEstadoModalAgregar(!estadoModalAgregar)} className={estilos.gris} type="button"> <p style={{ marginLeft: "-13px" }}> Cancelar</p></button>
+                            </div>
+                        </center>
+                    </form>
+                </Contenido>
+            </Modal>
+
+            <Modal
+                estado={estadoModaleditar}
+                cambiarEstado={cambiarEstadoModalEditar}
+                titulo="Actualizar"
+                mostrarHeader={true}
+                mostrarOverlay={true}
+                posicionModal={'center'}
+                width={'500px'}
+                padding={'20px'}
+            >
+                <Contenido>
+
+                    <form onSubmit={handleSubmitEditar}>
+                        <div id={estilos.contenedorsito}>
+                            <div id={estilos.contInput}>
+                                <br />
+                                <br />
+                                <div className={estilos["input-container"]}>
+                                    <div style={{ marginLeft: "-50px" }} id={estilos.eo}>
+                                        <p id={estilos.textito} > Nombre</p>
+                                        <input
+                                            id={estilos.nombreproveedor}
+                                            className={`${estilos.inputfield2} ${!inputValido ? estilos.inputInvalido : ''} ${!inputValido2 ? estilos.inputInvalido : ''} ${!inputValido3 ? estilos.inputInvalido : ''}`}
+                                            type="text"
+                                            placeholder="Insertar nombre"
+                                            name='nombre_categoria_productos'
+                                            value={categoriasEditar.nombre_categoria_productos}
+                                            onChange={handleEditarChange}
+                                            style={{ width: "250px", height: "40px" }}
+
+                                        />
+                                        {
+                                            !inputValido3 && (
+                                                <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>El campo no puede estar vacío</p>
+                                            )
+                                        }
+                                        {
+
+                                            !inputValido && !inputValido2 && (
+                                                <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>El límite es de 30 letras y no se aceptan caracteres especiales.</p>
+                                            )
+                                        }
+                                        {
+                                            inputValido && !inputValido2 && (
+                                                <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>No se aceptan caracteres especiales.</p>
+                                            )
+                                        }
+                                        {
+                                            !inputValido && inputValido2 && (
+                                                <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>El límite es de 30 letras.</p>
+                                            )
+                                        }
+
+                                    </div>
+
+                                </div>
+                                <br />
+
+                                <br />
+                            </div>
+                        </div>
+                        <br />
+                        <center>
+                            <div style={{ marginTop: "-5px" }} className={estilos["cajaBotones"]}>
+                                <button onClick={() => registrar()} className={estilos.azulado3} type="submit"><p style={{ marginLeft: "-10px" }}> Guardar</p> </button>
+
+                                <div className={estilos["espacioEntreBotones"]}></div>
+                                <button style={{ color: "white" }} onClick={() => cambiarEstadoModalEditar(!estadoModaleditar)} className={estilos.gris} type="button"> <p style={{ marginLeft: "-13px" }}> Cancelar</p></button>
+                            </div>
+                        </center>
+                    </form>
+                </Contenido>
+            </Modal>
+        </div>
+    );
 }
 
-            const Contenido = styled.div`
+const Contenido = styled.div`
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -596,4 +753,4 @@ function CategoriasProductos() {
 	}
             `;
 
-            export default CategoriasProductos;
+export default CategoriasProductos;
