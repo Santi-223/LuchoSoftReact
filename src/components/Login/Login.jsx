@@ -70,11 +70,12 @@ function Acceso() {
                 setUsuarioAutenticado(true);
                 // Aquí podrías redirigir a otra página, mostrar un mensaje de éxito, etc.
             } else {
+                const errorData = await response.json();
                 console.error('Error al accceder:', response.statusText);
                 Swal.fire({
                     showConfirmButton: false,
                     icon: 'error',
-                    text: 'Credenciales incorrectas, Inténtalo de nuevo.',
+                    text: errorData.msg,
                     timer: 2000
                 });
             }

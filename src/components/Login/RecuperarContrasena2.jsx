@@ -40,17 +40,30 @@ function RecuperarContrasena2() {
         if (usuario.nuevaContraseña.length < 8) {
             Swal.fire({
                 icon: 'error',
-                title: 'La contraseña debe tener mínimo 8 caracteres.',
+                text: 'La contraseña debe tener mínimo 8 caracteres y debe incluir al menos una mayúscula, un número y un carácter especial.',
                 showConfirmButton: false,
                 timer: 1500
             });
         }
+        else if (/\s/.test(usuario.nuevaContraseña)) {
+            Swal.fire({
+              icon: 'error',
+              title: 'No se permiten espacios.',
+              showConfirmButton: true,
+            });
+          }
+          else if (!/[A-Z]/.test(usuario.nuevaContraseña) || !/[^a-zA-Z0-9\s]/.test(usuario.nuevaContraseña) || !/\d/.test(usuario.nuevaContraseña)) {
+            Swal.fire({
+              icon: 'error',
+              text: 'La contraseña debe incluir al menos una mayúscula, un número y un carácter especial.',
+              showConfirmButton: true,
+            });
+          }
         else if (usuario.nuevaContraseña != usuario.confirmacionContraseña) {
             Swal.fire({
                 icon: 'error',
-                title: 'La confirmación de contraseña es incorrecta',
-                showConfirmButton: false,
-                timer: 1500
+                text: 'La confirmación de contraseña es incorrecta',
+                showConfirmButton: false
             });
         }
         else {
@@ -65,12 +78,21 @@ function RecuperarContrasena2() {
                 });
 
                 if (response.ok) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: `Su contraseña se ha actualizado con exito.`,
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: "top-end",
                         showConfirmButton: false,
-                        timer: 1500
-                    });
+                        timer: 2000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                          toast.onmouseenter = Swal.stopTimer;
+                          toast.onmouseleave = Swal.resumeTimer;
+                        }
+                      });
+                      Toast.fire({
+                        icon: "success",
+                        text: "Su contraseña se ha actualizado con exito."
+                      });
 
                     setTimeout(() => {
                         window.location.href = '/#/login';
@@ -82,7 +104,6 @@ function RecuperarContrasena2() {
                     console.error('Error al recuperar la contraseña', errorData.msg);
                     Swal.fire({
                         icon: 'error',
-                        title: 'Error',
                         text: errorData.msg,
                     });
                 }

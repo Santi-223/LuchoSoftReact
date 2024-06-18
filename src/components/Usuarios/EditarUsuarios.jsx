@@ -34,6 +34,10 @@ function EditarUsuario() {
     const [inputValidadoImg, setInputValidoImg] = useState(true);
     const [errorImg, setErrorImg] = useState('')
 
+    const [emailUsr, setEmailUsr] = useState('')
+
+    const [usuarios, setUsuarios] = useState([]);
+
     let { id_usuario } = useParams();
     console.log(id_usuario)
 
@@ -81,7 +85,7 @@ function EditarUsuario() {
                     const data = await response.json();
                     const usuarioFiltrado = data[0];
                     setUsuario(usuarioFiltrado);
-                    console.log(usuarioFiltrado)
+                    setEmailUsr(usuarioFiltrado.email)
                     setIsLoading(false)
                 } else {
                     console.error('Error al obtener el usuario');
@@ -102,9 +106,14 @@ function EditarUsuario() {
             const esNumeroPositivo = /^[0-9/s]+$/.test(value);
 
             if (value.trim() === '') {
-                setErrorTelefono('El campo es obligatorio.');
-                setInputValidoTelefono(false);
-            } else if (!esNumeroPositivo) {
+                setErrorId('El campo es obligatorio.');
+                setInputValidoId(false);
+            }
+            else if (value != id_usuario) {
+                setErrorId('La identificación no es editable.');
+                setInputValidoId(false);
+            }
+            else if (!esNumeroPositivo) {
                 setErrorId('No se permiten caracteres especiales ni letras.');
                 setInputValidoId(false);
             } else if (value.length < 5) {
@@ -214,6 +223,19 @@ function EditarUsuario() {
                 setErrorEmail('Ingresa un máximo de 30 caracteres.');
                 setInputValidoEmail(false);
             }
+            else if (/\s/.test(value)) {
+                setErrorEmail('No se permiten espacios.');
+                setInputValidoEmail(false);
+            }
+            else if (usuarios.some(usuario => usuario.email.replace(/\s+/g, '').toLowerCase() === value.replace(/\s+/g, '').toLowerCase())) {
+
+                if (emailUsr.toLowerCase() == value.toLowerCase()) {
+
+                } else {
+                    setErrorEmail('El email ya se encuentra registrado.');
+                    setInputValidoEmail(false);
+                }
+            }
             // Si todo es válido
             else {
                 setErrorEmail(''); // Limpia el mensaje de error
@@ -263,6 +285,30 @@ function EditarUsuario() {
     };
 
     useEffect(() => {
+        const fetchUsuarios = async () => {
+            try {
+                const response = await fetch('https://api-luchosoft-mysql.onrender.com/configuracion/usuarios');
+                if (response.ok) {
+                    const data = await response.json();
+                    const usuariosFiltrador = data.map(usuario => ({
+                        id_usuario: usuario.id_usuario,
+                        imagen_usuario: usuario.imagen_usuario,
+                        nombre_usuario: usuario.nombre_usuario,
+                        direccion_usuario: usuario.direccion_usuario,
+                        telefono_usuario: usuario.telefono_usuario,
+                        email: usuario.email,
+                        estado_usuario: usuario.estado_usuario,
+                        id_rol: usuario.id_rol,
+                    }));
+                    setUsuarios(usuariosFiltrador);
+                } else {
+                    console.error('Error al obtener las compras');
+                }
+            } catch (error) {
+                console.error('Error al obtener las compras:', error);
+            }
+        };
+
         const fetchRoles = async () => {
             try {
                 const response = await fetch('https://api-luchosoft-mysql.onrender.com/configuracion/roles');
@@ -285,7 +331,7 @@ function EditarUsuario() {
         };
 
         fetchRoles(); // Llama a la función fetchRoles cuando se monta el componente
-
+        fetchUsuarios();
     }, []);
 
     const handleSubmit = async (event) => {
@@ -294,14 +340,14 @@ function EditarUsuario() {
         if (!inputValidoId || !inputValidoNombre || !inputValidadoDireccion || !inputValidadoTelefono || !inputValidadoEmail || !inputValidadoContrasena || !inputValidadoRol || !inputValidadoImg) {
             Swal.fire({
                 icon: "error",
-                title: "Error",
                 text: "Verifica todos los campos.",
+                showConfirmButton: true
             });
         } else if (!usuario.id_usuario || !usuario.nombre_usuario || !usuario.direccion_usuario || !usuario.telefono_usuario || !usuario.email || !usuario.contraseña || usuario.id_rol == 0) {
             Swal.fire({
                 icon: "error",
-                title: "Error",
                 text: "Hay campos vacios.",
+                showConfirmButton: true
             });
         }
         else {
@@ -335,11 +381,20 @@ function EditarUsuario() {
                         if (response.ok) {
 
                             console.log('Usuario actualizado exitosamente.');
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Usuario actualizado exitosamente',
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: "top-end",
                                 showConfirmButton: false,
-                                timer: 1500
+                                timer: 2000,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.onmouseenter = Swal.stopTimer;
+                                    toast.onmouseleave = Swal.resumeTimer;
+                                }
+                            });
+                            Toast.fire({
+                                icon: "success",
+                                title: "Usuario actualizado exitosamente."
                             });
                             setTimeout(() => {
                                 setRedirect(true);
@@ -349,16 +404,16 @@ function EditarUsuario() {
                             console.error('Error al actualizar el usuario:', response.statusText);
                             Swal.fire({
                                 icon: 'error',
-                                title: 'Error',
-                                text: 'Error al actualizar el usuario',
+                                text: 'Error al actualizar el usuario.',
+                                showConfirmButton: true
                             });
                         }
                     } catch (error) {
                         console.error('Error al actualizar el usuario:', error);
                         Swal.fire({
                             icon: 'error',
-                            title: 'Error',
-                            text: 'Error al actualizar el usuario',
+                            text: 'Error al actualizar el usuario.',
+                            showConfirmButton: true
                         });
                     }
                 }
@@ -411,7 +466,7 @@ function EditarUsuario() {
                                     </div>
                                 </div>
                                 <div className={estilos["formulario__grupo2"]}>
-                                    <label htmlFor="nombre">Nombre Completo</label>
+                                    <label htmlFor="nombre">Nombre Completo <span style={{ color: 'red' }}>*</span></label>
                                     <div className={estilos["formulario__grupo-input"]}>
                                         <input
                                             className={`${!inputValidoNombre ? estilos.inputInvalido : estilos['input-field2']}`}
@@ -427,7 +482,7 @@ function EditarUsuario() {
                             </div>
                             <div className={estilos["input-container"]}>
                                 <div className={estilos["formulario__grupo"]} id={estilos.grupo__telefono}>
-                                    <label htmlFor="telefono_usuario">Teléfono</label>
+                                    <label htmlFor="telefono_usuario">Teléfono <span style={{ color: 'red' }}>*</span></label>
                                     <div className={estilos["formulario__grupo-input"]}>
                                         <input
                                             className={`${!inputValidadoTelefono ? estilos.inputInvalido : estilos['input-field2']}`}
@@ -441,7 +496,7 @@ function EditarUsuario() {
                                     </div>
                                 </div>
                                 <div className={estilos["formulario__grupo2"]} id={estilos.grupo__direccion}>
-                                    <label htmlFor="direccion_usuario">Dirección</label>
+                                    <label htmlFor="direccion_usuario">Dirección <span style={{ color: 'red' }}>*</span></label>
                                     <div className={estilos["formulario__grupo-input"]}>
                                         <input
                                             className={`${!inputValidadoDireccion ? estilos.inputInvalido : estilos['input-field2']}`}
@@ -458,7 +513,7 @@ function EditarUsuario() {
 
                             <div className={estilos["input-container"]}>
                                 <div className={estilos["eo"]}>
-                                    <p>Email</p>
+                                    <p>Email <span style={{ color: 'red' }}>*</span></p>
                                     <input
                                         className={`${!inputValidadoEmail ? estilos.inputInvalido2 : estilos['input-field']}`}
                                         type="email"
@@ -472,7 +527,7 @@ function EditarUsuario() {
                             </div>
                             <div className={estilos["input-container"]}>
                                 <div className={estilos["formulario__grupo"]} id={estilos.grupo__id_rol}>
-                                    <label htmlFor="id_rol">Seleccionar Rol</label>
+                                    <label htmlFor="id_rol">Seleccionar Rol <span style={{ color: 'red' }}>*</span></label>
                                     <div className={estilos["formulario__grupo-input"]}>
                                         <select
                                             className={`${!inputValidadoRol ? estilos.inputInvalido : estilos['input-field2']}`}
@@ -483,7 +538,7 @@ function EditarUsuario() {
                                         >
                                             <option value={0}>Seleccione un rol</option>
                                             {roles.map(rol => {
-                                                if (rol.estado_rol !== false) {
+                                                if (rol.estado_rol !== 0) {
                                                     return <option key={rol.id_rol} value={rol.id_rol}>{rol.nombre_rol}</option>;
                                                 }
                                                 return null;

@@ -40,6 +40,8 @@ function Roles() {
     const [inputValidoDes2, setInputValidoDes2] = useState(true);
     const [errorDes2, setErrorDes2] = useState('')
 
+    let seleccionados = 0;
+
     const [selectedPermisos, setSelectedPermisos] = useState([]);
     const [estadoModalAgregar, cambiarEstadoModalAgregar] = useState(false);
     const [estadoModaleditar, cambiarEstadoModalEditar] = useState(false);
@@ -50,6 +52,13 @@ function Roles() {
         estado_rol: 1
     });
     const [rolesEditar, setRolesEditar] = useState({
+        id_rol: '',
+        nombre_rol: '',
+        descripcion_rol: '',
+        estado_rol: 1
+    });
+
+    const [rolesEditar2, setRolesEditar2] = useState({
         id_rol: '',
         nombre_rol: '',
         descripcion_rol: '',
@@ -124,11 +133,9 @@ function Roles() {
                     })
                 }</ul>
             ),
-            sortable: true,
         },
         {
             name: "Estado",
-            sortable: true,
             maxWidth: "100px",
             cell: (row) => (
                 <button className={estilos.boton} onClick={() => handleEstadoRol(row.id_rol, row.estado_rol)} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '25px' }}>
@@ -147,14 +154,14 @@ function Roles() {
             name: "Acciones",
             cell: (row) => (
                 <div className={estilos["acciones"]}>
-                    <button disabled={row.estado_rol === 0} onClick={() => {
+                    <button disabled={row.estado_rol === 0 || row.id_rol == 1 || row.id_rol == 2 || row.id_rol == 3} onClick={() => {
                         cambiarEstadoModalEditar(!estadoModaleditar),
-                            setRolesEditar(row)
+                            setRolesEditar(row), setRolesEditar2(row)
                     }} className={estilos.boton} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '22px' }}>
-                        <i className={`fa-solid fa-pen-to-square ${row.estado_rol === 1 ? 'iconosNaranjas' : 'iconosGrises'}`}></i>
+                        <i className={`fa-solid fa-pen-to-square ${row.estado_rol === 0 || row.id_rol == 1 || row.id_rol == 2 || row.id_rol == 3 ? 'iconosGrises' : 'iconosNaranjas'}`}></i>
                     </button>
-                    <button disabled={row.estado_rol === 0} className={estilos.boton} onClick={() => handleDeleteRoles(row.id_rol)} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '22px' }}>
-                        <i className={`bi bi-trash ${row.estado_rol === 1 ? 'iconosRojos' : 'iconosGrises'}`}></i>
+                    <button disabled={row.estado_rol === 0 || row.id_rol == 1 || row.id_rol == 2 || row.id_rol == 3} className={estilos.boton} onClick={() => handleDeleteRoles(row.id_rol)} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '22px' }}>
+                        <i className={`bi bi-trash ${row.estado_rol === 0 || row.id_rol == 1 || row.id_rol == 2 || row.id_rol == 3 ? 'iconosGrises' : 'iconosRojos'}`}></i>
                     </button>
                 </div>
             )
@@ -178,8 +185,16 @@ function Roles() {
             console.log("Ya esta descheck", idRolP)
             crearRolPer(idRol, idPermiso)
         } else {
-            console.log("Ya esta check", idRolP)
-            handleDeleteRolesPermisos(idRolP, idRol)
+            if (seleccionados <= 1) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'No puedes eliminar todos los permisos.',
+                    showConfirmButton: true
+                });
+            } else {
+                console.log("Ya esta check", idRolP)
+                handleDeleteRolesPermisos(idRolP, idRol)
+            }
         }
         console.log(selectedPermisos)
     };
@@ -216,17 +231,25 @@ function Roles() {
                 console.error('Error al enviar el detalle del permiso:', responseDetalle.statusText);
                 Swal.fire({
                     icon: 'error',
-                    title: 'Error al enviar el detalle',
-                    showConfirmButton: false,
-                    timer: 1500
+                    title: 'Error al enviar el detalle.',
+                    showConfirmButton: true
                 });
             } else {
-                console.log('Detalle enviado con exito')
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Registro exitoso',
+                console.log('Detalle enviado con éxito')
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
                     showConfirmButton: false,
-                    timer: 1500
+                    timer: 2200,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.onmouseenter = Swal.stopTimer;
+                        toast.onmouseleave = Swal.resumeTimer;
+                    }
+                });
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Registro exitoso.',
                 });
                 fetchRolesPermisos();
             }
@@ -241,14 +264,20 @@ function Roles() {
         if (!inputValidoNombre || !inputValidoDes) {
             Swal.fire({
                 icon: "error",
-                title: "Error",
                 text: "Verifica todos los campos.",
+                showConfirmButton: true
             });
         } else if (!roles1.nombre_rol || !roles1.descripcion_rol) {
             Swal.fire({
                 icon: "error",
-                title: "Error",
-                text: "Hay campos vacios.",
+                text: "Hay campos vacíos.",
+                showConfirmButton: true
+            });
+        } else if (selectedPermisos < 1) {
+            Swal.fire({
+                icon: "error",
+                text: "Debes seleccionar mínimo un permiso.",
+                showConfirmButton: true
             });
         }
         else {
@@ -299,11 +328,20 @@ function Roles() {
                                 console.error('Error al enviar el detalle del permiso:', responseDetalle.statusText);
                             } else {
                                 console.log('Detalle enviado con exito')
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Registro exitoso',
+                                const Toast = Swal.mixin({
+                                    toast: true,
+                                    position: "top-end",
                                     showConfirmButton: false,
-                                    timer: 1500
+                                    timer: 2200,
+                                    timerProgressBar: true,
+                                    didOpen: (toast) => {
+                                        toast.onmouseenter = Swal.stopTimer;
+                                        toast.onmouseleave = Swal.resumeTimer;
+                                    }
+                                });
+                                Toast.fire({
+                                    icon: "success",
+                                    title: "Registro exitoso."
                                 });
                                 fetchRolesPermisos();
                                 fetchRoles();
@@ -326,7 +364,8 @@ function Roles() {
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
-                        text: 'Error al crear el rol',
+                        text: 'Error al crear el rol.',
+                        showConfirmButton: true
                     });
                 }
             } catch (error) {
@@ -357,7 +396,6 @@ function Roles() {
                 const data = await response.json();
                 const usuarioFiltrado = data[0];
                 setUsuario(usuarioFiltrado);
-                console.log(usuarioFiltrado)
                 setIsLoading(false)
             } else {
                 console.error('Error al obtener el usuario');
@@ -411,11 +449,20 @@ function Roles() {
 
                     if (response.ok) {
                         console.log('Eliminación exitosa')
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Eliminación exitosa',
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: "top-end",
                             showConfirmButton: false,
-                            timer: 1500
+                            timer: 2200,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.onmouseenter = Swal.stopTimer;
+                                toast.onmouseleave = Swal.resumeTimer;
+                            }
+                        });
+                        Toast.fire({
+                            icon: "success",
+                            title: "Eliminación exitosa."
                         });
                         fetchRoles();
                     } else {
@@ -423,19 +470,16 @@ function Roles() {
                         console.error('Error al eliminar el rol:', errorData.msg);
                         Swal.fire({
                             icon: 'error',
-                            title: `Error al eliminar el rol`,
-                            text: errorData.msg, // Mostrar el mensaje de error recibido desde la API
-                            showConfirmButton: false,
-                            timer: 1500
+                            text: "No se puede eliminar el rol porque tiene usuarios asociados.", // Mostrar el mensaje de error recibido desde la API
+                            showConfirmButton: true
                         });
                     }
                 } catch (error) {
                     console.error('Error al eliminar el rol:', error);
                     Swal.fire({
                         icon: 'error',
-                        title: 'Error al eliminar el rol',
-                        showConfirmButton: false,
-                        timer: 1500
+                        title: 'Error al eliminar el rol.',
+                        showConfirmButton: true
                     });
                 }
             }
@@ -468,22 +512,30 @@ function Roles() {
 
                     if (response.ok) {
                         console.log('Eliminación exitosa')
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Eliminación exitosa',
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: "top-end",
                             showConfirmButton: false,
-                            timer: 1500
+                            timer: 2200,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.onmouseenter = Swal.stopTimer;
+                                toast.onmouseleave = Swal.resumeTimer;
+                            }
+                        });
+                        Toast.fire({
+                            icon: "success",
+                            title: "Eliminación exitosa."
                         });
                         fetchRolesPermisos();
                     } else {
                         const errorData = await response.json(); // Parsear el cuerpo de la respuesta como JSON
-                        console.error('Error al eliminar la aisgnación del permiso:', errorData.msg);
+                        console.error('Error al eliminar la asignación del permiso:', errorData.msg);
                         Swal.fire({
                             icon: 'error',
-                            title: `Error al eliminar la aisgnación del permiso`,
+                            title: `Error al eliminar la asignación del permiso.`,
                             text: errorData.msg, // Mostrar el mensaje de error recibido desde la API
-                            showConfirmButton: false,
-                            timer: 1500
+                            showConfirmButton: true,
                         });
                     }
                 } catch (error) {
@@ -523,11 +575,20 @@ function Roles() {
                     if (response.ok) {
                         // Actualización exitosa, actualizar la lista de compras
                         console.log('actualizacion exitosa')
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'El estado se ha actualizado',
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: "top-end",
                             showConfirmButton: false,
-                            timer: 1500
+                            timer: 2200,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.onmouseenter = Swal.stopTimer;
+                                toast.onmouseleave = Swal.resumeTimer;
+                            }
+                        });
+                        Toast.fire({
+                            icon: "success",
+                            title: "El estado se ha actualizado."
                         });
                         fetchRoles();
                     } else {
@@ -604,6 +665,11 @@ function Roles() {
                 setErrorNombre('Ingresa un máximo de 30 caracteres.');
                 setInputValidoNombre(false);
             }
+            // Verifica si el rol ya está registrado (sin espacios y en minúsculas)
+            else if (roles.some(rol => rol.nombre_rol.replace(/\s+/g, '').toLowerCase() === value.replace(/\s+/g, '').toLowerCase())) {
+                setErrorNombre('El rol ya se encuentra registrado.');
+                setInputValidoNombre(false);
+            }
             // Si todo es válido
             else {
                 setErrorNombre(''); // Limpia el mensaje de error
@@ -617,7 +683,7 @@ function Roles() {
                 setInputValidoDes(false);
             }
             // Verifica si el valor contiene caracteres especiales
-            else if (/[^a-zA-Z0-9\sÁÉÍÓÚáéíóúÑñÜü]/.test(value)) {
+            else if (/[^a-zA-Z0-9\sÁÉÍÓÚáéíóúÑñÜü,.]/.test(value)) {
                 setErrorDes('No se permiten caracteres especiales.');
                 setInputValidoDes(false);
             }
@@ -669,6 +735,16 @@ function Roles() {
                 setErrorNombre2('Ingresa un máximo de 30 caracteres.');
                 setInputValidoNombre2(false);
             }
+            // Verifica si el rol ya está registrado (sin espacios y en minúsculas)
+            else if (roles.some(rol => rol.nombre_rol.replace(/\s+/g, '').toLowerCase() === value.replace(/\s+/g, '').toLowerCase())) {
+                console.log("si se cumple ", rolesEditar2.nombre_rol, value)
+                if (rolesEditar2.nombre_rol.replace(/\s+/g, '').toLowerCase() == value.replace(/\s+/g, '').toLowerCase()) {
+
+                } else {
+                    setErrorNombre2('El rol ya se encuentra registrado.');
+                    setInputValidoNombre2(false);
+                }
+            }
             // Si todo es válido
             else {
                 setErrorNombre2(''); // Limpia el mensaje de error
@@ -682,7 +758,7 @@ function Roles() {
                 setInputValidoDes2(false);
             }
             // Verifica si el valor contiene caracteres especiales
-            else if (/[^a-zA-Z0-9\sÁÉÍÓÚáéíóúÑñÜü]/.test(value)) {
+            else if (/[^a-zA-Z0-9\sÁÉÍÓÚáéíóúÑñÜü,.]/.test(value)) {
                 setErrorDes2('No se permiten caracteres especiales.');
                 setInputValidoDes2(false);
             }
@@ -725,19 +801,29 @@ function Roles() {
                 // Almacenar en el localStorage
                 localStorage.setItem('token', data.token);
 
-                if(perm){
-                    Swal.fire({
-                        icon: 'success',
-                        title: `El rol ha sido actualizado.`,
+                if (perm) {
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: "top-end",
                         showConfirmButton: false,
-                        timer: 1500
+                        timer: 2200,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.onmouseenter = Swal.stopTimer;
+                            toast.onmouseleave = Swal.resumeTimer;
+                        }
+                    });
+                    Toast.fire({
+                        icon: "success",
+                        title: "El rol ha sido actualizado."
                     });
                 }
 
                 actualizarUsuarioLogueado(usuario);
 
+                window.location.reload();
+
                 setTimeout(() => {
-                    window.location.reload();
                     cambiarEstadoModalEditar(false);
                 }, 2000);
 
@@ -747,6 +833,7 @@ function Roles() {
                     icon: 'error',
                     title: 'Error',
                     text: 'Error al refrescar, debes volver a iniciar sesión.',
+                    showConfirmButton: true
                 });
                 localStorage.removeItem('token');
 
@@ -761,12 +848,24 @@ function Roles() {
                 }, 1800);
             }
         } catch (error) {
-            console.error('Error al acceder:', error);
+            console.error('Error al refrescar, debes volver a iniciar sesión:', response.statusText);
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: 'Error al acceder',
+                text: 'Error al refrescar, debes volver a iniciar sesión.',
+                showConfirmButton: true
             });
+            localStorage.removeItem('token');
+
+            // Eliminar usuario del localStorage
+            localStorage.removeItem('usuario');
+
+            // Eliminar permisos del localStorage
+            localStorage.removeItem('permisos');
+
+            setTimeout(() => {
+                window.location.href = '/#/login';
+            }, 1800);
         }
     }
 
@@ -778,12 +877,14 @@ function Roles() {
                 icon: "error",
                 title: "Error",
                 text: "Verifica todos los campos.",
+                showConfirmButton: true
             });
         } else if (!rolesEditar.nombre_rol || !rolesEditar.descripcion_rol) {
             Swal.fire({
                 icon: "error",
                 title: "Error",
                 text: "Hay campos vacios.",
+                showConfirmButton: true
             });
         }
         else {
@@ -812,13 +913,22 @@ function Roles() {
 
                             if (rolesEditar.id_rol == usuarioLogueado.id_rol) {
                                 validarRefresh(true)
-                            }else{
+                            } else {
                                 console.log('rol actualizado exitosamente.');
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'rol actualizado exitosamente',
+                                const Toast = Swal.mixin({
+                                    toast: true,
+                                    position: "top-end",
                                     showConfirmButton: false,
-                                    timer: 1500
+                                    timer: 2200,
+                                    timerProgressBar: true,
+                                    didOpen: (toast) => {
+                                        toast.onmouseenter = Swal.stopTimer;
+                                        toast.onmouseleave = Swal.resumeTimer;
+                                    }
+                                });
+                                Toast.fire({
+                                    icon: "success",
+                                    title: "Rol actualizado exitosamente."
                                 });
                             }
 
@@ -832,15 +942,16 @@ function Roles() {
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Error',
-                                text: 'Error al actualizar el rol',
+                                text: 'Error al actualizar el rol.',
+                                showConfirmButton: true
                             });
                         }
                     } catch (error) {
                         console.error('Error al actualizar el rol:', error);
                         Swal.fire({
                             icon: 'error',
-                            title: 'Error',
-                            text: 'Error al actualizar el rol',
+                            text: 'Error al actualizar el rol.',
+                            showConfirmButton: true
                         });
                     }
                 }
@@ -889,6 +1000,7 @@ function Roles() {
                 titulo="Registar Rol"
                 mostrarHeader={true}
                 mostrarOverlay={true}
+                mostrarExit={false}
                 posicionModal={'center'}
                 width={'500px'}
                 padding={'20px'}
@@ -900,7 +1012,7 @@ function Roles() {
                             <div id={estilos.contInput}>
                                 <div className={estilos["input-container"]}>
                                     <div id={estilos.eo}>
-                                        <p id={estilos.textito} >Nombre del rol</p>
+                                        <p id={estilos.textito} >Nombre del rol <span style={{ color: 'red' }}>*</span></p>
                                         <input
                                             className={`${!inputValidoNombre ? estilos.inputInvalido : estilos['input-field']}`}
                                             type="text"
@@ -916,7 +1028,7 @@ function Roles() {
                                 <br />
                                 <div className={estilos["input-container"]}>
                                     <div id={estilos.eo}>
-                                        <p id={estilos.textito}>Descripción del rol</p>
+                                        <p id={estilos.textito}>Descripción del rol <span style={{ color: 'red' }}>*</span></p>
                                         <textarea
                                             id={estilos.descrol}
                                             className={`${!inputValidoDes ? estilos.inputInvalido : estilos['input-field']}`}
@@ -990,6 +1102,7 @@ function Roles() {
                 titulo="Editar Rol"
                 mostrarHeader={true}
                 mostrarOverlay={true}
+                mostrarExit={false}
                 posicionModal={'center'}
                 width={'500px'}
                 padding={'20px'}
@@ -1015,7 +1128,7 @@ function Roles() {
 
                                     </div>
                                     <div id={estilos.nombrerol}>
-                                        <p id={estilos.textito} >Nombre del rol</p>
+                                        <p id={estilos.textito} >Nombre del rol <span style={{ color: 'red' }}>*</span></p>
                                         <input
                                             className={`${!inputValidoNombre2 ? estilos.inputInvalido2 : estilos['input2']}`}
                                             type="text"
@@ -1031,16 +1144,16 @@ function Roles() {
                                 <br />
                                 <div className={estilos["input-container"]}>
                                     <div id={estilos.eo}>
-                                        <p id={estilos.textito}>Descripción del rol</p>
+                                        <p id={estilos.textito}>Descripción del rol <span style={{ color: 'red' }}>*</span></p>
                                         <textarea
                                             id={estilos.descrol}
-                                            className={`${!inputValidoDes ? estilos.inputInvalido : estilos['input-field']}`}
+                                            className={`${!inputValidoDes2 ? estilos.inputInvalido : estilos['input-field']}`}
                                             placeholder="Insertar descripción"
                                             name='descripcion_rol'
                                             value={rolesEditar.descripcion_rol}
-                                            onChange={handleChange}
+                                            onChange={handleChangeEditar}
                                         />
-                                        {!inputValidoDes && <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute' }}>{errorDes}</p>}
+                                        {!inputValidoDes2 && <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute' }}>{errorDes2}</p>}
                                     </div>
                                 </div>
                             </div>
@@ -1062,6 +1175,7 @@ function Roles() {
                                                     rolesPermisos.forEach(rolP => {
                                                         if (rolP.id_rol === rolesEditar.id_rol && rolP.id_permiso === permiso.id_permiso) {
                                                             sent2 = true;
+                                                            seleccionados += 1;
                                                             idRolP = rolP.id_roles_permisos;
                                                         }
                                                     });

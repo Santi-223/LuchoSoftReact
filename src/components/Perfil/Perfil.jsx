@@ -67,7 +67,7 @@ const Perfil = () => {
     if (usuario2.contraseña.length < 8) {
       Swal.fire({
         icon: 'error',
-        title: 'La contraseña debe tener mínimo 8 caracteres.',
+        text: 'La contraseña debe tener mínimo 8 caracteres y debe incluir al menos una mayúscula, un número y un carácter especial.',
         showConfirmButton: false,
         timer: 1500
       });
@@ -75,17 +75,29 @@ const Perfil = () => {
     else if (usuario2.contraseñaAntigua != usuarioL2.contraseña) {
       Swal.fire({
         icon: 'error',
-        title: 'Contraseña incorrecta',
-        showConfirmButton: false,
-        timer: 1500
+        text: 'Contraseña incorrecta',
+        showConfirmButton: true,
+      });
+    }
+    else if (/\s/.test(usuario2.contraseña)) {
+      Swal.fire({
+        icon: 'error',
+        text: 'No se permiten espacios.',
+        showConfirmButton: true,
+      });
+    }
+    else if (!/[A-Z]/.test(usuario2.contraseña) || !/[^a-zA-Z0-9\s]/.test(usuario2.contraseña) || !/\d/.test(usuario2.contraseña)) {
+      Swal.fire({
+        icon: 'error',
+        text: 'La contraseña debe incluir al menos una mayúscula, un número y un carácter especial.',
+        showConfirmButton: true,
       });
     }
     else if (usuario2.contraseña != usuario2.confirmacionContraseña) {
       Swal.fire({
         icon: 'error',
-        title: 'La confirmación de contraseña es incorrecta',
-        showConfirmButton: false,
-        timer: 1500
+        text: 'La confirmación de contraseña es incorrecta.',
+        showConfirmButton: true,
       });
     }
     else {
@@ -111,11 +123,20 @@ const Perfil = () => {
 
             if (response.ok) {
               console.log('Contraseña actualizada exitosamente, debes volver a iniciar sesión.');
-              Swal.fire({
-                icon: 'success',
-                title: 'Contraseña actualizada exitosamente, debes volver a iniciar sesión.',
+              const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
                 showConfirmButton: false,
-                timer: 1800
+                timer: 2000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                  toast.onmouseenter = Swal.stopTimer;
+                  toast.onmouseleave = Swal.resumeTimer;
+                }
+              });
+              Toast.fire({
+                icon: "success",
+                title: "Contraseña actualizada exitosamente, debes volver a iniciar sesión."
               });
               localStorage.removeItem('token');
 
@@ -127,7 +148,7 @@ const Perfil = () => {
 
               setTimeout(() => {
                 window.location.href = '/#/login';
-              }, 1800);
+              }, 2100);
 
             } else {
               console.error('Error al actualizar la contraseña:', response.statusText);

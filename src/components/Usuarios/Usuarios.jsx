@@ -65,7 +65,6 @@ function Usuarios() {
                     src={row.imagen_usuario ? row.imagen_usuario : 'https://tse2.mm.bing.net/th?id=OIP.U8HnwxkbTkhoZ_DTf7sCSgHaHa&pid=Api&P=0&h=180'}
                     width="40px" />
             ),
-            sortable: true,
             maxWidth: "140px",
         },
         {
@@ -97,7 +96,6 @@ function Usuarios() {
                     }
                 })
             ),
-            sortable: true,
             maxWidth: "10px",
         },
         {
@@ -114,7 +112,6 @@ function Usuarios() {
                     )}
                 </button>
             ),
-            sortable: true,
             maxWidth: "100px",
         },
         {
@@ -227,19 +224,29 @@ function Usuarios() {
                         // Eliminación exitosa, actualizar la lista de usuarios
                         fetchUsuarios();
                         // Mostrar alerta de éxito
-                        Swal.fire(
-                            '¡Eliminado!',
-                            'El usuario ha sido eliminado correctamente.',
-                            'success'
-                        );
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: "top-end",
+                            showConfirmButton: false,
+                            timer: 2000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                              toast.onmouseenter = Swal.stopTimer;
+                              toast.onmouseleave = Swal.resumeTimer;
+                            }
+                          });
+                          Toast.fire({
+                            icon: "success",
+                            title: "El usuario ha sido eliminado correctamente."
+                          });
                     } else {
                         // Mostrar alerta de error si falla la eliminación
                         const errorData = await response.json(); // Parsear el cuerpo de la respuesta como JSON
                         console.error('Error al eliminar el usuario:', errorData.msg);
                         Swal.fire({
                             icon: 'error',
-                            title: 'No se pudo eliminar el usuario.',
-                            text: errorData.msg
+                            text: 'No se puede eliminar un usuario con pedidos o ordenes asociadas.',
+                            showConfirmButton: true
                         });
                     }
                 } catch (error) {
@@ -247,7 +254,8 @@ function Usuarios() {
                     console.error('Error al eliminar el usuario:', error);
                     Swal.fire({
                         icon: 'error',
-                        title: 'No se pudo eliminar el usuario.',
+                        text: 'No se puede eliminar un usuario con pedidos o ordenes asociadas.',
+                        showConfirmButton: true
                     });
                 }
             }
@@ -281,12 +289,21 @@ function Usuarios() {
 
                     if (response.ok) {
                         // Actualización exitosa, actualizar la lista de compras
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'El estado se ha actualizado',
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: "top-end",
                             showConfirmButton: false,
-                            timer: 1500
-                        });
+                            timer: 2000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                              toast.onmouseenter = Swal.stopTimer;
+                              toast.onmouseleave = Swal.resumeTimer;
+                            }
+                          });
+                          Toast.fire({
+                            icon: "success",
+                            title: "El estado se ha actualizado con éxito."
+                          });
                         fetchUsuarios();
                     } else {
                         console.error('Error al actualizar el estado del usuario');
@@ -344,6 +361,7 @@ function Usuarios() {
                 titulo="Detalles Usuario"
                 mostrarHeader={true}
                 mostrarOverlay={true}
+                mostrarExit={true}
                 posicionModal={'center'}
                 width={'500px'}
                 padding={'20px'}
