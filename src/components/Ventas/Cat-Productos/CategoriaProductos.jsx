@@ -79,7 +79,7 @@ function CategoriasProductos() {
                                 setCategoriasEditar(row)
                         }
                     }} className={estilos.boton} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}>
-                        <i className={`fa-solid fa-pen-to-square ${row.estado_categoria_productos === 1 ? 'iconosVerdes' : 'iconosGris'}`}></i>
+                        <i className={`fa-solid fa-pen-to-square ${row.estado_categoria_productos === 1 ? 'iconosNaranjas' : 'iconosGris'}`}></i>
                     </button>
                     <button
                         onClick={() => handleEliminarCategoria(row.id_categoria_productos)}
