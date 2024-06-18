@@ -375,3 +375,16 @@ background: #154360d7;
     border: 1px solid #B3B6B7;
     border-radius: 5px
 }
+
+.boton{
+    margin-left: -60px;
+}
+
+.input-field23 {
+    height: 10px;
+    border-radius: 5px;
+    width: 300PX; /* Cambia este valor para ajustar el ancho del input */
+    padding: 20px;
+    border: 1px solid #ccc;
+    border: 1px solid red;
+}

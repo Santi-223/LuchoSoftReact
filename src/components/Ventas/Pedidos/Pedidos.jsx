@@ -70,7 +70,7 @@ const Pedidos = () => {
     }, [Pedidos]);
 
     const filteredPedidos = Pedidos.filter(pedido =>
-        pedido.id_pedido.toString().includes(filtro) ||
+        pedido.id_cliente.toString().includes(filtro) ||
         pedido.observaciones.toLowerCase().includes(filtro.toLowerCase()) ||
         pedido.total_pedido.toString().includes(filtro)
     );
@@ -125,7 +125,7 @@ const Pedidos = () => {
                             </Link>
                             <abbr title="Ver detalle">
                                 <button onClick={() => { cambiarEstadoModal2(!estadoModal2); setIdproducto({ id_producto: row.id_pedido }); listarpedidosProductos(row.id_pedido); }}>
-                                    <i className={`fa-regular fa-eye ${estilos.icono_negro}`}></i>
+                                    <i className={`fa-regular fa-eye iconosAzules`}></i>
                                 </button>
                             </abbr>
                         </div>
@@ -134,7 +134,7 @@ const Pedidos = () => {
                             <button name="estado_pedido" id={estilos.estado_pedido_negro}><i className={`fa-solid fa-shuffle ${estilos.estado_pedido_negro}`}></i></button>
                             <button><i className={`fa-solid fa-pen-to-square ${estilos.icono_negro}`} ></i></button>
                             <abbr title="Ver detalle">
-                                <button onClick={() => { cambiarEstadoModal2(!estadoModal2, listarpedidosProductos(row.id_pedido)) }}><i className={`fa-regular fa-eye ${estilos.icono_negro}`}></i></button>
+                                <button ><i className={`bi-eye-slash cerrado ${estilos.estado_pedido_negro}`}></i></button>
                             </abbr>
                         </div>
                     )}

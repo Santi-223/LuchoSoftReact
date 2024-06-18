@@ -26,7 +26,7 @@ const Cliente = () => {
     });
 
     const [ClientesEditar, setClientesEditar] = useState({
-        id_cliente:'',
+        id_cliente: '',
         nombre_cliente: '',
         telefono_cliente: '',
         direccion_cliente: ''
@@ -124,27 +124,163 @@ const Cliente = () => {
             ),
         },
         {
-            name: "Acciones",
+            name: "ㅤㅤㅤAcciones",
             cell: (row) => (
-                <div className={estilos["acciones"]}>
-                    <label className={estilos["switch"]} >
-                        <input type="checkbox" onChange={() => handleEstadoCliente(row)} />
-                        {row.estado_cliente === 1 ? (
-                            <span className={`${row.estado_cliente == 1 && estilos['slider2']}`}></span>
+                <div>
+                    {
+                        row.estado_cliente === 1 ? (
+                            <div className={estilos["acciones"]}>
+                                <label className={estilos["switch"]} >
+                                    <input type="checkbox" onChange={() => handleEstadoCliente(row)} />
+                                    {row.estado_cliente === 1 ? (
+                                        <span className={`${row.estado_cliente == 1 && estilos['slider2']}`}></span>
+                                    ) : (
+                                        <span className={`${row.estado_cliente !== 1 && estilos['slider']}`}></span>
+                                    )}
+                                    <span className={`${row.estado_cliente == 1 && estilos['slider2']} ${row.estado_cliente !== 1 && estilos['slider']}`}></span>
+                                </label>
+                                <button onClick={() => { cambiarEstadoModal2(!estadoModal2), setClientesEditar(row) }}><i className={`fa-solid fa-pen-to-square iconosNaranjas`}></i></button>
+                                <abbr title="Ver detalle">
+                                    <button onClick={() => { cambiarEstadoModal3(!estadoModal3), setClientesEditar(row) }}><i className={`fa-regular fa-eye iconosAzules`}></i></button>
+                                </abbr>
+                                <button
+                                    onClick={() => handleEliminarCliente(row.id_cliente)}
+                                    // disabled={row.estado_producto === 0}
+                                    className={estilos["boton"]}
+                                    style={{ cursor: "pointer", textAlign: "center", fontSize: "23px" }}
+                                >
+                                    <i
+                                        className={`bi bi-trash ${row.estado_producto === 0 ? "basuraDesactivada" : ""
+                                            }`}
+                                        style={{ color: row.estado_producto === 0 ? "gray" : "red" }}
+                                    ></i>
+                                </button>
+                            </div>
                         ) : (
-                            <span className={`${row.estado_cliente !== 1 && estilos['slider']}`}></span>
-                        )}
-                        <span className={`${row.estado_cliente == 1 && estilos['slider2']} ${row.estado_cliente !== 1 && estilos['slider']}`}></span>
-                    </label>
-                    <button onClick={() => { cambiarEstadoModal2(!estadoModal2), setClientesEditar(row) }}><i className={`fa-solid fa-pen-to-square iconosNaranjas`}></i></button>
-                    <abbr title="Ver detalle">
-                        <button onClick={() => { cambiarEstadoModal3(!estadoModal3),setClientesEditar(row) }}><i className={`fa-regular fa-eye iconosAzules`}></i></button>
-                    </abbr>
+                            <div className={estilos["acciones"]}>
+                                <label className={estilos["switch"]} >
+                                    <input type="checkbox" onChange={() => handleEstadoCliente(row)} />
+                                    {row.estado_cliente === 1 ? (
+                                        <span className={`${row.estado_cliente == 1 && estilos['slider2']}`}></span>
+                                    ) : (
+                                        <span className={`${row.estado_cliente !== 1 && estilos['slider']}`}></span>
+                                    )}
+                                    <span className={`${row.estado_cliente == 1 && estilos['slider2']} ${row.estado_cliente !== 1 && estilos['slider']}`}></span>
+                                </label>
+                                <button><i className={`fa-solid fa-pen-to-square ${estilos.icono_negro}`}></i></button>
+                                <abbr title="Ver detalle">
+                                    <button ><i className={`bi-eye-slash cerrado ${estilos.icono_negro}`}></i></button>
+                                </abbr>
+                                <button
+                                    onClick={() => handleEliminarCliente(row.id_cliente)}
+                                    // disabled={row.estado_producto === 0}
+                                    className={estilos["boton"]}
+                                    style={{ cursor: "pointer", textAlign: "center", fontSize: "23px" }}
+                                >
+                                    <i
+                                        className={`bi bi-trash ${row.estado_producto === 0 ? "basuraDesactivada" : ""
+                                            }`}
+                                        style={{ color: row.estado_producto === 0 ? "gray" : "red" }}
+                                    ></i>
+                                </button>
+                            </div>
+                        )
+                    }
                 </div>
+
             )
         },
 
     ]
+
+    const handleEliminarCliente = async (id_cliente) => {
+        console.log("Intentando eliminar el cliente con ID:", id_cliente);
+    
+        try {
+            // Verificar si el producto tiene pedidos asociados
+            const ClienteResponse = await fetch(`https://api-luchosoft-mysql.onrender.com/ventas/pedidos/`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+    
+            if (!ClienteResponse.ok) {
+                const errorText = await ClienteResponse.text();
+                console.error("Error al verificar cliente asociado:", ClienteResponse.status, errorText);
+                await Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: `Error al verificar cliente asociado: ${ClienteResponse.statusText}`,
+                });
+                return;
+            }
+    
+            const Clientes = await ClienteResponse.json();
+    
+            const tienePedidosAsociados = Clientes.some(cliente => cliente.id_cliente === id_cliente);
+    
+            if (tienePedidosAsociados) {
+                await Swal.fire({
+                    icon: "warning",
+                    title: "No se puede eliminar",
+                    text: "El cliente tiene pedidos asociados y no puede ser eliminado.",
+                });
+                return;
+            }
+    
+            // Mostrar mensaje de confirmación
+            const { isConfirmed } = await Swal.fire({
+                text: "¿Deseas eliminar este cliente?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Sí, eliminar",
+                cancelButtonText: "Cancelar",
+            });
+    
+            if (!isConfirmed) return;
+    
+            console.log("Confirmación recibida para eliminar el cliente.");
+    
+            // Solicitud DELETE
+            const response = await fetch(`https://api-luchosoft-mysql.onrender.com/ventas/clientes/${id_cliente}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+    
+            // Manejo de la respuesta
+            if (response.ok) {
+                console.log("Cliente eliminado exitosamente.");
+                await Swal.fire({
+                    icon: "success",
+                    title: "Cliente eliminado",
+                    text: "El cliente ha sido eliminado correctamente",
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+                fetchVenta();
+            } else {
+                const errorText = await response.text();
+                console.error("Error al eliminar el cliente:", response.status, errorText);
+                await Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: `Error al eliminar el cliente: ${response.statusText}`,
+                });
+            }
+        } catch (error) {
+            console.error("Error al eliminar el cliente:", error);
+            await Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: `Error al eliminar el cliente: ${error.message}`,
+            });
+        }
+    };
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -158,10 +294,10 @@ const Cliente = () => {
             } else if (!esNumeroPositivo) {
                 setErrorId('No se permiten caracteres especiales ni letras.');
                 setInputValidoId(false);
-            } else if (value.length < 10) {
-                setErrorId('Ingresa 10 dígitos.');
+            } else if (value.length < 8) {
+                setErrorId('Ingresa un mínimo 8 dígitos.');
                 setInputValidoId(false);
-            } else if (value.length > 10) {
+            }else if (value.length > 10) {
                 setErrorId('Ingresa un máximo de 10 dígitos.');
                 setInputValidoId(false);
             } else {
@@ -178,8 +314,8 @@ const Cliente = () => {
                 setErrorNombre('No se permiten caracteres especiales.');
                 setInputValidoNombre(false);
             }
-            else if (value.length < 5) {
-                setErrorNombre('Ingresa al menos 5 caracteres.');
+            else if (value.length < 4) {
+                setErrorNombre('Ingresa al menos 4 caracteres.');
                 setInputValidoNombre(false);
             }
             else if (value.length > 30) {
@@ -205,6 +341,9 @@ const Cliente = () => {
             else if (value.length < 7) {
                 setErrorTelefono('Ingresa al menos 7 caracteres.');
                 setInputValidoTelefono(false);
+            }else if (value.length ==8 ||value.length ==9) {
+                setErrorTelefono('El teléfono contiene 7 o 10 caracteres');
+                setInputValidoTelefono(false);
             }
             else if (value.length > 10) {
                 setErrorTelefono('Ingresa un máximo de 10 caracteres.');
@@ -220,8 +359,8 @@ const Cliente = () => {
                 setErrorDireccion('El campo es obligatorio.');
                 setInputValidoDireccion(false);
             }
-            else if (value.length < 10) {
-                setErrorDireccion('Ingresa al menos 10 caracteres.');
+            else if (value.length < 15) {
+                setErrorDireccion('Ingresa al menos 15 caracteres.');
                 setInputValidoDireccion(false);
             }
             else if (value.length > 30) {
@@ -355,7 +494,7 @@ const Cliente = () => {
             });
             return;
         }
-        if (ClienteRegistrar.id_cliente <=9) {
+        if (ClienteRegistrar.id_cliente <= 9) {
             Swal.fire({
                 icon: 'error',
                 text: 'El documento no cuenta con la longitud establecida',
@@ -420,6 +559,7 @@ const Cliente = () => {
             console.error('Error al crear cliente:', error);
         }
     };
+
 
     const handleEstadoCliente = async (row) => {
         Swal.fire({
@@ -600,9 +740,12 @@ const Cliente = () => {
                             title: "Actualización exitosa"
                         });
                         setTimeout(() => {
+                            fetchVenta();
                             cambiarEstadoModal2(false)
+
                         }, 1000);
                         // Aquí podrías redirigir a otra página, mostrar un mensaje de éxito, etc.
+                        window.location.href = "/#/clientes";
                     } else {
                         console.error('Error al actualizar el cliente:', response.statusText);
                         Swal.fire({
@@ -665,6 +808,13 @@ const Cliente = () => {
                 fontSize: '13px'
             },
         },
+
+        name:{
+            style:{
+                textAlign: 'center',
+
+            }
+        },
     };
 
     if (isLoading) {
@@ -688,7 +838,7 @@ const Cliente = () => {
 
             </div>
             <div className={estilos["tabla"]}>
-                <DataTable columns={columns} data={filteredClientes} pagination paginationPerPage={6} highlightOnHover customStyles={customStyles} defaultSortField="id_producto" defaultSortAsc={true}></DataTable>
+                <DataTable columns={columns} data={filteredClientes} pagination paginationPerPage={6} highlightOnHover customStyles={customStyles} defaultSortField="id_cliente" defaultSortAsc={true}></DataTable>
             </div>
             <Modal
                 estado={estadoModal1}
@@ -757,23 +907,33 @@ const Cliente = () => {
                 <Contenido>
                     <div className={estilos["contFormsRCliente"]}>
                         <div className={estilos["input1RCliente"]}>
+                            <label>Documento <span style={{ color: 'red' }}>*</span></label>
+                            <input
+                                id={estilos["id_cliente"]} className={`${!inputValidoId ? estilos['input-field2'] : estilos['input-field']}`} type="number" placeholder="10203040" name="id_cliente"
+                                value={ClientesEditar.id_cliente} onChange={handleChange} disabled
+                            />
+                            {!inputValidoId && <p className='error' style={{ color: 'red', fontSize: '10px', position: 'relative' }}>{errorId}</p>}
+                        </div>
+                        <div className={estilos["input1RCliente"]}>
                             <p> Nombre<span style={{ color: 'red' }}>*</span></p>
                             <input id={estilos["nombre_cliente"]} className={`${!inputValidoNombreEditar ? estilos['input-field2'] : estilos['input-field']}`} type="text" placeholder="Nombre" name="nombre_cliente" value={ClientesEditar.nombre_cliente} onChange={handleEditarChange} />
                             {!inputValidoNombreEditar && <p className='error' style={{ color: 'red', fontSize: '10px', position: 'relative' }}>{errorNombreEditar}</p>}
                         </div>
+                        <br />
+                    </div>
+                    <div style={{ display: 'flex' }}>
                         <div className={estilos["input1RCliente"]}>
                             <p>Telefono<span style={{ color: 'red' }}>*</span></p>
                             <input id={estilos["telefono_cliente"]} className={`${!inputValidoTelefonoEditar ? estilos['input-field2'] : estilos['input-field']}`} type="number" placeholder="Telefono" name="telefono_cliente" value={ClientesEditar.telefono_cliente} onChange={handleEditarChange} />
                             {!inputValidoTelefonoEditar && <p className='error' style={{ color: 'red', fontSize: '10px', position: 'relative' }}>{errorTelefonoEditar}</p>}
                         </div>
-                        <br />
-                    </div>
-                    <div className={estilos["BotonesClientes2"]}>
                         <div className={estilos["input1RCliente"]}>
                             <p> Dirección<span style={{ color: 'red' }}>*</span></p>
                             <input id="direccion_cliente" className={`${!inputValidoDireccionEditar ? estilos['input-field2'] : estilos['input-field']}`} type="text" placeholder="Dirección" name="direccion_cliente" value={ClientesEditar.direccion_cliente} onChange={handleEditarChange} />
                             {!inputValidoDireccionEditar && <p className='error' style={{ color: 'red', fontSize: '10px', position: 'relative' }}>{errorDireccionEditar}</p>}
                         </div>
+                    </div>
+                    <div className={estilos["BotonesClientes"]}>
                         <button type='submit' onClick={EditarCliente} className={estilos['RegistrarCliente']}>Aceptar</button>
                         <button onClick={() => cambiarEstadoModal2(!estadoModal2, setClientesEditar({
                             nombre_cliente: '',
@@ -795,18 +955,18 @@ const Cliente = () => {
             >
                 <Contenido>
                     <div className={estilos["input1RCliente"]}>
-                        <label htmlFor="" ><i className="fa-solid fa-user" style={{color:'#b90505'}}></i>{'   '} Nombre: {ClientesEditar.nombre_cliente} </label>
+                        <label htmlFor="" > Nombre: {ClientesEditar.nombre_cliente} </label>
                         <br />
-                        <label htmlFor=""><i className="fa-regular fa-address-card" style={{color:'#b90505'}}></i>{'   '}  Documento: {ClientesEditar.id_cliente}</label>
+                        <label htmlFor=""> Documento: {ClientesEditar.id_cliente}</label>
                         <br />
-                        <label htmlFor=""><i className="fa-solid fa-phone" style={{color:'#b90505'}}></i>{'   '}Teléfono: {ClientesEditar.telefono_cliente}</label>
+                        <label htmlFor="">Teléfono: {ClientesEditar.telefono_cliente}</label>
                         <br />
-                        <label htmlFor=""><i className="fa-solid fa-map-location-dot" style={{color:'#b90505'}}></i>{'   '}Dirección: {ClientesEditar.direccion_cliente}</label>
-                        
-                       
+                        <label htmlFor="">Dirección: {ClientesEditar.direccion_cliente}</label>
+
+
                     </div>
                     <div className={estilos["boton-cerrar"]}>
-                        <button onClick={()=>cambiarEstadoModal3(!estadoModal3)}>Cerrar</button>
+                        <button onClick={() => cambiarEstadoModal3(!estadoModal3)}>Cerrar</button>
                     </div>
 
 

@@ -289,24 +289,7 @@ input {
 
 }
 
-.BotonesClientes2{
-    display: flex;
-    justify-content: space-between;
-    /* margin-top: 10%; */
-    align-items: center;
-}
 
-
-.BotonesClientes2 button{
-    height: 45px;
-    width: 100px;
-    margin-right: 10px;
-    border-radius: 10px;
-    border: none;
-    margin-top: 5%;
-    /* margin-left: 10px; */
-
-}
 
 
 .RegistrarCliente{
@@ -359,4 +342,8 @@ input {
     background-color: #7c7979;
     color: white;
     font-size: 14px;
+}
+
+.icono_negro{
+    color: #b3b1b1;
 }
