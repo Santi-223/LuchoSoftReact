@@ -803,10 +803,9 @@ function Roles() {
                                 <div className={estilos["input-container"]}>
                                     <div id={estilos.eo}>
                                         <p id={estilos.textito}>Descripción del rol</p>
-                                        <input
+                                        <textarea
                                             id={estilos.descrol}
                                             className={`${!inputValidoDes ? estilos.inputInvalido : estilos['input-field']}`}
-                                            type="text"
                                             placeholder="Insertar descripción"
                                             name='descripcion_rol'
                                             value={roles1.descripcion_rol}
@@ -814,8 +813,8 @@ function Roles() {
                                         />
                                         {!inputValidoDes && <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute' }}>{errorDes}</p>}
                                     </div>
-
                                 </div>
+
                             </div>
                             <div className={estilos["input-container"]}>
                                 <div className={estilos["contDerechaAbajo"]}>
@@ -919,18 +918,16 @@ function Roles() {
                                 <div className={estilos["input-container"]}>
                                     <div id={estilos.eo}>
                                         <p id={estilos.textito}>Descripción del rol</p>
-                                        <input
+                                        <textarea
                                             id={estilos.descrol}
-                                            className={`${!inputValidoDes2 ? estilos.inputInvalido : estilos['input-field']}`}
-                                            type="text"
+                                            className={`${!inputValidoDes ? estilos.inputInvalido : estilos['input-field']}`}
                                             placeholder="Insertar descripción"
                                             name='descripcion_rol'
-                                            value={rolesEditar.descripcion_rol}
-                                            onChange={handleChangeEditar}
+                                            value={roles1.descripcion_rol}
+                                            onChange={handleChange}
                                         />
-                                        {!inputValidoDes2 && <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute' }}>{errorDes2}</p>}
+                                        {!inputValidoDes && <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute' }}>{errorDes}</p>}
                                     </div>
-
                                 </div>
                             </div>
                             <div className={estilos["input-container"]}>

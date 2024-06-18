@@ -1,9 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Outlet, Link, json } from "react-router-dom";
+import { Outlet, Link, Navigate } from "react-router-dom";
 import "./Layout.css";
 import { useUserContext } from "../components/UserProvider";
+import Swal from "sweetalert2";
 
 const Layout = () => {
+
+    const [cerrarSesion, setCerrarSesion] = useState(false);
+
     const [selectedModule, setSelectedModule] = useState(null);
     const [permisoRoles, setPermisoRoles] = useState(false);
     const [permisoUsuarios, setPermisoUsuarios] = useState(false);
@@ -22,7 +26,34 @@ const Layout = () => {
 
     const { usuarioLogueado, permisos } = useUserContext();
 
+    const [openProfile, setOpenProfile] = useState(false);
+
+    const [roles, setRoles] = useState([]);
+
+    const fetchRoles = async () => {
+        try {
+            const response = await fetch('https://api-luchosoft-mysql.onrender.com/configuracion/roles');
+            if (response.ok) {
+                const data = await response.json();
+                const rolesFiltrados = data.map(rol => ({
+                    id_rol: rol.id_rol,
+                    nombre_rol: rol.nombre_rol,
+                    descripcion_rol: rol.descripcion_rol,
+                    estado_rol: rol.estado_rol,
+                }));
+                setRoles(rolesFiltrados);
+            } else {
+                console.error('Error al obtener las compras');
+            }
+        } catch (error) {
+            console.error('Error al obtener las compras:', error);
+        }
+    };
+
+
     useEffect(() => {
+
+        fetchRoles();
 
 
         if (permisos && permisos.includes(1)) {
@@ -98,21 +129,54 @@ const Layout = () => {
         setSelectedModule(selectedModule === module ? null : module);
     };
 
+    const alertaCerrarSesion = () => {
+        // Mostrar una alerta de confirmación
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "Estás a punto de cerrar sesión.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, cerrar sesión'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Aquí puedes agregar la lógica para cerrar la sesión
+                // Por ejemplo, redirigir a la página de inicio de sesión
+                // Eliminar token del localStorage
+                localStorage.removeItem('token');
+
+                // Eliminar usuario2 del localStorage
+                localStorage.removeItem('usuario2');
+
+                // Eliminar permisos del localStorage
+                localStorage.removeItem('permisos');
+
+                setCerrarSesion(true);
+
+            }
+        });
+    };
+
 
     //<h2>Componente Hijo</h2>
     //{usuario && <p>Hola {usuario.nombre_usuario}</p>}
 
+    if (cerrarSesion) {
+        return <Navigate to="/login" />;
+    }
+
     return (
         <div>
-            <link rel="preconnect" href="https://fonts.googleapis.com"/>
-            <link rel="preconnect" href="https://fonts.gstatic.com" crosorigin/>
-            <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet"/>
+            <link rel="preconnect" href="https://fonts.googleapis.com" />
+            <link rel="preconnect" href="https://fonts.gstatic.com" crosorigin />
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+            <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet" />
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" />
             <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
             <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
             <link href="https://cdn.datatables.net/2.0.2/css/dataTables.semanticui.css" rel="stylesheet" />
-            <link href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.css" rel="stylesheet" />
 
             <div className="barraPrincipal">
                 <div className="contenedor_1">
@@ -122,11 +186,49 @@ const Layout = () => {
                     <p id="luchosoft" className="bebas-neue-regular">LuchoSoft</p>
                 </div>
                 <div>
-                    <Link to="/Perfil">
-                        <a className="usuario-link">
-                            <img src={usuarioLogueado && usuarioLogueado.imagen_usuario} alt="" />
-                        </a>
-                    </Link>
+
+                    <a className="usuario-link">
+                        <img src={usuarioLogueado && usuarioLogueado.imagen_usuario} alt="" onClick={() => setOpenProfile(prev => !prev)} />
+
+                    </a>
+
+                    {openProfile && (
+                        <div className="flex flex-col dropDownProfile">
+                            <br />
+                            <center>
+                                <p style={{ fontSize: '17px', color: 'black', fontFamily: 'Roboto' }}>{usuarioLogueado.nombre_usuario}</p>
+                                <p style={{ fontSize: '12px', color: 'gray', fontFamily: 'Roboto' }}>{roles.map(rol => {
+                                    if (rol.id_rol === usuarioLogueado.id_rol) {
+                                        return rol.nombre_rol;
+                                    } else {
+                                        return null;
+                                    }
+                                })}</p>
+                            </center>
+                            <br />
+                            <div className="divUl">
+                                <ul className="flex flex-col gap-4 no-bullets">
+                                    <hr />
+                                    <Link to={`/Perfil`} className="custom-link">
+                                        <li onClick={() => cambiarEstadoModalPerfil(!estadoModalPerfil)} className="liDiv">
+                                            <img src="/archivos/imagenes/user.png" width={'20px'} /> <p style={{ fontSize: '14px', color: 'black', fontFamily: 'Roboto' }}>Perfil</p>
+                                        </li>
+                                    </Link>
+                                    <hr />
+                                    <Link to={`/editarPerfil/${usuarioLogueado && usuarioLogueado.id_usuario}`} className="custom-link">
+                                        <li className="liDiv">
+                                            <img src="/archivos/imagenes/edit.png" width={'20px'} /> <p style={{ fontSize: '14px', color: 'black', fontFamily: 'Roboto' }}>Editar perfil</p>
+                                        </li>
+                                    </Link>
+                                    <hr />
+                                    <li onClick={alertaCerrarSesion} className="liDiv">
+                                    <i class="fa-solid fa-arrow-right-from-bracket iconoLog"></i><p style={{ fontSize: '14px', color: 'black', fontFamily: 'Roboto' }}>Cerrar sesión</p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    )}
+
                 </div>
 
             </div>
@@ -137,7 +239,7 @@ const Layout = () => {
                         {permisoRoles && ( // Mostrar el módulo de configuración solo si el permiso uno está presente
                             <div className="module">
                                 <p className={`module-heading ${selectedModule === "Configuración" ? "selected" : ""}`} onClick={() => handleModuleClick("Configuración")}>
-                                   <i className="bi bi-gear"></i> Configuración <i className="bi bi-chevron-down arrow-icon"></i>
+                                    <i className="bi bi-gear"></i> Configuración <i className="bi bi-chevron-down arrow-icon"></i>
                                 </p>
                                 <Link to={"/roles"}>
                                     <ul className={`options ${selectedModule === "Configuración" ? "active" : ""}`} >
@@ -150,7 +252,7 @@ const Layout = () => {
                         {permisoUsuarios && (
                             <div className="module">
                                 <p className={`module-heading ${selectedModule === "Usuarios" ? "selected" : ""}`} onClick={() => handleModuleClick("Usuarios")}>
-                                   <i className="bi bi-person-circle"></i>Usuarios <i className="bi bi-chevron-down arrow-icon"></i>
+                                    <i className="bi bi-person-circle"></i>Usuarios <i className="bi bi-chevron-down arrow-icon"></i>
                                 </p>
                                 <Link to="/usuarios">
                                     <ul className={`options ${selectedModule === "Usuarios" ? "active" : ""}`}>
@@ -163,7 +265,7 @@ const Layout = () => {
                         {permisoMCompras && (
                             < div className="module">
                                 <p className={`module-heading ${selectedModule === "Compras" ? "selected" : ""}`} onClick={() => handleModuleClick("Compras")}>
-                                   <i className="bi bi-cart-check"></i> Compras <i className="bi bi-chevron-down arrow-icon"></i>
+                                    <i className="bi bi-cart-check"></i> Compras <i className="bi bi-chevron-down arrow-icon"></i>
                                 </p>
                                 <ul className={`options ${selectedModule === "Compras" ? "active" : ""}`}>
                                     {permisoCatInsumos && (
@@ -192,7 +294,7 @@ const Layout = () => {
                         {permisoOrden && (
                             <div className="module">
                                 <p className={`module-heading ${selectedModule === "Producción" ? "selected" : ""}`} onClick={() => handleModuleClick("Producción")}>
-                                   <i className="bi bi-box-seam"></i> Producción <i className="bi bi-chevron-down arrow-icon"></i>
+                                    <i className="bi bi-box-seam"></i> Producción <i className="bi bi-chevron-down arrow-icon"></i>
                                 </p>
                                 <ul className={`options ${selectedModule === "Producción" ? "active" : ""}`}>
                                     <Link to="/ordenes_produccion">
@@ -244,5 +346,6 @@ const Layout = () => {
         </div >
     );
 };
+
 
 export default Layout;

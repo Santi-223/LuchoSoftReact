@@ -211,9 +211,12 @@ const Perfil = () => {
   return (
     <div className={estilos.div1}>
       <MDBCard className={`mb-3 ${estilos.card}`} style={{ borderRadius: '.5rem' }}>
-        <MDBRow className="g-0">
+        <MDBRow className="g-0 w-100 ${es}">
           <MDBCol md="4" className={`gradient-custom text-center text-white ${estilos.bgcustom}`}
             style={{ borderTopLeftRadius: '.5rem', borderBottomLeftRadius: '.5rem', heigh: '400px' }}>
+            <br />
+            <br />
+            <br />
             <MDBCardImage src={usuarioLS && usuarioLS.imagen_usuario}
               alt="Avatar" className="my-4" style={{ borderRadius: '50%', width: '80px' }} fluid />
             <MDBTypography tag="h5">{usuarioLS && usuarioLS.nombre_usuario}</MDBTypography>
@@ -228,6 +231,9 @@ const Perfil = () => {
             <Link to={`/editarPerfil/${usuarioLS && usuarioLS.id_usuario}`}>
               <MDBIcon far icon="edit mb-5" style={{ fontSize: '1.5em', color: '#ffbd2f' }} />
             </Link>
+            <br />
+            <br />
+            <br />
           </MDBCol>
           <MDBCol md="8">
             <MDBCardBody className="p-4">
@@ -251,10 +257,6 @@ const Perfil = () => {
                   <MDBCardText className="text-muted">{usuarioLS && usuarioLS.direccion_usuario}</MDBCardText>
                 </MDBCol>
               </MDBRow>
-              <div className={estilos.bottomRightButtons}>
-                <button onClick={() => cambiarEstadoModalActContraseña(!estadoModalActContraseña)} className={`btn btn-primary me-2 ${estilos.button}`}>Reestablecer contraseña</button>
-                <button className={`btn btn-danger ${estilos.button}`} onClick={alertaCerrarSesion}><i className="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
-              </div>
               {/* 
               <div className="d-flex justify-content-start">
                 <a href="#!"><MDBIcon fab icon="facebook me-3" size="lg" /></a>
@@ -264,6 +266,9 @@ const Perfil = () => {
             </MDBCardBody>
           </MDBCol>
         </MDBRow>
+        <div className={estilos.bottomRightButtons}>
+          <button onClick={() => cambiarEstadoModalActContraseña(!estadoModalActContraseña)} className={` me-2 ${estilos.botonesBordeRojo}`}>Reestablecer contraseña</button>
+        </div>
       </MDBCard>
       <Modal
         estado={estadoModalActContraseña}

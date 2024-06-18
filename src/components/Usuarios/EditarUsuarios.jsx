@@ -471,21 +471,7 @@ function EditarUsuario() {
                                 </div>
                             </div>
                             <div className={estilos["input-container"]}>
-                                <div className={estilos["formulario__grupo"]} id={estilos.grupo__contraseña}>
-                                    <label htmlFor="contraseña">Contraseña</label>
-                                    <div className={estilos["formulario__grupo-input"]}>
-                                        <input
-                                            className={`${!inputValidadoContrasena ? estilos.inputInvalido : estilos['input-field2']}`}
-                                            type="password"
-                                            name="contraseña"
-                                            id={estilos.contraseña}
-                                            value={usuario.contraseña}
-                                            onChange={handleChange}
-                                        />
-                                        {!inputValidadoContrasena && <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute' }}>{errorContrasena}</p>}
-                                    </div>
-                                </div>
-                                <div className={estilos["formulario__grupo2"]} id={estilos.grupo__id_rol}>
+                                <div className={estilos["formulario__grupo"]} id={estilos.grupo__id_rol}>
                                     <label htmlFor="id_rol">Seleccionar Rol</label>
                                     <div className={estilos["formulario__grupo-input"]}>
                                         <select

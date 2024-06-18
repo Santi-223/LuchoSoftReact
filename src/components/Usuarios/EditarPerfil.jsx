@@ -423,12 +423,11 @@ function EditarPerfil() {
                         <h1>Editar Perfil</h1>
                         <br />
                         <br />
-                        <br />
                     </div>
                 </center>
                 <form onSubmit={handleSubmit}>
                     <div id={estilos.contenedorsitos}>
-                    <div id={estilos.contenedorsito}>
+                    <div>
                             <div className={estilos["input-container"]}>
                                 <div className={estilos["formulario__grupo"]} id={estilos.grupo__id_usuario}>
                                     <label htmlFor="id_usuario">Identificación</label>
@@ -505,43 +504,6 @@ function EditarPerfil() {
                                     {!inputValidadoEmail && <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute' }}>{errorEmail}</p>}
                                 </div>
                             </div>
-                            <div className={estilos["input-container"]}>
-                                <div className={estilos["formulario__grupo"]} id={estilos.grupo__contraseña}>
-                                    <label htmlFor="contraseña">Contraseña</label>
-                                    <div className={estilos["formulario__grupo-input"]}>
-                                        <input
-                                            className={`${!inputValidadoContrasena ? estilos.inputInvalido : estilos['input-field2']}`}
-                                            type="password"
-                                            name="contraseña"
-                                            id={estilos.contraseña}
-                                            value={usuario.contraseña}
-                                            onChange={handleChange}
-                                        />
-                                        {!inputValidadoContrasena && <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute' }}>{errorContrasena}</p>}
-                                    </div>
-                                </div>
-                                <div className={estilos["formulario__grupo2"]} id={estilos.grupo__id_rol}>
-                                    <label htmlFor="id_rol">Seleccionar Rol</label>
-                                    <div className={estilos["formulario__grupo-input"]}>
-                                        <select
-                                            className={`${!inputValidadoRol ? estilos.inputInvalido : estilos['input-field2']}`}
-                                            name="id_rol" // Utiliza el mismo nombre que el campo id_rol
-                                            id={estilos.id_rol} // Cambia el id para que sea único
-                                            value={usuario.id_rol}
-                                            onChange={handleChange}
-                                        >
-                                            <option value={0}>Seleccione un rol</option>
-                                            {roles.map(rol => {
-                                                if (rol.estado_rol !== false) {
-                                                    return <option key={rol.id_rol} value={rol.id_rol}>{rol.nombre_rol}</option>;
-                                                }
-                                                return null;
-                                            })}
-                                        </select>
-                                        {!inputValidadoRol && <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute' }}>{errorRol}</p>}
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                         <div id={estilos.cosas}>
                             <center>
@@ -568,6 +530,7 @@ function EditarPerfil() {
                             </center>
                         </div>
                     </div>
+                    <br />
                     <div className={estilos["botonsito"]}>
                         <button className={`boton ${estilos.azul}`} type='submit'><p className={estilos.textoBoton}>Guardar</p></button>
                         <Link className={`boton ${estilos.gris}`} to='/Perfil'><p>Cancelar</p></Link>

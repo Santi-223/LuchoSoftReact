@@ -136,7 +136,7 @@ body{
 
 .usuario-link img {
   margin-top: 8px;
-  margin-right: 10px;
+  margin-right: 20px;
   border-radius: 50%;
   width: 40px;
   height: 40px;
@@ -225,4 +225,65 @@ a {
   word-break: break-word;     /* Rompe las palabras largas si es necesario */
   white-space: normal;        /* Mantiene el comportamiento estándar de los espacios en blanco */
   hyphens: auto;              /* Inserta guiones automáticamente cuando sea posible */
+}
+
+.dropDownProfile{
+  z-index: 1000;
+  position: absolute;
+  top: 4.8rem;
+  right: 1rem;
+  width: 250px;
+  padding: 15px;
+  border-radius: 8px;
+  background-color: white;
+  border: 1px solid rgb(197, 197, 197);
+
+}
+
+.dropDownProfile::before{
+  content: '';
+  position: absolute;
+  top: -0.8rem;
+  right: 1.2rem;
+  width: 20px;
+  height: 20px;
+  transform: rotate(45deg);
+  background-color: white;
+  border-left: 1px solid rgb(197, 197, 197);
+  border-top: 1px solid rgb(197, 197, 197);
+}
+
+.no-bullets {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.no-bullets li {
+  margin-top: 0px;
+}
+
+.custom-link {
+  color: inherit;  /* Hace que el enlace tome el color del elemento padre */
+  text-decoration: none;  /* Elimina el subrayado */
+}
+
+.liDiv{
+  display: flex;
+  align-items: center;
+}
+
+.liDiv p{
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.divUl{
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.iconoLog {
+  color: #E12424;
+  font-size: 18px;
 }

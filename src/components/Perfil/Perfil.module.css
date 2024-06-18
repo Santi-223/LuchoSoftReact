@@ -12,9 +12,7 @@
 }
 
 .div1{
-  margin-top: 16vh;
-  margin-left: 15vh;
-  margin-right: 15vh;
+  margin-top: 10vh;
 }
 
 #iconoEditar {
@@ -179,4 +177,21 @@
 
 .gris:active {
   box-shadow: 1px 1px 1px 1px #adadad;
+}
+
+.botonesBordeRojo {
+  border: 1px solid #b90505;
+  margin-right: 20px;
+  background-color: white;
+  color: #b90505;
+  border-radius: 50px;
+  height: 40px;
+  width: 300px;
+  font-size: 18px;
+}
+
+.botonesBordeRojo:hover {
+  background: #b905052d;
+  color: white;
+
 }
