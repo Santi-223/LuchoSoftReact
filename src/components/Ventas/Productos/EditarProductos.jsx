@@ -5,6 +5,15 @@ import { Navigate, useParams, Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
 function EditarProductos() {
+    const [inputValido, setInputValido] = useState(true);
+    const [inputValido2, setInputValido2] = useState(true);
+    const [inputValido3, setInputValido3] = useState(true);
+    const [inputValidoD, setInputValidoD] = useState(true);
+    const [inputValido2D, setInputValido2D] = useState(true);
+    const [inputValido3D, setInputValido3D] = useState(true);
+    const [inputValidoP, setInputValidoP] = useState(true);
+    const [inputValido2P, setInputValido2P] = useState(true);
+    const [inputValido3P, setInputValido3P] = useState(true);
     const [redirect, setRedirect] = useState(false);
     const [categorias, setCategorias] = useState([]);
     const [inputValidadoImg, setInputValidoImg] = useState(true);
@@ -67,6 +76,76 @@ function EditarProductos() {
 
     const handleChange = (event) => {
         const { name, value } = event.target;
+
+
+        if (name === 'nombre_producto') {
+            if (value.length > 30) {
+                setInputValido(false);
+            } else {
+                setInputValido(true);
+            }
+        }
+        if (name === 'nombre_producto') {
+            if (value.length > 0) {
+                setInputValido3(true)
+            }
+        }
+
+        if (name === 'nombre_producto') {
+            // Expresión regular que coincide con cualquier carácter que no sea una letra, un número o un guion bajo
+            const caracteresEspeciales = /^[a-zA-Z0-9\s#,;.-àèìòù]*$/;
+
+            // Verificar si la cadena no contiene caracteres especiales
+            if (caracteresEspeciales.test(value)) {
+                setInputValido2(true);
+            } else {
+                setInputValido2(false);
+            }
+        }
+
+        if (name === 'descripcion_producto') {
+            if (value.length > 60) {
+                setInputValidoD(false);
+            } else {
+                setInputValidoD(true);
+            }
+        }
+        if (name === 'descripcion_producto') {
+            if (value.length > 0) {
+                setInputValido3D(true)
+            }
+        }
+
+        if (name === 'descripcion_producto') {
+            // Expresión regular que coincide con cualquier carácter que no sea una letra, un número o un guion bajo
+            const caracteresEspeciales = /^[a-zA-Z0-9\s#,;.-àèìòù]*$/;
+
+            // Verificar si la cadena no contiene caracteres especiales
+            if (caracteresEspeciales.test(value)) {
+                setInputValido2D(true);
+            } else {
+                setInputValido2D(false);
+            }
+        }
+
+
+
+
+        if (name === 'precio_producto') {
+            if (value.length > 30) {
+                setInputValidoP(false);
+            } else {
+                setInputValidoP(true);
+            }
+        }
+        if (name === 'precio_producto') {
+            if (value.length > 0) {
+                setInputValido3P(true)
+            }
+        }
+
+
+
         setProducto(prevProducto => ({
             ...prevProducto,
             [name]: value
@@ -97,7 +176,122 @@ function EditarProductos() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+
+        if (!inputValido) {
+            Swal.fire({
+                icon: 'error',
+                text: 'Por favor, digite bien los datos',
+                confirmButtonColor: '#1F67B9',
+            });
+            return;
+        }
+
+        if (!inputValido2) {
+            Swal.fire({
+                icon: 'error',
+                text: 'Por favor, digite bien los datos',
+                confirmButtonColor: '#1F67B9',
+            });
+            return;
+        }
+
+        if (producto.nombre_producto.trim() === '') {
+            Swal.fire({
+                icon: 'error',
+
+                text: 'El nombre del producto no puede estar vacío',
+            });
+            setInputValido3(false)
+            return;
+        }
+
+        if (producto.descripcion_producto.trim() === '') {
+            Swal.fire({
+                icon: 'error',
+
+                text: 'la descripción del producto no puede estar vacía',
+            });
+            setInputValido3D(false)
+            return;
+        }
+
         
+
+        if (!producto.id_categoria_producto) {
+            Swal.fire({
+                icon: 'error',
+                text: 'La categoría del producto no puede estar vacía',
+            });
+            return;
+        }
+
+
+        if (producto.nombre_producto.length < 3) {
+            Swal.fire({
+                icon: 'error',
+
+                text: 'El nombre del producto debe tener al menos 3 letras',
+            });
+            setInputValido(false)
+            return;
+        }
+
+        if (producto.descripcion_producto.length < 10) {
+            Swal.fire({
+                icon: 'error',
+
+                text: 'la descripción del producto debe tener al menos 10 letras',
+            });
+            setInputValidoD(false)
+            return;
+        }
+
+        if (producto.precio_producto.length < 3) {
+            Swal.fire({
+                icon: 'error',
+
+                text: 'El precio del producto debe tener al menos 3 digitos',
+            });
+            setInputValidoP(false)
+            return;
+        }
+
+
+
+        const regex = /^[a-zA-Z0-9\s#,;.-àèìòù]*$/;
+
+        if (!regex.test(producto.nombre_producto)) {
+            // Mostrar alerta con SweetAlert
+            Swal.fire({
+                icon: 'error',
+
+                text: 'El nombre no puede contener caracteres especiales',
+            });
+            return;
+        }
+
+        if (!regex.test(producto.descripcion_producto)) {
+            // Mostrar alerta con SweetAlert
+            Swal.fire({
+                icon: 'error',
+
+                text: 'la descripción no puede contener caracteres especiales',
+            });
+            return;
+        }
+
+
+        // Validar el campo de precio
+        if (isNaN(producto.precio_producto) || parseFloat(producto.precio_producto) < 50) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Ingresa un precio válido, debe ser mayor o igual que 50',
+                confirmButtonText: 'Aceptar'
+            });
+            return; // Detener la ejecución si el precio no es válido
+        }
+
 
         Swal.fire({
             title: '¿Estás seguro?',
@@ -126,7 +320,7 @@ function EditarProductos() {
 
                     if (response.ok) {
                         console.log('Producto actualizado exitosamente.');
-                                            
+
                         Swal.fire({
                             toast: true,
                             position: "top-end",
@@ -184,7 +378,7 @@ function EditarProductos() {
                     </div>
                 </center>
                 <form onSubmit={handleSubmit}>
-                    <div style={{justifyContent: 'space-between', marginTop: '-50px'}} id={estilos.contenedorsitos}>
+                    <div style={{ justifyContent: 'space-between', marginTop: '-50px' }} id={estilos.contenedorsitos}>
                         <div style={{ marginTop: '-20px' }} id={estilos.contenedorsito}>
                             <div className={estilos["input-container"]}>
                                 <div className={estilos["formulario__grupo"]} id={estilos.grupo__id_producto}>
@@ -214,6 +408,26 @@ function EditarProductos() {
                                             style={{ width: '350px' }}
 
                                         />
+                                        {
+                                            !inputValido3 && (
+                                                <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>El campo no puede estar vacío</p>
+                                            )
+                                        }
+                                        {
+                                            !inputValido2 && !inputValido && (
+                                                <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>No se aceptan caracteres especiales.</p>
+                                            )
+                                        }
+                                        {
+                                            !inputValido && inputValido2 && (
+                                                <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>Debe de contener al menos 3 letras y máximo 30.</p>
+                                            )
+                                        }
+                                        {
+                                            !inputValido2 && inputValido && (
+                                                <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>No se aceptan caracteres especiales.</p>
+                                            )
+                                        }
                                         <span></span>
                                     </div>
                                 </div>
@@ -229,9 +443,29 @@ function EditarProductos() {
                                         id={estilos.descripcion_producto}
                                         value={producto.descripcion_producto}
                                         onChange={handleChange}
-                                        style={{ marginLeft: "30px",  resize: 'none', width: '350px' }}
+                                        style={{ marginLeft: "30px", resize: 'none', width: '350px' }}
 
                                     />
+                                    {
+                                        !inputValido3D && (
+                                            <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '30px' }}>El campo no puede estar vacío</p>
+                                        )
+                                    }
+                                    {
+                                        !inputValido2D && !inputValidoD && (
+                                            <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '30px' }}>No se aceptan caracteres especiales.</p>
+                                        )
+                                    }
+                                    {
+                                        !inputValidoD && inputValido2D && (
+                                            <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '30px' }}>Debe de contener al menos 10 letras y máximo 60.</p>
+                                        )
+                                    }
+                                    {
+                                        !inputValido2D && inputValidoD && (
+                                            <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '30px' }}>No se aceptan caracteres especiales.</p>
+                                        )
+                                    }
                                     <span></span>
                                 </div>
                             </div>
@@ -241,18 +475,38 @@ function EditarProductos() {
                                     <div className={estilos["formulario__grupo-input"]}>
                                         <input
                                             className={estilos["input-field2"]}
-                                            type="text"
+                                            type="number"
                                             name="precio_producto"
                                             id={estilos.precio_producto}
                                             value={producto.precio_producto}
                                             onChange={handleChange}
                                             style={{ marginLeft: "20px", width: '350px' }}
                                         />
+                                        {
+                                            !inputValido3P && (
+                                                <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>El campo no puede estar vacío</p>
+                                            )
+                                        }
+                                        {
+                                            !inputValido2P && !inputValidoP && (
+                                                <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>No se aceptan caracteres especiales.</p>
+                                            )
+                                        }
+                                        {
+                                            !inputValidoP && inputValido2P && (
+                                                <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '20px' }}>Debe de contener al menos 3 letras y máximo 30.</p>
+                                            )
+                                        }
+                                        {
+                                            !inputValido2P && inputValidoP && (
+                                                <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>No se aceptan caracteres especiales.</p>
+                                            )
+                                        }
                                         <span></span>
                                     </div>
                                 </div>
                             </div>
-                            
+
 
 
                             <div className={estilos["input-container"]}>
@@ -283,7 +537,7 @@ function EditarProductos() {
                         </div>
                         <div id={estilos.cosas}>
                             <center>
-                            <div className={`${estilos.divImagen} `}>
+                                <div className={`${estilos.divImagen} `}>
                                     <p>URL Imagen</p>
                                     <img id={estilos.imagen}
                                         src={imgPreview || producto.imagen_producto || 'https://tse2.mm.bing.net/th?id=OIP.U8HnwxkbTkhoZ_DTf7sCSgHaHa&pid=Api&P=0&h=180'}
