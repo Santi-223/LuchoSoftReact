@@ -79,7 +79,7 @@ export default function FrequentCustomersTable() {
   }
 
   return (
-    <Box>
+    <Box sx={{ height: '400px', overflowY: 'auto' }}>
       <TableContainer
         sx={{
           width: '100%',
@@ -93,7 +93,7 @@ export default function FrequentCustomersTable() {
         <Table aria-labelledby="tableTitle">
           <OrderTableHead />
           <TableBody>
-            {rows.map((row, index) => (
+            {rows.slice(0, 9).map((row, index) => (
               <TableRow hover role="checkbox" tabIndex={-1} key={row.id_cliente}>
                 <TableCell>
                   <Link color="secondary"> {row.id_cliente}</Link>

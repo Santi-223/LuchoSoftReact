@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'; // Importar el icono de compras
 import AnalyticEcommerce from './AnalyticEcommerce';
 
 const TotalCompras = () => {
@@ -29,8 +30,11 @@ const TotalCompras = () => {
   }).format(totalCompras);
 
   return (
-    <Grid item xs={12} sm={6} md={4} lg={3}>
-      <AnalyticEcommerce title="Total de compras" count={totalComprasFormatted} />
+    <Grid item xs={12} sm={6} md={4} lg={4}>
+      <AnalyticEcommerce 
+        title="Total de compras" 
+        count={totalComprasFormatted} 
+      />
     </Grid>
   );
 };

@@ -29,7 +29,7 @@ const TotalVentas = () => {
   }).format(totalVentas);
 
   return (
-    <Grid item xs={12} sm={6} md={4} lg={3}>
+    <Grid item xs={12} sm={6} md={4} lg={4}>
       <AnalyticEcommerce title="Total de ventas" count={totalVentasFormatted} />
     </Grid>
   );
