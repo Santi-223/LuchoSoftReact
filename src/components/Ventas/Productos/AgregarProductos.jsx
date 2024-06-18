@@ -19,6 +19,8 @@ function AgregarProductos() {
     const [inputValidoP, setInputValidoP] = useState(true);
     const [inputValido2P, setInputValido2P] = useState(true);
     const [inputValido3P, setInputValido3P] = useState(true);
+    const [inputValidadoImg, setInputValidoImg] = useState(true);
+
 
     const [categorias, setCategorias] = useState([]);
     const [producto, setProducto] = useState({
@@ -37,17 +39,21 @@ function AgregarProductos() {
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
+        setimgProducto(file);
+        setImgPreview(URL.createObjectURL(file));
+
+
         const allowedTypes = ['image/jpeg', 'image/png', 'image/gif']; // Tipos MIME permitidos
 
         if (file && allowedTypes.includes(file.type)) {
             setErrorImg(''); // Limpia el mensaje de error
             setInputValidoImg(true);
-            setImgProducto(file); // Guarda el archivo seleccionado en el estado imgUsuario
+            setimgProducto(file); // Guarda el archivo seleccionado en el estado imgUsuario
             setImgPreview(URL.createObjectURL(file)); // Crea una URL para mostrar la vista previa de la imagen
         } else {
             setErrorImg('Selecciona un archivo de imagen válido (JPEG, PNG, GIF).');
             setInputValidoImg(false);
-            setImgProducto(null); // Restablece el estado de la imagen
+            setimgProducto(null); // Restablece el estado de la imagen
             setImgPreview(''); // Restablece la vista previa de la imagen
             event.target.value = null;
         } // Crear una URL para la imagen seleccionada
