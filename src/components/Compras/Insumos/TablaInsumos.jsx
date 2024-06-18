@@ -246,13 +246,21 @@ function Insumos() {
 
           if (response.ok) {
             // Insumo eliminado exitosamente
-            Swal.fire({
-              icon: "success",
-              title: "Insumo eliminado",
-              text: "El insumo ha sido eliminado correctamente",
+            const Toast = Swal.mixin({
+              toast: true,
+              position: "top-end",
               showConfirmButton: false,
-              timer: 1500,
+              timer: 3000,
+              timerProgressBar: true,
+              didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+              }
             });
+            Toast.fire({
+              icon: "success",
+              title: "Insumo eliminado exitosamente."
+            })
             // Actualizar la lista de insumos
             fetchinsumos();
           } else {
@@ -586,12 +594,21 @@ function Insumos() {
 
           if (response.ok) {
             console.log("insumo actualizado exitosamente.");
-            Swal.fire({
-              icon: "success",
-              title: "insumo actualizado exitosamente",
+            const Toast = Swal.mixin({
+              toast: true,
+              position: "top-end",
               showConfirmButton: false,
-              timer: 1500,
+              timer: 3000,
+              timerProgressBar: true,
+              didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+              }
             });
+            Toast.fire({
+              icon: "success",
+              title: "Insumo actualizado exitosamente."
+            })
             setTimeout(() => {
               window.location.href = "/#/insumos";
               fetchinsumos();
@@ -1017,12 +1034,21 @@ function Insumos() {
       if (responseInsumos.ok) {
         console.log("Insumo creado exitosamente.");
 
-        Swal.fire({
-          icon: "success",
-          title: "Registro exitoso",
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
           showConfirmButton: false,
-          timer: 1500,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
         });
+        Toast.fire({
+          icon: "success",
+          title: "Insumo registrado exitosamente."
+        })
         setTimeout(() => {
           fetchinsumos();
           setinsumos1({
