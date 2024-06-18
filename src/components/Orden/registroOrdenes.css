@@ -8,6 +8,21 @@
     margin-top: -30px;
   
   }
+
+  .inputfield2 {
+
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 350px;
+    height: 40px;
+
+    
+    max-width: 280px;
+    display: flex;
+    justify-content: end;
+    margin-right: 50px;
+   
+  }
   
   .contenedor-input{
     max-Width: "170px";
