@@ -211,6 +211,38 @@ function Productos() {
         console.log("Intentando eliminar el producto con ID:", idProducto);
     
         try {
+            // Verificar si el producto tiene pedidos asociados
+            const pedidosResponse = await fetch(`https://api-luchosoft-mysql.onrender.com/ventas/pedidos_productos/`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+    
+            if (!pedidosResponse.ok) {
+                const errorText = await pedidosResponse.text();
+                console.error("Error al verificar pedidos asociados:", pedidosResponse.status, errorText);
+                await Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: `Error al verificar pedidos asociados: ${pedidosResponse.statusText}`,
+                });
+                return;
+            }
+    
+            const pedidos = await pedidosResponse.json();
+    
+            const tienePedidosAsociados = pedidos.some(pedido => pedido.id_producto === idProducto);
+    
+            if (tienePedidosAsociados) {
+                await Swal.fire({
+                    icon: "warning",
+                    title: "No se puede eliminar",
+                    text: "El producto tiene pedidos asociados y no puede ser eliminado.",
+                });
+                return;
+            }
+    
             // Mostrar mensaje de confirmación
             const { isConfirmed } = await Swal.fire({
                 text: "¿Deseas eliminar este producto?",
@@ -225,7 +257,6 @@ function Productos() {
             if (!isConfirmed) return;
     
             console.log("Confirmación recibida para eliminar el producto.");
-            console.log("Token utilizado:", token);
     
             // Solicitud DELETE
             const response = await fetch(`https://api-luchosoft-mysql.onrender.com/ventas2/productos/${idProducto}`, {
@@ -264,6 +295,8 @@ function Productos() {
             });
         }
     };
+    
+    
     
     
     
