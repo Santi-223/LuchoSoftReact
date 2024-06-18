@@ -23,6 +23,7 @@ const Layout = () => {
     const [permisoVentas, setPermisoVentas] = useState(false);
     const [permisoMCompras, setPermisoMCompras] = useState(false);
     const [permisoMVentas, setPermisoMVentas] = useState(false);
+    const [permisoDashboard, setPermisoDashboard] = useState(false);
 
     const { usuarioLogueado, permisos } = useUserContext();
 
@@ -110,6 +111,10 @@ const Layout = () => {
 
         if (permisos && permisos.includes(12)) {
             setPermisoVentas(true);
+        }
+
+        if (permisos && permisos.includes(13)) {
+            setPermisoDashboard(true);
         }
 
         const handleClickOutside = (event) => {
@@ -223,7 +228,7 @@ const Layout = () => {
                                     </Link>
                                     <hr />
                                     <li onClick={alertaCerrarSesion} className="liDiv">
-                                    <i class="fa-solid fa-arrow-right-from-bracket iconoLog"></i><p style={{ fontSize: '14px', color: 'black', fontFamily: 'Roboto' }}>Cerrar sesión</p>
+                                        <i class="fa-solid fa-arrow-right-from-bracket iconoLog"></i><p style={{ fontSize: '14px', color: 'black', fontFamily: 'Roboto' }}>Cerrar sesión</p>
                                     </li>
                                 </ul>
                             </div>
@@ -237,6 +242,19 @@ const Layout = () => {
             <div className="contenedor">
                 <div className="barraLateral">
                     <div className="sidebar">
+                        {permisoDashboard && ( // Mostrar el módulo de configuración solo si el permiso uno está presente
+                            <div className="module">
+                                <p className={`module-heading`} onClick={() => handleModuleClick("Dashboard")}>
+                                    <i class="fa-solid fa-chart-line"></i> Dashboard <i className="bi bi-chevron-down arrow-icon"></i>
+                                </p>
+                                <Link to={"/Dashboard"}>
+                                    <ul className={`options ${selectedModule === "Dashboard" ? "active" : ""}`} >
+                                        <li>Dashboard</li>
+                                    </ul>
+                                </Link>
+                            </div>
+                        )}
+
                         {permisoRoles && ( // Mostrar el módulo de configuración solo si el permiso uno está presente
                             <div className="module">
                                 <p className={`module-heading ${selectedModule === "Configuración" ? "selected" : ""}`} onClick={() => handleModuleClick("Configuración")}>

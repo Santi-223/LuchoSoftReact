@@ -7,8 +7,6 @@ import Swal from "sweetalert2";
 import DataTable from "react-data-table-component";
 import Modal from "./modal";
 import styled from "styled-components";
-import jsPDF from "jspdf";
-import "jspdf-autotable";
 
 function Insumos() {
   const token = localStorage.getItem("token");
@@ -66,43 +64,7 @@ function Insumos() {
       insumo.estado_insumo.toString().includes(filtro)
   );
 
-  const generarPDF = () => {
-    const doc = new jsPDF();
 
-    // Encabezado del PDF
-    doc.text("Reporte de Insumos", 20, 10);
-
-    // Definir las columnas que se mostrarán en el informe
-    const columnasInforme = ["Id", "Nombre", "Medida", "Stock", "Categoría"];
-
-    // Filtrar los datos de los insumos para incluir solo las columnas deseadas
-    const datosInforme = filteredinsumos.map((insumo) => {
-      const {
-        id_insumo,
-        nombre_insumo,
-        unidadesDeMedida_insumo,
-        stock_insumo,
-        nombre_categoria,
-      } = insumo;
-      return [
-        id_insumo,
-        nombre_insumo,
-        unidadesDeMedida_insumo,
-        stock_insumo,
-        nombre_categoria,
-      ];
-    });
-
-    // Agregar la tabla al documento PDF
-    doc.autoTable({
-      startY: 20,
-      head: [columnasInforme],
-      body: datosInforme,
-    });
-
-    // Guardar el PDF
-    doc.save("reporte_insumos.pdf");
-  };
 
   const columns = [
     {
@@ -190,7 +152,9 @@ function Insumos() {
           >
             <i
               className={`fa-solid fa-pen-to-square ${
-                row.estado_insumo === 1 ? "iconosNaranjas" : "iconosGris"
+                row.estado_insumo === 1
+                  ? "iconosNaranjas"
+                  : "iconosGris"
               }`}
             ></i>
           </button>
@@ -336,7 +300,7 @@ function Insumos() {
 
     if (name === 'nombre_insumo') {
       // Expresión regular que coincide con cualquier carácter que no sea una letra, un número o un guion bajo
-      const caracteresEspeciales = /^[a-zA-Z0-9\s#,;.-àèìòù]*$/; 
+      const caracteresEspeciales = /^[a-zA-Z0-9\sÁÉÍÓÚáéíóúÑñÜü]*$/;
     
       // Verificar si la cadena no contiene caracteres especiales
       if (caracteresEspeciales.test(value)) {
@@ -531,7 +495,7 @@ function Insumos() {
       Swal.fire({
         icon: 'error',
 
-        text: 'Por favor, digite bien los datos.',
+        text: "El mínimo es 3 letras y el máximo es de 50.",
         confirmButtonColor: '#1F67B9',
       });
       return;
@@ -542,7 +506,7 @@ function Insumos() {
       Swal.fire({
         icon: 'error',
 
-        text: 'Por favor, digite bien los datos.',
+        text: "No se aceptan caracteres especiales",
         confirmButtonColor: '#1F67B9',
       });
       return;
@@ -576,7 +540,7 @@ function Insumos() {
 
 
 
-    const regex = /^[a-zA-Z0-9\s#,;.-áéíóúñ]*$/; 
+    const regex = /^[a-zA-Z0-9\sÁÉÍÓÚáéíóúÑñÜü.,]*$/;
 
     if (
       !regex.test(insumos1.nombre_insumo) ||
@@ -686,7 +650,7 @@ function Insumos() {
       Swal.fire({
         icon: 'error',
 
-        text: 'Por favor, digite bien los datos.',
+        text: "El mínimo es 3 letras y el máximo es de 50.",
         confirmButtonColor: '#1F67B9',
       });
       return;
@@ -696,7 +660,7 @@ function Insumos() {
       Swal.fire({
         icon: 'error',
 
-        text: 'Por favor, digite bien los datos.',
+        text: "No se aceptan caracteres especiales",
         confirmButtonColor: '#1F67B9',
       });
       return;
@@ -937,7 +901,7 @@ function Insumos() {
           Swal.fire({
             icon: 'error',
     
-            text: 'Por favor, digite bien los datos.',
+            text: 'El número de stock sobrepasa los límites.',
             confirmButtonColor: '#1F67B9',
           });
           return;
@@ -947,7 +911,7 @@ function Insumos() {
           Swal.fire({
             icon: 'error',
     
-            text: 'Por favor, digite bien los datos.',
+            text: "No se aceptan caracteres especiales",
             confirmButtonColor: '#1F67B9',
           });
           return;
@@ -1019,7 +983,7 @@ function Insumos() {
 
 
     // Validar que no haya caracteres especiales en los campos
-    const regex = /^[a-zA-Z0-9\s#,;.-áéíóúñ]*$/; 
+    const regex = /^[a-zA-Z0-9\sÁÉÍÓÚáéíóúÑñÜü.,]*$/;
 
     if (
       !regex.test(insumos1.nombre_insumo) ||
@@ -1122,7 +1086,7 @@ function Insumos() {
 
     if (name === 'nombre_insumo') {
       // Expresión regular que coincide con cualquier carácter que no sea una letra, un número o un guion bajo
-      const caracteresEspeciales = /^[a-zA-Z0-9\s#,;.-àèìòù]*$/; 
+      const caracteresEspeciales = /^[a-zA-Z0-9\sÁÉÍÓÚáéíóúÑñÜü]*$/;
     
       // Verificar si la cadena no contiene caracteres especiales
       if (caracteresEspeciales.test(value)) {
@@ -1231,7 +1195,7 @@ function Insumos() {
     headCells: {
       style: {
         textAlign: "center",
-        backgroundColor: "#E7E7E7",
+        backgroundColor: "#f2f2f2",
         fontWeight: "bold",
         padding: "10px",
         fontSize: "16px",
@@ -1245,6 +1209,31 @@ function Insumos() {
       },
     },
   };
+
+  const exportExcel = (customFileName) => {
+    import('xlsx').then((xlsx) => {
+        const worksheet = xlsx.utils.json_to_sheet(insumos);
+        const workbook = { Sheets: { data: worksheet }, SheetNames: ['data'] };
+        const excelBuffer = xlsx.write(workbook, {
+            bookType: 'xlsx',
+            type: 'array'
+        });
+
+        saveAsExcelFile(excelBuffer, customFileName || 'insumos');
+    });
+};
+const saveAsExcelFile = (buffer, fileName) => {
+    import('file-saver').then((module) => {
+        if (module && module.default) {
+            let EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+            let EXCEL_EXTENSION = '.xlsx';
+            const data = new Blob([buffer], {
+                type: EXCEL_TYPE
+            });
+            module.default.saveAs(data, fileName + EXCEL_EXTENSION);
+        }
+    });
+  }
 
   if (isLoading) {
     return <div>Cargando...</div>;
@@ -1294,13 +1283,7 @@ function Insumos() {
             <i className="fa-solid fa-plus"></i> Agregar
           </button>
 
-          <button
-            style={{ color: "white" }}
-            className={` ${estilos.vinotinto}`}
-            onClick={generarPDF}
-          >
-            <i className="fa-solid fa-download"></i>
-          </button>
+          <button style={{backgroundColor:'white', border:'1px solid #c9c6c675', borderRadius:'50px', marginTop: '-10px', cursor:'pointer'}} onClick={() => exportExcel('Reporte_Insumos')}> <img src="src\assets\excel-logo.png" height={'40px'}/> </button>
         </div>
       </div>
 
@@ -1311,6 +1294,7 @@ function Insumos() {
           pagination
           paginationPerPage={5}
           highlightOnHover
+          customStyles={customStyles} defaultSortField="id_categoria_productos" defaultSortAsc={true}
         ></DataTable>
       </div>
 
@@ -1416,7 +1400,7 @@ function Insumos() {
                       ${!inputStockValido2 ? estilos.inputInvalido : ''}
                       ${!inputStockValido3 ? estilos.inputInvalido : ''}
                       `}
-                      type="text"
+                      type="number"
                       placeholder="000"
                       name="stock_insumo"
                       value={insumos1.stock_insumo}

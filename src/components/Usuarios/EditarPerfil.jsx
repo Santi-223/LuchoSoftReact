@@ -420,6 +420,7 @@ function EditarPerfil() {
 
                                     setTimeout(() => {
                                         window.location.href = '/#/Perfil'
+                                        window.location.reload();
                                     }, 2000);
 
                                 } else {

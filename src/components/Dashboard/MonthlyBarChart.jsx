@@ -26,7 +26,7 @@ const barChartOptions = {
     enabled: false
   },
   xaxis: {
-    categories: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
+    categories: ['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa', 'Do'],
     axisBorder: {
       show: false
     },
@@ -50,13 +50,44 @@ export default function MonthlyBarChart() {
   const { primary, secondary } = theme.palette.text;
   const info = theme.palette.info.light;
 
-  const [series] = useState([
+  const [series, setSeries] = useState([
     {
-      data: [80, 95, 70, 42, 65, 55, 78]
+      data: [0, 0, 0, 0, 0, 0, 0]
     }
   ]);
 
   const [options, setOptions] = useState(barChartOptions);
+
+  useEffect(() => {
+    const fetchProductionOrders = async () => {
+      try {
+        const response = await fetch('https://api-luchosoft-mysql.onrender.com/orden/orden_produccion/');
+        const data = await response.json();
+
+        // Get the start and end dates of the current week
+        const now = new Date();
+        const firstDayOfWeek = new Date(now.setDate(now.getDate() - now.getDay() + 1)); // Monday
+        const lastDayOfWeek = new Date(now.setDate(firstDayOfWeek.getDate() + 6)); // Sunday
+
+        // Process the data to count the orders per day
+        const ordersCount = [0, 0, 0, 0, 0, 0, 0]; // Initialize an array for each day of the week
+        data.forEach(order => {
+          const orderDate = new Date(order.fecha_orden);
+          if (orderDate >= firstDayOfWeek && orderDate <= lastDayOfWeek) {
+            const day = orderDate.getDay(); // Get the day of the week (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
+            const adjustedDay = day === 0 ? 6 : day - 1; // Adjust to make Monday = 0, ..., Sunday = 6
+            ordersCount[adjustedDay]++;
+          }
+        });
+
+        setSeries([{ data: ordersCount }]);
+      } catch (err) {
+        console.error('Error fetching production orders:', err);
+      }
+    };
+
+    fetchProductionOrders();
+  }, []);
 
   useEffect(() => {
     setOptions((prevState) => ({

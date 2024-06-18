@@ -73,11 +73,6 @@ const PrivateRoute = ({ publ, prot, children }) => {
         cont = true
     }
 
-
-    if(prot === 111 && admin === true){
-        cont = true;
-    }
-
     console.log("admin? ", admin)
 
     if(publ && !auth){

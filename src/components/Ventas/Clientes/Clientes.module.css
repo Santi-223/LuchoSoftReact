@@ -1,8 +1,12 @@
-#tituloCliente{
-font-size: 15px;
-margin-top: -20px;
+.tituloCliente{
+font-size: 35px;
 display: flex;
 color: #48110d;
+margin-bottom: 20px;
+}
+
+.tituloCliente h1{
+font-size: 35px;
 }
 
 .contenido {
@@ -109,6 +113,11 @@ input {
     align-items: center;
 }
 
+.boton2{
+    display: flex;
+    justify-content: center;
+}
+
 .botonAgregar {
     border: 1px solid #b90505;
     margin-right: 20px;
@@ -118,17 +127,7 @@ input {
     height: 40px;
     width: 120px;
     font-size: 18px;
-}
-
-.boton-generar {
-    background-color: #48110d;
-    color: white;
-    text-align: center;
-    font-size: 20px;
-    height: 40px;
-    width: 55px;
-    border-radius: 50px;
-    border: none;
+    cursor: pointer;
 }
 
 
@@ -246,7 +245,8 @@ input {
 }
 
 .contFormsRCliente {
-    /* display: inline-block; */
+    display: flex;
+    /* flex-direction: column; */
     /* Alinea los formularios horizontalmente */
     text-align: left;
     /* Alinea el contenido de los formularios a la izquierda */
@@ -259,6 +259,8 @@ input {
 .input1RCliente{
     font-size: 16px;
     margin: 10px;
+    display: flex;
+    flex-direction: column;
 }
 
 
@@ -274,8 +276,9 @@ input {
 .BotonesClientes{
     display: flex;
     justify-content: space-between;
-    margin-top: 10px;
+    margin-top: 10%;
 }
+
 
 .BotonesClientes button{
     height: 45px;
@@ -286,9 +289,13 @@ input {
 
 }
 
+
+
+
 .RegistrarCliente{
     background-color: #1F67B9;
     color: #ffffff;
+    border: none;
 }
 
 .input-field {
@@ -297,4 +304,46 @@ input {
     width: 300PX; /* Cambia este valor para ajustar el ancho del input */
     padding: 20px;
     border: 1px solid #ccc;
+}
+.input-field2 {
+    height: 10px;
+    border-radius: 5px;
+    width: 300PX; /* Cambia este valor para ajustar el ancho del input */
+    padding: 20px;
+    border: 1px solid #ccc;
+    border: 1px solid red;
+}
+
+#id_cliente{
+    width: 200px;
+}
+
+#nombre_cliente{
+    width: 300px;
+}
+
+#telefono_cliente{
+    width: 200px;
+}
+
+.boton-cerrar{
+    border-top: 1px solid #ccc;
+    width: 95%;
+    display: flex;
+    justify-content: end;
+}
+
+.boton-cerrar button{
+    margin-top: 5%;
+    height: 5.5vh;
+    border: none;
+    width: 10vh;
+    border-radius: 10px;
+    background-color: #7c7979;
+    color: white;
+    font-size: 14px;
+}
+
+.icono_negro{
+    color: #b3b1b1;
 }

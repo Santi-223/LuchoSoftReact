@@ -817,15 +817,23 @@ function Roles() {
                         icon: "success",
                         title: "El rol ha sido actualizado."
                     });
+
+                    actualizarUsuarioLogueado(usuario);
+
+                    window.location.reload();
+
+                    setTimeout(() => {
+                        cambiarEstadoModalEditar(false);
+                    }, 2000);
+                } else {
+                    actualizarUsuarioLogueado(usuario);
+
+                    window.location.reload();
+
+                    setTimeout(() => {
+                        cambiarEstadoModalEditar(false);
+                    }, 2000);
                 }
-
-                actualizarUsuarioLogueado(usuario);
-
-                window.location.reload();
-
-                setTimeout(() => {
-                    cambiarEstadoModalEditar(false);
-                }, 2000);
 
             } else {
                 console.error('Error al refrescar, debes volver a iniciar sesión:', response.statusText);
@@ -963,7 +971,9 @@ function Roles() {
         headCells: {
             style: {
                 textAlign: 'center',
+                backgroundColor: '#f2f2f2',
                 fontWeight: 'bold',
+                padding: '10px',
                 fontSize: '16px'
             },
         }

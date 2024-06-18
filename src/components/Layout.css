@@ -271,8 +271,13 @@ a {
 }
 
 .custom-link {
-  color: inherit;  /* Hace que el enlace tome el color del elemento padre */
-  text-decoration: none;  /* Elimina el subrayado */
+    color: inherit; /* Hereda el color del elemento padre */
+    text-decoration: none; /* Sin subrayado */
+}
+
+.custom-link:hover, .custom-link:focus, .custom-link:active {
+    text-decoration: none; /* Asegurarse de que no haya subrayado en ningún estado */
+    color: inherit; /* Mantener el color en cualquier estado */
 }
 
 .liDiv{

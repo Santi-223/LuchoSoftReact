@@ -7,8 +7,7 @@ import Swal from "sweetalert2";
 import Modal from "./modal";
 import styled from "styled-components";
 import DataTable from "react-data-table-component";
-import jsPDF from "jspdf";
-import "jspdf-autotable";
+
 
 function Proveedores() {
   const token = localStorage.getItem("token");
@@ -61,58 +60,15 @@ function Proveedores() {
   const filteredproveedores = proveedores.filter(
     (proveedor) =>
       proveedor.id_proveedor.toString().includes(filtro) ||
-      proveedor.nombre_proveedor.toLowerCase().includes(filtro) ||
+      proveedor.nombre_proveedor.toLowerCase().includes(filtro.toLowerCase()) ||
       proveedor.documento_proveedor.toString().toLowerCase().includes(filtro) ||
       proveedor.telefono_proveedor.toString().includes(filtro) ||
-      proveedor.direccion_proveedor.toString().toLowerCase().includes(filtro) ||
+      proveedor.direccion_proveedor.toString().toLowerCase().includes(filtro.toLowerCase()) ||
       proveedor.estado_proveedor.toString().includes(filtro) ||
-      proveedor.tipo_documento.toString().toLowerCase().includes(filtro)
+      proveedor.tipo_documento.toString().toLowerCase().includes(filtro.toLowerCase())
   );
 
-  const generarPDF = () => {
-    const doc = new jsPDF();
 
-    // Encabezado del PDF
-    doc.text("Reporte de Proveedores", 20, 10);
-
-    // Definir las columnas que se mostrarán en el informe (excluyendo "Estado")
-    const columnasInforme = [
-      "Id",
-      "Nombre",
-      "Tipo Documento",
-      "Teléfono",
-      "Dirección",
-    ];
-
-    const datosInforme = filteredproveedores.map((proveedor) => {
-      const {
-        id_proveedor,
-        nombre_proveedor,
-        tipo_documento,
-        documento_proveedor,
-        telefono_proveedor,
-        direccion_proveedor,
-      } = proveedor;
-      return [
-        id_proveedor,
-        nombre_proveedor,
-        tipo_documento,
-        documento_proveedor,
-        telefono_proveedor,
-        direccion_proveedor,
-      ];
-    });
-
-    // Agregar la tabla al documento PDF
-    doc.autoTable({
-      startY: 20,
-      head: [columnasInforme],
-      body: datosInforme,
-    });
-
-    // Guardar el PDF
-    doc.save("reporte_proveedores.pdf");
-  };
 
   const handleEliminarProveedor = (idProveedor) => {
     // Mostrar un mensaje de confirmación antes de eliminar
@@ -140,7 +96,6 @@ function Proveedores() {
           );
 
           if (response.ok) {
-            // Insumo eliminado exitosamente
             Swal.fire({
               icon: "success",
               title: "Proveedor eliminado",
@@ -269,7 +224,9 @@ function Proveedores() {
           >
             <i
               className={`fa-solid fa-pen-to-square ${
-                row.estado_proveedor === 1 ? "iconosNaranjas" : "iconosGris"
+                row.estado_proveedor === 1
+                  ? "iconosNaranjas"
+                  : "iconosGris"
               }`}
             ></i>
           </button>
@@ -804,7 +761,7 @@ function Proveedores() {
       direccion_proveedor.trim() !== ""
     ) {
       // Validar que los campos no contengan caracteres especiales
-      const regex = /^[a-zA-Z0-9\s#,;.-]*$/; // Expresión regular que permite letras, números, espacios, '#' y '-'
+      const regex = /^[a-zA-Z0-9\sÁÉÍÓÚáéíóúÑñÜü#,;.-]*$/;// Expresión regular que permite letras, números, espacios, '#' y '-'
       if (
         regex.test(nombre_proveedor) &&
         regex.test(telefono_proveedor) &&
@@ -1420,7 +1377,7 @@ function Proveedores() {
         if (proveedores1.nombre_proveedor.length < 2) {
           Swal.fire({
             icon: "error",
-            text: "El nombre del insumo debe tener al menos 2 letras",
+            text: "El nombre del proveedor debe tener al menos 2 letras",
           });
           setInputNombreValido(false)
           return;
@@ -1489,7 +1446,7 @@ function Proveedores() {
       tipo_documento.trim() !== ""
     ) {
       // Validar que los campos no contengan caracteres especiales
-      const regex = /^[a-zA-Z0-9\s#,;.-]*$/; // Expresión regular que permite letras, números, espacios, '#' y '-'
+      const regex = /^[a-zA-Z0-9\sÁÉÍÓÚáéíóúÑñÜü#,;.-]*$/;// Expresión regular que permite letras, números, espacios, '#' y '-'
       if (
         regex.test(nombre_proveedor) &&
         regex.test(documento_proveedor) &&
@@ -1679,7 +1636,7 @@ function Proveedores() {
 
     if (name === 'nombre_proveedor') {
       // Expresión regular que coincide con cualquier carácter que no sea una letra, un número o un guion bajo
-      const caracteresEspeciales = /^[a-zA-Z0-9\s#,;.-àèìòù]*$/; 
+      const caracteresEspeciales = /^[a-zA-Z0-9\sÁÉÍÓÚáéíóúÑñÜü]*$/;
     
       // Verificar si la cadena no contiene caracteres especiales
       if (caracteresEspeciales.test(value)) {
@@ -1691,7 +1648,7 @@ function Proveedores() {
 
     if (name === 'direccion_proveedor') {
       // Expresión regular que coincide con cualquier carácter que no sea una letra, un número o un guion bajo
-      const caracteresEspeciales = /^[a-zA-Z0-9\s#,;.-]*$/;
+      const caracteresEspeciales = /^[a-zA-Z0-9\sÁÉÍÓÚáéíóúÑñÜü#,;.-]*$/;
     
       // Verificar si la cadena no contiene caracteres especiales
       if (caracteresEspeciales.test(value)) {
@@ -1777,7 +1734,7 @@ function Proveedores() {
 
     if (name === 'nombre_proveedor') {
       // Expresión regular que coincide con cualquier carácter que no sea una letra, un número o un guion bajo
-      const caracteresEspeciales = /^[a-zA-Z0-9\s#,;.-àèìòù]*$/; 
+      const caracteresEspeciales = /^[a-zA-Z0-9\sÁÉÍÓÚáéíóúÑñÜü]*$/;
     
       // Verificar si la cadena no contiene caracteres especiales
       if (caracteresEspeciales.test(value)) {
@@ -1789,7 +1746,7 @@ function Proveedores() {
 
     if (name === 'direccion_proveedor') {
       // Expresión regular que coincide con cualquier carácter que no sea una letra, un número o un guion bajo
-      const caracteresEspeciales = /^[a-zA-Z0-9\s#,;.-]*$/;
+      const caracteresEspeciales = /^[a-zA-Z0-9\sÁÉÍÓÚáéíóúÑñÜü#,;.-]*$/;
     
       // Verificar si la cadena no contiene caracteres especiales
       if (caracteresEspeciales.test(value)) {
@@ -1855,6 +1812,7 @@ function Proveedores() {
         fontWeight: "bold",
         padding: "10px",
         fontSize: "16px",
+        
       },
     },
     cells: {
@@ -1865,6 +1823,31 @@ function Proveedores() {
       },
     },
   };
+
+  const exportExcel = (customFileName) => {
+    import('xlsx').then((xlsx) => {
+        const worksheet = xlsx.utils.json_to_sheet(proveedores);
+        const workbook = { Sheets: { data: worksheet }, SheetNames: ['data'] };
+        const excelBuffer = xlsx.write(workbook, {
+            bookType: 'xlsx',
+            type: 'array'
+        });
+
+        saveAsExcelFile(excelBuffer, customFileName || 'proveedores');
+    });
+};
+const saveAsExcelFile = (buffer, fileName) => {
+    import('file-saver').then((module) => {
+        if (module && module.default) {
+            let EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+            let EXCEL_EXTENSION = '.xlsx';
+            const data = new Blob([buffer], {
+                type: EXCEL_TYPE
+            });
+            module.default.saveAs(data, fileName + EXCEL_EXTENSION);
+        }
+    });
+  }
 
   if (isLoading) {
     return <div>Cargando...</div>;
@@ -1914,13 +1897,7 @@ function Proveedores() {
             <i className="fa-solid fa-plus"></i> Agregar
           </button>
 
-          <button
-            style={{ color: "white" }}
-            className={` ${estilos.vinotinto}`}
-            onClick={generarPDF}
-          >
-            <i className="fa-solid fa-download"></i>
-          </button>
+          <button style={{backgroundColor:'white', border:'1px solid #c9c6c675', borderRadius:'50px', marginTop: '-10px', cursor:'pointer'}} onClick={() => exportExcel('Reporte_Proveedores')}> <img src="src\assets\excel-logo.png" height={'40px'}/> </button>
         </div>
       </div>
 
@@ -1930,6 +1907,7 @@ function Proveedores() {
           data={filteredproveedores}
           pagination
           paginationPerPage={6}
+          customStyles={customStyles} defaultSortField="id_categoria_productos" defaultSortAsc={true}
         ></DataTable>
       </div>
 

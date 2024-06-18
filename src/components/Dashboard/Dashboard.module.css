@@ -1,0 +1,147 @@
+#iconoEditar {
+  margin-top: -30px;
+  margin-left: 80px;
+  font-size: 30px;
+}
+
+#iconoEditar a {
+  color: #ffbd2f;
+}
+
+#imgPerfil img {
+  border-radius: 50%; 
+  width: 130px; 
+}
+
+#perfil {
+  margin-top: 4vh;
+}
+
+#usuarioRegistrado {
+  margin-top: 1vh;
+}
+
+#contenidoDatos {
+  border-radius: 5px;
+  border: 1px solid #6d6d6d;
+  padding: 10px;
+}
+
+#contenidoDatos i {
+  margin-right: 10px;
+  color: #1F67B9;
+}
+
+#datos {
+  width: 70%;
+  /* Ajusta el ancho según lo necesites */
+  margin: 0 auto;
+  /* Centra horizontalmente */
+  padding: 10px;
+  /* Agregamos un poco de espacio interno */
+}
+
+#tituloDatos {
+  margin-bottom: 10px;
+}
+
+#botones {
+  text-align: right;
+  /* Alinea los botones a la derecha */
+  margin-top: 30px;
+  /* Agrega espacio entre el contenido y los botones */
+}
+
+.btn-rojo {
+  background-color: #E12424;
+  color: white;
+  border: none;
+  padding: 10px 10px;
+  border-radius: 5px;
+  margin-left: 10px;
+}
+
+.btn-azul-claro {
+  background-color: #1F67B9;
+  color: white;
+  border: none;
+  padding: 10px 10px;
+  border-radius: 5px;
+}
+
+.divActualizarContraseña {
+  max-width: 400px;
+  margin: 0 auto;
+  margin-top: 70px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f8f8f8;
+}
+
+.divActualizarContraseña h2 {
+  margin-bottom: 20px;
+}
+
+.divActualizarContraseña form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+}
+
+
+.input-group input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.inputs{
+  width: 300px;
+}
+
+.cajaBotones{
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.azul {
+  background-color: #1F67B9;
+  color: white;
+  border: none;
+  padding: 15px 40px;
+  border-radius: 5px;
+
+}
+
+.azul:hover {
+  background: #3c77bb;
+}
+
+.azul:active {
+  box-shadow: 1px 1px 1px 1px #3c77bb;
+}
+
+.gris {
+  background: #a7a7a7;
+  color: white;
+  color: white;
+  border: none;
+  padding: 15px 40px;
+  border-radius: 5px;
+}
+
+.gris:hover {
+  background: #adadad;
+
+}
+
+.gris:active {
+  box-shadow: 1px 1px 1px 1px #adadad;
+}

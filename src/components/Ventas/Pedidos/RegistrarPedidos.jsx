@@ -1,25 +1,30 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Table, Pagination } from "react-bootstrap";
 import Swal from "sweetalert2";
 import styled from "styled-components";
 import estilos from './Pedidos.module.css';
 import { Link } from "react-router-dom";
 import { useUserContext } from "../../UserProvider";
+import { AutoComplete } from 'primereact/autocomplete';
+
 function App() {
   const token = localStorage.getItem("token");
   const [productos, setProductos] = useState([]);
   const { usuarioLogueado } = useUserContext();
+  const usuario = usuarioLogueado;
   const [isLoading, setIsLoading] = useState(true);
   const [pedido, setPedido] = useState({
-    observaciones: "",
+    observaciones: "Mesa ",
     fecha_venta: "",
     fecha_pedido: "",
     estado_pedido: 1,
     total_venta: 0,
     total_pedido: 0,
     id_cliente: 0,
-    id_usuario: usuarioLogueado.id_usuario,
+    id_usuario: usuario.id_usuario,
   });
+  const [pedidoCliente, setPedidoCliente] = useState({
+    id_cliente: 0
+  })
   const [clientes, setClientes] = useState([]);
   const tableRef = useRef(null);
   const [scrollEnabled, setScrollEnabled] = useState(false);
@@ -34,7 +39,10 @@ function App() {
   ]);
   const [precioTotal, setPrecioTotal] = useState(0);
   const [formChanged, setFormChanged] = useState(false);
-
+  const [filteredClientes, setFilteredClientes] = useState([]);
+  const [selectedCliente, setSelectedCliente] = useState(null);
+  const [inputValidoFecha, setInputValidoFecha] = useState(true);
+  const [errorFecha, setErrorFecha] = useState('')
   useEffect(() => {
     fetchProductos();
     fetchClientes();
@@ -70,7 +78,15 @@ function App() {
       const response = await fetch("https://api-luchosoft-mysql.onrender.com/ventas2/productos");
       if (response.ok) {
         const data = await response.json();
-        setProductos(data);
+        const productosData = data.filter(producto => producto.estado_producto === 1).map(producto => ({
+          id_producto: producto.id_producto,
+          nombre_producto: producto.nombre_producto,
+          descripcion_producto: producto.descripcion_producto,
+          estado_producto: producto.estado_producto,
+          precio_producto: producto.precio_producto,
+          id_categoria_producto: producto.id_categoria_producto
+        }))
+        setProductos(productosData);
       } else {
         throw new Error("Error al obtener los productos");
       }
@@ -83,13 +99,22 @@ function App() {
       });
     }
   };
+  let intervalId = null;
 
   const fetchClientes = async () => {
     try {
       const response = await fetch("https://api-luchosoft-mysql.onrender.com/ventas/clientes");
       if (response.ok) {
         const data = await response.json();
-        setClientes(data);
+        const ClienteData = data.filter(cliente => cliente.estado_cliente === 1).map(cliente => ({
+          id_cliente: cliente.id_cliente,
+          nombre_cliente: cliente.nombre_cliente,
+          telefono_cliente: cliente.telefono_cliente,
+          direccion_cliente: cliente.direccion_cliente,
+          cliente_frecuente: cliente.cliente_frecuente,
+          estado_cliente: cliente.estado_cliente
+        }))
+        setClientes(prevClientes => [...prevClientes, ...ClienteData]);
       } else {
         console.error("Error al obtener los clientes");
       }
@@ -98,8 +123,30 @@ function App() {
     }
   };
 
+  const startPolling = () => {
+    intervalId = setInterval(fetchClientes, 20000); // Llamar a fetchClientes cada 10 segundos
+  };
+
+  const stopPolling = () => {
+    clearInterval(intervalId);
+  };
+  const addCliente = () => {
+    setClientes((prevClientes) => {
+      const updatedClientes = [...prevClientes];
+      setFilteredClientes(updatedClientes); // Actualizar clientes filtrados
+      return updatedClientes;
+    });
+  };
+
   const handleInputChange = (event) => {
     const { name, value } = event.target;
+
+    if (name === 'fecha_pedido') {
+      if (value.trim() === '') {
+        setErrorFecha('El campo es obligatorio.');
+        setInputValidoFecha(false);
+      }
+    }
 
     const parsedValue = name === "id_cliente" ? parseInt(value, 10) : value;
 
@@ -122,17 +169,32 @@ function App() {
       }));
     }
   };
+  const today = new Date().toISOString().split('T')[0];
 
   const handleSelectChange = (event, index) => {
     const { value } = event.target;
-
+  
+    // Verificar si el producto ya está seleccionado en otra fila
+    const isProductAlreadySelected = tableRows.some((row, rowIndex) => {
+      return rowIndex !== index && row.nombre === value;
+    });
+  
+    if (isProductAlreadySelected) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Producto ya seleccionado',
+        text: 'Este producto ya ha sido seleccionado en otra fila. Por favor, elige otro producto.',
+      });
+      return;
+    }
+  
     const selectedProducto = productos.find(
       (producto) => producto.nombre_producto === value
     );
     if (!selectedProducto) {
       return;
     }
-
+  
     const updatedRows = tableRows.map((row, rowIndex) => {
       if (rowIndex === index) {
         return {
@@ -144,7 +206,7 @@ function App() {
       }
       return row;
     });
-
+  
     setTableRows(updatedRows);
     setFormChanged(true);
   };
@@ -199,7 +261,7 @@ function App() {
     if (
       !pedido.fecha_pedido ||
       !pedido.observaciones ||
-      !pedido.id_cliente ||
+      !pedidoCliente.id_cliente ||
       tableRows.some((row) => !row.nombre || !row.cantidad)
     ) {
       Swal.fire({
@@ -233,6 +295,7 @@ function App() {
           },
           body: JSON.stringify({
             ...pedido,
+            id_cliente: pedidoCliente.id_cliente,
             total_pedido: totalPedido,
             total_venta: totalPedido,
           }),
@@ -323,31 +386,76 @@ function App() {
     setFormChanged(true);
   };
 
+  const searchClientes = (event) => {
+    setTimeout(() => {
+      stopPolling();
+      let filtered;
+      if (!event.query.trim().length) {
+        filtered = [...clientes];
+      } else {
+        filtered = clientes.filter((cliente) => {
+          return (
+            cliente.nombre_cliente.toLowerCase().includes(event.query.toLowerCase()) ||
+            cliente.id_cliente.toString().includes(event.query)
+          );
+        });
+
+        // Eliminar duplicados de la lista filtrada
+        filtered = Array.from(new Set(filtered.map(cliente => cliente.id_cliente))).map(id_cliente => {
+          return clientes.find(cliente => cliente.id_cliente === id_cliente);
+        });
+      }
+      setFilteredClientes(filtered);
+    }, 250);
+  };
+  const handleClienteChange = (e) => {
+
+    if (e.value) {
+
+      setSelectedCliente(e.value);
+      setPedidoCliente((prevPedido) => ({
+        ...prevPedido,
+        id_cliente: e.value.id_cliente, // Para mostrar el nombre en el campo
+      }));
+    }
+    setFormChanged(true);
+  };
+
+  const getAvailableProducts = (selectedProducts, allProducts) => {
+    return allProducts.filter(
+      (producto) => !selectedProducts.includes(producto.nombre_producto)
+    );
+  };
+
   if (isLoading) {
     return <div>Cargando la API, espere por favor...</div>;
   }
 
   return (
     <>
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
       <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.css" rel="stylesheet" />
+
       <div className={estilos["contenido"]}>
-        <div id={estilos["titulo2"]}>
-          <h2>Registrar Pedidos</h2>
+        <div className={estilos["tituloR"]}>
+          <h1>Registrar Pedidos</h1>
         </div>
         <div id={estilos["contenedorcito"]}>
-          <div className={estilos["input-container"]}>
+          <div className={estilos["input-containerR"]}>
             <div id={estilos["kaka"]}>
-              <label htmlFor="fechaPedido">Fecha</label>
+              <label htmlFor="fechaPedido">Fecha<span style={{ color: 'red' }}>*</span></label>
               <input
                 id="fechaPedido"
                 name="fecha_pedido"
-                className={estilos["input-field"]}
+                className={`${!inputValidoFecha ? estilos['input-field23'] : estilos['input-field']}`}
                 value={pedido.fecha_pedido}
                 onChange={handleInputChange}
                 type="date"
+                max={today}
               />
+              {!inputValidoFecha && <p className='error' style={{ color: 'red', fontSize: '10px', position: 'relative' }}>{errorFecha}</p>}
             </div>
             <div id={estilos["kaka"]}>
               <input
@@ -363,7 +471,7 @@ function App() {
             <div id={estilos["kake"]}>
               <label htmlFor="Observaciones">
                 {" "}
-                Observaciones
+                Observaciones <span style={{ color: 'red' }}>*</span>
               </label>
               <textarea
                 id="observaciones"
@@ -378,29 +486,35 @@ function App() {
               />
             </div>
             <div className={estilos["cliente"]}>
-              <div className="clienteasosciado" style={{ display: 'flex', textAlign:'center' }}>
+              <div className="clienteasosciado" style={{ display: 'flex', textAlign: 'center' }}>
                 <p>
-                  Cliente asociado
+                  Cliente asociado <span style={{ color: 'red' }}> *</span>
                 </p>
-                <button type="button" className="fa-solid fa-plus" style={{ background: '#154360', border: 'none', borderRadius: '20px', width: '40px', color: 'white', marginLeft:'40px', marginTop:'-10px', marginBottom:'10px'}} >
-                </button>
+                <Link to={'/clientes'} target="_blank" onClick={startPolling()}>
+                  <button type="button" className="fa-solid fa-plus" style={{ background: '#3e7fc9', border: 'none', borderRadius: '20px', height: '40px', width: '40px', color: 'white', marginLeft: '40px', marginTop: '-10px', marginBottom: '10px' }} >
+                  </button>
+                </Link>
                 {/* <button style={{background: '#154360', color: 'white',height: '30px', fontSize:'12px', marginLeft: '10px', border: 'none', borderRadius: '15px', width:'70px'}}>Agregar</button> */}
               </div>
-              <select
-                id="cliente"
-                name="id_cliente"
-                className={estilos["input-field22"]}
-                value={pedido.id_cliente}
-                onChange={handleInputChange}
-                style={{marginTop:'10px'}}
-              >
-                <option value="">Seleccione un cliente</option>
-                {clientes.map((cliente) => (
-                  <option key={cliente.id_cliente} value={cliente.id_cliente}>
-                    {cliente.nombre_cliente}
-                  </option>
-                ))}
-              </select>
+              <div className="custom-autocomplete-container">
+
+                <AutoComplete
+                  value={selectedCliente}
+                  suggestions={filteredClientes}
+                  completeMethod={searchClientes}
+                  field="id_cliente"
+                  name="id_cliente"
+                  // dropdown
+                  forceSelection
+                  itemTemplate={(item) => (
+                    <div style={{ backgroundColor: 'white' }}>{item.id_cliente}  {item.nombre_cliente}</div>
+                  )}
+                  onChange={handleClienteChange}
+                  placeholder="Buscar cliente"
+                  inputStyle={{ width: '31vh', padding: '8px', border: '1px solid #ccc', borderRadius: '4px', fontSize:'17px' }}
+                // aria-label="Clientes"
+                />
+              </div>
             </div>
             <div className="BotonesPedidos">
               <div id={estilos["totalpedidos"]}>
@@ -436,27 +550,27 @@ function App() {
           <div className={estilos["TablaDetallePedidos"]}>
             <div className={estilos["agrPedidos"]}>
               <p>Agregar Productos</p>
-              <button type="button" className="fa-solid fa-plus" style={{ background: '#154360', border: 'none', borderRadius: '20px', width: '40px', color: 'white' }} onClick={handleAgregarProducto}>
+              <button type="button" className="fa-solid fa-plus" style={{ background: '#3e7fc9', border: 'none', borderRadius: '20px', width: '40px', color: 'white', marginTop:'-10px', marginBottom:'10px' }} onClick={handleAgregarProducto}>
               </button>
             </div>
             <div style={{ overflowY: scrollEnabled ? 'scroll' : 'auto', height: '60vh', width: '130%' }} >
               <table
-                className="tablaDT ui celled table"
+                className="ui celled table"
                 style={{ border: 'none' }}
                 ref={tableRef}
               >
                 <thead>
                   <tr>
-                    <th style={{ background: '#154360', color: 'white', textAlign: 'center' }}>
+                    <th style={{ background: '#3e7fc9', color: 'white', textAlign: 'center' }}>
                       Nombre Producto
                     </th>
-                    <th style={{ background: '#154360', color: 'white', textAlign: 'center' }}>
+                    <th style={{ background: '#3e7fc9', color: 'white', textAlign: 'center' }}>
                       Precio
                     </th>
-                    <th style={{ background: '#154360', color: 'white', textAlign: 'center' }}>
+                    <th style={{ background: '#3e7fc9', color: 'white', textAlign: 'center' }}>
                       Cantidad
                     </th>
-                    <th style={{ background: '#154360', color: 'white', textAlign: 'center' }}>
+                    <th style={{ background: '#3e7fc9', color: 'white', textAlign: 'center' }}>
                       Acciones
                     </th>
                   </tr>
@@ -534,6 +648,8 @@ function App() {
 }
 
 export default App;
+
+
 
 const ContenedorBotones = styled.div`
   padding: 40px;

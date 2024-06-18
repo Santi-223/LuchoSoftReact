@@ -68,7 +68,7 @@ function App() {
             </UserProvider>
           }>
             <Route exact path="/Dashboard" element={
-              <PrivateRoute prot={111}>
+              <PrivateRoute prot={13}>
                 <Dashboard />
               </PrivateRoute>}
             />

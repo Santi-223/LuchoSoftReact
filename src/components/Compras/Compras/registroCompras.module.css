@@ -178,10 +178,10 @@
   cursor: pointer;
 }
 
-/* .inputInvalido {
+.inputInvalido {
   border: 1px solid red;
-  background-color: #f5c1c1;
-} */
+  /* background-color: #f5c1c1; */
+}
 
 #titulo {
   color: rgb(0, 0, 0);
@@ -197,6 +197,7 @@
 .azulado2 {
   background: #1F67B9;
   color: white;
+  border: none;
   height: 55px;
   max-width: 120px;
   min-width: 120px;
@@ -211,7 +212,7 @@
   color: #FFF;
   padding: 15px 15px;
   white-space: nowrap;
-  border-radius: 5px;
+  border-radius: 15px;
   -webkit-transition: all 0.2s ease-in-out;
   -ms-transition: all 0.2s ease-in-out;
   -moz-transition: all 0.2s ease-in-out;
@@ -233,6 +234,7 @@
 .azulado3 {
   background: #1F67B9;
   color: white;
+  border: none;
   height: 55px;
   max-width: 120px;
   min-width: 120px;
@@ -247,7 +249,7 @@
   color: #FFF;
   padding: 15px 15px;
   white-space: nowrap;
-  border-radius: 5px;
+  border-radius: 15px;
   -webkit-transition: all 0.2s ease-in-out;
   -ms-transition: all 0.2s ease-in-out;
   -moz-transition: all 0.2s ease-in-out;
@@ -267,6 +269,7 @@
 .gris {
   background: rgb(128, 128, 128);
   min-width: 120px;
+  border: none;
   height: 55px;
   border-color: white;
   text-shadow: 0px 1px rgba(0, 0, 0, 0.2);
@@ -277,7 +280,7 @@
   color: #FFF;
   padding: 15px 15px;
   white-space: nowrap;
-  border-radius: 5px;
+  border-radius: 15px;
   -webkit-transition: all 0.2s ease-in-out;
   -ms-transition: all 0.2s ease-in-out;
   -moz-transition: all 0.2s ease-in-out;

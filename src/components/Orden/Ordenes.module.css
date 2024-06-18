@@ -5,13 +5,14 @@
 }
 
 .botonAgregar {
-  background-color: #1F67B9;
-  color: white;
-  height: 40px;
-  width: 130px;
+  border: 1px solid #b90505;
   margin-right: 20px;
-  border: none;
+  background-color: white;
+  color: #b90505;
   border-radius: 50px;
+  height: 40px;
+  width: 120px;
+  font-size: 18px;
 }
 
 .divFiltro{
@@ -183,18 +184,12 @@ input {
 }
 
 
-.rojo {
-  background: #E12424;
-  color: white;
-
-}
-
 .rojo:hover {
-  background: #f33928;
+  background: #b9050517;
 }
 
 .rojo:active {
-  box-shadow: 1px 1px 1px 1px #f33928;
+  box-shadow: 1px 1px 1px 1px #b9050517;
 }
 
 .vinotinto {

@@ -16,7 +16,7 @@ import FallOutlined from '@ant-design/icons/FallOutlined';
 
 const iconSX = { fontSize: '0.75rem', color: 'inherit', marginLeft: 0, marginRight: 0 };
 
-export default function AnalyticEcommerce({ color = 'primary', title, count, percentage, isLoss, extra }) {
+export default function AnalyticEcommerce({ color = 'primary', title, count, percentage, isLoss, extra, icon }) {
   return (
     <MainCard contentSX={{ p: 2.25 }}>
       <Stack spacing={0.5}>
@@ -25,6 +25,7 @@ export default function AnalyticEcommerce({ color = 'primary', title, count, per
         </Typography>
         <Grid container alignItems="center">
           <Grid item>
+            {icon && <Box sx={{ display: 'inline-flex', alignItems: 'center', mr: 1 }}>{icon}</Box>}
             <Typography variant="h4" color="inherit">
               {count}
             </Typography>
@@ -32,11 +33,9 @@ export default function AnalyticEcommerce({ color = 'primary', title, count, per
           {percentage && (
             <Grid item>
               <Chip
-                variant="combined"
-                color={color}
                 icon={isLoss ? <FallOutlined style={iconSX} /> : <RiseOutlined style={iconSX} />}
                 label={`${percentage}%`}
-                sx={{ ml: 1.25, pl: 1 }}
+                color={isLoss ? 'error' : 'success'}
                 size="small"
               />
             </Grid>
@@ -45,11 +44,9 @@ export default function AnalyticEcommerce({ color = 'primary', title, count, per
       </Stack>
       <Box sx={{ pt: 2.25 }}>
         <Typography variant="caption" color="text.secondary">
-          You made an extra{' '}
           <Typography variant="caption" sx={{ color: `${color || 'primary'}.main` }}>
             {extra}
           </Typography>{' '}
-          this year
         </Typography>
       </Box>
     </MainCard>
@@ -62,5 +59,5 @@ AnalyticEcommerce.propTypes = {
   count: PropTypes.string,
   percentage: PropTypes.number,
   isLoss: PropTypes.bool,
-  extra: PropTypes.string
+  extra: PropTypes.string,
 };

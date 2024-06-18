@@ -82,36 +82,33 @@ function OrdenesProduccion() {
 
 
 
-    const generarPDF = () => {
-        const doc = new jsPDF();
 
-        // Encabezado del PDF
-        doc.text("Reporte de Ordenes de producción", 20, 10);
 
-        // Definir las columnas que se mostrarán en el informe (excluyendo "Estado")
-        const columnasInforme = [
-            "Id",
-            "Descripcion",
-            "Fecha",
-            "Usuario"
-        ];
 
-        // Filtrar los datos de las compras para incluir solo las columnas deseadas
-        const datosInforme = filteredOrdenes.map(orden => {
-            const { id_orden_de_produccion, descripcion_orden, fecha_orden, nombre_usuario } = orden;
-            return [id_orden_de_produccion, descripcion_orden, fecha_orden, nombre_usuario];
+    const exportExcel = (customFileName) => {
+        import('xlsx').then((xlsx) => {
+            const worksheet = xlsx.utils.json_to_sheet(ordenes);
+            const workbook = { Sheets: { data: worksheet }, SheetNames: ['data'] };
+            const excelBuffer = xlsx.write(workbook, {
+                bookType: 'xlsx',
+                type: 'array'
+            });
+
+            saveAsExcelFile(excelBuffer, customFileName || 'ordenes');
         });
-
-        // Agregar la tabla al documento PDF
-        doc.autoTable({
-            startY: 20,
-            head: [columnasInforme],
-            body: datosInforme
-        });
-
-        // Guardar el PDF
-        doc.save("reporte_ordenes.pdf");
     };
+    const saveAsExcelFile = (buffer, fileName) => {
+        import('file-saver').then((module) => {
+            if (module && module.default) {
+                let EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+                let EXCEL_EXTENSION = '.xlsx';
+                const data = new Blob([buffer], {
+                    type: EXCEL_TYPE
+                });
+                module.default.saveAs(data, fileName + EXCEL_EXTENSION);
+            }
+        });
+    }
 
 
     const handleMostrarDetalle = (orden) => {
@@ -282,14 +279,10 @@ function OrdenesProduccion() {
                 <input type="text" placeholder=" Buscar..." value={filtro} onChange={handleFiltroChange} className={estilos["busqueda"]} />
                 <div>
                     <button onClick={handleAgregarOrden} className={` ${estilos.botonAgregar} ${estilos.rojo} bebas-neue-regular`}><i className="fa-solid fa-plus"></i> Agregar</button>
+                    
 
-                    <button
-                        style={{ color: "white" }}
-                        className={` ${estilos.vinotinto}`}
-                        onClick={generarPDF}
-                    >
-                        <i className="fa-solid fa-download"></i>
-                    </button>
+                    <button style={{ backgroundColor: 'white', border: '1px solid #c9c6c675', borderRadius: '50px', marginTop: '-10px', cursor: 'pointer' }} onClick={() => exportExcel('Reporte_Ordenes')}> <img src="src\assets\excel-logo.png" height={'40px'} /> </button>
+
 
                 </div>
             </div>
@@ -309,10 +302,10 @@ function OrdenesProduccion() {
                     {/* Muestra los datos de la fila seleccionada */}
                     {detalleOrden && (
                         <div>
-                            <p>ID de la orden: {detalleOrden.id_orden_de_produccion}</p>
-                            <p>Descripción de la orden: {detalleOrden.descripcion_orden}</p>
-                            <p>Fecha de la orden: {detalleOrden.fecha_orden}</p>
-                            <p>Usuario de la orden: {detalleOrden.nombre_usuario}</p>
+                            <p>ID: {detalleOrden.id_orden_de_produccion}</p>
+                            <p>Descripción: {detalleOrden.descripcion_orden}</p>
+                            <p>Fecha: {detalleOrden.fecha_orden}</p>
+                            <p>Usuario: {detalleOrden.nombre_usuario}</p>
                             {/* Muestra más detalles si es necesario */}
                         </div>
                     )}

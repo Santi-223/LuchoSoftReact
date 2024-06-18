@@ -70,17 +70,16 @@ const EncabezadoModal = styled.div`
 	margin-bottom: 10px;
 	padding-bottom: 10px;
 	border-bottom: 1px solid #E8E8E8;
-
 	h3 {
 		font-weight: 500;
 		font-size: 16px;
-		color: #000000;
+		color: #48110d;
 	}
 `;
 
 const BotonCerrar = styled.button`
 	position: absolute;
-	top: 25px;
+	top: 15px;
 	right: 20px;
 
 	width: 40px;

@@ -9,7 +9,7 @@ const Modal = ({
 	mostrarHeader,
 	mostrarOverlay,
 	posicionModal,
-	mostrarExit,
+	mostrarExit = true,
 	width,
 	padding
 }) => {

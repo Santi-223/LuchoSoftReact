@@ -12,6 +12,7 @@ const imagen = "https://www.bing.com/images/search?view=detailV2&ccid=1mJgu55%2f
 
 
 function Productos() {
+    const token = localStorage.getItem("token");
     const [productos, setproductos] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [showDetalleModal, setShowDetalleModal] = useState(false);
@@ -33,37 +34,37 @@ function Productos() {
         (producto.id_categoria_producto && producto.id_categoria_producto.toString().includes(filtro))
     );
 
-    const generarPDF = () => {
-        const doc = new jsPDF();
 
-        // Encabezado del PDF
-        doc.text("Reporte de Productos", 20, 10);
 
-        // Definir las columnas que se mostrarán en el informe (excluyendo "Estado")
-        const columnasInforme = [
-            "Id",
-            "Nombre",
-            "Descripcion",
-            "Precio",
-            "Categoria de producto"
-        ];
+    const exportExcel = (customFileName) => {
+        // Filtra los productos para incluir solo aquellos con estado 1
+        const productosHabilitados = productos.filter(producto => producto.estado_producto === 1);
 
-        // Filtrar los datos de las compras para incluir solo las columnas deseadas
-        const datosInforme = filteredproductos.map(producto => {
-            const { id_producto, nombre_producto, descripcion_producto, precio_producto, nombre_categoria_producto } = producto;
-            return [id_producto, nombre_producto, descripcion_producto, precio_producto, nombre_categoria_producto];
+        import('xlsx').then((xlsx) => {
+            const worksheet = xlsx.utils.json_to_sheet(productosHabilitados);
+            const workbook = { Sheets: { data: worksheet }, SheetNames: ['data'] };
+            const excelBuffer = xlsx.write(workbook, {
+                bookType: 'xlsx',
+                type: 'array'
+            });
+
+            saveAsExcelFile(excelBuffer, customFileName || 'productos');
         });
-
-        // Agregar la tabla al documento PDF
-        doc.autoTable({
-            startY: 20,
-            head: [columnasInforme],
-            body: datosInforme
-        });
-
-        // Guardar el PDF
-        doc.save("reporte_productos.pdf");
     };
+
+    const saveAsExcelFile = (buffer, fileName) => {
+        import('file-saver').then((module) => {
+            if (module && module.default) {
+                let EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+                let EXCEL_EXTENSION = '.xlsx';
+                const data = new Blob([buffer], {
+                    type: EXCEL_TYPE
+                });
+                module.default.saveAs(data, fileName + EXCEL_EXTENSION);
+            }
+        });
+    };
+
 
     const handleMostrarDetalle = (producto) => {
         setDetalleProducto(producto); // Establece los datos de la fila seleccionada
@@ -73,7 +74,7 @@ function Productos() {
     const formatearDinero = (cantidad) => {
         return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(cantidad);
     };
-    
+
 
 
     const columns = [
@@ -146,6 +147,19 @@ function Productos() {
                         <i className={`fa-solid fa-pen-to-square ${row.estado_producto === 1 ? 'iconosVerdes' : 'iconosGris'}`}></i>
                     </button>
 
+                    <button
+                        onClick={() => handleEliminarProducto(row.id_producto)}
+                        disabled={row.estado_producto === 0}
+                        className={estilos.boton}
+                        style={{ cursor: "pointer", textAlign: "center", fontSize: "25px" }}
+                    >
+                        <i
+                            className={`bi bi-trash ${row.estado_producto === 0 ? "basuraDesactivada" : ""
+                                }`}
+                            style={{ color: row.estado_producto === 0 ? "gray" : "red" }}
+                        ></i>
+                    </button>
+
                 </div>
 
             )
@@ -192,6 +206,100 @@ function Productos() {
         }
     };
 
+
+    const handleEliminarProducto = async (idProducto) => {
+        console.log("Intentando eliminar el producto con ID:", idProducto);
+    
+        try {
+            // Verificar si el producto tiene pedidos asociados
+            const pedidosResponse = await fetch(`https://api-luchosoft-mysql.onrender.com/ventas/pedidos_productos/`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+    
+            if (!pedidosResponse.ok) {
+                const errorText = await pedidosResponse.text();
+                console.error("Error al verificar pedidos asociados:", pedidosResponse.status, errorText);
+                await Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: `Error al verificar pedidos asociados: ${pedidosResponse.statusText}`,
+                });
+                return;
+            }
+    
+            const pedidos = await pedidosResponse.json();
+    
+            const tienePedidosAsociados = pedidos.some(pedido => pedido.id_producto === idProducto);
+    
+            if (tienePedidosAsociados) {
+                await Swal.fire({
+                    icon: "warning",
+                    title: "No se puede eliminar",
+                    text: "El producto tiene pedidos asociados y no puede ser eliminado.",
+                });
+                return;
+            }
+    
+            // Mostrar mensaje de confirmación
+            const { isConfirmed } = await Swal.fire({
+                text: "¿Deseas eliminar este producto?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Sí, eliminar",
+                cancelButtonText: "Cancelar",
+            });
+    
+            if (!isConfirmed) return;
+    
+            console.log("Confirmación recibida para eliminar el producto.");
+    
+            // Solicitud DELETE
+            const response = await fetch(`https://api-luchosoft-mysql.onrender.com/ventas2/productos/${idProducto}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+    
+            // Manejo de la respuesta
+            if (response.ok) {
+                console.log("Producto eliminado exitosamente.");
+                await Swal.fire({
+                    icon: "success",
+                    title: "Producto eliminado",
+                    text: "El producto ha sido eliminado correctamente",
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+                fetchproductos();
+            } else {
+                const errorText = await response.text();
+                console.error("Error al eliminar el producto:", response.status, errorText);
+                await Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: `Error al eliminar el producto: ${response.statusText}`,
+                });
+            }
+        } catch (error) {
+            console.error("Error al eliminar el producto:", error);
+            await Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: `Error al eliminar el producto: ${error.message}`,
+            });
+        }
+    };
+    
+    
+    
+    
+    
 
 
 
@@ -289,13 +397,8 @@ function Productos() {
 
                     </Link>
 
-                    <button
-                        style={{ color: "white" }}
-                        className={` ${estilos.vinotinto}`}
-                        onClick={generarPDF}
-                    >
-                        <i className="fa-solid fa-download"></i>
-                    </button>
+                    <button style={{ backgroundColor: 'white', border: '1px solid #c9c6c675', borderRadius: '50px', marginTop: '-10px', cursor: 'pointer' }} onClick={() => exportExcel('Reporte_Productos')}> <img src="src\assets\excel-logo.png" height={'40px'} /> </button>
+
                 </div>
             </div>
 
@@ -316,13 +419,13 @@ function Productos() {
                     {/* Muestra los datos de la fila seleccionada */}
                     {detalleProducto && (
                         <div>
-                            <p>ID del producto: {detalleProducto.id_producto}</p>
-                            <p>Nombre del producto: {detalleProducto.nombre_producto}</p>
-                            <p>Descripción del producto: {detalleProducto.descripcion_producto}</p>
+                            <p>ID: {detalleProducto.id_producto}</p>
+                            <p>Nombre: {detalleProducto.nombre_producto}</p>
+                            <p>Descripción: {detalleProducto.descripcion_producto}</p>
                             <p>
-                                Precio del producto: {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(detalleProducto.precio_producto)}
+                                Precio: {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(detalleProducto.precio_producto)}
                             </p>
-                            <p>Categoría del producto: {detalleProducto.nombre_categoria_producto}</p>
+                            <p>Categoría: {detalleProducto.nombre_categoria_producto}</p>
                             {/* Muestra más detalles si es necesario */}
                         </div>
                     )}

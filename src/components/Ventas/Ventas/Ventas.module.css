@@ -2,6 +2,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-top: 20px;
 }
 
 
@@ -32,8 +33,13 @@
 
 #titulo {
     display: flex;
-    font-size: 15px;
-    margin-top: -15px;
+    font-size: 35px;
+    margin-top: 5px;
+}
+
+#titulo h1{
+    font-size: 30px;
+    color: #48110d;
 }
 .iconosRojos{
     color: #E12424;
@@ -61,7 +67,7 @@ box-shadow: 1px 1px 1px 1px #771d17;
     border-collapse: collapse;
     border: 1px solid gray;
     border-radius: 10px;
-    margin-top: 20px;
+    margin-top: 30px;
 }
 
 .busqueda{
@@ -112,7 +118,7 @@ box-shadow: 1px 1px 1px 1px #771d17;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #1F67B9;
+    background-color: #48110d;
     border-radius: 30px;
     transition: 0.4s;
 }
@@ -145,3 +151,18 @@ box-shadow: 1px 1px 1px 1px #771d17;
     border: none;
     border-radius: 5px;
 }
+
+.acciones{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+    .acciones button{
+        margin-left: 10px;
+        /* margin-top: -5px; */
+        background-color: rgba(255, 255, 255, 0);
+        border: none;
+        font-size: 20px;
+    }
+

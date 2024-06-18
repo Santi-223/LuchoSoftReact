@@ -319,7 +319,9 @@ function Usuarios() {
         headCells: {
             style: {
                 textAlign: 'center',
+                backgroundColor: '#f2f2f2',
                 fontWeight: 'bold',
+                padding: '10px',
                 fontSize: '16px'
             },
         }

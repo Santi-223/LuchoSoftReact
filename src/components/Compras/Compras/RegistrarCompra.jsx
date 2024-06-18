@@ -28,7 +28,7 @@ function App() {
   const [scrollEnabled, setScrollEnabled] = useState(false);
   const [selectedInsumos, setSelectedInsumos] = useState(new Set());
   const [formChanged, setFormChanged] = useState(false);
-  // const [inputValido, setInputValido] = useState(true);
+ const [inputValido, setInputValido] = useState(true);
   const [inputValido2, setInputValido2] = useState(Array(tableRows.length).fill(true));
 
 
@@ -99,13 +99,13 @@ function App() {
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    // if (name === 'numero_compra') {
-    //   if (value.length > 5) {
-    //     setInputValido(false);
-    //   } else {
-    //     setInputValido(true);
-    //   }
-    // }
+    if (name === 'numero_compra') {
+      if (value.length > 30) {
+        setInputValido(false);
+      } else {
+        setInputValido(true);
+      }
+    }
     setCompra({ ...compra, [name]: value });
     setFormChanged(true);
   };
@@ -209,12 +209,23 @@ function App() {
       return;
     }
 
-    if (!compra.fecha_compra || !compra.numero_compra || !compra.id_proveedor || tableRows.some(row => !row.nombre || !row.precio)) {
+    if (!compra.fecha_compra || !compra.numero_compra || !compra.id_proveedor || tableRows.some(row => !row.nombre)) {
       // Verifica si el input es válido o si hay campos vacíos
       Swal.fire({
         icon: 'error',
         title: 'Error',
-        text: 'Hay campos vacíos',
+        text: 'Por favor, complete los campos vacíos.',
+        confirmButtonColor: '#1F67B9',
+      });
+      return;
+    }
+
+    if (tableRows.some(row => !row.precio)) {
+      // Verifica si el input es válido o si hay campos vacíos
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Digite correctamente el precio.',
         confirmButtonColor: '#1F67B9',
       });
       return;
@@ -231,16 +242,16 @@ function App() {
       return;
     }
 
-    // if (!inputValido) {
-    //   // Verifica si el input es válido o si hay campos vacíos
-    //   Swal.fire({
-    //     icon: 'error',
-    //     title: 'Error',
-    //     text: 'El número de compra no puede tener más de 5 números',
-    //     confirmButtonColor: '#1F67B9',
-    //   });
-    //   return;
-    // }
+    if (!inputValido) {
+      // Verifica si el input es válido o si hay campos vacíos
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'El número de compra no puede tener más de 30 números',
+        confirmButtonColor: '#1F67B9',
+      });
+      return;
+    }
     if (!inputValido2.every(valido => valido)) {
       // Verifica si el input es válido o si hay campos vacíos
       Swal.fire({
@@ -410,8 +421,7 @@ function App() {
                 <input
                   id="numeroCompra"
                   name="numero_compra"
-                  className={`${estilos.inputfield3} 
-                 `}
+                  className={`${estilos.inputfield3} ${!inputValido ? estilos.inputInvalido : ''}`}
                   value={compra.numero_compra}
                   onChange={handleInputChange}
                   minLength={1}
@@ -420,7 +430,7 @@ function App() {
                   placeholder="000"
                   style={{ marginLeft: "30px" }}
                 />
-                {/* {!inputValido && <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '27px' }}>Máximo 5 números</p>} */}
+                {!inputValido && <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '27px' }}>Máximo 30 números</p>}
               </div>
             </div>
             <br />
@@ -441,8 +451,6 @@ function App() {
               </select>
             </div>
             <br />
-            <br />
-            <br />
             <div className={estilos.inputsup}>
               <div className='contenedor-input' >
                 <label htmlFor="precioCompra"> Total </label>
@@ -457,7 +465,8 @@ function App() {
                   readOnly={true}
                   style={{
                     backgroundColor: '#E4E4E4',
-                    color: '#999'
+                    color: '#999',
+                    borderRadius: '15px'
                   }}
                 />
               </div>
@@ -483,7 +492,7 @@ function App() {
                   <tr key={index}>
                     <td style={{ textAlign: "center" }}>
                       <select className={estilos.inputfieldtabla} value={row.nombre} onChange={(e) => handleSelectChange(e, index)}>
-                        <option value="">Seleccione un insumo</option>
+                      <option value="" disabled selected>Seleccione un insumo</option>
                         {filteredInsumos.map((insumo) => (
                           <option key={insumo.id_insumo} value={insumo.nombre_insumo}>
                             {insumo.nombre_insumo}

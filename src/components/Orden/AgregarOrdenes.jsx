@@ -7,6 +7,7 @@ import { useUserContext } from "../UserProvider";
 
 
 
+
 function AgregarOrdenes() {
     const { usuarioLogueado } = useUserContext();
 
@@ -14,6 +15,9 @@ function AgregarOrdenes() {
 
     const usuarioLO = usuarioLogueado;
 
+    const [inputValido, setInputValido] = useState(true);
+    const [inputValido4, setInputValido4] = useState(true);
+    const [inputValido3, setInputValido3] = useState(true);
     const [insumos, setInsumos] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [precio, setPrecio] = useState(0);
@@ -97,11 +101,43 @@ function AgregarOrdenes() {
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
+
+        if (name === 'descripcion_orden') {
+            if (value.length > 60) {
+                setInputValido(false);
+            } else {
+                setInputValido(true);
+            }
+        }
+        if (name === 'descripcion_orden') {
+            if (value.length > 0) {
+                setInputValido3(true)
+            }
+        }
+
+        if (name === 'descripcion_orden') {
+            // Expresión regular que coincide con cualquier carácter que no sea una letra, un número o un guion bajo
+            const caracteresEspeciales = /^[a-zA-Z0-9\s#,;.-àèìòù]*$/;
+
+            // Verificar si la cadena no contiene caracteres especiales
+            if (caracteresEspeciales.test(value)) {
+                setInputValido4(true);
+            } else {
+                setInputValido4(false);
+            }
+        }
+
+
+
+
+
         if (name !== 'search') {
             setOrden({ ...orden, [name]: value });
             setFormChanged(true);
         }
     };
+
+
 
     const filteredInsumos = insumos.filter(insumo =>
         insumo.nombre_insumo.toLowerCase().includes(searchTerm.toLowerCase())
@@ -167,19 +203,62 @@ function AgregarOrdenes() {
 
     const handleSubmitOrden = async (event) => {
         event.preventDefault();
-        const regex = /^[a-zA-Z0-9.,?!¡¿\s]+$/; // Expresión regular para permitir letras, números y algunos caracteres especiales
 
-        // Verificar caracteres especiales en el campo de fecha y usuario
-        if (!regex.test(orden.descripcion_orden)) {
+        if (!inputValido) {
             Swal.fire({
                 icon: 'error',
-                title: 'Error',
-                text: 'Evita caracteres especiales en el campo de descripción.',
+
+                text: 'Por favor, digite bien los datos.',
                 confirmButtonColor: '#1F67B9',
             });
             return;
         }
 
+        if (!inputValido4) {
+            Swal.fire({
+                icon: 'error',
+
+                text: 'Por favor, digite bien los datos.',
+                confirmButtonColor: '#1F67B9',
+            });
+            return;
+        }
+
+        if (orden.descripcion_orden.trim() === '') {
+            Swal.fire({
+                icon: 'error',
+
+                text: 'La descripción de la orden de producción no puede estar vacía',
+            });
+            setInputValido3(false)
+            return;
+        }
+
+
+        if (orden.descripcion_orden.length < 10) {
+            Swal.fire({
+                icon: 'error',
+
+                text: 'La descripción de la orden de producción debe tener al menos 10 letras',
+            });
+            setInputValido(false)
+            return;
+        }
+
+
+        const regex = /^[a-zA-Z0-9\s#,;.-àèìòùñ]*$/;
+
+        if (!regex.test(orden.descripcion_orden)) {
+            // Mostrar alerta con SweetAlert
+            Swal.fire({
+                icon: 'error',
+
+                text: 'La descripción no puede contener caracteres especiales',
+            });
+            return;
+        }
+
+        // Verificar insumos con cantidad mayor al stock disponible
         const invalidInsumos = tableRows.filter(row => {
             const insumo = insumos.find(i => i.nombre_insumo === row.nombre);
             return insumo && parseFloat(row.cantidad) > insumo.stock_insumo;
@@ -195,6 +274,7 @@ function AgregarOrdenes() {
             return;
         }
 
+        // Verificar campos vacíos en fecha de la orden y en los insumos
         if (!orden.fecha_orden || tableRows.some(row => !row.nombre || !row.cantidad)) {
             Swal.fire({
                 icon: 'error',
@@ -204,7 +284,9 @@ function AgregarOrdenes() {
             });
             return;
         }
-      
+        
+
+        // Si todas las validaciones pasan, proceder con el registro de la orden
         Swal.fire({
             toast: true,
             position: "top-end",
@@ -213,9 +295,9 @@ function AgregarOrdenes() {
             timerProgressBar: true,
             icon: "success",
             title: "Orden registrada exitosamente"
-        })    .then(async () => {
+        }).then(async () => {
             try {
-                // Primero, creamos la orden de producción
+                // Enviar los datos de la orden de producción
                 const responseOrden = await fetch('https://api-luchosoft-mysql.onrender.com/orden/orden_produccion', {
                     method: 'POST',
                     headers: {
@@ -234,14 +316,14 @@ function AgregarOrdenes() {
 
                 console.log('Orden registrada correctamente:', ordenData, "id_orden_de_produccion: ", idOrden);
 
-                // Luego, insertamos los detalles de la orden (insumos)
+                // Enviar los detalles de los insumos
                 const ordenesInsumosPromises = tableRows.filter(row => row.nombre !== '').map(async (row) => {
                     const insumoId = insumos.find(insumo => insumo.nombre_insumo === row.nombre).id_insumo;
                     const ordenesInsumosData = {
                         id_orden_de_produccion: idOrden,
                         id_insumo: insumoId,
                         cantidad_insumo_orden_insumos: parseFloat(row.cantidad) || 0,
-                        descripcion_orden_insumos: orden.descripcion_orden // Usamos la descripción de la orden como descripción del insumo en la tabla orden_insumos
+                        descripcion_orden_insumos: orden.descripcion_orden
                     };
 
                     try {
@@ -265,13 +347,16 @@ function AgregarOrdenes() {
 
                 await Promise.all(ordenesInsumosPromises);
 
-                // Una vez que se han registrado todos los detalles de la orden, redireccionamos a la página de órdenes de producción
+                // Redireccionar a la página de órdenes de producción
                 window.location.href = '/#/ordenes_produccion';
             } catch (error) {
                 console.error('Error al enviar los datos:', error);
             }
         });
     };
+
+
+
 
 
     const handleCancel = () => {
@@ -322,7 +407,7 @@ function AgregarOrdenes() {
                     <div className='formulario'>
                         <div>
                             <h1 id="titulo">Órdenes de producción</h1>
-                        </div><br />
+                        </div><br /><br /><br />
 
                         <div className='inputs-up'>
                             <div className='contenedor-input' >
@@ -337,8 +422,10 @@ function AgregarOrdenes() {
                                     type="date"
                                     style={{ width: "270px", height: "40px" }}
 
+
                                 />
                             </div>
+
 
 
                         </div><br /><br />
@@ -351,38 +438,57 @@ function AgregarOrdenes() {
                                 className=""
                                 value={orden.descripcion_orden}
                                 onChange={handleInputChange}
-             
+
                                 cols="33" rows="4"
                                 type="text"
-                                style={{ resize: 'none' }}
+                                style={{ resize: 'none', width: '270px' }}
                             />
+                            {
+                                !inputValido3 && (
+                                    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>El campo no puede estar vacío</p>
+                                )
+                            }
+                            {
+                                !inputValido4 && !inputValido && (
+                                    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>No se aceptan caracteres especiales.</p>
+                                )
+                            }
+                            {
+                                !inputValido && inputValido4 && (
+                                    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>Debe de contener al menos 10 letras y máximo 60.</p>
+                                )
+                            }
+                            {
+                                !inputValido4 && inputValido && (
+                                    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>No se aceptan caracteres especiales.</p>
+                                )
+                            }
                         </div><br />
                         <div id="kaka">
-                            <p>Usuario</p>
-                            <select
+                            <input type='hidden'
                                 id="proveedor"
                                 name="id_usuario"
                                 className="input-field2"
                                 style={{ width: "270px", height: "40px" }}
-                                value={orden.id_usuario}
+                                value={usuario.nombre_usuario}
                                 readOnly={true}
                                 onChange={handleInputChange}>
-                                <option value="">{usuario.nombre_usuario}</option>
 
-                            </select>
+
+                            </input>
                         </div>
                         <br /><br />
                         <div className='inputs-up'>
                             <div className='contenedor-input'>
-                                <button className='boton azulado2' type="button" onClick={addTableRow}><center>+ Insumo</center></button>
+                                <button style={{ marginLeft: '-1px', width: "270px", height: "50px" }} className='boton azulado2' type="button" onClick={addTableRow}><center>+ Insumo</center></button>
                             </div>
                         </div>
                     </div>
 
 
 
-                    <hr style={{ margin: '10px 0', border: 'none', borderTop: '1px solid black' }} />
-                    <div className='tabla-detalle' style={{ overflowY: scrollEnabled ? 'scroll' : 'auto', maxHeight: '400px' }}>
+                    <hr style={{ marginLeft: '150px', margin: '10px 0', border: 'none', borderTop: '1px solid black' }} />
+                    <div className='tabla-detalle' style={{ overflowY: scrollEnabled ? 'scroll' : 'auto', maxHeight: '350px' }}>
                         <table className="tablaDT ui celled table" style={{ width: "70%", marginTop: "10%" }} ref={tableRef}>
                             <thead className="rojo thead-fixed">
                                 <tr>
@@ -405,7 +511,7 @@ function AgregarOrdenes() {
                                                 ))}
                                             </select>
                                         </td>
-                                        
+
                                         <td style={{ textAlign: "center" }}><input className="input-field-tabla" style={{ width: "100px" }} type="number" onChange={(e) => handleCantidadChange(e, index)} /></td>
                                         {index !== 0 && (
                                             <td style={{ textAlign: "center" }}>
@@ -423,7 +529,7 @@ function AgregarOrdenes() {
                     </div>
                 </div>
                 <br />
-                <div style={{ marginRight: "200px" }} className="cajaBotones">
+                <div style={{ marginTop: '30px', marginRight: "200px" }} className="cajaBotones">
                     <button type="submit" id="can" className="boton azulado3"><center>Guardar</center></button>
                     <button style={{ color: "white" }} type="button" className="boton gris" onClick={handleCancel}>Cancelar</button>
                 </div>
