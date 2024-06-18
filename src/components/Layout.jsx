@@ -187,7 +187,7 @@ const Layout = () => {
             <div className="barraPrincipal">
                 <div className="contenedor_1">
                     <Link to={"/Dashboard"}>
-                        <img src="/archivos/imagenes/LuchoGod.png" height="45px" length="45px" alt="Logo" />
+                        <img className="imgL" src="/archivos/imagenes/LuchoGod.jpg" height="45px" length="45px" alt="Logo"/>
                     </Link>
                     <p id="luchosoft" className="bebas-neue-regular">LuchoSoft</p>
                 </div>
