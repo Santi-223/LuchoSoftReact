@@ -172,15 +172,28 @@ function App() {
 
   const handleSelectChange = (event, index) => {
     const { value } = event.target;
-    
+  
+    // Verificar si el producto ya está seleccionado en otra fila
+    const isProductAlreadySelected = tableRows.some((row, rowIndex) => {
+      return rowIndex !== index && row.nombre === value;
+    });
+  
+    if (isProductAlreadySelected) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Producto ya seleccionado',
+        text: 'Este producto ya ha sido seleccionado en otra fila. Por favor, elige otro producto.',
+      });
+      return;
+    }
+  
     const selectedProducto = productos.find(
       (producto) => producto.nombre_producto === value
     );
     if (!selectedProducto) {
       return;
     }
-
-    // Actualiza las filas de la tabla
+  
     const updatedRows = tableRows.map((row, rowIndex) => {
       if (rowIndex === index) {
         return {
@@ -192,7 +205,7 @@ function App() {
       }
       return row;
     });
-
+  
     setTableRows(updatedRows);
     setFormChanged(true);
   };
@@ -422,12 +435,14 @@ function App() {
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
       <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
       <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.css" rel="stylesheet" />
+
       <div className={estilos["contenido"]}>
-        <div id={estilos["titulo2"]}>
-          <h2>Registrar Pedidos</h2>
+        <div className={estilos["tituloR"]}>
+          <h1>Registrar Pedidos</h1>
         </div>
         <div id={estilos["contenedorcito"]}>
-          <div className={estilos["input-container"]}>
+          <div className={estilos["input-containerR"]}>
             <div id={estilos["kaka"]}>
               <label htmlFor="fechaPedido">Fecha<span style={{ color: 'red' }}>*</span></label>
               <input
@@ -495,25 +510,10 @@ function App() {
                   )}
                   onChange={handleClienteChange}
                   placeholder="Buscar cliente"
-                  inputStyle={{ width: '100%', padding: '8px', border: '1px solid #ccc', borderRadius: '4px' }}
+                  inputStyle={{ width: '31vh', padding: '8px', border: '1px solid #ccc', borderRadius: '4px', fontSize:'17px' }}
                 // aria-label="Clientes"
                 />
               </div>
-              {/* <select
-                id="cliente"
-                name="id_cliente"
-                className={estilos["input-field22"]}
-                value={pedido.id_cliente}
-                onChange={handleInputChange}
-                style={{marginTop:'10px'}}
-              >
-                <option value="">Seleccione un cliente</option>
-                {clientes.map((cliente) => (
-                  <option key={cliente.id_cliente} value={cliente.id_cliente}>
-                    {cliente.nombre_cliente}
-                  </option>
-                ))}
-              </select> */}
             </div>
             <div className="BotonesPedidos">
               <div id={estilos["totalpedidos"]}>
@@ -549,7 +549,7 @@ function App() {
           <div className={estilos["TablaDetallePedidos"]}>
             <div className={estilos["agrPedidos"]}>
               <p>Agregar Productos</p>
-              <button type="button" className="fa-solid fa-plus" style={{ background: '#3e7fc9', border: 'none', borderRadius: '20px', width: '40px', color: 'white' }} onClick={handleAgregarProducto}>
+              <button type="button" className="fa-solid fa-plus" style={{ background: '#3e7fc9', border: 'none', borderRadius: '20px', width: '40px', color: 'white', marginTop:'-10px', marginBottom:'10px' }} onClick={handleAgregarProducto}>
               </button>
             </div>
             <div style={{ overflowY: scrollEnabled ? 'scroll' : 'auto', height: '60vh', width: '130%' }} >
@@ -575,66 +575,60 @@ function App() {
                   </tr>
                 </thead>
                 <tbody>
-                  {tableRows.map((row, index) => {
-                    const selectedProducts = tableRows.map((row) => row.nombre);
-                    const availableProducts = getAvailableProducts(selectedProducts, productos);
-
-                    return (
-                      <tr key={index} className={estilos.tabladetalle}>
-                        <td style={{ textAlign: "center" }}>
-                          <select
-                            className={estilos["input-field-tabla"]}
-                            value={row.nombre}
-                            onChange={(e) => handleSelectChange(e, index)}
-                            style={{ width: '300px', display: 'flex', marginRight: '0px' }}
-                          >
-                            <option value="">Seleccione un producto</option>
-                            {availableProducts.map((producto) => (
-                              <option
-                                key={producto.id_producto}
-                                value={producto.nombre_producto}
-                              >
-                                {producto.nombre_producto}
-                              </option>
-                            ))}
-                          </select>
-                        </td>
-                        <td style={{ textAlign: "center" }}>
-                          <input
-                            className={estilos["input-field-tabla"]}
-                            style={{ width: "90px" }}
-                            type="number"
-                            onChange={(e) => handlePrecioChange(e, index)}
-                            value={row.precio_unitario}
-                            disabled
-                          />
-                        </td>
-                        <td style={{ textAlign: "center" }}>
-                          <input
-                            className={estilos["input-field-tabla"]}
-                            style={{ width: "100px" }}
-                            type="number"
-                            onChange={(e) => handleCantidadChange(e, index)}
-                          />
-                        </td>
-                        {
-                          index !== 0 && (
-                            <td style={{ textAlign: "center" }}>
-                              <button
-                                type="button"
-                                className={`btn btn-danger ${estilos['boton-eliminar']}`}
-                                onClick={() => handleDeleteRow(index)}
-                              >
-                                Eliminar
-                              </button>
-                            </td>
-                          )
-                        }
-                      </tr>
-                    );
-                  })}
+                  {tableRows.map((row, index) => (
+                    <tr key={index} className={estilos.tabladetalle}>
+                      <td style={{ textAlign: "center" }}>
+                        <select
+                          className={estilos["input-field-tabla"]}
+                          value={row.nombre}
+                          onChange={(e) => handleSelectChange(e, index)}
+                          style={{ width: '300px', display: 'flex', marginRight: '0px' }}
+                        >
+                          <option value="">Seleccione un producto</option>
+                          {productos.map((producto) => (
+                            <option
+                              key={producto.id_producto}
+                              value={producto.nombre_producto}
+                            >
+                              {producto.nombre_producto}
+                            </option>
+                          ))}
+                        </select>
+                      </td>
+                      <td style={{ textAlign: "center" }}>
+                        <input
+                          className={estilos["input-field-tabla"]}
+                          style={{ width: "90px" }}
+                          type="number"
+                          onChange={(e) => handlePrecioChange(e, index)}
+                          value={row.precio_unitario}
+                          disabled
+                        />
+                      </td>
+                      <td style={{ textAlign: "center" }}>
+                        <input
+                          className={estilos["input-field-tabla"]}
+                          style={{ width: "100px" }}
+                          type="number"
+                          onChange={(e) => handleCantidadChange(e, index)}
+                        />
+                      </td>
+                      {
+                        index !== 0 && (
+                          <td style={{ textAlign: "center" }}>
+                            <button
+                              type="button"
+                              className={`btn btn-danger ${estilos['boton-eliminar']}`}
+                              onClick={() => handleDeleteRow(index)}
+                            >
+                              Eliminar
+                            </button>
+                          </td>
+                        )
+                      }
+                    </tr>
+                  ))}
                 </tbody>
-
               </table>
             </div>
           </div>

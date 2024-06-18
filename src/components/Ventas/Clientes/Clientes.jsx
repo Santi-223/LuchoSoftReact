@@ -139,10 +139,10 @@ const Cliente = () => {
                                     )}
                                     <span className={`${row.estado_cliente == 1 && estilos['slider2']} ${row.estado_cliente !== 1 && estilos['slider']}`}></span>
                                 </label>
-                                <button onClick={() => { cambiarEstadoModal2(!estadoModal2), setClientesEditar(row) }}><i className={`fa-solid fa-pen-to-square iconosNaranjas`}></i></button>
                                 <abbr title="Ver detalle">
                                     <button onClick={() => { cambiarEstadoModal3(!estadoModal3), setClientesEditar(row) }}><i className={`fa-regular fa-eye iconosAzules`}></i></button>
                                 </abbr>
+                                <button onClick={() => { cambiarEstadoModal2(!estadoModal2), setClientesEditar(row) }}><i className={`fa-solid fa-pen-to-square iconosNaranjas`}></i></button>
                                 <button
                                     onClick={() => handleEliminarCliente(row.id_cliente)}
                                     // disabled={row.estado_producto === 0}
@@ -167,20 +167,19 @@ const Cliente = () => {
                                     )}
                                     <span className={`${row.estado_cliente == 1 && estilos['slider2']} ${row.estado_cliente !== 1 && estilos['slider']}`}></span>
                                 </label>
-                                <button><i className={`fa-solid fa-pen-to-square ${estilos.icono_negro}`}></i></button>
                                 <abbr title="Ver detalle">
                                     <button ><i className={`bi-eye-slash cerrado ${estilos.icono_negro}`}></i></button>
                                 </abbr>
+                                <button><i className={`fa-solid fa-pen-to-square ${estilos.icono_negro}`}></i></button>
                                 <button
-                                    onClick={() => handleEliminarCliente(row.id_cliente)}
                                     // disabled={row.estado_producto === 0}
                                     className={estilos["boton"]}
                                     style={{ cursor: "pointer", textAlign: "center", fontSize: "23px" }}
                                 >
                                     <i
-                                        className={`bi bi-trash ${row.estado_producto === 0 ? "basuraDesactivada" : ""
+                                        className={`bi bi-trash ${row.estado_cliente === 0 ? "basuraDesactivada" : ""
                                             }`}
-                                        style={{ color: row.estado_producto === 0 ? "gray" : "red" }}
+                                        style={{ color: row.estado_cliente === 0 ? "gray" : "red" }}
                                     ></i>
                                 </button>
                             </div>

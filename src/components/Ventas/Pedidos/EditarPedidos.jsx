@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Swal from 'sweetalert2'
 import estilos from './Pedidos.module.css';
 import { useUserContext } from "../../UserProvider";
@@ -14,6 +14,8 @@ const EditarPedidos = () => {
     const [scrollEnabled, setScrollEnabled] = useState(false);
     const [pedidoProductos1, setPedidoProductos] = useState([]);
     const { usuario } = useUserContext();
+  const tableRef = useRef(null);
+
     //editar pedidos
 
     const { id_pedido } = useParams();
@@ -139,8 +141,8 @@ const EditarPedidos = () => {
                         //     title: '',
                         //     text: 'Producto eliminado correctamente',
                         // }).then(() => {
-                            // });
-                            listarpedidosProductos();
+                        // });
+                        listarpedidosProductos();
                     } else {
                         console.error("Error al eliminar el producto:", response.statusText);
                         Swal.fire({
@@ -308,14 +310,14 @@ const EditarPedidos = () => {
                             timer: 3000,
                             timerProgressBar: true,
                             didOpen: (toast) => {
-                              toast.onmouseenter = Swal.stopTimer;
-                              toast.onmouseleave = Swal.resumeTimer;
+                                toast.onmouseenter = Swal.stopTimer;
+                                toast.onmouseleave = Swal.resumeTimer;
                             }
-                          });
-                          Toast.fire({
+                        });
+                        Toast.fire({
                             icon: "success",
                             title: "Actualización exitosa"
-                          });
+                        });
                         setTimeout(() => {
                             window.location.href = '/#/pedidos';
                         }, 2000);
@@ -540,16 +542,18 @@ const EditarPedidos = () => {
         setpedidostEditar({ ...pedidosEditar, total_pedido: totalPedido });
     }, [tableRows, pedidoProductos1]);
 
-    
+
 
     return (
         <>
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" />
             <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
             <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.css" rel="stylesheet" />
+
             <div className={estilos["contenido"]}>
-                <div id={estilos["titulo2"]}>
-                    <h2>Editar Pedido</h2>
+                <div className={estilos["titulo2"]}>
+                    <h1>Editar Pedido</h1>
                 </div>
 
 
@@ -569,7 +573,7 @@ const EditarPedidos = () => {
                                 <option>Seleccione un Cliente</option>
                                 {
                                     clienteEditar.map(cliente => {
-                                        return <option value={cliente.id_cliente}>{cliente.nombre_cliente}-{cliente.id_cliente}</option>
+                                        return <option value={cliente.id_cliente}> {cliente.nombre_cliente}</option>
                                     })
                                 }
                             </select>
@@ -585,7 +589,7 @@ const EditarPedidos = () => {
                         </div>
                     </div>
                     <div className={estilos["TablaDetallePedidos"]}>
-                        <div style={{ overflowY: scrollEnabled ? 'scroll' : 'auto',height:'60vh'}}>
+                        <div style={{ overflowY: scrollEnabled ? 'scroll' : 'auto', height: '60vh' }}>
                             <div className={estilos["cajaBotonesRPedidos"]} style={{ zIndex: '2', position: 'fixed', bottom: '10px', background: 'white', width: '54%', padding: '.7em' }}>
                                 <button type='submit' onClick={editarPedido} className={`${estilos["boton-azul"]} `} >Guardar</button>
 
@@ -593,24 +597,25 @@ const EditarPedidos = () => {
                                     <button className={estilos["boton-gris"]} type="button">Cancelar</button>
                                 </Link>
                             </div>
-                            <table style={{ borderRadius: '90px' }}>
+                            <table className="ui celled table" ref={tableRef}>
                                 <thead>
                                     <tr>
-                                        <th className={estilos.cabeceraTabla}>Nombre</th>
-                                        <th className={estilos.cabeceraTabla}>Precio</th>
-                                        <th className={estilos.cabeceraTabla}>Cantidad</th>
-                                        <th className={estilos.cabeceraTabla}>Acciones</th>
+                                        <th style={{ background: '#3e7fc9', color: 'white', textAlign: 'center' }}>Nombre</th>
+                                        <th style={{ background: '#3e7fc9', color: 'white', textAlign: 'center' }}>Precio</th>
+                                        <th style={{ background: '#3e7fc9', color: 'white', textAlign: 'center' }}>Cantidad</th>
+                                        <th style={{ background: '#3e7fc9', color: 'white', textAlign: 'center' }}>Acciones</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody >
                                     {pedidoProductos1.map((detalle, index) => (
 
-                                        <tr key={detalle.id_pedidos_productos}>
-                                            <td>
+                                        <tr key={detalle.id_pedidos_productos} >
+                                            <td style={{border:'none'}}>
                                                 <select
                                                     name={`producto-${index}`}
                                                     value={detalle.id_producto}
                                                     onChange={(event) => handleSelectChange(event, index)}
+                                                    style={{ width: '250px' }}
                                                 >
                                                     <option value="">Seleccione un producto</option>
                                                     {listarProductos1.map((producto) => (
@@ -620,7 +625,7 @@ const EditarPedidos = () => {
                                                     ))}
                                                 </select>
                                             </td>
-                                            <td>
+                                            <td style={{border:'none'}}>
                                                 <input
                                                     type="number"
                                                     name={`precio-${index}`}
@@ -628,7 +633,7 @@ const EditarPedidos = () => {
                                                     readOnly // El precio del producto no debe ser editable desde aquí
                                                 />
                                             </td>
-                                            <td>
+                                            <td style={{border:'none'}}>
                                                 <input
                                                     type="number"
                                                     name={`cantidad-${index}`}
@@ -636,28 +641,28 @@ const EditarPedidos = () => {
                                                     onChange={(e) => handleCantidadChange(e, index)}
                                                 />
                                             </td>
-                                            <td>
+                                            <td style={{border:'none'}}>
                                                 <button className="btn btn-danger fa-solid fa-trash" style={{ height: '30px', width: '40px', fontSize: '15px', borderRadius: '30px' }} onClick={() => handleEliminarProducto(detalle.id_pedidos_productos)}></button>
                                             </td>
                                         </tr>
                                     ))}
                                     {tableRows.map((row, index) => (
                                         <tr key={index}>
-                                            <td>
-                                                <select name="id_producto" value={row.id_producto} onChange={(event) => handleAgregarProducto(event, index)}>
+                                            <td style={{border:'none'}}>
+                                                <select style={{ width: '250px' }} name="id_producto" value={row.id_producto} onChange={(event) => handleAgregarProducto(event, index)}>
                                                     <option value="">Seleccione un producto</option>
                                                     {listarProductos1.map((producto) => (
                                                         <option value={producto.id_producto}>{producto.nombre_producto}</option>
                                                     ))}
                                                 </select>
                                             </td>
-                                            <td>
+                                            <td style={{border:'none'}}>
                                                 <input type="text" readOnly className="inputPrecio" value={row.precio_unitario} />
                                             </td>
-                                            <td>
+                                            <td style={{border:'none'}}>
                                                 <input type="number" value={row.cantidad} onChange={(event) => handleCantidadChange2(event, index)} />
                                             </td>
-                                            <td style={{ display: "flex" }}>
+                                            <td style={{ display: "flex"}}>
                                                 <button onClick={() => handleDeleteRow(index)} className="btn btn-danger fa-solid fa-trash" style={{ height: '30px', width: '40px', fontSize: '15px', borderRadius: '30px', marginRight: '5px' }}></button>
                                                 <button className="btn btn-success fa-solid fa-plus" style={{ height: '30px', width: '40px', fontSize: '15px', borderRadius: '30px', }} onClick={AgregarPedidoDetalle}></button>
                                             </td>

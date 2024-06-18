@@ -13,11 +13,26 @@
     font-size: 35px;
 }
 
-
-#titulo2{
-    font-size: 20px;
+.titulo2{
+    font-size: 35px;
     margin-top: 10px;
     display: flex;
+}
+
+.titulo2 h1{
+    font-size: 30px;
+    color: #48110d;
+}
+
+.tituloR{
+    font-size: 35px;
+    margin-top: 10px;
+    display: flex;
+}
+
+.tituloR h1{
+    font-size: 30px;
+    color: #48110d;
 }
 
 .iconosRojos {
@@ -219,10 +234,20 @@ background: #154360d7;
 .input-container {
     display: block;
     margin-bottom: 15px;
-    margin-top: 10px;
+    margin-top: 20px;
 }
 
 .input-container input{
+    width: 200px;
+}
+
+.input-containerR {
+    display: block;
+    margin-bottom: 15px;
+    margin-top: 20px;
+}
+
+.input-containerR input{
     width: 200px;
 }
 
@@ -242,11 +267,14 @@ background: #154360d7;
 }
 .agrPedidos{
     display: flex;
+    margin-top: 15px;
+    /* margin-bottom: 15px; */
 }
 
 .agrPedidos p{
     margin-right: 20px;
     text-align: center;
+    font-size: 15px;
 }
 
 .cajaBotonesRPedidos {
@@ -287,7 +315,7 @@ background: #154360d7;
     display: flex;
     flex-direction: column;
     text-align: left;
-    margin-top: 10px;
+    margin-top: 20px;
 }
 
 .input-field2 {
@@ -320,11 +348,12 @@ background: #154360d7;
 
 .input-field {
     padding: 10px;
-
+    height: 50px;
     border-radius: 5px;
     width: 350px; /* Cambia este valor para ajustar el ancho del input */
     padding: 10px;
     border: 1px solid #ccc;
+    font-size: 15px;
 }
 
 .input-field-tabla {
@@ -363,11 +392,13 @@ background: #154360d7;
     width: 200px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    height: 100px;
+    font-size: 16px;
 }
 
 .cabeceraTabla{
     text-align: center;
-    background-color: #154360;
+    background-color: #3e7fc9;
     color: white;
 }
 
