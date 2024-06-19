@@ -12,7 +12,7 @@ const status = [
 ];
 
 const SaleReportCard = () => {
-  const [value, setValue] = useState('today');
+  const [value, setValue] = useState('month');
   const [salesData, setSalesData] = useState({ labels: [], series: [] });
 
   useEffect(() => {
@@ -89,7 +89,7 @@ const SaleReportCard = () => {
     <>
       <Grid container alignItems="center" justifyContent="space-between">
         <Grid item>
-          <Typography variant="h5">Reporte de ventas</Typography>
+          <Typography variant="h5">Reporte de ventas y compras</Typography>
         </Grid>
         <Grid item>
           <TextField
