@@ -284,7 +284,7 @@ function AgregarOrdenes() {
             });
             return;
         }
-        
+
 
         // Si todas las validaciones pasan, proceder con el registro de la orden
         Swal.fire({
@@ -422,7 +422,6 @@ function AgregarOrdenes() {
                                     type="date"
                                     style={{ width: "270px", height: "40px" }}
 
-
                                 />
                             </div>
 
@@ -487,8 +486,8 @@ function AgregarOrdenes() {
 
 
 
-                    <hr style={{ marginLeft: '150px', margin: '10px 0', border: 'none', borderTop: '1px solid black' }} />
-                    <div className='tabla-detalle' style={{ overflowY: scrollEnabled ? 'scroll' : 'auto', maxHeight: '350px' }}>
+                    <hr style={{ margin: '10px 0', border: 'none', borderTop: '1px solid black' }} />
+                    <div className='tabla-detalle' style={{ marginLeft: '150px', overflowY: scrollEnabled ? 'scroll' : 'auto', maxHeight: '320px' }}>
                         <table className="tablaDT ui celled table" style={{ width: "70%", marginTop: "10%" }} ref={tableRef}>
                             <thead className="rojo thead-fixed">
                                 <tr>
@@ -512,7 +511,15 @@ function AgregarOrdenes() {
                                             </select>
                                         </td>
 
-                                        <td style={{ textAlign: "center" }}><input className="input-field-tabla" style={{ width: "100px" }} type="number" onChange={(e) => handleCantidadChange(e, index)} /></td>
+                                        <td style={{ textAlign: "center" }}>
+                                            <input
+                                                className="input-field-tabla"
+                                                style={{ width: "100px" }}
+                                                type="number"
+                                                step="0.01"
+                                                onChange={(e) => handleCantidadChange(e, index)}
+                                            />
+                                        </td>
                                         {index !== 0 && (
                                             <td style={{ textAlign: "center" }}>
                                                 <button className='bot-x' type="button" onClick={() => handleDeleteRow(index)}>X</button>
