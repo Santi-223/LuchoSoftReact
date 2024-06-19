@@ -383,7 +383,7 @@ const Pedidos = () => {
                     <Link to="/agregarPedidos">
                         <button className={`${estilos["botonAgregar"]} bebas-neue-regular`} ><i class="fa-solid fa-plus"></i> Agregar</button>
                     </Link>
-                    <button style={{ backgroundColor: 'white', border: '1px solid #c9c6c675', borderRadius: '50px', marginTop: '-20px' }} onClick={() => exportExcel('Reporte_Pedidos')}> <img src="src\assets\excel-logo.png" height={'40px'} /> </button>
+                    <button style={{ backgroundColor: 'white', border: '1px solid #c9c6c675', borderRadius: '50px', marginTop: '-20px' }} onClick={() => exportExcel('Reporte_Pedidos')}> <img src='../../../../public/excel-logo.png' height={'40px'} /> </button>
                 </div>
             </div>
             <div className={estilos["tabla"]}>

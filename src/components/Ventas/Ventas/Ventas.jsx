@@ -313,7 +313,7 @@ const Ventas = () => {
             <div className={estilos["botones"]}>
                 <input type="text" placeholder="Buscar..." value={filtro} onChange={handleFiltroChange} className={estilos["busqueda"]} />
                 <div>
-                    <button style={{ backgroundColor: 'white', border: '1px solid #c9c6c675', borderRadius: '50px', marginTop: '-10px', cursor: 'pointer' }} onClick={() => exportExcel('Reporte_Ventas')}> <img src="src\assets\excel-logo.png" height={'40px'} /> </button>
+                    <button style={{ backgroundColor: 'white', border: '1px solid #c9c6c675', borderRadius: '50px', marginTop: '-10px', cursor: 'pointer' }} onClick={() => exportExcel('Reporte_Ventas')}> <img src='../../../../public/excel-logo.png' height={'40px'} /> </button>
                 </div>
             </div>
             <div className={estilos['tabla']}>

@@ -825,7 +825,7 @@ const Cliente = () => {
                 <input type="text" placeholder="Buscar..." value={filtro} onChange={handleFiltroChange} className={estilos["busqueda"]} />
                 <div className={estilos['boton2']}>
                     <button onClick={() => cambiarEstadoModal1(!estadoModal1)} className={`${estilos.botonAgregar} ${estilos.rojo} bebas-neue-regular`}><i className="fa-solid fa-plus"></i> Agregar</button>
-                    <button style={{ backgroundColor: 'white', border: '1px solid #c9c6c675', borderRadius: '50px', marginTop: '-2px', height: '45px', cursor: 'pointer' }} onClick={() => exportExcel('Cliente_informacion')}><img src="src\assets\excel-logo.png" height={'40px'} /></button>
+                    <button style={{ backgroundColor: 'white', border: '1px solid #c9c6c675', borderRadius: '50px', marginTop: '-2px', height: '45px', cursor: 'pointer' }} onClick={() => exportExcel('Cliente_informacion')}><img src='../../../../public/excel-logo.png' height={'40px'} /></button>
                 </div>
 
             </div>
