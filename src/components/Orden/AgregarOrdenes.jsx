@@ -518,7 +518,8 @@ function AgregarOrdenes() {
                                         </td>
                                         <td>
                                             <input
-                                                type="text"
+                                                type="number"
+                                                step="0.01"
                                                 value={row.cantidad || ''}
                                                 onChange={(event) => handleCantidadChange(event, index)}
                                                 placeholder={row.unidadDeMedida || ''}

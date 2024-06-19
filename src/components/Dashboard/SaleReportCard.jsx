@@ -12,7 +12,7 @@ const status = [
 ];
 
 const SaleReportCard = () => {
-  const [value, setValue] = useState('today');
+  const [value, setValue] = useState('month');
   const [salesData, setSalesData] = useState({ labels: [], series: [] });
 
   useEffect(() => {
@@ -26,13 +26,16 @@ const SaleReportCard = () => {
         const comprasData = await comprasResponse.json();
         const ventasData = await ventasResponse.json();
 
+        // Filtrar pedidos por estado 3
+        const filteredVentas = ventasData.filter(venta => venta.estado_pedido == 3);
+
         const filteredCompras = filterDataByTime(comprasData, 'fecha_compra', value);
-        const filteredVentas = filterDataByTime(ventasData, 'fecha_venta', value);
+        const filteredVentasByTime = filterDataByTime(filteredVentas, 'fecha_venta', value);
 
-        const labels = generateLabels(filteredCompras, filteredVentas, value);
+        const labels = generateLabels(filteredCompras, filteredVentasByTime, value);
 
-        const totalCompras = labels.map(label => calculateTotalForLabel(filteredCompras, label, 'fecha_compra', 'total_compra'));
-        const totalVentas = labels.map(label => calculateTotalForLabel(filteredVentas, label, 'fecha_venta', 'total_venta'));
+        const totalCompras = labels.map(label => calculateTotalForLabel(filteredCompras, label, 'fecha_compra', 'total_compra', value));
+        const totalVentas = labels.map(label => calculateTotalForLabel(filteredVentasByTime, label, 'fecha_venta', 'total_venta', value));
 
         setSalesData({
           labels,
@@ -68,18 +71,30 @@ const SaleReportCard = () => {
     const dates = new Set([...compras.map(item => item.fecha_compra), ...ventas.map(item => item.fecha_venta)]);
     const sortedDates = Array.from(dates).sort((a, b) => new Date(a) - new Date(b));
     if (range === 'today') {
-      return sortedDates.map(date => new Date(date).toLocaleTimeString());
+      const now = new Date();
+      return Array.from({ length: 24 }, (_, i) => {
+        const date = new Date(now.getFullYear(), now.getMonth(), now.getDate(), i);
+        return date.toLocaleTimeString([], { hour: '2-digit', hour12: false });
+      });
     } else if (range === 'month' || range === 'year') {
       return sortedDates.map(date => new Date(date).toLocaleDateString());
     }
     return [];
   };
 
-  const calculateTotalForLabel = (data, label, dateKey, valueKey) => {
+  const calculateTotalForLabel = (data, label, dateKey, valueKey, range) => {
     return data.reduce((acc, item) => {
-      const itemDate = new Date(item[dateKey]).toLocaleDateString();
-      if (itemDate === label) {
-        return acc + parseFloat(item[valueKey]);
+      const itemDate = new Date(item[dateKey]);
+      if (range === 'today') {
+        const itemHour = itemDate.toLocaleTimeString([], { hour: '2-digit', hour12: false });
+        if (itemHour === label) {
+          return acc + parseFloat(item[valueKey]);
+        }
+      } else {
+        const itemDay = itemDate.toLocaleDateString();
+        if (itemDay === label) {
+          return acc + parseFloat(item[valueKey]);
+        }
       }
       return acc;
     }, 0);

@@ -11,7 +11,9 @@ const Balance = () => {
         // Fetch total ventas
         const ventasResponse = await fetch('https://api-luchosoft-mysql.onrender.com/ventas/pedidos/');
         const ventasData = await ventasResponse.json();
-        const totalVentas = ventasData.reduce((acc, venta) => acc + parseFloat(venta.total_venta), 0);
+        // Filtrar pedidos por estado 3
+        const filteredData = ventasData.filter(venta => venta.estado_pedido == 3);
+        const totalVentas = filteredData.reduce((acc, venta) => acc + parseFloat(venta.total_venta), 0);
 
         // Fetch total compras
         const comprasResponse = await fetch('https://api-luchosoft-mysql.onrender.com/compras/compras/');

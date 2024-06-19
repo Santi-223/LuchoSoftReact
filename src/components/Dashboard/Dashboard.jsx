@@ -78,34 +78,15 @@ export default function Dashboard() {
 
 
       {/* row 2 */}
-      <Grid item xs={12} md={7} lg={8}>
+      <Grid item xs={12} md={7} lg={12}>
         <SaleReportCard />
       </Grid>
 
 
 
 
-
-      <Grid item xs={12} md={5} lg={4}>
-        <Grid container alignItems="center" justifyContent="space-between">
-          <Grid item>
-            <Typography variant="h6">Ordenes de producción en la semana</Typography>
-          </Grid>
-          <Grid item />
-        </Grid>
-        <MainCard sx={{ mt: 2 }} content={false}>
-          <Box sx={{ p: 3, pb: 0 }}>
-            <Stack spacing={2}>
-              <Typography variant="h6" color="text.secondary">
-              </Typography>
-            </Stack>
-          </Box>
-          <MonthlyBarChart />
-        </MainCard>
-      </Grid>
-
       {/* row 3 */}
-      <Grid item xs={12} md={7} lg={20}>
+      <Grid item xs={12} md={7} lg={8}>
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid item>
             <Typography variant="h5">Clientes frecuentes</Typography>
@@ -115,14 +96,25 @@ export default function Dashboard() {
         <MainCard sx={{ mt: 2 }} content={false}>
           <OrdersTable />
         </MainCard>
-       </Grid>
-       <Grid item xs={12} md={5} lg={4}>
-        <Grid container alignItems="center" justifyContent="space-between">
-
-          <Grid item />
+      </Grid>
+      <Grid item xs={12} md={5} lg={4}>
+          <Grid container alignItems="center" justifyContent="space-between">
+            <Grid item>
+              <Typography variant="h6">Ordenes de producción en la semana</Typography>
+            </Grid>
+            <Grid item />
+          </Grid>
+          <MainCard sx={{ mt: 2 }} content={false}>
+            <Box sx={{ p: 3, pb: 0 }}>
+              <Stack spacing={2}>
+                <Typography variant="h6" color="text.secondary">
+                </Typography>
+              </Stack>
+            </Box>
+            <MonthlyBarChart />
+          </MainCard>
         </Grid>
 
-      </Grid>
     </Grid>
   );
 }

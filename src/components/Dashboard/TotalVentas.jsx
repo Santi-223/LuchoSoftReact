@@ -10,7 +10,12 @@ const TotalVentas = () => {
       try {
         const response = await fetch('https://api-luchosoft-mysql.onrender.com/ventas/pedidos/');
         const data = await response.json();
-        const totalSum = data.reduce((acc, venta) => acc + parseFloat(venta.total_venta), 0);
+        
+        // Filtrar pedidos por estado 3
+        const filteredData = data.filter(venta => venta.estado_pedido == 3);
+
+        // Calcular el total de ventas para los pedidos con estado 3
+        const totalSum = filteredData.reduce((acc, venta) => acc + parseFloat(venta.total_venta), 0);
         setTotalVentas(totalSum);
       } catch (error) {
         console.error('Error fetching data:', error);
