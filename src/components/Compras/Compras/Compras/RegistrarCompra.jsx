@@ -262,23 +262,13 @@ function App() {
       });
       return;
     }
-    const Toast = Swal.mixin({
-      toast: true,
-      position: "top-end",
+    Swal.fire({
+      icon: 'success',
+      title: '',
+      text: 'Compra registrada',
       showConfirmButton: false,
-      timer: 3000,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.onmouseenter = Swal.stopTimer;
-        toast.onmouseleave = Swal.resumeTimer;
-      }
-    });
-    Toast.fire({
-      icon: "success",
-      title: "Compra registrada exitosamente."
-    })
-    
-    .then(async () => {
+      timer: 2000,
+    }).then(async () => {
       try {
         const totalCompra = tableRows.reduce((total, row) => total + parseFloat(row.precio_total || 0), 0);
 

@@ -144,7 +144,7 @@ function Productos() {
                             window.location.href = `/#/editarProductos/${row.id_producto}`;
                         }
                     }} className={estilos.boton} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}>
-                        <i className={`fa-solid fa-pen-to-square ${row.estado_producto === 1 ? 'iconosVerdes' : 'iconosGris'}`}></i>
+                        <i className={`fa-solid fa-pen-to-square ${row.estado_producto === 1 ? 'iconosNaranjas' : 'iconosGris'}`}></i>
                     </button>
 
                     <button

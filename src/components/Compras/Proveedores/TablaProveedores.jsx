@@ -96,13 +96,21 @@ function Proveedores() {
           );
 
           if (response.ok) {
-            Swal.fire({
-              icon: "success",
-              title: "Proveedor eliminado",
-
+            const Toast = Swal.mixin({
+              toast: true,
+              position: "top-end",
               showConfirmButton: false,
-              timer: 1500,
+              timer: 3000,
+              timerProgressBar: true,
+              didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+              }
             });
+            Toast.fire({
+              icon: "success",
+              title: "Proveedor elminado exitosamente."
+            })
 
             fetchproveedores();
           } else {
@@ -785,12 +793,21 @@ function Proveedores() {
 
           if (response.ok) {
             console.log("proveedor actualizado exitosamente.");
-            Swal.fire({
-              icon: "success",
-              title: "Proveedor actualizado exitosamente",
+            const Toast = Swal.mixin({
+              toast: true,
+              position: "top-end",
               showConfirmButton: false,
-              timer: 1500,
+              timer: 3000,
+              timerProgressBar: true,
+              didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+              }
             });
+            Toast.fire({
+              icon: "success",
+              title: "Proveedor actualizado exitosamente."
+            })
             setTimeout(() => {
               window.location.href = "/#/proveedores";
               fetchproveedores();
@@ -1173,6 +1190,62 @@ function Proveedores() {
     }
 
     if (
+      !proveedores1.telefono_proveedor && !proveedores1.direccion_proveedor
+    ) {
+      setInputTelValido3(false)
+      setInputDirecValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !proveedores1.documento_proveedor && !proveedores1.direccion_proveedor
+    ) {
+      setInputDocValido3(false)
+      setInputDirecValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !proveedores1.nombre_proveedor && !proveedores1.direccion_proveedor
+    ) {
+      setInputNombreValido3(false)
+      setInputDirecValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
+      !proveedores1.tipo_documento && !proveedores1.direccion_proveedor
+    ) {
+      setInputTipoValido(false)
+      setInputDirecValido3(false)
+      Swal.fire({
+        icon: "error",
+         
+        text: "Por favor, completa los campos vacíos",
+      });
+      
+      return;
+    }
+
+    if (
       !proveedores1.tipo_documento && !proveedores1.nombre_proveedor
     ) {
       setInputTipoValido(false)
@@ -1473,12 +1546,21 @@ function Proveedores() {
           if (responseProveedores.ok) {
             console.log("Proveedor creado exitosamente.");
 
-            Swal.fire({
-              icon: "success",
-              title: "Registro exitoso",
+            const Toast = Swal.mixin({
+              toast: true,
+              position: "top-end",
               showConfirmButton: false,
-              timer: 1500,
+              timer: 3000,
+              timerProgressBar: true,
+              didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+              }
             });
+            Toast.fire({
+              icon: "success",
+              title: "Proveedor registrado exitosamente."
+            })
             setTimeout(() => {
               fetchproveedores();
               setProveedores1({

@@ -152,12 +152,21 @@ function categoria_insumos() {
       if (responseCategoria_insumos.ok) {
         console.log("categoría de insumo creada exitosamente.");
 
-        Swal.fire({
-          icon: "success",
-          title: "Registro exitoso",
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
           showConfirmButton: false,
-          timer: 1500,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
         });
+        Toast.fire({
+          icon: "success",
+          title: "Categorìa de insumo registrada exitosamente."
+        })
         setTimeout(() => {
           fetchcategoria_insumos();
 
@@ -241,13 +250,21 @@ function categoria_insumos() {
 
           if (response.ok) {
             // Insumo eliminado exitosamente
-            Swal.fire({
-              icon: "success",
-              title: "Categoría eliminada",
-
+            const Toast = Swal.mixin({
+              toast: true,
+              position: "top-end",
               showConfirmButton: false,
-              timer: 1500,
+              timer: 3000,
+              timerProgressBar: true,
+              didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+              }
             });
+            Toast.fire({
+              icon: "success",
+              title: "Categorìa de insumo eliminada exitosamente."
+            })
 
             fetchcategoria_insumos();
           } else {
@@ -469,12 +486,21 @@ function categoria_insumos() {
 
           if (response.ok) {
             console.log("categoría de insumo actualizado exitosamente.");
-            Swal.fire({
-              icon: "success",
-              title: "categoría de insumo actualizado exitosamente",
+            const Toast = Swal.mixin({
+              toast: true,
+              position: "top-end",
               showConfirmButton: false,
-              timer: 1500,
+              timer: 3000,
+              timerProgressBar: true,
+              didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+              }
             });
+            Toast.fire({
+              icon: "success",
+              title: "Categorìa de insumo editada exitosamente."
+            })
             setTimeout(() => {
               window.location.href = "/#/CatInsumos";
               fetchcategoria_insumos();

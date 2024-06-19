@@ -422,7 +422,6 @@ function AgregarOrdenes() {
                                     type="date"
                                     style={{ width: "270px", height: "40px" }}
 
-
                                 />
                             </div>
 
@@ -487,8 +486,8 @@ function AgregarOrdenes() {
 
 
 
-                    <hr style={{ marginLeft: '150px', margin: '10px 0', border: 'none', borderTop: '1px solid black' }} />
-                    <div className='tabla-detalle' style={{ overflowY: scrollEnabled ? 'scroll' : 'auto', maxHeight: '350px' }}>
+                    <hr  style={{margin: '10px 0', border: 'none', borderTop: '1px solid black' }} />
+                    <div className='tabla-detalle' style={{marginLeft:'150px', overflowY: scrollEnabled ? 'scroll' : 'auto', maxHeight: '320px' }}>
                         <table className="tablaDT ui celled table" style={{ width: "70%", marginTop: "10%" }} ref={tableRef}>
                             <thead className="rojo thead-fixed">
                                 <tr>
@@ -537,4 +536,5 @@ function AgregarOrdenes() {
         </div>
     );
 }
+
 export default AgregarOrdenes;
