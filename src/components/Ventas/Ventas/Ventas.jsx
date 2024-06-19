@@ -102,24 +102,46 @@ const Ventas = () => {
             name: "Accion",
             cell: (row) => (
                 <div>
+                    {
+                        row.estado_pedido === 3 ? (
+                            <div className={estilos['acciones']}>
+                                <label className={estilos["switch"]}>
+                                    <input type="checkbox" onChange={() => CambiarEstadoVenta(row)} />
+                                    {row.estado_pedido === 3 ? (
+                                        <span className={`${row.estado_pedido == 3 && estilos['slider2']}`}></span>
+                                    ) : (
+                                        <span className={`${row.estado_pedido !== 3 && estilos['slider']}`}></span>
+                                    )}
+                                    <span className={`${row.estado_pedido == 3 && estilos['slider2']} ${row.estado_pedido !== 3 && estilos['slider']}`}></span>
 
-                    <div className={estilos['acciones']}>
-                        <label className={estilos["switch"]}>
-                            <input type="checkbox" onChange={() => CambiarEstadoVenta(row)} />
-                            {row.estado_pedido === 3 ? (
-                                <span className={`${row.estado_pedido == 3 && estilos['slider2']}`}></span>
-                            ) : (
-                                <span className={`${row.estado_pedido !== 3 && estilos['slider']}`}></span>
-                            )}
-                            <span className={`${row.estado_pedido == 3 && estilos['slider2']} ${row.estado_pedido !== 3 && estilos['slider']}`}></span>
+                                </label>
+                                <abbr title="Ver detalle">
+                                    <button onClick={() => { cambiarEstadoModal2(!estadoModal2); setIdproducto({ id_producto: row.id_pedido }); listarpedidosProductos(row.id_pedido); listarClienteAsociado(row.id_cliente); }}>
+                                        <i className={`fa-regular fa-eye iconosAzules`}></i>
+                                    </button>
+                                </abbr>
+                            </div>
+                        ) : (
+                            <div className={estilos['acciones']}>
+                                <label className={estilos["switch"]}>
+                                    <input type="checkbox" onChange={() => CambiarEstadoVenta(row)} />
+                                    {row.estado_pedido === 3 ? (
+                                        <span className={`${row.estado_pedido == 3 && estilos['slider2']}`}></span>
+                                    ) : (
+                                        <span className={`${row.estado_pedido !== 3 && estilos['slider']}`}></span>
+                                    )}
+                                    <span className={`${row.estado_pedido == 3 && estilos['slider2']} ${row.estado_pedido !== 3 && estilos['slider']}`}></span>
 
-                        </label>
-                        <abbr title="Ver detalle">
-                            <button onClick={() => { cambiarEstadoModal2(!estadoModal2); setIdproducto({ id_producto: row.id_pedido }); listarpedidosProductos(row.id_pedido); listarClienteAsociado(row.id_cliente); }}>
-                                <i className={`fa-regular fa-eye iconosAzules`}></i>
-                            </button>
-                        </abbr>
-                    </div>
+                                </label>
+                                <abbr title="Ver detalle">
+                                    <button >
+                                        <i className={`fa-regular fa-eye`} style={{color: 'gray'}}></i>
+                                    </button>
+                                </abbr>
+                            </div>
+                        )
+                    }
+
 
                 </div>
             )

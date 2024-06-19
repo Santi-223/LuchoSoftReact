@@ -124,7 +124,7 @@ const Pedidos = () => {
                         <div className={estilos['acciones']}>
                             <abbr title="Ver detalle">
                                 <button onClick={() => { cambiarEstadoModal2(!estadoModal2); setIdproducto({ id_producto: row.id_pedido }); listarpedidosProductos(row.id_pedido); listarClienteAsociado(row.id_cliente); }}>
-                                    <i className={`fa-regular fa-eye iconosAzules`}></i>
+                                    <i className={`fa-regular fa-eye `} style={{color: '#1A008E'}}></i>
                                 </button>
                             </abbr>
                             <abbr title="Cambiar Estado">
@@ -403,10 +403,6 @@ const Pedidos = () => {
             >
                 <Contenido>
                     <div>
-                        <div className={estilos.estado}>
-                            <p>Pendiente</p>
-                            <button type='button' value={1} onClick={(event) => { handleEstadoPedidos(selectedRowId, selectedRow, event) }}>Seleccionar</button>
-                        </div>
                         <div className={estilos.estado}>
                             <p>Cancelado</p>
                             <button type='submit' value={2} onClick={(event) => { handleEstadoPedidos(selectedRowId, selectedRow, event) }}>Seleccionar</button>

@@ -124,15 +124,20 @@ function App() {
       });
       return;
     }
-
+  
+    const selectedInsumo = insumos.find(insumo => insumo.nombre_insumo === value);
     const updatedRows = tableRows.map((row, rowIndex) => {
       if (rowIndex === index) {
-        const selectedInsumo = insumos.find(insumo => insumo.nombre_insumo === value);
-        return { ...row, nombre: value, insumoId: selectedInsumo.id_insumo };
+        return {
+          ...row,
+          nombre: value,
+          insumoId: selectedInsumo.id_insumo,
+          unidadesDeMedida: selectedInsumo.unidadesDeMedida_insumo // Agregar unidades de medida
+        };
       }
       return row;
     });
-
+  
     setTableRows(updatedRows);
     setSelectedInsumos(prevSelected => new Set(prevSelected.add(value)));
     setFormChanged(true);
@@ -461,6 +466,8 @@ function App() {
               </select>
             </div>
             <br />
+            <br />
+            <br />
             <div className={estilos.inputsup}>
               <div className='contenedor-input' >
                 <label htmlFor="precioCompra"> Total </label>
@@ -518,6 +525,7 @@ function App() {
                         className={`${estilos.inputfieldtabla} ${(!inputValido2[index] && tableRows[index].cantidad !== '') ? estilos.inputInvalido2 : ''}`}
                         style={{ width: "100px" }}
                         type="number"
+                        placeholder={tableRows[index].unidadesDeMedida}
                         onChange={(e) => handleCantidadChange(e, index)}
                       />
 

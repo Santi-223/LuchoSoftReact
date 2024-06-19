@@ -328,14 +328,7 @@ function Compras() {
                 padding: '10px',
                 fontSize: '16px'
             },
-        },
-        cells: {
-            style: {
-                textAlign: 'center',
-
-                fontSize: '13px'
-            },
-        },
+        }
     };
 
     const exportExcel = (customFileName) => {
@@ -391,7 +384,7 @@ function Compras() {
 
 
             <div className={estilos["tabla"]}>
-                <DataTable columns={columns} data={filteredCompras} pagination paginationPerPage={5} highlightOnHover></DataTable>
+                <DataTable customStyles={customStyles} columns={columns} data={filteredCompras} pagination paginationPerPage={5} highlightOnHover></DataTable>
             </div>
 
 

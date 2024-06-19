@@ -140,14 +140,14 @@ const Cliente = () => {
                                     <span className={`${row.estado_cliente == 1 && estilos['slider2']} ${row.estado_cliente !== 1 && estilos['slider']}`}></span>
                                 </label>
                                 <abbr title="Ver detalle">
-                                    <button onClick={() => { cambiarEstadoModal3(!estadoModal3), setClientesEditar(row) }}><i className={`fa-regular fa-eye iconosAzules`}></i></button>
+                                    <button onClick={() => { cambiarEstadoModal3(!estadoModal3), setClientesEditar(row) }}><i className={`fa-regular fa-eye`} style={{color: '#1A008E'}}></i></button>
                                 </abbr>
-                                <button onClick={() => { cambiarEstadoModal2(!estadoModal2), setClientesEditar(row) }}><i className={`fa-solid fa-pen-to-square iconosNaranjas`}></i></button>
+                                <button onClick={() => { cambiarEstadoModal2(!estadoModal2), setClientesEditar(row) }}><i className={`fa-solid fa-pen-to-square iconosNaranjas`} style={{marginRight:'-4px', fontSize:'20px', marginLeft: '-9px'}}></i></button>
                                 <button
                                     onClick={() => handleEliminarCliente(row.id_cliente)}
                                     // disabled={row.estado_producto === 0}
                                     className={estilos["boton"]}
-                                    style={{ cursor: "pointer", textAlign: "center", fontSize: "23px" }}
+                                    style={{ cursor: "pointer", textAlign: "center", fontSize: "20px" }}
                                 >
                                     <i
                                         className={`bi bi-trash ${row.estado_producto === 0 ? "basuraDesactivada" : ""
@@ -174,7 +174,7 @@ const Cliente = () => {
                                 <button
                                     // disabled={row.estado_producto === 0}
                                     className={estilos["boton"]}
-                                    style={{ cursor: "pointer", textAlign: "center", fontSize: "23px" }}
+                                    style={{ cursor: "pointer", textAlign: "center", fontSize: "20px" }}
                                 >
                                     <i
                                         className={`bi bi-trash ${row.estado_cliente === 0 ? "basuraDesactivada" : ""
@@ -806,13 +806,6 @@ const Cliente = () => {
 
                 fontSize: '13px'
             },
-        },
-
-        name:{
-            style:{
-                textAlign: 'center',
-
-            }
         },
     };
 

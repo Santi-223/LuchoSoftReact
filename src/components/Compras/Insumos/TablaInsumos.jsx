@@ -130,9 +130,8 @@ function Insumos() {
             style={{ cursor: "pointer", textAlign: "center", fontSize: "25px" }}
           >
             <i
-              className={`bi ${
-                row.estado_insumo === 0 ? "bi-eye-slash cerrado" : "bi-eye"
-              }`}
+              className={`bi ${row.estado_insumo === 0 ? "bi-eye-slash cerrado" : "bi-eye"
+                }`}
               style={{
                 color: row.estado_insumo === 0 ? "gray" : "#1A008E",
                 pointerEvents: row.estado_insumo === 0 ? "none" : "auto",
@@ -151,11 +150,10 @@ function Insumos() {
             style={{ cursor: "pointer", textAlign: "center", fontSize: "20px" }}
           >
             <i
-              className={`fa-solid fa-pen-to-square ${
-                row.estado_insumo === 1
+              className={`fa-solid fa-pen-to-square ${row.estado_insumo === 1
                   ? "iconosNaranjas"
                   : "iconosGris"
-              }`}
+                }`}
             ></i>
           </button>
 
@@ -166,9 +164,8 @@ function Insumos() {
             style={{ cursor: "pointer", textAlign: "center", fontSize: "25px" }}
           >
             <i
-              className={`bi bi-trash ${
-                row.estado_insumo === 0 ? "basuraDesactivada" : ""
-              }`}
+              className={`bi bi-trash ${row.estado_insumo === 0 ? "basuraDesactivada" : ""
+                }`}
               style={{ color: row.estado_insumo === 0 ? "gray" : "red" }}
             ></i>
           </button>
@@ -267,7 +264,7 @@ function Insumos() {
             console.error("Error al eliminar el insumo:", response.statusText);
             Swal.fire({
               icon: "error",
-               
+
               text: "Error al eliminar el insumo",
             });
           }
@@ -275,7 +272,7 @@ function Insumos() {
           console.error("Error al eliminar el insumo:", error);
           Swal.fire({
             icon: "error",
-             
+
             text: "Error al eliminar el insumo",
           });
         }
@@ -297,19 +294,19 @@ function Insumos() {
     if (name === 'unidadesDeMedida_insumo') {
       if (value.length > 0) {
         setInputMedidaValido(true)
-      } 
+      }
     }
 
     if (name === 'nombre_insumo') {
       if (value.length > 0) {
         setInputNombreValido3(true);
-      } 
+      }
     }
 
     if (name === 'nombre_insumo') {
       // Expresión regular que coincide con cualquier carácter que no sea una letra, un número o un guion bajo
       const caracteresEspeciales = /^[a-zA-Z0-9\sÁÉÍÓÚáéíóúÑñÜü]*$/;
-    
+
       // Verificar si la cadena no contiene caracteres especiales
       if (caracteresEspeciales.test(value)) {
         setInputNombreValido2(true);
@@ -330,7 +327,7 @@ function Insumos() {
     event.preventDefault();
 
 
-    
+
     if (
       !insumosEditar.nombre_insumo && !insumosEditar.stock_insumo && !insumosEditar.unidadesDeMedida_insumo && !insumosEditar.id_categoria_insumo
     ) {
@@ -341,10 +338,10 @@ function Insumos() {
       setInputCategoriaValido(false)
       Swal.fire({
         icon: "error",
-         
+
         text: "Por favor, completa los campos vacíos",
       });
-      
+
       return;
     }
 
@@ -356,10 +353,10 @@ function Insumos() {
       setInputMedidaValido(false)
       Swal.fire({
         icon: "error",
-         
+
         text: "Por favor, completa los campos vacíos",
       });
-      
+
       return;
     }
 
@@ -371,10 +368,10 @@ function Insumos() {
       setInputNombreValido3(false)
       Swal.fire({
         icon: "error",
-         
+
         text: "Por favor, completa los campos vacíos",
       });
-      
+
       return;
     }
 
@@ -385,10 +382,10 @@ function Insumos() {
       setInputCategoriaValido(false)
       Swal.fire({
         icon: "error",
-         
+
         text: "Por favor, completa los campos vacíos",
       });
-      
+
       return;
     }
 
@@ -401,10 +398,10 @@ function Insumos() {
       setInputCategoriaValido(false)
       Swal.fire({
         icon: "error",
-         
+
         text: "Por favor, completa los campos vacíos",
       });
-      
+
       return;
     }
 
@@ -416,10 +413,10 @@ function Insumos() {
       setInputCategoriaValido(false)
       Swal.fire({
         icon: "error",
-         
+
         text: "Por favor, completa los campos vacíos",
       });
-      
+
       return;
     }
 
@@ -430,10 +427,10 @@ function Insumos() {
       setInputCategoriaValido(false)
       Swal.fire({
         icon: "error",
-         
+
         text: "Por favor, completa los campos vacíos",
       });
-      
+
       return;
     }
 
@@ -446,10 +443,10 @@ function Insumos() {
       setInputMedidaValido(false)
       Swal.fire({
         icon: "error",
-         
+
         text: "Por favor, completa los campos vacíos",
       });
-      
+
       return;
     }
 
@@ -461,10 +458,10 @@ function Insumos() {
       setInputMedidaValido(false)
       Swal.fire({
         icon: "error",
-         
+
         text: "Por favor, completa los campos vacíos",
       });
-      
+
       return;
     }
 
@@ -476,10 +473,10 @@ function Insumos() {
       setInputMedidaValido(false)
       Swal.fire({
         icon: "error",
-         
+
         text: "Por favor, completa los campos vacíos",
       });
-      
+
       return;
     }
 
@@ -491,10 +488,10 @@ function Insumos() {
       setInputStockValido3(false)
       Swal.fire({
         icon: "error",
-         
+
         text: "Por favor, completa los campos vacíos",
       });
-      
+
       return;
     }
 
@@ -527,23 +524,23 @@ function Insumos() {
       setInputNombreValido3(false)
       Swal.fire({
         icon: "error",
-         
+
         text: "Por favor completa todos los campos vacíos",
       });
-      
+
       return;
     }
 
-        // Validar que el nombre tenga al menos 3 letras
-        if (insumosEditar.nombre_insumo.length < 3) {
-          Swal.fire({
-            icon: "error",
-             
-            text: "El nombre del insumo debe tener al menos 3 letras",
-          });
-          setInputNombreValido3(false)
-          return;
-        }
+    // Validar que el nombre tenga al menos 3 letras
+    if (insumosEditar.nombre_insumo.length < 3) {
+      Swal.fire({
+        icon: "error",
+
+        text: "El nombre del insumo debe tener al menos 3 letras",
+      });
+      setInputNombreValido3(false)
+      return;
+    }
 
 
 
@@ -558,7 +555,7 @@ function Insumos() {
       // Mostrar alerta con SweetAlert
       Swal.fire({
         icon: "error",
-         
+
         text: "Los campos no pueden contener caracteres especiales",
       });
       return;
@@ -622,7 +619,7 @@ function Insumos() {
             );
             Swal.fire({
               icon: "error",
-               
+
               text: "Error al actualizar el insumo",
             });
           }
@@ -630,7 +627,7 @@ function Insumos() {
           console.error("Error al actualizar el insumo:", error);
           Swal.fire({
             icon: "error",
-             
+
             text: "Error al actualizar el insumo",
           });
         }
@@ -648,7 +645,7 @@ function Insumos() {
       // Mostrar mensaje de error si no hay categorías activas
       Swal.fire({
         icon: "error",
-         
+
         text: "No hay categorías de insumos activas",
       });
     } else {
@@ -693,10 +690,10 @@ function Insumos() {
       setInputCategoriaValido(false)
       Swal.fire({
         icon: "error",
-         
+
         text: "Por favor, completa los campos vacíos",
       });
-      
+
       return;
     }
 
@@ -708,10 +705,10 @@ function Insumos() {
       setInputMedidaValido(false)
       Swal.fire({
         icon: "error",
-         
+
         text: "Por favor, completa los campos vacíos",
       });
-      
+
       return;
     }
 
@@ -723,10 +720,10 @@ function Insumos() {
       setInputNombreValido3(false)
       Swal.fire({
         icon: "error",
-         
+
         text: "Por favor, completa los campos vacíos",
       });
-      
+
       return;
     }
 
@@ -737,10 +734,10 @@ function Insumos() {
       setInputCategoriaValido(false)
       Swal.fire({
         icon: "error",
-         
+
         text: "Por favor, completa los campos vacíos",
       });
-      
+
       return;
     }
 
@@ -753,10 +750,10 @@ function Insumos() {
       setInputCategoriaValido(false)
       Swal.fire({
         icon: "error",
-         
+
         text: "Por favor, completa los campos vacíos",
       });
-      
+
       return;
     }
 
@@ -768,10 +765,10 @@ function Insumos() {
       setInputCategoriaValido(false)
       Swal.fire({
         icon: "error",
-         
+
         text: "Por favor, completa los campos vacíos",
       });
-      
+
       return;
     }
 
@@ -782,10 +779,10 @@ function Insumos() {
       setInputCategoriaValido(false)
       Swal.fire({
         icon: "error",
-         
+
         text: "Por favor, completa los campos vacíos",
       });
-      
+
       return;
     }
 
@@ -798,10 +795,10 @@ function Insumos() {
       setInputMedidaValido(false)
       Swal.fire({
         icon: "error",
-         
+
         text: "Por favor, completa los campos vacíos",
       });
-      
+
       return;
     }
 
@@ -813,10 +810,10 @@ function Insumos() {
       setInputMedidaValido(false)
       Swal.fire({
         icon: "error",
-         
+
         text: "Por favor, completa los campos vacíos",
       });
-      
+
       return;
     }
 
@@ -828,10 +825,10 @@ function Insumos() {
       setInputMedidaValido(false)
       Swal.fire({
         icon: "error",
-         
+
         text: "Por favor, completa los campos vacíos",
       });
-      
+
       return;
     }
 
@@ -843,10 +840,10 @@ function Insumos() {
       setInputStockValido3(false)
       Swal.fire({
         icon: "error",
-         
+
         text: "Por favor, completa los campos vacíos",
       });
-      
+
       return;
     }
 
@@ -859,10 +856,10 @@ function Insumos() {
       setInputNombreValido3(false)
       Swal.fire({
         icon: "error",
-         
+
         text: "Por favor completa todos los campos vacíos",
       });
-      
+
       return;
     }
 
@@ -873,10 +870,10 @@ function Insumos() {
       setInputStockValido3(false)
       Swal.fire({
         icon: "error",
-         
+
         text: "Por favor completa todos los campos vacíos",
       });
-      
+
       return;
     }
 
@@ -893,47 +890,47 @@ function Insumos() {
     if (!insumos1.id_categoria_insumo) {
       Swal.fire({
         icon: "error",
-         
+
         text: "Por favor, selecciona una categoría de insumo",
       });
       setInputCategoriaValido(false)
       return; // Detener la ejecución si no se seleccionó una categoría
     }
 
-    
 
-        // Validar que el nombre tenga al menos 3 letras
-        if (insumos1.nombre_insumo.length < 3) {
-          Swal.fire({
-            icon: "error",
-             
-            text: "El nombre del insumo debe tener al menos 3 letras",
-          });
-          setInputNombreValido(false)
-          return;
-          
-        }
 
-        if (!inputStockValido) {
-          Swal.fire({
-            icon: 'error',
-    
-            text: 'El número de stock sobrepasa los límites.',
-            confirmButtonColor: '#1F67B9',
-          });
-          return;
-        }
-    
-        if (!inputStockValido2) {
-          Swal.fire({
-            icon: 'error',
-    
-            text: "No se aceptan caracteres especiales",
-            confirmButtonColor: '#1F67B9',
-          });
-          return;
-        }
-        
+    // Validar que el nombre tenga al menos 3 letras
+    if (insumos1.nombre_insumo.length < 3) {
+      Swal.fire({
+        icon: "error",
+
+        text: "El nombre del insumo debe tener al menos 3 letras",
+      });
+      setInputNombreValido(false)
+      return;
+
+    }
+
+    if (!inputStockValido) {
+      Swal.fire({
+        icon: 'error',
+
+        text: 'El número de stock sobrepasa los límites.',
+        confirmButtonColor: '#1F67B9',
+      });
+      return;
+    }
+
+    if (!inputStockValido2) {
+      Swal.fire({
+        icon: 'error',
+
+        text: "No se aceptan caracteres especiales",
+        confirmButtonColor: '#1F67B9',
+      });
+      return;
+    }
+
 
 
 
@@ -945,7 +942,7 @@ function Insumos() {
 
       Swal.fire({
         icon: "error",
-         
+
         text: "Por favor completa todos los campos vacíos",
       });
       return;
@@ -958,7 +955,7 @@ function Insumos() {
 
       Swal.fire({
         icon: "error",
-         
+
         text: "Por favor completa todos los campos vacíos",
       });
       return;
@@ -980,7 +977,7 @@ function Insumos() {
     if (insumos1.stock_insumo < 0) {
       Swal.fire({
         icon: "error",
-         
+
         text: "El stock debe ser un número positivo",
       });
       return;
@@ -990,10 +987,10 @@ function Insumos() {
     if (insumos1.stock_insumo.length > 9) {
       Swal.fire({
         icon: "error",
-         
+
         text: "El stock no puede exceder los 0 números",
       });
-      
+
       return;
     }
 
@@ -1010,7 +1007,7 @@ function Insumos() {
       // Mostrar alerta con SweetAlert
       Swal.fire({
         icon: "error",
-         
+
         text: "Los campos no pueden contener caracteres especiales",
       });
       return;
@@ -1064,7 +1061,7 @@ function Insumos() {
         console.error("Error al crear el insumo:", responseInsumos.statusText);
         Swal.fire({
           icon: "error",
-           
+
           text: "Error al crear el insumo",
         });
       }
@@ -1088,32 +1085,32 @@ function Insumos() {
     if (name === 'nombre_insumo') {
       if (value.length > 0) {
         setInputNombreValido3(true);
-      } 
+      }
     }
 
     if (name === 'id_categoria_insumo') {
       if (value.length > 0) {
         setInputCategoriaValido(true);
-      } 
+      }
     }
 
     if (name === 'unidadesDeMedida_insumo') {
       if (value.length > 0) {
         setInputMedidaValido(true)
-      } 
+      }
     }
 
-    
+
     if (name === 'stock_insumo') {
       if (value.length > 0) {
         setInputStockValido3(true);
-      } 
+      }
     }
 
     if (name === 'nombre_insumo') {
       // Expresión regular que coincide con cualquier carácter que no sea una letra, un número o un guion bajo
       const caracteresEspeciales = /^[a-zA-Z0-9\sÁÉÍÓÚáéíóúÑñÜü]*$/;
-    
+
       // Verificar si la cadena no contiene caracteres especiales
       if (caracteresEspeciales.test(value)) {
         setInputNombreValido2(true);
@@ -1127,14 +1124,14 @@ function Insumos() {
         setInputStockValido(false);
       } else {
         setInputStockValido(true);
-        
+
       }
     }
 
     if (name === 'stock_insumo') {
       // Expresión regular que coincide con cualquier carácter que no sea una letra, un número o un guion bajo
       const caracteresEspeciales = /^[0-9.,]*$/;
-    
+
       // Verificar si la cadena no contiene caracteres especiales
       if (caracteresEspeciales.test(value)) {
         setInputStockValido2(true);
@@ -1238,26 +1235,26 @@ function Insumos() {
 
   const exportExcel = (customFileName) => {
     import('xlsx').then((xlsx) => {
-        const worksheet = xlsx.utils.json_to_sheet(insumos);
-        const workbook = { Sheets: { data: worksheet }, SheetNames: ['data'] };
-        const excelBuffer = xlsx.write(workbook, {
-            bookType: 'xlsx',
-            type: 'array'
-        });
+      const worksheet = xlsx.utils.json_to_sheet(insumos);
+      const workbook = { Sheets: { data: worksheet }, SheetNames: ['data'] };
+      const excelBuffer = xlsx.write(workbook, {
+        bookType: 'xlsx',
+        type: 'array'
+      });
 
-        saveAsExcelFile(excelBuffer, customFileName || 'insumos');
+      saveAsExcelFile(excelBuffer, customFileName || 'insumos');
     });
-};
-const saveAsExcelFile = (buffer, fileName) => {
+  };
+  const saveAsExcelFile = (buffer, fileName) => {
     import('file-saver').then((module) => {
-        if (module && module.default) {
-            let EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
-            let EXCEL_EXTENSION = '.xlsx';
-            const data = new Blob([buffer], {
-                type: EXCEL_TYPE
-            });
-            module.default.saveAs(data, fileName + EXCEL_EXTENSION);
-        }
+      if (module && module.default) {
+        let EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+        let EXCEL_EXTENSION = '.xlsx';
+        const data = new Blob([buffer], {
+          type: EXCEL_TYPE
+        });
+        module.default.saveAs(data, fileName + EXCEL_EXTENSION);
+      }
     });
   }
 
@@ -1309,7 +1306,7 @@ const saveAsExcelFile = (buffer, fileName) => {
             <i className="fa-solid fa-plus"></i> Agregar
           </button>
 
-          <button style={{backgroundColor:'white', border:'1px solid #c9c6c675', borderRadius:'50px', marginTop: '-10px', cursor:'pointer'}} onClick={() => exportExcel('Reporte_Insumos')}> <img src="src\assets\excel-logo.png" height={'40px'}/> </button>
+          <button style={{ backgroundColor: 'white', border: '1px solid #c9c6c675', borderRadius: '50px', marginTop: '-10px', cursor: 'pointer' }} onClick={() => exportExcel('Reporte_Insumos')}> <img src="src\assets\excel-logo.png" height={'40px'} /> </button>
         </div>
       </div>
 
@@ -1389,27 +1386,27 @@ const saveAsExcelFile = (buffer, fileName) => {
                       onChange={handleChange}
                     />
 
-{
-  !inputNombreValido2 && !inputNombreValido && (
-    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>No se aceptan caracteres especiales.</p>
-  )
-}
                     {
-  !inputNombreValido && inputNombreValido2 && (
-    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>Debe de contener al menos 3 letras y máximo 50.</p>
-  )
-}
-{
-  !inputNombreValido2 && inputNombreValido &&(
-    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>No se aceptan caracteres especiales.</p>
-  )
-}
+                      !inputNombreValido2 && !inputNombreValido && (
+                        <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>No se aceptan caracteres especiales.</p>
+                      )
+                    }
+                    {
+                      !inputNombreValido && inputNombreValido2 && (
+                        <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>Debe de contener al menos 3 letras y máximo 50.</p>
+                      )
+                    }
+                    {
+                      !inputNombreValido2 && inputNombreValido && (
+                        <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>No se aceptan caracteres especiales.</p>
+                      )
+                    }
 
-{
-  !inputNombreValido3 && (
-    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>El campo no puede estar vacío</p>
-  )
-}
+                    {
+                      !inputNombreValido3 && (
+                        <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>El campo no puede estar vacío</p>
+                      )
+                    }
 
 
 
@@ -1432,28 +1429,28 @@ const saveAsExcelFile = (buffer, fileName) => {
                       value={insumos1.stock_insumo}
                       onChange={handleChange}
                     />
-                                        {
-  !inputStockValido && inputStockValido2 && (
-    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>El número sobrepasa los límites.</p>
-  )
-}
-{
-  !inputStockValido2 && inputStockValido && (
-    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>Solo se aceptan números.</p>
-  )
-}
+                    {
+                      !inputStockValido && inputStockValido2 && (
+                        <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>El número sobrepasa los límites.</p>
+                      )
+                    }
+                    {
+                      !inputStockValido2 && inputStockValido && (
+                        <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>Solo se aceptan números.</p>
+                      )
+                    }
 
-{
-  !inputStockValido3 && (
-    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>El campo no puede estar vacío</p>
-  )
-}
+                    {
+                      !inputStockValido3 && (
+                        <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>El campo no puede estar vacío</p>
+                      )
+                    }
 
-{
-  !inputStockValido2 && !inputStockValido && (
-    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>No se aceptan caracteres especiales.</p>
-  )
-}
+                    {
+                      !inputStockValido2 && !inputStockValido && (
+                        <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>No se aceptan caracteres especiales.</p>
+                      )
+                    }
                   </div>
                 </div>
                 <br />
@@ -1472,18 +1469,19 @@ const saveAsExcelFile = (buffer, fileName) => {
                         Seleccionar unidad de medida
                       </option>
                       <option value="unidades">Unidades</option>
-                      <option value="miligramos">Miligramos</option>
+                      <option value="kilogramos">Kilogramo</option>
+                      <option value="litros">Litro</option>
+                      <option value="piezas">Pieza</option>
                       <option value="gramos">Gramos</option>
-                      <option value="libras">Libras</option>
-                      <option value="kilogramos">Kilogramos</option>
-                      <option value="mililitros">Mililitros</option>
-                      <option value="litros">Litros</option>
+                      <option value="miligramos">Miligramos</option>
+                      <option value="mililitros">Mililitro</option>
+                      <option value="toneladas">Tonelada</option>
                     </select>
                     {
-  !inputMedidaValido && (
-    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>El campo no puede estar vacío</p>
-  )
-}
+                      !inputMedidaValido && (
+                        <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>El campo no puede estar vacío</p>
+                      )
+                    }
                   </div>
 
                   <div id={estilos.eo}>
@@ -1496,7 +1494,7 @@ const saveAsExcelFile = (buffer, fileName) => {
                       value={insumos1.id_categoria_insumo}
                       onChange={handleChange}
                     >
-                       <option value="" disabled selected>
+                      <option value="" disabled selected>
                         Seleccionar una categoría
                       </option>
                       {categoria_insumo.map((categoria) => {
@@ -1510,10 +1508,10 @@ const saveAsExcelFile = (buffer, fileName) => {
                       })}
                     </select>
                     {
-  !inputCategoriaValido && (
-    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>El campo no puede estar vacío</p>
-  )
-}
+                      !inputCategoriaValido && (
+                        <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>El campo no puede estar vacío</p>
+                      )
+                    }
                   </div>
                 </div>
               </div>
@@ -1529,7 +1527,8 @@ const saveAsExcelFile = (buffer, fileName) => {
               </button>
 
               <button
-                onClick={() => {cambiarEstadoModalAgregar(!estadoModalAgregar)
+                onClick={() => {
+                  cambiarEstadoModalAgregar(!estadoModalAgregar)
                   setInputNombreValido(true)
                   setInputNombreValido2(true)
                   setInputNombreValido3(true)
@@ -1546,7 +1545,7 @@ const saveAsExcelFile = (buffer, fileName) => {
                     id_categoria_insumo: "",
                   });
                 }
-                  
+
                 }
                 className={estilos["gris"]}
                 type="button"
@@ -1592,28 +1591,28 @@ const saveAsExcelFile = (buffer, fileName) => {
                       onChange={handleEditarChange}
                     />
 
-{
-  !inputNombreValido && (
-    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>El límite es de 50 letras.</p>
-  )
-}
-{
-  !inputNombreValido2 && (
-    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>No se aceptan caracteres especiales.</p>
-  )
-}
+                    {
+                      !inputNombreValido && (
+                        <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>El límite es de 50 letras.</p>
+                      )
+                    }
+                    {
+                      !inputNombreValido2 && (
+                        <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>No se aceptan caracteres especiales.</p>
+                      )
+                    }
 
-{
-  !inputNombreValido3 && (
-    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>El campo no puede estar vacío</p>
-  )
-}
+                    {
+                      !inputNombreValido3 && (
+                        <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>El campo no puede estar vacío</p>
+                      )
+                    }
 
-{
-  !inputNombreValido2 && !inputNombreValido && (
-    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>No se aceptan caracteres especiales.</p>
-  )
-}
+                    {
+                      !inputNombreValido2 && !inputNombreValido && (
+                        <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>No se aceptan caracteres especiales.</p>
+                      )
+                    }
                   </div>
                   <div className={estilos["espacio2"]}></div>
                 </div>
@@ -1622,7 +1621,7 @@ const saveAsExcelFile = (buffer, fileName) => {
                   <div id={estilos.documentoproveedor}>
                     <p id={estilos.textito}> Unidad de medida</p>
                     <select
-                       className={`${estilos.input2} ${!inputMedidaValido ? estilos.inputInvalido : ''}
+                      className={`${estilos.input2} ${!inputMedidaValido ? estilos.inputInvalido : ''}
                        `}
                       name="unidadesDeMedida_insumo"
                       id={estilos.unidadesDeMedida_insumo_input}
@@ -1632,6 +1631,7 @@ const saveAsExcelFile = (buffer, fileName) => {
                       <option value="" disabled selected>
                         Seleccionar unidad de medida
                       </option>
+                      <option value="unidades">Unidades</option>
                       <option value="kilogramos">Kilogramo</option>
                       <option value="litros">Litro</option>
                       <option value="piezas">Pieza</option>
@@ -1641,22 +1641,22 @@ const saveAsExcelFile = (buffer, fileName) => {
                       <option value="toneladas">Tonelada</option>
                     </select>
                     {
-  !inputMedidaValido && (
-    <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>El campo no puede estar vacío</p>
-  )
-}
+                      !inputMedidaValido && (
+                        <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>El campo no puede estar vacío</p>
+                      )
+                    }
                   </div>
                   <div className={estilos["espacio2"]}></div>
                   <div id={estilos.eo}>
-                  <p id={estilos.textito}> Categoria</p>
-                  <select
+                    <p id={estilos.textito}> Categoria</p>
+                    <select
                       className={estilos["input2"]}
                       name="id_categoria_insumo" // Utiliza el mismo nombre que el campo id_rol
                       id={estilos.id_categoria_insumos_input} // Cambia el id para que sea único
                       value={insumosEditar.id_categoria_insumo}
                       onChange={handleEditarChange}
                     >
-                                             <option value="" disabled selected>
+                      <option value="" disabled selected>
                         Seleccionar una categoría
                       </option>
                       {categoria_insumo.map((categoria) => {
@@ -1687,7 +1687,8 @@ const saveAsExcelFile = (buffer, fileName) => {
                 </button>
 
                 <button
-                  onClick={() => {cambiarEstadoModalEditar(!estadoModaleditar)
+                  onClick={() => {
+                    cambiarEstadoModalEditar(!estadoModaleditar)
                     setInputNombreValido(true)
                     setInputNombreValido2(true)
                     setInputNombreValido3(true)

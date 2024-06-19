@@ -471,7 +471,7 @@ function App() {
             <div id={estilos["kake"]}>
               <label htmlFor="Observaciones">
                 {" "}
-                Observaciones <span style={{ color: 'red' }}>*</span>
+                Observaciones
               </label>
               <textarea
                 id="observaciones"
@@ -583,7 +583,7 @@ function App() {
                           className={estilos["input-field-tabla"]}
                           value={row.nombre}
                           onChange={(e) => handleSelectChange(e, index)}
-                          style={{ width: '300px', display: 'flex', marginRight: '0px' }}
+                          style={{ width: '250px', display: 'flex', marginRight: '0px' }}
                         >
                           <option value="">Seleccione un producto</option>
                           {productos.map((producto) => (

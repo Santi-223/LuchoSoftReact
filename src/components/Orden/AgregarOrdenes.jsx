@@ -34,7 +34,7 @@ function AgregarOrdenes() {
     });
     const [usuarios, setUsuarios] = useState([]);
     const tableRef = useRef(null);
-    const [tableRows, setTableRows] = useState([{ id: '', cantidad: '', cantidad_seleccionada: 0 }]);
+    const [tableRows, setTableRows] = useState([{ id: '', cantidad: '', cantidad_seleccionada: 0, unidadDeMedida: '' }]);
     const [precioTotal, setPrecioTotal] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const [insumosPerPage] = useState(5);
@@ -155,10 +155,16 @@ function AgregarOrdenes() {
             return;
         }
 
+        const selectedInsumo = insumos.find(insumo => insumo.nombre_insumo === value);
+
         const updatedRows = tableRows.map((row, rowIndex) => {
             if (rowIndex === index) {
-                const selectedInsumo = insumos.find(insumo => insumo.nombre_insumo === value);
-                return { ...row, nombre: value, insumoId: selectedInsumo.id_insumo };
+                return {
+                    ...row,
+                    nombre: value,
+                    insumoId: selectedInsumo.id_insumo,
+                    unidadDeMedida: selectedInsumo.unidadesDeMedida_insumo
+                };
             }
             return row;
         });
@@ -284,7 +290,7 @@ function AgregarOrdenes() {
             });
             return;
         }
-        
+
 
         // Si todas las validaciones pasan, proceder con el registro de la orden
         Swal.fire({
@@ -486,8 +492,8 @@ function AgregarOrdenes() {
 
 
 
-                    <hr  style={{margin: '10px 0', border: 'none', borderTop: '1px solid black' }} />
-                    <div className='tabla-detalle' style={{marginLeft:'150px', overflowY: scrollEnabled ? 'scroll' : 'auto', maxHeight: '320px' }}>
+                    <hr style={{ margin: '10px 0', border: 'none', borderTop: '1px solid black' }} />
+                    <div className='tabla-detalle' style={{ marginLeft: '150px', overflowY: scrollEnabled ? 'scroll' : 'auto', maxHeight: '320px' }}>
                         <table className="tablaDT ui celled table" style={{ width: "70%", marginTop: "10%" }} ref={tableRef}>
                             <thead className="rojo thead-fixed">
                                 <tr>
@@ -510,8 +516,17 @@ function AgregarOrdenes() {
                                                 ))}
                                             </select>
                                         </td>
-
-                                        <td style={{ textAlign: "center" }}><input className="input-field-tabla" style={{ width: "100px" }} type="number" onChange={(e) => handleCantidadChange(e, index)} /></td>
+                                        <td>
+                                            <input
+                                                type="text"
+                                                value={row.cantidad || ''}
+                                                onChange={(event) => handleCantidadChange(event, index)}
+                                                placeholder={row.unidadDeMedida || ''}
+                                            />
+                                            {!inputValido2[index] && (
+                                                <p className='error' style={{ color: 'red', fontSize: '10px', position: 'absolute', marginLeft: '1px' }}>Formato de número incorrecto</p>
+                                            )}
+                                        </td>
                                         {index !== 0 && (
                                             <td style={{ textAlign: "center" }}>
                                                 <button className='bot-x' type="button" onClick={() => handleDeleteRow(index)}>X</button>
