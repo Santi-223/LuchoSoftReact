@@ -1007,7 +1007,7 @@ function Roles() {
             <Modal
                 estado={estadoModalAgregar}
                 cambiarEstado={cambiarEstadoModalAgregar}
-                titulo="Registar Rol"
+                titulo="Registrar Rol"
                 mostrarHeader={true}
                 mostrarOverlay={true}
                 mostrarExit={false}

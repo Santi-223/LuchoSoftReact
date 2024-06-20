@@ -1356,7 +1356,7 @@ function Insumos() {
       <Modal
         estado={estadoModalAgregar}
         cambiarEstado={cambiarEstadoModalAgregar}
-        titulo="Registar"
+        titulo="Registrar"
         mostrarHeader={true}
         mostrarOverlay={true}
         posicionModal={"center"}
