@@ -55,7 +55,7 @@ export default function FrequentCustomersTable() {
   useEffect(() => {
     const fetchCustomers = async () => {
       try {
-        const response = await fetch('https://api-luchosoft-mysql.onrender.com/ventas/clientes/');
+        const response = await fetch('https://api-luchosoft-v2.onrender.com/ventas/clientes/');
         const data = await response.json();
         const frequentCustomers = data.filter((customer) => customer.cliente_frecuente === 1)
                                       .map((customer) => createData(customer.id_cliente, customer.nombre_cliente, customer.telefono_cliente, customer.direccion_cliente));

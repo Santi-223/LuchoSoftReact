@@ -55,7 +55,7 @@ function App() {
   }, [productos]);
 
   const ultimoId = async () => {
-    const response = await fetch("https://api-luchosoft-mysql.onrender.com/ventas/pedidos");
+    const response = await fetch("https://api-luchosoft-v2.onrender.com/ventas/pedidos");
     const data = await response.json();
     const lastItem = data[data.length - 1];
     const lastId = lastItem.id_pedido;
@@ -75,7 +75,7 @@ function App() {
 
   const fetchProductos = async () => {
     try {
-      const response = await fetch("https://api-luchosoft-mysql.onrender.com/ventas2/productos");
+      const response = await fetch("https://api-luchosoft-v2.onrender.com/ventas2/productos");
       if (response.ok) {
         const data = await response.json();
         const productosData = data.filter(producto => producto.estado_producto === 1).map(producto => ({
@@ -103,7 +103,7 @@ function App() {
 
   const fetchClientes = async () => {
     try {
-      const response = await fetch("https://api-luchosoft-mysql.onrender.com/ventas/clientes");
+      const response = await fetch("https://api-luchosoft-v2.onrender.com/ventas/clientes");
       if (response.ok) {
         const data = await response.json();
         const ClienteData = data.filter(cliente => cliente.estado_cliente === 1).map(cliente => ({
@@ -287,7 +287,7 @@ function App() {
       );
       console.log(totalPedido);
       const responsePedido = await fetch(
-        "https://api-luchosoft-mysql.onrender.com/ventas/pedidos",
+        "https://api-luchosoft-v2.onrender.com/ventas/pedidos",
         {
           method: "POST",
           headers: {
@@ -329,7 +329,7 @@ function App() {
 
       const pedidosProductosPromises = detallesPedido.map(async (detalle) => {
         const responsePedidosProductos = await fetch(
-          "https://api-luchosoft-mysql.onrender.com/ventas/pedidos_productos",
+          "https://api-luchosoft-v2.onrender.com/ventas/pedidos_productos",
           {
             method: "POST",
             headers: {

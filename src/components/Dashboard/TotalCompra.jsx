@@ -8,7 +8,7 @@ const TotalCompras = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://api-luchosoft-mysql.onrender.com/compras/compras/');
+        const response = await fetch('https://api-luchosoft-v2.onrender.com/compras/compras/');
         const data = await response.json();
         const totalSum = data.reduce((acc, compra) => acc + parseFloat(compra.total_compra), 0);
         setTotalCompras(totalSum);

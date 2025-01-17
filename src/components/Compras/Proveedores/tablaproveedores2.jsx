@@ -165,7 +165,7 @@ function Proveedores() {
                     // Tu código para enviar el formulario de edición
                     console.log('proveedor a actualizar: ', proveedoresEditar);
     
-                    const response = await fetch(`https://api-luchosoft-mysql.onrender.com/compras/proveedores/${proveedoresEditar.id_proveedor}`, {
+                    const response = await fetch(`https://api-luchosoft-v2.onrender.com/compras/proveedores/${proveedoresEditar.id_proveedor}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json',
@@ -233,7 +233,7 @@ function Proveedores() {
 
     const fetchproveedores = async () => {
         try {
-            const response = await fetch('https://api-luchosoft-mysql.onrender.com/compras/proveedores/');
+            const response = await fetch('https://api-luchosoft-v2.onrender.com/compras/proveedores/');
             if (response.ok) {
                 const data = await response.json();
                 const proveedoresFiltrador = data.map(proveedor => ({
@@ -275,7 +275,7 @@ function Proveedores() {
                     // Tu código para enviar el formulario
                     console.log('proveedor a enviar: ', proveedores1);
     
-                    const responseProveedores = await fetch('https://api-luchosoft-mysql.onrender.com/compras/proveedores/', {
+                    const responseProveedores = await fetch('https://api-luchosoft-v2.onrender.com/compras/proveedores/', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -361,7 +361,7 @@ function Proveedores() {
                 try {
                     const nuevoEstado = estadoproveedor === 1 ? 0 : 1;
 
-                    const response = await fetch(`https://api-luchosoft-mysql.onrender.com/compras/proveedores/${idproveedor}`, {
+                    const response = await fetch(`https://api-luchosoft-v2.onrender.com/compras/proveedores/${idproveedor}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json',

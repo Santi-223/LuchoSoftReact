@@ -22,7 +22,7 @@ const Ventas = () => {
 
     const fetchVenta = async () => {
         try {
-            const response = await fetch('https://api-luchosoft-mysql.onrender.com/ventas/pedidos');
+            const response = await fetch('https://api-luchosoft-v2.onrender.com/ventas/pedidos');
             if (response.ok) {
                 const data = await response.json();
                 const ventaData = data.filter(venta => venta.estado_pedido === 3 || venta.estado_pedido === 4).map(venta => ({
@@ -157,7 +157,7 @@ const Ventas = () => {
     const listarpedidosProductos = async (id_pedido) => {
         console.log('El id del pedido es', id_pedido);
         try {
-            const response = await fetch(`https://api-luchosoft-mysql.onrender.com/ventas/pedidos_productos/pedidos/${id_pedido}`);
+            const response = await fetch(`https://api-luchosoft-v2.onrender.com/ventas/pedidos_productos/pedidos/${id_pedido}`);
             if (response.ok) {
                 const data = await response.json();
                 console.log(data);
@@ -177,7 +177,7 @@ const Ventas = () => {
     const listarClienteAsociado = async (id_cliente) => {
         console.log('El id del cliente es:_ ', id_cliente);
         try {
-            const response = await fetch(`https://api-luchosoft-mysql.onrender.com/ventas/clientes/${id_cliente}`);
+            const response = await fetch(`https://api-luchosoft-v2.onrender.com/ventas/clientes/${id_cliente}`);
             if (response.ok) {
                 const data = await response.json();
                 console.log(data);
@@ -192,7 +192,7 @@ const Ventas = () => {
     useEffect(() => {
         const listarProductos = async () => {
             try {
-                const response = await fetch(`https://api-luchosoft-mysql.onrender.com/ventas2/productos`);
+                const response = await fetch(`https://api-luchosoft-v2.onrender.com/ventas2/productos`);
                 if (response.ok) {
                     const data = await response.json();
                     const productosData = data.map(productos => ({
@@ -229,7 +229,7 @@ const Ventas = () => {
                 try {
                     const nuevoEstado = row.estado_pedido === 3 ? 4 : 3;
 
-                    const response = await fetch(`https://api-luchosoft-mysql.onrender.com/ventas/pedidos/${row.id_pedido}`, {
+                    const response = await fetch(`https://api-luchosoft-v2.onrender.com/ventas/pedidos/${row.id_pedido}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json'

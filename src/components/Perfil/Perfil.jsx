@@ -40,7 +40,7 @@ const Perfil = () => {
 
   const fetchUsuario = async () => {
     try {
-      const response = await fetch(`https://api-luchosoft-mysql.onrender.com/configuracion/usuarios/${usuarioLS.id_usuario}`);
+      const response = await fetch(`https://api-luchosoft-v2.onrender.com/configuracion/usuarios/${usuarioLS.id_usuario}`);
       if (response.ok) {
         const data = await response.json();
         const usuarioFiltrado = data[0];
@@ -113,7 +113,7 @@ const Perfil = () => {
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
-            const response = await fetch(`https://api-luchosoft-mysql.onrender.com/configuracion/contrasenaUsuarios/${usuarioLS.id_usuario}`, {
+            const response = await fetch(`https://api-luchosoft-v2.onrender.com/configuracion/contrasenaUsuarios/${usuarioLS.id_usuario}`, {
               method: 'PUT',
               headers: {
                 'Content-Type': 'application/json'
@@ -176,7 +176,7 @@ const Perfil = () => {
 
   const fetchRoles = async () => {
     try {
-      const response = await fetch('https://api-luchosoft-mysql.onrender.com/configuracion/roles');
+      const response = await fetch('https://api-luchosoft-v2.onrender.com/configuracion/roles');
       if (response.ok) {
         const data = await response.json();
         const rolesFiltrados = data.map(rol => ({

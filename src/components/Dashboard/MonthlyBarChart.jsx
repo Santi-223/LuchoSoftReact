@@ -61,7 +61,7 @@ export default function MonthlyBarChart() {
   useEffect(() => {
     const fetchProductionOrders = async () => {
       try {
-        const response = await fetch('https://api-luchosoft-mysql.onrender.com/orden/orden_produccion');
+        const response = await fetch('https://api-luchosoft-v2.onrender.com/orden/orden_produccion');
         const data = await response.json();
 
         // Get the start and end dates of the current week

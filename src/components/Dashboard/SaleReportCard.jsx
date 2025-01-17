@@ -19,8 +19,8 @@ const SaleReportCard = () => {
     const fetchData = async () => {
       try {
         const [comprasResponse, ventasResponse] = await Promise.all([
-          fetch('https://api-luchosoft-mysql.onrender.com/compras/compras/'),
-          fetch('https://api-luchosoft-mysql.onrender.com/ventas/pedidos/'),
+          fetch('https://api-luchosoft-v2.onrender.com/compras/compras/'),
+          fetch('https://api-luchosoft-v2.onrender.com/ventas/pedidos/'),
         ]);
 
         const comprasData = await comprasResponse.json();

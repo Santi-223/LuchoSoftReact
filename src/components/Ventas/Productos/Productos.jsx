@@ -179,8 +179,8 @@ function Productos() {
     const fetchproductos = async () => {
         try {
             const [productosResponse, categoriasResponse] = await Promise.all([
-                fetch('https://api-luchosoft-mysql.onrender.com/ventas2/productos'),
-                fetch('https://api-luchosoft-mysql.onrender.com/ventas2/categoria_productos') // Suponiendo que esta es la ruta para obtener las categorías
+                fetch('https://api-luchosoft-v2.onrender.com/ventas2/productos'),
+                fetch('https://api-luchosoft-v2.onrender.com/ventas2/categoria_productos') // Suponiendo que esta es la ruta para obtener las categorías
             ]);
 
             if (productosResponse.ok && categoriasResponse.ok) {
@@ -212,7 +212,7 @@ function Productos() {
     
         try {
             // Verificar si el producto tiene pedidos asociados
-            const pedidosResponse = await fetch(`https://api-luchosoft-mysql.onrender.com/ventas/pedidos_productos/`, {
+            const pedidosResponse = await fetch(`https://api-luchosoft-v2.onrender.com/ventas/pedidos_productos/`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -259,7 +259,7 @@ function Productos() {
             console.log("Confirmación recibida para eliminar el producto.");
     
             // Solicitud DELETE
-            const response = await fetch(`https://api-luchosoft-mysql.onrender.com/ventas2/productos/${idProducto}`, {
+            const response = await fetch(`https://api-luchosoft-v2.onrender.com/ventas2/productos/${idProducto}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
@@ -319,7 +319,7 @@ function Productos() {
                 try {
                     const nuevoEstado = estadoproducto === 1 ? 0 : 1;
 
-                    const response = await fetch(`https://api-luchosoft-mysql.onrender.com/ventas2/estadoProducto/${idproducto}`, {
+                    const response = await fetch(`https://api-luchosoft-v2.onrender.com/ventas2/estadoProducto/${idproducto}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json'

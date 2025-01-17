@@ -69,7 +69,7 @@ function AgregarOrdenes() {
 
     const fetchInsumos = async () => {
         try {
-            const response = await fetch('https://api-luchosoft-mysql.onrender.com/compras/insumos');
+            const response = await fetch('https://api-luchosoft-v2.onrender.com/compras/insumos');
             if (response.ok) {
                 const data = await response.json();
                 const insumosConEstado1 = data.filter(insumo => insumo.estado_insumo === 1);
@@ -87,7 +87,7 @@ function AgregarOrdenes() {
 
     const fetchUsuarios = async () => {
         try {
-            const response = await fetch('https://api-luchosoft-mysql.onrender.com/configuracion/usuarios');
+            const response = await fetch('https://api-luchosoft-v2.onrender.com/configuracion/usuarios');
             if (response.ok) {
                 const data = await response.json();
                 setUsuarios(data);
@@ -304,7 +304,7 @@ function AgregarOrdenes() {
         }).then(async () => {
             try {
                 // Enviar los datos de la orden de producción
-                const responseOrden = await fetch('https://api-luchosoft-mysql.onrender.com/orden/orden_produccion', {
+                const responseOrden = await fetch('https://api-luchosoft-v2.onrender.com/orden/orden_produccion', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -333,7 +333,7 @@ function AgregarOrdenes() {
                     };
 
                     try {
-                        const responseOrdenesInsumos = await fetch('https://api-luchosoft-mysql.onrender.com/orden/orden_insumo', {
+                        const responseOrdenesInsumos = await fetch('https://api-luchosoft-v2.onrender.com/orden/orden_insumo', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'

@@ -143,7 +143,7 @@ function AgregarProductos() {
     useEffect(() => {
         const fetchCategorias = async () => {
             try {
-                const response = await fetch('https://api-luchosoft-mysql.onrender.com/ventas2/categoria_productos');
+                const response = await fetch('https://api-luchosoft-v2.onrender.com/ventas2/categoria_productos');
                 if (response.ok) {
                     const data = await response.json();
                     const categoriasConEstado1 = data.filter(categoria => categoria.estado_categoria_productos === 1);
@@ -299,7 +299,7 @@ function AgregarProductos() {
             formProducto.append('estado_producto', '1');
             formProducto.append('id_categoria_producto', producto.id_categoria_producto);
 
-            const response = await fetch('https://api-luchosoft-mysql.onrender.com/ventas2/productos', {
+            const response = await fetch('https://api-luchosoft-v2.onrender.com/ventas2/productos', {
                 method: 'POST',
                 body: formProducto
             });

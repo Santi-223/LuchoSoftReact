@@ -188,7 +188,7 @@ function Insumos() {
     const fetchCategoria_insumo = async () => {
       try {
         const response = await fetch(
-          "https://api-luchosoft-mysql.onrender.com/compras/categoria_insumos"
+          "https://api-luchosoft-v2.onrender.com/compras/categoria_insumos"
         );
         if (response.ok) {
           const data = await response.json();
@@ -231,7 +231,7 @@ function Insumos() {
       if (result.isConfirmed) {
         try {
           const response = await fetch(
-            `https://api-luchosoft-mysql.onrender.com/compras/insumos/${idInsumo}`,
+            `https://api-luchosoft-v2.onrender.com/compras/insumos/${idInsumo}`,
             {
               method: "DELETE",
               headers: {
@@ -578,7 +578,7 @@ function Insumos() {
       if (result.isConfirmed) {
         try {
           const response = await fetch(
-            `https://api-luchosoft-mysql.onrender.com/compras/insumos/${insumosEditar.id_insumo}`,
+            `https://api-luchosoft-v2.onrender.com/compras/insumos/${insumosEditar.id_insumo}`,
             {
               method: "PUT",
               headers: {
@@ -1017,7 +1017,7 @@ function Insumos() {
       console.log("insumo a enviar: ", insumos1);
 
       const responseInsumos = await fetch(
-        "https://api-luchosoft-mysql.onrender.com/compras/insumos",
+        "https://api-luchosoft-v2.onrender.com/compras/insumos",
         {
           method: "POST",
           headers: {
@@ -1150,7 +1150,7 @@ function Insumos() {
   const fetchinsumos = async () => {
     try {
       const response = await fetch(
-        "https://api-luchosoft-mysql.onrender.com/compras/insumos"
+        "https://api-luchosoft-v2.onrender.com/compras/insumos"
       );
       if (response.ok) {
         const data = await response.json();
@@ -1188,7 +1188,7 @@ function Insumos() {
           const nuevoEstado = estadoinsumo === 1 ? 0 : 1;
 
           const response = await fetch(
-            `https://api-luchosoft-mysql.onrender.com/compras/estadoInsumo/${idinsumo}`,
+            `https://api-luchosoft-v2.onrender.com/compras/estadoInsumo/${idinsumo}`,
             {
               method: "PUT",
               headers: {

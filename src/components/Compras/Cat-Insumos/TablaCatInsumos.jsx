@@ -138,7 +138,7 @@ function categoria_insumos() {
       console.log("categoría de insumo a enviar: ", categoria_insumos1);
 
       const responseCategoria_insumos = await fetch(
-        "https://api-luchosoft-mysql.onrender.com/compras/categoria_insumos",
+        "https://api-luchosoft-v2.onrender.com/compras/categoria_insumos",
         {
           method: "POST",
           headers: {
@@ -238,7 +238,7 @@ function categoria_insumos() {
       if (result.isConfirmed) {
         try {
           const response = await fetch(
-            `https://api-luchosoft-mysql.onrender.com/compras/categoria_insumos/${idcategoria_insumos}`,
+            `https://api-luchosoft-v2.onrender.com/compras/categoria_insumos/${idcategoria_insumos}`,
             {
               method: "DELETE",
               headers: {
@@ -385,7 +385,7 @@ function categoria_insumos() {
   const fetchcategoria_insumos = async () => {
     try {
       const response = await fetch(
-        "https://api-luchosoft-mysql.onrender.com/compras/categoria_insumos"
+        "https://api-luchosoft-v2.onrender.com/compras/categoria_insumos"
       );
       if (response.ok) {
         const data = await response.json();
@@ -473,7 +473,7 @@ function categoria_insumos() {
       if (result.isConfirmed) {
         try {
           const response = await fetch(
-            `https://api-luchosoft-mysql.onrender.com/compras/categoria_insumos/${categoria_insumosEditar.id_categoria_insumos}`,
+            `https://api-luchosoft-v2.onrender.com/compras/categoria_insumos/${categoria_insumosEditar.id_categoria_insumos}`,
             {
               method: "PUT",
               headers: {
@@ -547,7 +547,7 @@ function categoria_insumos() {
           const nuevoEstado = estadocategoria_insumos === 1 ? 0 : 1;
 
           const response = await fetch(
-            `https://api-luchosoft-mysql.onrender.com/compras/estadoCatInsumos/${idcategoria_insumos}`,
+            `https://api-luchosoft-v2.onrender.com/compras/estadoCatInsumos/${idcategoria_insumos}`,
             {
               method: "PUT",
               headers: {

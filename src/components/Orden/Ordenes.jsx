@@ -42,7 +42,7 @@ function OrdenesProduccion() {
 
     const fetchInsumos = async () => {
         try {
-            const response = await fetch('https://api-luchosoft-mysql.onrender.com/compras/insumos/', {
+            const response = await fetch('https://api-luchosoft-v2.onrender.com/compras/insumos/', {
                 headers: {
                     'token': token // Asegúrate de que 'token' esté definido
                 }
@@ -119,7 +119,7 @@ function OrdenesProduccion() {
 
     const handleMostrarDetalles = async (idOrden) => {
         try {
-            const response = await fetch('https://api-luchosoft-mysql.onrender.com/orden/orden_insumo/');
+            const response = await fetch('https://api-luchosoft-v2.onrender.com/orden/orden_insumo/');
             const data = await response.json();
 
             // Filtrar los datos para obtener solo los objetos con el id_compra deseado
@@ -192,8 +192,8 @@ function OrdenesProduccion() {
 
     const fetchOrdenes = async () => {
         try {
-            const ordenesResponse = await fetch('https://api-luchosoft-mysql.onrender.com/orden/orden_produccion');
-            const usuariosResponse = await fetch('https://api-luchosoft-mysql.onrender.com/configuracion/usuarios');
+            const ordenesResponse = await fetch('https://api-luchosoft-v2.onrender.com/orden/orden_produccion');
+            const usuariosResponse = await fetch('https://api-luchosoft-v2.onrender.com/configuracion/usuarios');
 
             if (ordenesResponse.ok && usuariosResponse.ok) {
                 const ordenesData = await ordenesResponse.json();

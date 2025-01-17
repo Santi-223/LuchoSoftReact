@@ -80,7 +80,7 @@ function EditarUsuario() {
     useEffect(() => {
         const fetchUsuario = async () => {
             try {
-                const response = await fetch(`https://api-luchosoft-mysql.onrender.com/configuracion/usuarios/${id_usuario}`);
+                const response = await fetch(`https://api-luchosoft-v2.onrender.com/configuracion/usuarios/${id_usuario}`);
                 if (response.ok) {
                     const data = await response.json();
                     const usuarioFiltrado = data[0];
@@ -287,7 +287,7 @@ function EditarUsuario() {
     useEffect(() => {
         const fetchUsuarios = async () => {
             try {
-                const response = await fetch('https://api-luchosoft-mysql.onrender.com/configuracion/usuarios');
+                const response = await fetch('https://api-luchosoft-v2.onrender.com/configuracion/usuarios');
                 if (response.ok) {
                     const data = await response.json();
                     const usuariosFiltrador = data.map(usuario => ({
@@ -311,7 +311,7 @@ function EditarUsuario() {
 
         const fetchRoles = async () => {
             try {
-                const response = await fetch('https://api-luchosoft-mysql.onrender.com/configuracion/roles');
+                const response = await fetch('https://api-luchosoft-v2.onrender.com/configuracion/roles');
                 if (response.ok) {
                     const data = await response.json();
                     const rolesFiltrados = data.map(rol => ({
@@ -373,7 +373,7 @@ function EditarUsuario() {
                         formUsuario.append('direccion_usuario', usuario.direccion_usuario);
                         formUsuario.append('estado_usuario', '1');
                         formUsuario.append('id_rol', usuario.id_rol);
-                        const response = await fetch(`https://api-luchosoft-mysql.onrender.com/configuracion/usuarios/${usuario.id_usuario}`, {
+                        const response = await fetch(`https://api-luchosoft-v2.onrender.com/configuracion/usuarios/${usuario.id_usuario}`, {
                             method: 'PUT',
                             body: formUsuario
                         });

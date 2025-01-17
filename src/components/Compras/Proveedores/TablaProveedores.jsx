@@ -85,7 +85,7 @@ function Proveedores() {
       if (result.isConfirmed) {
         try {
           const response = await fetch(
-            `https://api-luchosoft-mysql.onrender.com/compras/proveedores/${idProveedor}`,
+            `https://api-luchosoft-v2.onrender.com/compras/proveedores/${idProveedor}`,
             {
               method: "DELETE",
               headers: {
@@ -780,7 +780,7 @@ function Proveedores() {
           console.log("proveedor a actualizar: ", proveedoresEditar);
 
           const response = await fetch(
-            `https://api-luchosoft-mysql.onrender.com/compras/proveedores/${proveedoresEditar.id_proveedor}`,
+            `https://api-luchosoft-v2.onrender.com/compras/proveedores/${proveedoresEditar.id_proveedor}`,
             {
               method: "PUT",
               headers: {
@@ -1532,7 +1532,7 @@ function Proveedores() {
           console.log("proveedor a enviar: ", proveedores1);
 
           const responseProveedores = await fetch(
-            "https://api-luchosoft-mysql.onrender.com/compras/proveedores/",
+            "https://api-luchosoft-v2.onrender.com/compras/proveedores/",
             {
               method: "POST",
               headers: {
@@ -1617,7 +1617,7 @@ function Proveedores() {
   const fetchproveedores = async () => {
     try {
       const response = await fetch(
-        "https://api-luchosoft-mysql.onrender.com/compras/proveedores/"
+        "https://api-luchosoft-v2.onrender.com/compras/proveedores/"
       );
       if (response.ok) {
         const data = await response.json();
@@ -1860,7 +1860,7 @@ function Proveedores() {
           const nuevoEstado = estadoproveedor === 1 ? 0 : 1;
 
           const response = await fetch(
-            `https://api-luchosoft-mysql.onrender.com/compras/proveedores/${idproveedor}`,
+            `https://api-luchosoft-v2.onrender.com/compras/proveedores/${idproveedor}`,
             {
               method: "PUT",
               headers: {

@@ -8,7 +8,7 @@ const TotalVentas = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://api-luchosoft-mysql.onrender.com/ventas/pedidos/');
+        const response = await fetch('https://api-luchosoft-v2.onrender.com/ventas/pedidos/');
         const data = await response.json();
         
         // Filtrar pedidos por estado 3

@@ -68,7 +68,7 @@ function RecuperarContrasena2() {
         }
         else {
             try {
-                const response = await fetch('https://api-luchosoft-mysql.onrender.com/configuracion/recuperarContrasena', {
+                const response = await fetch('https://api-luchosoft-v2.onrender.com/configuracion/recuperarContrasena', {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',

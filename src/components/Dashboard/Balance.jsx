@@ -9,14 +9,14 @@ const Balance = () => {
     const fetchData = async () => {
       try {
         // Fetch total ventas
-        const ventasResponse = await fetch('https://api-luchosoft-mysql.onrender.com/ventas/pedidos/');
+        const ventasResponse = await fetch('https://api-luchosoft-v2.onrender.com/ventas/pedidos/');
         const ventasData = await ventasResponse.json();
         // Filtrar pedidos por estado 3
         const filteredData = ventasData.filter(venta => venta.estado_pedido == 3);
         const totalVentas = filteredData.reduce((acc, venta) => acc + parseFloat(venta.total_venta), 0);
 
         // Fetch total compras
-        const comprasResponse = await fetch('https://api-luchosoft-mysql.onrender.com/compras/compras/');
+        const comprasResponse = await fetch('https://api-luchosoft-v2.onrender.com/compras/compras/');
         const comprasData = await comprasResponse.json();
         const totalCompras = comprasData.reduce((acc, compra) => acc + parseFloat(compra.total_compra), 0);
 

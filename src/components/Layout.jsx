@@ -33,7 +33,7 @@ const Layout = () => {
 
     const fetchRoles = async () => {
         try {
-            const response = await fetch('https://api-luchosoft-mysql.onrender.com/configuracion/roles');
+            const response = await fetch('https://api-luchosoft-v2.onrender.com/configuracion/roles');
             if (response.ok) {
                 const data = await response.json();
                 const rolesFiltrados = data.map(rol => ({

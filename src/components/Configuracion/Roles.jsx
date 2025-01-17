@@ -215,7 +215,7 @@ function Roles() {
         };
 
         try {
-            const responseDetalle = await fetch('https://api-luchosoft-mysql.onrender.com/configuracion/roles_permisos', {
+            const responseDetalle = await fetch('https://api-luchosoft-v2.onrender.com/configuracion/roles_permisos', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -285,7 +285,7 @@ function Roles() {
                 console.log('rol a enviar: ', roles1)
 
                 // Enviar los datos del rol
-                const responseRoles = await fetch('https://api-luchosoft-mysql.onrender.com/configuracion/roles', {
+                const responseRoles = await fetch('https://api-luchosoft-v2.onrender.com/configuracion/roles', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -316,7 +316,7 @@ function Roles() {
                             id_permiso: id_permiso
                         };
                         try {
-                            const responseDetalle = await fetch('https://api-luchosoft-mysql.onrender.com/configuracion/roles_permisos', {
+                            const responseDetalle = await fetch('https://api-luchosoft-v2.onrender.com/configuracion/roles_permisos', {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json'
@@ -391,7 +391,7 @@ function Roles() {
 
     const fetchUsuario = async () => {
         try {
-            const response = await fetch(`https://api-luchosoft-mysql.onrender.com/configuracion/usuarios/${usuarioLogueado.id_usuario}`);
+            const response = await fetch(`https://api-luchosoft-v2.onrender.com/configuracion/usuarios/${usuarioLogueado.id_usuario}`);
             if (response.ok) {
                 const data = await response.json();
                 const usuarioFiltrado = data[0];
@@ -409,7 +409,7 @@ function Roles() {
 
     const fetchRoles = async () => {
         try {
-            const response = await fetch('https://api-luchosoft-mysql.onrender.com/configuracion/roles');
+            const response = await fetch('https://api-luchosoft-v2.onrender.com/configuracion/roles');
             if (response.ok) {
                 const data = await response.json();
                 const rolesFiltrados = data.map(rol => ({
@@ -440,7 +440,7 @@ function Roles() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await fetch(`https://api-luchosoft-mysql.onrender.com/configuracion/roles/${idRol}`, {
+                    const response = await fetch(`https://api-luchosoft-v2.onrender.com/configuracion/roles/${idRol}`, {
                         method: 'DELETE',
                         headers: {
                             'token': token
@@ -499,7 +499,7 @@ function Roles() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await fetch(`https://api-luchosoft-mysql.onrender.com/configuracion/roles_permisos/${idRolP}`, {
+                    const response = await fetch(`https://api-luchosoft-v2.onrender.com/configuracion/roles_permisos/${idRolP}`, {
                         method: 'DELETE',
                         headers: {
                             'token': token
@@ -562,7 +562,7 @@ function Roles() {
 
                     console.log('el estado nuevo sera: ', nuevoEstado)
 
-                    const response = await fetch(`https://api-luchosoft-mysql.onrender.com/configuracion/estadoRoles/${idRol}`, {
+                    const response = await fetch(`https://api-luchosoft-v2.onrender.com/configuracion/estadoRoles/${idRol}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json'
@@ -603,7 +603,7 @@ function Roles() {
 
     const fetchRolesPermisos = async () => {
         try {
-            const response = await fetch('https://api-luchosoft-mysql.onrender.com/configuracion/roles_permisos');
+            const response = await fetch('https://api-luchosoft-v2.onrender.com/configuracion/roles_permisos');
             if (response.ok) {
                 const data = await response.json();
                 const rolesPermisosFiltrados = data.map(rolP => ({
@@ -623,7 +623,7 @@ function Roles() {
 
     const fetchPermisos = async () => {
         try {
-            const response = await fetch(`https://api-luchosoft-mysql.onrender.com/configuracion/permisos`);
+            const response = await fetch(`https://api-luchosoft-v2.onrender.com/configuracion/permisos`);
             if (response.ok) {
                 const data = await response.json();
                 const permisosFiltrados = data.map(p => ({
@@ -787,7 +787,7 @@ function Roles() {
 
     const validarRefresh = async (perm) => {
         try {
-            const response = await fetch('https://api-luchosoft-mysql.onrender.com/auth/login', {
+            const response = await fetch('https://api-luchosoft-v2.onrender.com/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -908,7 +908,7 @@ function Roles() {
             }).then(async (result) => {
                 if (result.isConfirmed) {
                     try {
-                        const response = await fetch(`https://api-luchosoft-mysql.onrender.com/configuracion/roles/${rolesEditar.id_rol}`, {
+                        const response = await fetch(`https://api-luchosoft-v2.onrender.com/configuracion/roles/${rolesEditar.id_rol}`, {
                             method: 'PUT',
                             headers: {
                                 'Content-Type': 'application/json'
